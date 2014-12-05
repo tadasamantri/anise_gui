@@ -8,7 +8,7 @@
  *
  */
 
-#include <json/json.h>
+#include "qt-json/json.h"
 
 
 class FileReader{
@@ -35,4 +35,4 @@ public:
     */
 
     void writeFile();
-}
+};
