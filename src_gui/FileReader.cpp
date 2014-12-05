@@ -1,7 +1,7 @@
 #include "FileReader.h"
 
 
-void FileReader::loadFile(Qstring path){
+void FileReader::loadFile(QString path){
     this->file.open(path);
 
     JsonText = QJsonDocument::fromJson(file.readAll(), &JsonParseError);
@@ -9,7 +9,7 @@ void FileReader::loadFile(Qstring path){
 }
 
 
-void File::parseFile();
+void FileReader::parseFile();
 
 
-void File::writeFile();
+void FileReader::writeFile();

@@ -9,12 +9,14 @@
  */
 
 #include "qt-json/json.h"
-
+#include "qjson4/QJsonDocument.h"
+#include <QFile>
+#include <QString>
 
 class FileReader{
 
 private:
-    QJasonDocument JsonText;
+    QJsonDocument JsonText;
     QFile file;
 
 
@@ -22,7 +24,7 @@ public:
     /*
      *will simply load the file
     */
-    void loadFile(Qstring path);
+    void loadFile(QString path);
 
     /*
      * Will extract information from the file
