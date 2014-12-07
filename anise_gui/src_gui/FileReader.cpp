@@ -14,6 +14,8 @@ void FileReader::loadFile(QString path){
     while (file->bytesAvailable()) {
 
         QByteArray line = file->readLine();
+        // !! FEhler ist hier. die Liste bleibt leer!
+        // !! Hier debuggen!
         LineList << line;
     }
 
