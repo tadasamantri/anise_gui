@@ -26,6 +26,7 @@
 #include "qjson4/QJsonObject.h"
 #include "qjson4/QJsonParseError.h"
 #include <QFile>
+#include <QByteArray>
 #include <QCoreApplication>
 #include <QTextCodec>
 #include <QtDebug>
@@ -39,6 +40,7 @@ private:
 
     QFile* file;
     const QString path;
+    QStringList LineList;
     bool ok;
 
 
@@ -59,4 +61,11 @@ public:
     */
 
     void writeFile();
+
+    /*
+     * Print the File
+     * (just for debugging)
+    */
+
+    void printFile();
 };

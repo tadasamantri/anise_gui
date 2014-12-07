@@ -5,42 +5,17 @@ void FileReader::loadFile(QString path){
 
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 
+    //open a file
+    file = new QFile("jsondatei.json");
+    file->open(QIODevice::ReadOnly);
 
+    //read each line of that file and save it as a List
+    //(line1)->(line2)->(line3)-> etc...
+    while (file->bytesAvailable()) {
 
-
-
-
-
-
-    file = new QFile(path);
-    if(file->open(QIODevice::ReadOnly)) {
-        QJsonParseError e;
-        QJsonDocument d = QJsonDocument::fromJson(file->readAll(), &e);
-        if(!d.isNull()) {
-            qDebug() << d.toJson(QJsonDocument::Compact);
-        } else {
-            qDebug() << e.errorString();
-        }
+        QByteArray line = file->readLine();
+        LineList << line;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //do something here
-
-
-
-
 
     file->close();
 }
@@ -51,6 +26,15 @@ void FileReader::parseFile(){
 
 }
 
+void FileReader::printFile(){
+    if (LineList.isEmpty()) {
+        qDebug() << "LineList.isEmpty()";
+    }else{
+        foreach (QString line, LineList) {
+            qDebug()<< line;
+        }
+    }
+}
 
 void FileReader::writeFile(){
 
