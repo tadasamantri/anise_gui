@@ -6,6 +6,7 @@ void FileReader::loadFile(QString path){
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 
     //open a file
+    qDebug() << "trying to open: \n" << path << "\n";
     file = new QFile(path);
     file->open(QIODevice::ReadOnly);
 
@@ -13,11 +14,7 @@ void FileReader::loadFile(QString path){
     //(line1)->(line2)->(line3)-> etc...
     while (file->bytesAvailable()) {
 
-        qDebug("DU BIST JETZT IN DER WHILE SCHLEIFE"); //er geht nichtmal in die while schleife
-
         QByteArray line = file->readLine();
-        // !! Fehler ist hier. die Liste bleibt leer!
-        // !! Hier debuggen!
         LineList << line;
     }
 
@@ -34,8 +31,9 @@ void FileReader::printFile(){
     if (LineList.isEmpty()) {
         qDebug() << "LineList.isEmpty()! \nthe parser didnt read the file correctly!";
     }else{
+        qDebug()<< "LineList is not Empty!:\n";
         foreach (QString line, LineList) {
-            qDebug()<< line;
+            qDebug()<< "\n" << line;
         }
     }
 }
