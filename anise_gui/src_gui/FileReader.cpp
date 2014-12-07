@@ -13,6 +13,8 @@ void FileReader::loadFile(QString path){
     //(line1)->(line2)->(line3)-> etc...
     while (file->bytesAvailable()) {
 
+        qDebug("DU BIST JETZT IN DER WHILE SCHLEIFE"); //er geht nichtmal in die while schleife
+
         QByteArray line = file->readLine();
         // !! Fehler ist hier. die Liste bleibt leer!
         // !! Hier debuggen!
@@ -30,7 +32,7 @@ void FileReader::parseFile(){
 
 void FileReader::printFile(){
     if (LineList.isEmpty()) {
-        qDebug() << "LineList.isEmpty()! \n the parser didnt read the file correctly!";
+        qDebug() << "LineList.isEmpty()! \nthe parser didnt read the file correctly!";
     }else{
         foreach (QString line, LineList) {
             qDebug()<< line;
