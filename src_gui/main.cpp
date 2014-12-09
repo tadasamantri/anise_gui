@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     window.show();
 
     //read a json file:
-    FileReader filreaderObj;
+    FileHandler filreaderObj;
     QDir directory = QDir::current();   //den pfad basteln
     directory.cdUp();
     QString path = (directory.path()).append("/Data/jsondatei.json");

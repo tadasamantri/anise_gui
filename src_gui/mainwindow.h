@@ -3,7 +3,7 @@
 
 #include <QFile>
 #include <QMainWindow>
-#include "FileReader.h"
+#include "FileHandler.h"
 
 namespace Ui {
 class MainWindow;

@@ -1,3 +1,8 @@
+
+
+#ifndef FILEHANDLER_H
+#define FILEHANDLER_H
+
 /*
  * authors:
  * Artur Fast
@@ -8,32 +13,20 @@
  *
  */
 
+
 #include <QFile>
 #include <QString>
 #include <QTextCodec>
-
-#include <QCoreApplication>
 #include <QtDebug>
-
-#include "qt-json/json.h"
-#include "qjson4/QJsonDocument.h"
-
-
-//test
-#include "qjson4/QJsonValue.h"
-#include "qjson4/QJsonDocument.h"
-#include "qjson4/QJsonArray.h"
 #include "qjson4/QJsonObject.h"
-#include "qjson4/QJsonParseError.h"
-#include <QFile>
-#include <QByteArray>
-#include <QCoreApplication>
-#include <QTextCodec>
-#include <QtDebug>
 
 
 
-class FileReader{
+
+
+
+
+class FileHandler{
 
 
 private:
@@ -69,3 +62,5 @@ public:
 
     void printFile();
 };
+
+#endif //FILEHANDLER_H

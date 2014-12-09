@@ -1,7 +1,7 @@
-#include "FileReader.h"
+#include "FileHandler.h"
 
 
-void FileReader::loadFile(QString path){
+void FileHandler::loadFile(QString path){
 
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 
@@ -22,12 +22,12 @@ void FileReader::loadFile(QString path){
 }
 
 
-void FileReader::parseFile(){
+void FileHandler::parseFile(){
 
 
 }
 
-void FileReader::printFile(){
+void FileHandler::printFile(){
     if (LineList.isEmpty()) {
         qDebug() << "LineList.isEmpty()! \nthe parser didnt read the file correctly!";
     }else{
@@ -38,7 +38,7 @@ void FileReader::printFile(){
     }
 }
 
-void FileReader::writeFile(){
+void FileHandler::writeFile(){
 
 
 }
