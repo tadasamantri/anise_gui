@@ -19,7 +19,7 @@
 #include <QTextCodec>
 #include <QtDebug>
 #include "qjson4/QJsonObject.h"
-
+#include <QTextStream>
 
 class FileHandler{
 
@@ -27,7 +27,7 @@ public:
     /*
      *will simply load the file
     */
-    static QString loadFile(QString &path);
+    static QString loadFile(const QString &path);
 
     /*
      * Will extract information from the file
@@ -36,7 +36,7 @@ public:
 
 
     /*
-    * will write the file to disk
+    * will write the file to diskQString
     */
 
     void writeFile();
@@ -46,7 +46,7 @@ public:
      * (just for debugging)
     */
 
-    static void printFile(QString &fileContent);
+    static void printFile(const QString &fileContent);
 };
 
 #endif //FILEHANDLER_H
