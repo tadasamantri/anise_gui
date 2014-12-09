@@ -39,7 +39,7 @@ public:
     * will write the file to diskQString
     */
 
-    void writeFile();
+    void writeFile(const QString &path, const QString &fileContent);
 
     /*
      * Print the File

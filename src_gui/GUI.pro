@@ -14,10 +14,16 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    FileHandler.cpp
+    FileHandler.cpp \
+    node.cpp \
+    connection.cpp \
+    mesh.cpp
 
 HEADERS  += mainwindow.h \
-    FileHandler.h
+    FileHandler.h \
+    node.h \
+    connection.h \
+    mesh.h
 
 FORMS    += mainwindow.ui
 
