@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include <QFileDialog>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -12,4 +12,17 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_actionLoad_triggered()
+{
+    qDebug() << "Trying to open FileDialog";
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Load .mesh-File"),"",tr("Mesh-Files (*.mesh"));
+    qDebug() <<   "Path to File loaded\nPath is"
+               << fileName
+                  << "\nnow let's load it to the FileHandler!";
+
+    FileHandler fh;
+    fh.loadFile(fileName);
+    fh.printFile();
 }

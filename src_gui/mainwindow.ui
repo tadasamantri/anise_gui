@@ -55,7 +55,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>185</width>
+         <width>184</width>
          <height>607</height>
         </rect>
        </property>
@@ -118,8 +118,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>535</width>
-            <height>398</height>
+            <width>534</width>
+            <height>402</height>
            </rect>
           </property>
          </widget>
@@ -226,7 +226,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>25</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -288,6 +288,12 @@
    <property name="text">
     <string>Load</string>
    </property>
+   <property name="toolTip">
+    <string>Load an existing .mesh-File</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
+   </property>
   </action>
   <action name="actionExit">
    <property name="text">
@@ -327,22 +333,5 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections>
-  <connection>
-   <sender>actionLoad</sender>
-   <signal>triggered()</signal>
-   <receiver>actionLoad</receiver>
-   <slot>trigger()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>499</x>
-     <y>349</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

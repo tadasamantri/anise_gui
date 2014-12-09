@@ -17,6 +17,11 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+
+    //Action for loading .mesh files
+    void on_actionLoad_triggered();
+
 private:
     Ui::MainWindow *ui;
 };
