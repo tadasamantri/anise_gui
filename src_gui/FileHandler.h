@@ -21,27 +21,13 @@
 #include "qjson4/QJsonObject.h"
 
 
-
-
-
-
-
 class FileHandler{
-
-
-private:
-
-    QFile* file;
-    const QString path;
-    QStringList LineList;
-    bool ok;
-
 
 public:
     /*
      *will simply load the file
     */
-    void loadFile(QString path);
+    static QString loadFile(QString &path);
 
     /*
      * Will extract information from the file
@@ -60,7 +46,7 @@ public:
      * (just for debugging)
     */
 
-    void printFile();
+    static void printFile(QString &fileContent);
 };
 
 #endif //FILEHANDLER_H

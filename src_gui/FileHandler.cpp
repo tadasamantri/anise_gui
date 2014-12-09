@@ -1,24 +1,29 @@
 #include "FileHandler.h"
 
 
-void FileHandler::loadFile(QString path){
+QString FileHandler::loadFile(QString &path){
 
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 
+    QString fileContent = "";
+
+
     //open a file
     qDebug() << "trying to open: \n" << path << "\n";
-    file = new QFile(path);
-    file->open(QIODevice::ReadOnly);
+    QFile file(path);
+    file.open(QIODevice::ReadOnly);
 
-    //read each line of that file and save it as a List
-    //(line1)->(line2)->(line3)-> etc...
-    while (file->bytesAvailable()) {
 
-        QByteArray line = file->readLine();
-        LineList << line;
+
+    //read each line of that file and append it to the String
+    while (file.bytesAvailable()) {
+
+        QByteArray line = file.readLine();
+        fileContent.append(line);
     }
 
-    file->close();
+    file.close();
+    return fileContent;
 }
 
 
@@ -27,14 +32,13 @@ void FileHandler::parseFile(){
 
 }
 
-void FileHandler::printFile(){
-    if (LineList.isEmpty()) {
-        qDebug() << "LineList.isEmpty()! \nthe parser didnt read the file correctly!";
+void FileHandler::printFile(QString &fileContent){
+    if (fileContent == "" ) {
+        qDebug() << "no File Content loaded! \nthe parser didnt read the file correctly!";
     }else{
-        qDebug()<< "LineList is not Empty!:\n";
-        foreach (QString line, LineList) {
-            qDebug()<< "\n" << line;
-        }
+        qDebug()<< "File Content loaded!:\n";
+        qDebug()<< "\n" << fileContent << "\n";
+
     }
 }
 

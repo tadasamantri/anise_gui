@@ -17,12 +17,12 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionLoad_triggered()
 {
     qDebug() << "Trying to open FileDialog";
-    QString fileName = QFileDialog::getOpenFileName(this,tr("Load .mesh-File"),"",tr("Mesh-Files (*.mesh"));
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Load .mesh-File"),"",tr("Mesh-Files (*.mesh)"));
+
     qDebug() <<   "Path to File loaded\nPath is"
                << fileName
                   << "\nnow let's load it to the FileHandler!";
 
-    FileHandler fh;
-    fh.loadFile(fileName);
-    fh.printFile();
+    QString fileStringContent =  FileHandler::loadFile(fileName);
+    FileHandler::printFile(fileStringContent); //only for debugging
 }
