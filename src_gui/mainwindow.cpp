@@ -17,7 +17,10 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionLoad_triggered()
 {
     qDebug() << "Trying to open FileDialog";
-    QString fileName = QFileDialog::getOpenFileName(this,tr("Load .mesh-File"),"",tr("Mesh-Files (*.mesh)"));
+    QString fileName = QFileDialog::getOpenFileName(this,
+                                                    "Load previously saved mesh",
+                                                    "",
+                                                    "Mesh-Files (*.mesh *.json);; All Files (*.*)");
 
     qDebug() <<   "Path to File loaded\nPath is"
                << fileName

@@ -25,7 +25,7 @@ Node* Connection::getDestNode(){
     return nodeB;
 }
 
-Node* Connection::getSrcNode(){
+Node*  Connection::getSrcNode(){
     return nodeA;
 }
 
