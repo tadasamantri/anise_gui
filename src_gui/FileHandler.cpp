@@ -14,7 +14,6 @@ QString FileHandler::loadFile(const QString &path){
     file.open(QIODevice::ReadOnly);
 
 
-
     //read each line of that file and append it to the String
     while (file.bytesAvailable()) {
 
