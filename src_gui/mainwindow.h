@@ -3,7 +3,7 @@
 
 #include <QFile>
 #include <QMainWindow>
-#include "FileHandler.h"
+#include "jsonfilehandler.h"
 
 namespace Ui {
 class MainWindow;

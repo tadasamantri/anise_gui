@@ -26,6 +26,6 @@ void MainWindow::on_actionLoad_triggered()
                << fileName
                   << "\nnow let's load it to the FileHandler!";
 
-    QString fileStringContent =  FileHandler::loadFile(fileName);
-    FileHandler::printFile(fileStringContent); //only for debugging
+    QString fileStringContent =  JsonFileHandler::loadFile(fileName);
+    JsonFileHandler::printFile(fileStringContent); //only for debugging
 }

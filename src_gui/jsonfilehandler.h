@@ -21,7 +21,7 @@
 #include "qjson4/QJsonObject.h"
 #include <QTextStream>
 
-class FileHandler{
+class JsonFileHandler{
 
 public:
     /*
