@@ -18,14 +18,16 @@ SOURCES += main.cpp\
     connection.cpp \
     mesh.cpp \
     gate.cpp \
-    jsonfilehandler.cpp
+    jsonfilehandler.cpp \
+    AniseCommunicator.cpp
 
 HEADERS  += mainwindow.h \
     node.h \
     connection.h \
     mesh.h \
     gate.h \
-    jsonfilehandler.h
+    jsonfilehandler.h \
+    AniseCommunicator.h
 
 FORMS    += mainwindow.ui
 
