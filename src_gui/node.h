@@ -1,20 +1,15 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include <QObject>
 #include <QVector>
 #include <QString>
 #include <QMap>
+#include "gate.h"
 
-class Node : public QObject
+class Node
 {
-    Q_OBJECT
 public:
-    explicit Node(QObject *parent = 0);
     ~Node();
-    struct Gate{
-        QString type;
-    };
 Node(QVector<Gate> &inputGates,
      QVector<Gate> &outputGates,
      QString &type,
@@ -31,9 +26,6 @@ QVector<Gate> inputGates, outputGates;
 QString type, name;
 QMap<QString,QString> params; //maps <identifier, value>
 
-signals:
-
-public slots:
 
 };
 

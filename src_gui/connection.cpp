@@ -5,31 +5,26 @@ Connection::Connection(QObject *parent) :
 {
 }
 
-Connection::Connection(Node &src, Node &dest)
+Connection::Connection(Gate &src, Gate &dest)
 {
-    nodeA = &src;
-    nodeB = &dest;
+    gateA = &src;
+    gateB = &dest;
 }
 
-void Connection::setDestNode(Node &dest)
+void Connection::setDestGate(Gate &dest)
 {
-    nodeB = &dest;
+    gateB = &dest;
 }
 
-void Connection::setSrcNode(Node &src)
+void Connection::setSrcGate(Gate &src)
 {
-    nodeA = &src;
+    gateA = &src;
 }
 
-Node* Connection::getDestNode(){
-    return nodeB;
+Gate* Connection::getDestGate(){
+    return gateB;
 }
 
-Node*  Connection::getSrcNode(){
-    return nodeA;
-}
-
-Connection::~Connection()
-{
-    delete this;
+Gate*  Connection::getSrcGate(){
+    return gateA;
 }
