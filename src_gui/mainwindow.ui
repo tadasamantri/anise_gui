@@ -137,6 +137,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
+<<<<<<< HEAD
             <width>555</width>
             <height>350</height>
            </rect>
@@ -291,6 +292,7 @@
     <property name="title">
      <string>Properties</string>
     </property>
+    <addaction name="separator"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTools"/>
@@ -359,6 +361,11 @@
   <action name="actionLevel_Of_Detail">
    <property name="text">
     <string>Level Of Detail</string>
+   </property>
+  </action>
+  <action name="actionSetFrameworkPath">
+   <property name="text">
+    <string>SetFrameworkPath</string>
    </property>
   </action>
  </widget>
