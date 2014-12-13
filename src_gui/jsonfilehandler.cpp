@@ -33,7 +33,7 @@ void JsonFileHandler::parseFile(){
 
 void JsonFileHandler::printFile(const QString &fileContent){
     if (fileContent == "" ) {
-        qDebug() << "no File Content loaded! \nthe parser didnt read the file correctly!";
+        qDebug() << "no File Content loaded! \nthe parser didn't read the file correctly!";
     }else{
         qDebug()<< "File Content loaded!:\n";
         qDebug()<< "\n" << fileContent << "\n";

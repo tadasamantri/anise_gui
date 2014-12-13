@@ -1,12 +1,15 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QFileDialog>
+#include "qdebugstreamredirector.h"
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     menuBar()->setNativeMenuBar(false);
+    new Q_DebugStream(std::cout, ui->qDebug_out);
+    Q_DebugStream::registerQDebugMessageHandler();
 }
 
 MainWindow::~MainWindow()

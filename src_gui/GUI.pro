@@ -25,7 +25,8 @@ HEADERS  += mainwindow.h \
     connection.h \
     mesh.h \
     gate.h \
-    jsonfilehandler.h
+    jsonfilehandler.h \
+    qdebugstreamredirector.h
 
 FORMS    += mainwindow.ui
 
