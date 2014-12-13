@@ -4,3 +4,6 @@ build-GUI-Desktop-Debug/
 
 #do not upload user-files
 GUI.pro.user*
+
+#ignore local working copies
+*.*~
