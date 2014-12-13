@@ -1,4 +1,4 @@
-#include "AniseCommunicator.h"
+#include "anisecommunicator.h"
 
 
 QString AniseCommunicator::getAllNodeTypes(){
