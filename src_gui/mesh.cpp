@@ -1,6 +1,7 @@
 #include "mesh.h"
 
-Mesh::Mesh(QObject *parent) :
-    QObject(parent)
-{
+
+
+void Mesh::addNode(const Node &node){
+
 }

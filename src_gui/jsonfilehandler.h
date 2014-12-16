@@ -24,6 +24,10 @@
 #include <QJsonValue>
 #include <QJsonArray>
 #include <QErrorMessage>
+#include <QMessageBox>
+#include "node.h"
+#include "nodefactory.h"
+#include "mesh.h"
 
 class JsonFileHandler{
 
@@ -36,7 +40,7 @@ public:
     /*
      * Will extract information from the file
     */
-    static QJsonObject * parseFile(QString &jsonString);
+    static Mesh * parseJsonString(QString &jsonString);
 
 
     /*

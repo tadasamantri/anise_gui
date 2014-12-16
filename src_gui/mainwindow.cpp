@@ -31,5 +31,5 @@ void MainWindow::on_actionLoad_triggered()
 
     QString fileStringContent =  JsonFileHandler::loadFile(fileName);
     JsonFileHandler::printFile(fileStringContent); //only for debugging
-    JsonFileHandler::parseFile(fileStringContent);
+    JsonFileHandler::parseJsonString(fileStringContent);
 }

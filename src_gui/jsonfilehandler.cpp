@@ -1,4 +1,4 @@
-#include "jsonfilehandler.h"
+﻿#include "jsonfilehandler.h"
 
 
 QString JsonFileHandler::loadFile(const QString &path){
@@ -26,7 +26,7 @@ QString JsonFileHandler::loadFile(const QString &path){
 }
 
 
-QJsonObject * JsonFileHandler::parseFile(QString &jsonString){
+Mesh * JsonFileHandler::parseJsonString(QString &jsonString){
     //convert QString to char[]
     jsonString.remove(' ');
     jsonString.remove("\n");
@@ -36,19 +36,55 @@ QJsonObject * JsonFileHandler::parseFile(QString &jsonString){
     QJsonObject jsonObject = jsonDoc.object();
 
     //check if JSON-File is ok
-    if(jsonObject.contains(QString("nodes"))
+    if(!(jsonObject.contains(QString("nodes"))
             && jsonObject["nodes"].isArray()
             && jsonObject.contains(QString("connections"))
-            && jsonObject["connections"].isArray()) {
+            && jsonObject["connections"].isArray())) {
+
+        QMessageBox::information(0,QString("Error"),QString("The file you selected has an unknown Format"), "Thanks for that!");
+                    return 0;
+    }
 
         QJsonArray nodes, connections;
-        nodes = jsonObject["nodes"].toArray();
-        connections = jsonObject["connections"].toArray();
-        qDebug() << "json parsed\n"<< jsonObject<<"\n\nnodes:\n" <<nodes<<"\n\nconnections:\n" << connections;
-    } else {
-       qDebug() << "file has a unknown format!";
-    }
-    return &jsonObject;
+        Mesh mesh = Mesh(); //create new mesh for returning it later
+        nodes = jsonObject["nodes"].toArray(); //extract all nodes as Array
+        connections = jsonObject["connections"].toArray(); //same here with the connections
+        foreach (QJsonValue node, nodes) {
+
+            QJsonObject jNode = node.toObject(); //create a JSonObjec for each node
+            QString _class, _name;
+
+            if(!(jNode.contains("class") //check  if nodes are ok
+                 && jNode.contains("name")
+                 && jNode.contains("params")
+                 && jNode["params"].isArray())){
+                    QMessageBox::information(0,QString("Error"),QString("The file you selected has an unknown Format"), "Thanks for that!");
+                    return 0;
+            }
+
+            _class = jNode["class"].toString(); //extract node type
+            _name = jNode["name"].toString(); //extract node name
+
+            QMap<QString, QString> _params = QMap<QString, QString>(); //set up params map
+
+            QJsonArray jParams = jNode["params"].toArray(); //extract params as array from json file
+
+            foreach (QJsonValue paramJValue, jParams) { //for each of them..
+
+                QJsonObject paramObject = paramJValue.toObject(); //...make it an Object...
+
+                foreach(QString paramKey, paramObject.keys()){
+                    _params.insert(paramKey, paramObject.find(paramKey).value().toString()); //...and push it into the map
+                }
+            }
+            Node tmp = NodeFactory::createNode(_class, _name, _params); //let the datafactory create a node and insert it into mesh
+            mesh.addNode(tmp);
+
+            //TODO: Parse Connections!!!
+        }
+                qDebug() << "json parsed\n"<< jsonObject<<"\n\nnodes:\n" <<nodes<<"\n\nconnections:\n" << connections;
+
+    return &mesh;
 }
 
 void JsonFileHandler::printFile(const QString &fileContent){

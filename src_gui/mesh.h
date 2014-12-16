@@ -7,14 +7,12 @@
 #include "node.h"
 
 
-class Mesh : public QObject
+class Mesh
 {
-    Q_OBJECT
 public:
-    explicit Mesh(QObject *parent = 0);
 
     //add Node to mesh
-    void addNode();
+    void addNode(const Node &Node);
 
     //add Connection to mesh
     void addConnection();
