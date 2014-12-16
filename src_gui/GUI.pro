@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     mesh.cpp \
     gate.cpp \
     jsonfilehandler.cpp \
-    AniseCommunicator.cpp
+    settingshandler.cpp \
+    anisecommunicator.cpp
 
 HEADERS  += mainwindow.h \
     node.h \
@@ -27,7 +28,8 @@ HEADERS  += mainwindow.h \
     mesh.h \
     gate.h \
     jsonfilehandler.h \
-    AniseCommunicator.h
+    settingshandler.h \
+    anisecommunicator.h
 
 FORMS    += mainwindow.ui
 

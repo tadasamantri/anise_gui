@@ -264,6 +264,7 @@
      <string>Properties</string>
     </property>
     <addaction name="separator"/>
+    <addaction name="actionSet_framework_path"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTools"/>
@@ -337,6 +338,11 @@
   <action name="actionSetFrameworkPath">
    <property name="text">
     <string>SetFrameworkPath</string>
+   </property>
+  </action>
+  <action name="actionSet_framework_path">
+   <property name="text">
+    <string>Set framework path...</string>
    </property>
   </action>
  </widget>

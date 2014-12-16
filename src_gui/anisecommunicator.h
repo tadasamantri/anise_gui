@@ -11,7 +11,7 @@ private:
 
     static QString path;
     static QString ANISE;
-    static QProcess anise_process;
+    static QProcess anise_process();
     static bool path_is_set;
 
 
