@@ -55,22 +55,41 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>184</width>
+         <width>185</width>
          <height>607</height>
         </rect>
        </property>
+       <zorder>frame_2</zorder>
       </widget>
      </widget>
     </item>
     <item>
      <widget class="QFrame" name="frame_2">
       <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
+      <property name="lineWidth">
+       <number>3</number>
+      </property>
       <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>30</number>
+       </property>
        <item>
         <widget class="QDialogButtonBox" name="buttonBox">
          <property name="standardButtons">
@@ -82,7 +101,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QScrollArea" name="scrollArea">
+        <widget class="QScrollArea" name="mesh_edt_area">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
@@ -118,8 +137,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>534</width>
-            <height>402</height>
+            <width>555</width>
+            <height>350</height>
            </rect>
           </property>
          </widget>
@@ -136,7 +155,7 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>150</height>
+           <height>200</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -154,13 +173,13 @@
          <property name="currentIndex">
           <number>0</number>
          </property>
-         <widget class="QWidget" name="tab">
+         <widget class="QWidget" name="console_tab">
           <attribute name="title">
            <string>Console</string>
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
-            <widget class="QTextBrowser" name="textBrowser">
+            <widget class="QTextBrowser" name="console_out">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -182,14 +201,23 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit"/>
+            <widget class="QLineEdit" name="console_in"/>
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="tab_2">
+         <widget class="QWidget" name="log_tab">
           <attribute name="title">
            <string>Log</string>
           </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QTextBrowser" name="qDebug_out">
+             <property name="verticalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOn</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </widget>
        </item>
@@ -226,7 +254,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>20</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -263,6 +291,7 @@
     <property name="title">
      <string>Properties</string>
     </property>
+    <addaction name="separator"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTools"/>
@@ -331,6 +360,11 @@
   <action name="actionLevel_Of_Detail">
    <property name="text">
     <string>Level Of Detail</string>
+   </property>
+  </action>
+  <action name="actionSetFrameworkPath">
+   <property name="text">
+    <string>SetFrameworkPath</string>
    </property>
   </action>
  </widget>

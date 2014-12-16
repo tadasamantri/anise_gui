@@ -14,16 +14,21 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    FileHandler.cpp \
     node.cpp \
     connection.cpp \
-    mesh.cpp
+    mesh.cpp \
+    gate.cpp \
+    jsonfilehandler.cpp \
+    anisecommunicator.cpp
 
 HEADERS  += mainwindow.h \
-    FileHandler.h \
     node.h \
     connection.h \
-    mesh.h
+    mesh.h \
+    gate.h \
+    jsonfilehandler.h \
+    qdebugstreamredirector.h \
+    anisecommunicator.h
 
 FORMS    += mainwindow.ui
 

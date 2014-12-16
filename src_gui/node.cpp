@@ -1,10 +1,5 @@
 #include "node.h"
 
-Node::Node(QObject *parent) :
-    QObject(parent)
-{
-}
-
 Node::Node(QVector<Gate> &inputGates,
            QVector<Gate> &outputGates,
            QString &type,

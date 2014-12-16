@@ -1,9 +1,9 @@
-#include "FileHandler.h"
+#include "jsonfilehandler.h"
 
 
-QString FileHandler::loadFile(const QString &path){
+QString JsonFileHandler::loadFile(const QString &path){
 
-    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+    //QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 
     QString fileContent = "";
 
@@ -26,14 +26,14 @@ QString FileHandler::loadFile(const QString &path){
 }
 
 
-void FileHandler::parseFile(){
+void JsonFileHandler::parseFile(){
 
 
 }
 
-void FileHandler::printFile(const QString &fileContent){
+void JsonFileHandler::printFile(const QString &fileContent){
     if (fileContent == "" ) {
-        qDebug() << "no File Content loaded! \nthe parser didnt read the file correctly!";
+        qDebug() << "no File Content loaded! \nthe parser didn't read the file correctly!";
     }else{
         qDebug()<< "File Content loaded!:\n";
         qDebug()<< "\n" << fileContent << "\n";
@@ -41,7 +41,7 @@ void FileHandler::printFile(const QString &fileContent){
     }
 }
 
-void FileHandler::writeFile(const QString &path, const QString &fileContent){
+void JsonFileHandler::writeFile(const QString &path, const QString &fileContent){
 
     QFile file(path);
     file.open(QIODevice::WriteOnly | QIODevice::Text);

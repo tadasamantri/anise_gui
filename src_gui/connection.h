@@ -3,22 +3,23 @@
 
 #include <QObject>
 #include "node.h"
+#include "gate.h"
+
 class Connection : public QObject
 {
     Q_OBJECT
 public:
     explicit Connection(QObject *parent = 0);
-    ~Connection();
-    Connection(Node &src, Node &dest);
-    Node* getSrcNode();
-    Node* getDestNode();
-    void setSrcNode(Node &src);
-    void setDestNode(Node &dest);
+    Connection(Gate &src, Gate &dest);
+    Gate* getSrcGate();
+    Gate* getDestGate();
+    void setSrcGate(Gate &src);
+    void setDestGate(Gate &dest);
     //return true if validConnection(Node &src, &dest); Connection is made
     bool isValid();
 
 private:
-        Node *nodeA, *nodeB;
+        Gate *gateA, *gateB;
 signals:
 
 public slots:
