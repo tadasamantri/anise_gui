@@ -26,9 +26,29 @@ QString JsonFileHandler::loadFile(const QString &path){
 }
 
 
-void JsonFileHandler::parseFile(){
+QJsonObject * JsonFileHandler::parseFile(QString &jsonString){
+    //convert QString to char[]
+    jsonString.remove(' ');
+    jsonString.remove("\n");
 
+    //create QJsonObject from string given
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonString.toUtf8());
+    QJsonObject jsonObject = jsonDoc.object();
 
+    //check if JSON-File is ok
+    if(jsonObject.contains(QString("nodes"))
+            && jsonObject["nodes"].isArray()
+            && jsonObject.contains(QString("connections"))
+            && jsonObject["connections"].isArray()) {
+
+        QJsonArray nodes, connections;
+        nodes = jsonObject["nodes"].toArray();
+        connections = jsonObject["connections"].toArray();
+        qDebug() << "json parsed\n"<< jsonObject<<"\n\nnodes:\n" <<nodes<<"\n\nconnections:\n" << connections;
+    } else {
+       qDebug() << "file has a unknown format!";
+    }
+    return &jsonObject;
 }
 
 void JsonFileHandler::printFile(const QString &fileContent){

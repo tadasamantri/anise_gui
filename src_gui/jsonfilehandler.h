@@ -18,8 +18,12 @@
 #include <QString>
 #include <QTextCodec>
 #include <QtDebug>
-#include "qjson4/QJsonObject.h"
+#include <QJsonObject>
 #include <QTextStream>
+#include <QJsonDocument>
+#include <QJsonValue>
+#include <QJsonArray>
+#include <QErrorMessage>
 
 class JsonFileHandler{
 
@@ -32,7 +36,7 @@ public:
     /*
      * Will extract information from the file
     */
-    void parseFile();
+    static QJsonObject * parseFile(QString &jsonString);
 
 
     /*
