@@ -24,7 +24,7 @@ void MainWindow::on_actionLoad_triggered()
 
     qDebug() <<   "Path to File loaded\nPath is"
                << fileName
-                  << "\nnow let's load it to the FileHandler!";
+               << "\nnow let's load it to the FileHandler!";
 
     QString fileStringContent =  FileHandler::loadFile(fileName);
     FileHandler::printFile(fileStringContent); //only for debugging
