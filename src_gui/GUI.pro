@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     mesh.cpp \
     gate.cpp \
     jsonfilehandler.cpp \
-    anisecommunicator.cpp
+    anisecommunicator.cpp \
+    nodefactory.cpp
 
 HEADERS  += mainwindow.h \
     node.h \
@@ -28,7 +29,8 @@ HEADERS  += mainwindow.h \
     gate.h \
     jsonfilehandler.h \
     qdebugstreamredirector.h \
-    anisecommunicator.h
+    anisecommunicator.h \
+    nodefactory.h
 
 FORMS    += mainwindow.ui
 
