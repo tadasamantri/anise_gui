@@ -31,11 +31,10 @@ HEADERS  += mainwindow.h \
     gate.h \
     jsonfilehandler.h \
     settingshandler.h \
-    anisecommunicator.h
+    anisecommunicator.h \
     qdebugstreamredirector.h \
     anisecommunicator.h \
-    nodefactory.h 
-
+    nodefactory.h
 
 FORMS    += mainwindow.ui
 
