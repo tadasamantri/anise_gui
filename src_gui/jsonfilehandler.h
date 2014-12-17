@@ -40,7 +40,7 @@ public:
     /*
      * Will extract information from the file
     */
-    static Mesh * parseJsonString(QString &jsonString);
+    static Mesh parseJsonString(QString &jsonString);
 
 
     /*

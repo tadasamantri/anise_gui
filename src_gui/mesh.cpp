@@ -2,6 +2,6 @@
 
 
 
-void Mesh::addNode(const Node &node){
-
+void Mesh::addNode(Node &node){
+    this->nodes << &node;
 }

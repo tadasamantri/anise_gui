@@ -10,21 +10,21 @@ Node NodeFactory::createNode()
     return node;
 }
 
-Node NodeFactory::createNode(const QString &_class)
+Node NodeFactory::createNode(QString _class)
 {
     Node node = createNode();
     node.setType(_class);
     return node;
 }
 
-Node NodeFactory::createNode(const QString &_class, const QString &name)
+Node NodeFactory::createNode(QString _class, QString name)
 {
     Node node = createNode(_class);
     node.setName(name);
     return node;
 }
 
-Node NodeFactory::createNode(const QString &_class, const QString &name, const QMap<QString,QString> &params)
+Node NodeFactory::createNode(QString _class, QString name, QVariantMap params)
 {
     Node node = createNode(_class, name);
     foreach (QString key, params.keys()) {

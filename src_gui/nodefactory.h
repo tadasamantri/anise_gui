@@ -1,16 +1,16 @@
 #ifndef NODEFACTORY_H
 #define NODEFACTORY_H
 #include "node.h"
-#include <QMap>
+#include <QVariantMap>
 
 class NodeFactory
 {
 public:
     NodeFactory();
     static Node createNode();
-    static Node createNode(const QString &_class);
-    static Node createNode(const QString &_class, const QString &name);
-    static Node createNode(const QString &_class, const QString &name, const QMap<QString,QString> &params);
+    static Node createNode(QString _class);
+    static Node createNode(QString _class,  QString name);
+    static Node createNode(QString _class, QString name, QVariantMap params);
 };
 
 #endif // NODEFACTORY_H
