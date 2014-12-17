@@ -45,10 +45,9 @@ Mesh JsonFileHandler::parseJsonString(QString &jsonString){
         return mesh;
     }
 
-    QJsonArray nodes, connections;
+    QJsonArray nodes;
     //create new mesh for returning it later
     nodes = jsonObject["nodes"].toArray(); //extract all nodes as Array
-    connections = jsonObject["connections"].toArray(); //same here with the connections
     foreach (QJsonValue node, nodes) {
 
         QJsonObject jNode = node.toObject(); //create a JSonObjec for each node
@@ -90,11 +89,42 @@ Mesh JsonFileHandler::parseJsonString(QString &jsonString){
         Node tmp = NodeFactory::createNode(_class, _name, _params); //let the datafactory create a node and insert it into mesh
         mesh.addNode(tmp);
         qDebug() << "Node parsed:\n"<< tmp.toString();
-
-        //TODO: Parse Connections!!!
     }
-    //qDebug() << "json parsed\n"<< jsonObject<<"\n\nnodes:\n" <<nodes<<"\n\nconnections:\n" << connections;
 
+    if(jsonObject.contains("connections")){ //are there any connections?
+
+        QJsonArray connections = jsonObject["connections"].toArray();
+        if(connections.isEmpty()) //are there any connections?
+            return mesh;
+        foreach (QJsonValue vConnection, connections) {
+            QJsonObject object = vConnection.toObject();
+
+            //some error handling
+            if(!(object.contains("src_node")
+                 && object.contains("src_gate")
+                 && object.contains("dest_node")
+                 && object.contains("dest_gate"))){
+                QString message = "";
+                if(!object.contains("src_node")){
+                    message += "A connection has no src_node!\n";
+                }
+                if(!object.contains("src_gate")){
+                    message += "A connection has no src_gate!\n";
+                }
+                if(!object.contains("dest_node")){
+                    message += "A connection has no dest_node!\n";
+                }
+                if(!object.contains("dest_gate")){
+                    message += "A connection has no dest_gate!\n";
+                }
+                QMessageBox::information(0,QString("Error"),message, "Thanks for that!");
+                return mesh;
+            }//error handling
+
+            //TODO: Talk about Gates ands Connections to get this working
+        }
+
+    }
     return mesh;
 }
 
