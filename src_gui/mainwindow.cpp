@@ -6,6 +6,7 @@
 #include <QCoreApplication>
 #include "anisecommunicator.h"
 #include "settingshandler.h"
+#include "qdebugstreamredirector.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -13,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     menuBar()->setNativeMenuBar(false);
+    new Q_DebugStream(std::cout, ui->qDebug_out);
+    Q_DebugStream::registerQDebugMessageHandler();
 
     //initalize stored Settings
     SettingsHandler::setSettingsPath(QApplication::applicationDirPath() + "/settings.ini");
@@ -58,6 +61,7 @@ void MainWindow::on_actionLoad_triggered()
 
     QString fileStringContent =  JsonFileHandler::loadFile(fileName);
     JsonFileHandler::printFile(fileStringContent); //only for debugging
+    JsonFileHandler::parseJsonString(fileStringContent);
 }
 
 void MainWindow::on_actionSet_framework_path_triggered()

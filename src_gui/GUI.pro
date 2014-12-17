@@ -20,7 +20,9 @@ SOURCES += main.cpp\
     gate.cpp \
     jsonfilehandler.cpp \
     settingshandler.cpp \
-    anisecommunicator.cpp
+    anisecommunicator.cpp \
+    nodefactory.cpp
+
 
 HEADERS  += mainwindow.h \
     node.h \
@@ -30,6 +32,10 @@ HEADERS  += mainwindow.h \
     jsonfilehandler.h \
     settingshandler.h \
     anisecommunicator.h
+    qdebugstreamredirector.h \
+    anisecommunicator.h \
+    nodefactory.h 
+
 
 FORMS    += mainwindow.ui
 

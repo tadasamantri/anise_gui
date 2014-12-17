@@ -1,20 +1,17 @@
 #ifndef MESHHANDLER_H
 #define MESHHANDLER_H
 
-#include <QObject>
 #include <QVector>
 #include "connection.h"
 #include "node.h"
 
 
-class Mesh : public QObject
+class Mesh
 {
-    Q_OBJECT
 public:
-    explicit Mesh(QObject *parent = 0);
 
     //add Node to mesh
-    void addNode();
+    void addNode(Node &Node);
 
     //add Connection to mesh
     void addConnection();
@@ -25,9 +22,9 @@ public:
     //return connection's address behind ID
     Connection* getConnectionByID(int ID);
 
-signals:
-
-public slots:
+private:
+    QVector<Node*> nodes;
+    QVector<Connection*> connections;
 
 };
 
