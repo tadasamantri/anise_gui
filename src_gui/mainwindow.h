@@ -28,6 +28,8 @@ private slots:
     void on_actionSet_framework_path_triggered();
 
 
+    void on_actionNew_triggered();
+
 private:
     Ui::MainWindow *ui;
 

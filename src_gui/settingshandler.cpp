@@ -66,7 +66,9 @@ void SettingsHandler::initializeSettings(){
     if(allSettings.contains("frameworkpath")){
 
         value = allSettings.take("frameworkpath");
+        qDebug() << "initializing framework path: " << value;
         AniseCommunicator::setFrameworkPath(value);
+
 
     }
 

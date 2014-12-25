@@ -7,6 +7,8 @@
 #include "anisecommunicator.h"
 #include "settingshandler.h"
 #include "qdebugstreamredirector.h"
+#include "mesh.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -22,9 +24,9 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << QApplication::applicationDirPath() + "/settings.ini";
 
     //Check if Framework path is set
-    if(SettingsHandler::contains("frameworkpath"))
-        AniseCommunicator::setFrameworkPath(SettingsHandler::loadSetting("frameworkpath"));
-    else{
+    if(!SettingsHandler::contains("frameworkpath")){
+
+
 
         QMessageBox::information(0, QString("Please, set your framework path"), QString("You haven't set your framework path yet.\nChoose first!"), "Choose", "go to hell");
         QString fileName = QFileDialog::getOpenFileName(this,
@@ -36,6 +38,9 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     SettingsHandler::initializeSettings();
+
+    //load all available NodeTypes
+    AniseCommunicator::getAllNodeTypes();
 
 
 
@@ -78,4 +83,10 @@ void MainWindow::on_actionSet_framework_path_triggered()
               SettingsHandler::storeSetting("frameworkpath", fileName);
               AniseCommunicator::setFrameworkPath(fileName);
 
+}
+
+void MainWindow::on_actionNew_triggered()
+{
+
+    Mesh newMesh();
 }
