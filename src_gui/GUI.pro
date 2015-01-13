@@ -21,7 +21,9 @@ SOURCES += main.cpp\
     jsonfilehandler.cpp \
     settingshandler.cpp \
     anisecommunicator.cpp \
-    nodefactory.cpp
+    nodefactory.cpp \
+    renderclass.cpp \
+    nodecatalog.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -34,7 +36,9 @@ HEADERS  += mainwindow.h \
     anisecommunicator.h \
     qdebugstreamredirector.h \
     anisecommunicator.h \
-    nodefactory.h
+    nodefactory.h \
+    renderclass.h \
+    nodecatalog.h
 
 FORMS    += mainwindow.ui
 

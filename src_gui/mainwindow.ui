@@ -22,7 +22,7 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QScrollArea" name="scrollArea_2">
+     <widget class="QScrollArea" name="Node_Catalog">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -31,7 +31,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>200</width>
+        <width>0</width>
         <height>0</height>
        </size>
       </property>
@@ -55,11 +55,27 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>185</width>
+         <width>63</width>
          <height>607</height>
         </rect>
        </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QWidget" name="nodeCatalogContent" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="mouseTracking">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
        <zorder>frame_2</zorder>
+       <zorder>nodeCatalogContent</zorder>
       </widget>
      </widget>
     </item>
@@ -137,10 +153,25 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>555</width>
+            <width>677</width>
             <height>350</height>
            </rect>
           </property>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QWidget" name="meshWorkWidget" native="true">
+             <property name="mouseTracking">
+              <bool>true</bool>
+             </property>
+             <property name="acceptDrops">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+          <zorder>widget</zorder>
+          <zorder>Node_Catalog</zorder>
+          <zorder>meshWorkWidget</zorder>
          </widget>
         </widget>
        </item>
