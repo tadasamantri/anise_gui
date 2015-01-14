@@ -26,6 +26,12 @@ Node::~Node(){
 
 }
 
+void Node::setPosition(float x, float y){
+    this->position_x = x;
+    this->position_y = y;
+
+}
+
 void Node::setType(QString type){
     this->type = type;
 }
@@ -48,6 +54,14 @@ QString Node::getName(){
 
 QString Node::getType(){
     return this->type;
+}
+
+void Node::addGate(Gate &gate, bool input){
+    if(input == true){
+        this->inputGates.append(gate);
+    }else{
+        this->outputGates.append((gate));
+    }
 }
 
 bool Node::addParam(QString _key, QVariant _value){

@@ -12,19 +12,32 @@
 #include <QMap>
 #include <QVector>
 #include <QImage>
+#include <QWidget>
+#include "node.h"
 
 class RenderClass
 {
 public:
-    QLabel testBild;
-    RenderClass(QWidget* parent);
+
+    RenderClass();
 
     bool loadImages();
-    QLabel rose;
-    QVector<QLabel*> Nodes;
-    QVector<QPixmap*> Catalog; //All pictures that we load!
+
+
+    // Catalog is a Map containing all *png files in teh image folder
+    // Catalog["nameOfFile"] returns the picture
+    QMap<QString, QPixmap*> Catalog;
+
+    QWidget buildWidget(Node* node);
 
     void testBildRender();
+
+    /*
+     * Renders a node.
+     *
+     */
+    void renderNode(Node* nodeToRender,QWidget* parent);
+
 };
 
 #endif // RENDERCLASS_H

@@ -4,6 +4,8 @@
 #include <QMessageBox>
 #include <QApplication>
 #include <QCoreApplication>
+#include <QVector>
+#include <QCursor>
 #include "anisecommunicator.h"
 #include "settingshandler.h"
 #include "qdebugstreamredirector.h"
@@ -34,8 +36,16 @@ MainWindow::MainWindow(QWidget *parent) :
     if(SettingsHandler::contains("frameworkpath"))
         AniseCommunicator::setFrameworkPath(SettingsHandler::loadSetting("frameworkpath"));
     else{
+<<<<<<< HEAD
          QMessageBox::information(0, QString("Please, set your framework path"), QString("You haven't set your framework path yet.\nChoose first!"), "Choose", "Not yet");
 
+=======
+        /*
+         * TODO different outcome of buttons
+         * right now whatever you click will result in the same outcome
+         */
+        QMessageBox::information(0, QString("Please, set your framework path"), QString("You haven't set your framework path yet.\nChoose first!"), "Choose", "Not yet");
+>>>>>>> 5275380625b9c9869498bc747aa616449818d9b2
         QString fileName = QFileDialog::getOpenFileName(this,
                                                         "Set your framework path",
                                                         "",
@@ -45,8 +55,62 @@ MainWindow::MainWindow(QWidget *parent) :
 
     }
 
+
+
     SettingsHandler::initializeSettings();
-    NodeCatalog_Render();
+
+
+
+
+
+
+
+
+
+    // ##### generate a node just for testing purpose
+    //later nodes should be created by reading from a json file
+
+
+        Node *tempTestNode = new Node(); //using standart construktor
+        //setting individual variables
+
+        //name and type
+        tempTestNode->setType("TestType");
+        tempTestNode->setName("Dieter");
+
+        //generate and add test gates:
+        //input
+        QVector<QString> *tempTestGateInputTypes = new QVector<QString>();
+        tempTestGateInputTypes->append("type1");
+        tempTestGateInputTypes->append("type2");
+        tempTestGateInputTypes->append("type3");
+        //output
+        QVector<QString> *tempTestGateOutputTypes = new QVector<QString>();
+        tempTestGateInputTypes->append("type4");
+        tempTestGateInputTypes->append("type1");
+        tempTestGateInputTypes->append("type5");
+
+        Gate *tempTestGateInput = new Gate(true, *tempTestGateInputTypes);
+        Gate *tempTestGateOutput = new Gate(false, *tempTestGateOutputTypes);
+        tempTestNode->addGate(*tempTestGateInput,1);
+        tempTestNode->addGate(*tempTestGateOutput,0);
+
+        //add parameter
+        tempTestNode->addParam("param1", 1);
+        tempTestNode->addParam("param2", false);
+        tempTestNode->addParam("param3", 19.4f);
+        tempTestNode->addParam("param4", 3.141);
+
+        //set the position of the Node
+        tempTestNode->setPosition(1.0 , 1.0);
+
+    // ##### end of generation of testing node
+
+    //now we want to render this Node with the render class:
+    //RenderClass testRenderer = new
+
+    NodeCatalog_Render(tempTestNode);
+
 
     //load all available NodeTypes
     AniseCommunicator::getAllNodeTypes();
@@ -104,17 +168,26 @@ void MainWindow::on_actionNew_triggered()
 }
 
 
-void MainWindow::NodeCatalog_Render(){
 
-   qDebug() << "render method in mainwindow reached";
-   RenderClass *A = new RenderClass(ui->nodeCatalogContent) ;
-   ui->nodeCatalogContent->setMinimumWidth(A->Nodes[0]->height() + 15);
-    ui->nodeCatalogContent->setMinimumHeight((A->Nodes.size() )  * A->Nodes[0]->height());
-   for (int i = 0; i < A->Nodes.size(); ++i) {
-        A->Nodes.at(i)->show();
 
+<<<<<<< HEAD
    }
 
+=======
+void MainWindow::NodeCatalog_Render(Node* nodeToRender){
+
+    //temporary render method. should be later moved into the render class
+    qDebug() << "render method in mainwindow reached";
+    RenderClass *A = new RenderClass() ;
+
+    //render in the side
+    A->renderNode(nodeToRender,ui->nodeCatalogContent);
+
+    //render in the main window
+    //qDebug() << "x: " << QCursor::pos().x() << " y: "<< QCursor::pos().y() ;
+    //nodeToRender->setPosition(QCursor::pos().x(), QCursor::pos().y());
+    A->renderNode(nodeToRender,ui->meshWorkWidget);
+>>>>>>> 5275380625b9c9869498bc747aa616449818d9b2
 
 }
 

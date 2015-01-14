@@ -33,7 +33,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
-    void NodeCatalog_Render();
+    void NodeCatalog_Render(Node* nodeToRender);
 
 };
 

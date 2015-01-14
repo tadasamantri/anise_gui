@@ -50,7 +50,7 @@
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents">
+      <widget class="QWidget" name="nodeCatalogContent">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -61,21 +61,11 @@
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QWidget" name="nodeCatalogContent" native="true">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="mouseTracking">
-           <bool>true</bool>
-          </property>
+         <widget class="QFrame" name="">
+          <layout class="QVBoxLayout" name="verticalLayout_5"/>
          </widget>
         </item>
        </layout>
-       <zorder>frame_2</zorder>
-       <zorder>nodeCatalogContent</zorder>
       </widget>
      </widget>
     </item>
@@ -169,9 +159,6 @@
             </widget>
            </item>
           </layout>
-          <zorder>widget</zorder>
-          <zorder>Node_Catalog</zorder>
-          <zorder>meshWorkWidget</zorder>
          </widget>
         </widget>
        </item>
