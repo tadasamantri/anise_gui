@@ -36,16 +36,14 @@ MainWindow::MainWindow(QWidget *parent) :
     if(SettingsHandler::contains("frameworkpath"))
         AniseCommunicator::setFrameworkPath(SettingsHandler::loadSetting("frameworkpath"));
     else{
-<<<<<<< HEAD
-         QMessageBox::information(0, QString("Please, set your framework path"), QString("You haven't set your framework path yet.\nChoose first!"), "Choose", "Not yet");
 
-=======
         /*
          * TODO different outcome of buttons
          * right now whatever you click will result in the same outcome
          */
         QMessageBox::information(0, QString("Please, set your framework path"), QString("You haven't set your framework path yet.\nChoose first!"), "Choose", "Not yet");
->>>>>>> 5275380625b9c9869498bc747aa616449818d9b2
+
+
         QString fileName = QFileDialog::getOpenFileName(this,
                                                         "Set your framework path",
                                                         "",
@@ -170,12 +168,9 @@ void MainWindow::on_actionNew_triggered()
 
 
 
-<<<<<<< HEAD
-   }
 
-=======
 void MainWindow::NodeCatalog_Render(Node* nodeToRender){
-
+/*
     //temporary render method. should be later moved into the render class
     qDebug() << "render method in mainwindow reached";
     RenderClass *A = new RenderClass() ;
@@ -187,7 +182,7 @@ void MainWindow::NodeCatalog_Render(Node* nodeToRender){
     //qDebug() << "x: " << QCursor::pos().x() << " y: "<< QCursor::pos().y() ;
     //nodeToRender->setPosition(QCursor::pos().x(), QCursor::pos().y());
     A->renderNode(nodeToRender,ui->meshWorkWidget);
->>>>>>> 5275380625b9c9869498bc747aa616449818d9b2
+*/
 
 }
 

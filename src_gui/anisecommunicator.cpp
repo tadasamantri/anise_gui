@@ -14,7 +14,7 @@ void AniseCommunicator::readAll(){
 QString AniseCommunicator::getAllNodeTypes(){
 
     QStringList arguments;
-    arguments << "--help";
+    arguments << "--nodes" << "--machine";
     qDebug() << path << arguments;
 
     //QObject::connect(anise_process, &QProcess::finished, readAll);
@@ -32,7 +32,7 @@ QString AniseCommunicator::getAllNodeTypes(){
 
 
 
-    qDebug() << readOutput;
+    qDebug() << output;
     //if(byteArrayOutput.isEmpty()){
    // qDebug() << byteArrayOutput;
     return "";
