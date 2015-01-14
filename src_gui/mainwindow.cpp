@@ -7,13 +7,13 @@
 #include "anisecommunicator.h"
 #include "settingshandler.h"
 #include "qdebugstreamredirector.h"
-<<<<<<< HEAD
+
 #include "mesh.h"
 
-=======
+
 #include "renderclass.h"
 #include "nodecatalog.h"
->>>>>>> 359c1d2cb2e0152fe0472088e976d227a557c4c8
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -30,21 +30,12 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << QApplication::applicationDirPath() + "/settings.ini";
 
     //Check if Framework path is set
-<<<<<<< HEAD
-    if(!SettingsHandler::contains("frameworkpath")){
 
-
-
-        QMessageBox::information(0, QString("Please, set your framework path"), QString("You haven't set your framework path yet.\nChoose first!"), "Choose", "go to hell");
-=======
     if(SettingsHandler::contains("frameworkpath"))
         AniseCommunicator::setFrameworkPath(SettingsHandler::loadSetting("frameworkpath"));
     else{
-        /*
-         * TODO different outcome of buttons
-         */
-        QMessageBox::information(0, QString("Please, set your framework path"), QString("You haven't set your framework path yet.\nChoose first!"), "Choose", "Not yet");
->>>>>>> 359c1d2cb2e0152fe0472088e976d227a557c4c8
+         QMessageBox::information(0, QString("Please, set your framework path"), QString("You haven't set your framework path yet.\nChoose first!"), "Choose", "Not yet");
+
         QString fileName = QFileDialog::getOpenFileName(this,
                                                         "Set your framework path",
                                                         "",
@@ -103,14 +94,14 @@ void MainWindow::on_actionSet_framework_path_triggered()
 
 }
 
-<<<<<<< HEAD
+
 void MainWindow::on_actionNew_triggered()
 {
 
     Mesh newMesh();
-=======
 
 
+}
 
 
 void MainWindow::NodeCatalog_Render(){
@@ -123,16 +114,7 @@ void MainWindow::NodeCatalog_Render(){
         A->Nodes.at(i)->show();
 
    }
-   /*
-   A->rose.setParent(ui->nodeCatalogContent);
-   ui->nodeCatContent->setMinimumWidth(A->rose.width());
-   ui->nodeCatContent->setMaximumWidth(A->rose.width());
-   ui->nodeCatContent->setMinimumHeight(A->rose.height());
-   //A->rose.move(10,10);
-   //roseRect. (20,20);
-   //A->rose.setGeometry(A->rose.rect());
-   //->layout()->addWidget(&(A->rose));
-   //A->rose.show();
-*/
->>>>>>> 359c1d2cb2e0152fe0472088e976d227a557c4c8
+
+
 }
+
