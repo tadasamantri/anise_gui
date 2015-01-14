@@ -1,5 +1,8 @@
 #include "gate.h"
 
+Gate::Gate(){
+    }
+
 Gate::Gate(bool in, QVector<QString> types){
     this->in=in;
     this->types=types;
@@ -17,4 +20,3 @@ void Gate::setDirection(bool in){
 QVector<QString> Gate::getTypes(){
     return types;
 }
-

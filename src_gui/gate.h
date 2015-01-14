@@ -8,7 +8,7 @@ class Gate
 {
 
 public:
-
+    Gate();
     Gate(bool in, QVector<QString> tpyes);
     bool getDirection();
     void setDirection(bool in);

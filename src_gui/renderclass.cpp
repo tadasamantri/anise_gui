@@ -3,32 +3,28 @@
 #include <QDebug>
 #include <QDir>
 #include <QStringList>
+#include <QtWidgets>
+#include <QMap>
 
-
-RenderClass::RenderClass(QWidget* parent)
+RenderClass::RenderClass()
 {
     //load all images
     if (loadImages() == true) {
         qDebug() << "images loaded successfully";
 
 
-        //create Node images
-        for (int i = 0; i < Catalog.size(); ++i) {
-            QLabel *temp = new QLabel();
-            temp->setPixmap(*Catalog.at(i));
-            temp->setParent(parent);
-            //temp.setMask(Catalog.at(i)->mask());
-            temp->setGeometry(0,i * (Catalog.at(i)->height()),Catalog.at(i)->width() ,Catalog.at(i)->height());
-            Nodes<< temp ;
-        }
-
-
+//        //create Node images
+//        for (int i = 0; i < Catalog.size(); ++i) {
+//            QLabel *temp = new QLabel();
+//            temp->setPixmap(*Catalog.at(i));
+//            temp->setParent(parent);
+//            //temp.setMask(Catalog.at(i)->mask());
+//            temp->setGeometry(0,i * (Catalog.at(i)->height()),Catalog.at(i)->width() ,Catalog.at(i)->height());
+//            Nodes<< temp ;
+//        }
     }else{
         qDebug() << "images loading failed";
     }
-
-
-
 }
 
 
@@ -53,7 +49,7 @@ bool RenderClass::loadImages(){
     listOfFiles = listOfFiles.filter(".png");
 
 
-/*
+    /*
     for (int i = 0; i < listOfFiles.size(); ++i) {
         qDebug() << "file found: " << listOfFiles.at(i);
     }
@@ -67,10 +63,10 @@ bool RenderClass::loadImages(){
             result = temp->load(directory.absolutePath().append("/"+listOfFiles.at(i)));
 
             if (result == false) {
-                   qDebug() << "loaded image: " << directory.absolutePath().append(listOfFiles.at(i)) << " " << result;
+                qDebug() << "loaded image: " << directory.absolutePath().append(listOfFiles.at(i)) << " " << result;
             }
 
-            Catalog << temp;
+            Catalog.insert(listOfFiles.at(i), temp);
 
         }
     }
@@ -79,4 +75,24 @@ bool RenderClass::loadImages(){
 
     return result;
 }
+
+
+void RenderClass::renderNode(Node* nodeToRender,QWidget* parent){
+
+
+    QWidget *NodeWidget = new QWidget(parent);
+
+    //Zeichne den hintergrund:
+    QLabel *BackgroundLabel = new QLabel();
+
+    //Momentan hardcoded bild für Background. soll per id oder string ansprechbar sein!
+    BackgroundLabel->setPixmap(*Catalog["background.png"]);
+    BackgroundLabel->setParent(NodeWidget);
+
+    NodeWidget->setGeometry(int(nodeToRender->position_x),int(nodeToRender->position_y), BackgroundLabel->width(), BackgroundLabel->height());
+    NodeWidget->show();
+    //Nodes<< BackgroundLabel ;
+
+}
+
 
