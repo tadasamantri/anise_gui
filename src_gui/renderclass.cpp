@@ -35,8 +35,9 @@ bool RenderClass::loadImages(){
     bool result = true;
     QStringList listOfFiles;
 
-    //absoluter pfad muss noch geändert werden! TODO
-    QDir directory("/media/Work/BaPra/GuiRepo/anise_gui/Data/Images/");
+    QDir directory;
+    directory.cdUp();
+    directory.cd("Data/Images/");
 
     if (directory.exists() == true) {
         //qDebug() << "directory.exists() == true";

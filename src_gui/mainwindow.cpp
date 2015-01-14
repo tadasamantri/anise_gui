@@ -170,7 +170,7 @@ void MainWindow::on_actionNew_triggered()
 
 
 void MainWindow::NodeCatalog_Render(Node* nodeToRender){
-/*
+
     //temporary render method. should be later moved into the render class
     qDebug() << "render method in mainwindow reached";
     RenderClass *A = new RenderClass() ;
@@ -182,7 +182,7 @@ void MainWindow::NodeCatalog_Render(Node* nodeToRender){
     //qDebug() << "x: " << QCursor::pos().x() << " y: "<< QCursor::pos().y() ;
     //nodeToRender->setPosition(QCursor::pos().x(), QCursor::pos().y());
     A->renderNode(nodeToRender,ui->meshWorkWidget);
-*/
+
 
 }
 
