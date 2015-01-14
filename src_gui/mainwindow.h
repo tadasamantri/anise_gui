@@ -33,6 +33,8 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
+    void NodeCatalog_Render();
+
 };
 
 #endif // MAINWINDOW_H

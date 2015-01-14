@@ -7,16 +7,22 @@
 #include "anisecommunicator.h"
 #include "settingshandler.h"
 #include "qdebugstreamredirector.h"
+<<<<<<< HEAD
 #include "mesh.h"
 
+=======
+#include "renderclass.h"
+#include "nodecatalog.h"
+>>>>>>> 359c1d2cb2e0152fe0472088e976d227a557c4c8
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
-    menuBar()->setNativeMenuBar(false);
-    new Q_DebugStream(std::cout, ui->qDebug_out);
+    //general initialization of the mainwindow
+    ui->setupUi(this);//generate gui from xml
+    menuBar()->setNativeMenuBar(false); //schaltet natives ubuntu menu aus
+    new Q_DebugStream(std::cout, ui->qDebug_out); //leitet qDebug ins logfenster
     Q_DebugStream::registerQDebugMessageHandler();
 
     //initalize stored Settings
@@ -24,20 +30,32 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << QApplication::applicationDirPath() + "/settings.ini";
 
     //Check if Framework path is set
+<<<<<<< HEAD
     if(!SettingsHandler::contains("frameworkpath")){
 
 
 
         QMessageBox::information(0, QString("Please, set your framework path"), QString("You haven't set your framework path yet.\nChoose first!"), "Choose", "go to hell");
+=======
+    if(SettingsHandler::contains("frameworkpath"))
+        AniseCommunicator::setFrameworkPath(SettingsHandler::loadSetting("frameworkpath"));
+    else{
+        /*
+         * TODO different outcome of buttons
+         */
+        QMessageBox::information(0, QString("Please, set your framework path"), QString("You haven't set your framework path yet.\nChoose first!"), "Choose", "Not yet");
+>>>>>>> 359c1d2cb2e0152fe0472088e976d227a557c4c8
         QString fileName = QFileDialog::getOpenFileName(this,
                                                         "Set your framework path",
                                                         "",
                                                         "(anids_framework (*)");
 
        SettingsHandler::storeSetting("frameworkpath", fileName);
+
     }
 
     SettingsHandler::initializeSettings();
+    NodeCatalog_Render();
 
     //load all available NodeTypes
     AniseCommunicator::getAllNodeTypes();
@@ -85,8 +103,36 @@ void MainWindow::on_actionSet_framework_path_triggered()
 
 }
 
+<<<<<<< HEAD
 void MainWindow::on_actionNew_triggered()
 {
 
     Mesh newMesh();
+=======
+
+
+
+
+void MainWindow::NodeCatalog_Render(){
+
+   qDebug() << "render method in mainwindow reached";
+   RenderClass *A = new RenderClass(ui->nodeCatalogContent) ;
+   ui->nodeCatalogContent->setMinimumWidth(A->Nodes[0]->height() + 15);
+    ui->nodeCatalogContent->setMinimumHeight((A->Nodes.size() )  * A->Nodes[0]->height());
+   for (int i = 0; i < A->Nodes.size(); ++i) {
+        A->Nodes.at(i)->show();
+
+   }
+   /*
+   A->rose.setParent(ui->nodeCatalogContent);
+   ui->nodeCatContent->setMinimumWidth(A->rose.width());
+   ui->nodeCatContent->setMaximumWidth(A->rose.width());
+   ui->nodeCatContent->setMinimumHeight(A->rose.height());
+   //A->rose.move(10,10);
+   //roseRect. (20,20);
+   //A->rose.setGeometry(A->rose.rect());
+   //->layout()->addWidget(&(A->rose));
+   //A->rose.show();
+*/
+>>>>>>> 359c1d2cb2e0152fe0472088e976d227a557c4c8
 }
