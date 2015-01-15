@@ -39,7 +39,7 @@ Mesh JsonFileHandler::parseJsonString(QString &jsonString){
     if(!(jsonObject.contains(QString("nodes"))
          && jsonObject["nodes"].isArray())){
         // && jsonObject.contains(QString("connections"))
-         //&& jsonObject["connections"].isArray())) {
+        //&& jsonObject["connections"].isArray())) {
 
         QMessageBox::information(0,QString("Error"),QString("The file you selected has an unknown Format"), "Thanks for that!");
         return mesh;
@@ -145,5 +145,51 @@ void JsonFileHandler::writeFile(const QString &path, const QString &fileContent)
     QTextStream out(&file);
     out << fileContent;
     file.close();
+
+}
+
+QString* JsonFileHandler::meshToJson(Mesh *mesh){
+
+    QString *jsonString = new QString();
+
+    *jsonString += "{\n\t\"nodes: [";
+
+    foreach (Node* localNode, mesh->nodes) {
+        *jsonString += "\n\t\t{\"class\": " + localNode->getType() + "\",\n";
+        *jsonString += "\t\t \"name\": \"" + localNode->getName() + "\", \n";
+        *jsonString += "\t\t \"params\": [";
+        foreach(QString key, localNode->params.keys()){
+            *jsonString += "\n\t\t\t{\"" + key + "\": \"" + localNode->params[key].toString() + "\"},";
+        }
+        //remove obsolete last ","
+        if(*(jsonString->end()) == ',')
+            jsonString->chop(jsonString->length()-1);
+        *jsonString += "]},";
+
+    }
+    //remove obsolete last ","
+    if(*(jsonString->end()) == ',')
+        jsonString->chop(jsonString->length()-1);
+    *jsonString += "\t],\n";
+    *jsonString += "\"connections\": [";
+
+    foreach (Connection* localConnection, mesh->connections) {
+        *jsonString += "\n\t{\"src_node\": \"";
+        *jsonString += /*TODO: NodeName*/ "NodeNameDummy";
+        *jsonString += "\", \"src_gate\": \"" ;
+        *jsonString += /*TODO:GateName*/ "GateNameDummy (out)";
+        *jsonString += "\", ";
+        *jsonString += "\"dest_node\": \"";
+        *jsonString += /*TODO: NodeName*/ "NodeNameDummy";
+        *jsonString += "\", \"dest_gate\": \"";
+        *jsonString += /*T + ODO:GateName*/ "GateNameDummy (in)";
+        *jsonString += "\"},";
+    }
+    //remove obsolete last ","
+    if(*(jsonString->end()) == ',')
+        jsonString->chop(jsonString->length()-1);
+    *jsonString += "\n\t]\n}";
+
+    return jsonString;
 
 }

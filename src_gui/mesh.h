@@ -21,8 +21,8 @@ public:
 
     //return connection's address behind ID
     Connection* getConnectionByID(int ID);
-
-private:
+    friend class JsonFilehandler;
+//private:
     QVector<Node*> nodes;
     QVector<Connection*> connections;
 

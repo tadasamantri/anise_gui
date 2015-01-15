@@ -47,7 +47,7 @@ public:
     QString getParamByKey(const QString & _key);
     QString toString();
 
-private:
+    //private:
     QVector<Gate> inputGates, outputGates;
     QString type, name;
     QVariantMap params; //maps <identifier, value>

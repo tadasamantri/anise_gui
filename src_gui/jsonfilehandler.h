@@ -16,6 +16,7 @@
 
 #include <QFile>
 #include <QString>
+#include <QVector>
 #include <QTextCodec>
 #include <QtDebug>
 #include <QJsonObject>
@@ -55,6 +56,8 @@ public:
     */
 
     static void printFile(const QString &fileContent);
+
+    static QString* meshToJson(Mesh* mesh);
 };
 
 #endif //FILEHANDLER_H
