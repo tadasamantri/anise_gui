@@ -38,6 +38,18 @@ public:
      */
     void renderNode(Node* nodeToRender,QWidget* parent);
 
+    /*
+     * Render one Node Type in the Catalog
+     *
+     */
+    void renderNodeType(Node* nodeToRender,QWidget* parent, int position);
+
+
+    /*
+     * This will Render all Nodes in the Type Catalog.
+     */
+    void renderCatalogContent(QVector<Node> NodeVektor, QWidget *CatalogParent);
+
 };
 
 #endif // RENDERCLASS_H

@@ -5,6 +5,8 @@
 #include <QStringList>
 #include <QtWidgets>
 #include <QMap>
+#include "node.h"
+#include <QVector>
 
 RenderClass::RenderClass()
 {
@@ -87,7 +89,6 @@ void RenderClass::renderNode(Node* nodeToRender,QWidget* parent){
     //Zeichne den hintergrund:
     QLabel *BackgroundLabel = new QLabel();
 
-    //Momentan hardcoded bild für Background. soll per id oder string ansprechbar sein!
     BackgroundLabel->setPixmap(*Catalog["background.png"]);
     BackgroundLabel->setParent(NodeWidget);
 
@@ -97,4 +98,29 @@ void RenderClass::renderNode(Node* nodeToRender,QWidget* parent){
 
 }
 
+void RenderClass::renderNodeType(Node* nodeToRender,QWidget* parent, int position){
+    QWidget *NodeWidget = new QWidget(parent);
+
+    //Zeichne den hintergrund:
+    QLabel *BackgroundLabel = new QLabel();
+
+    BackgroundLabel->setPixmap(*Catalog["background.png"]);
+    BackgroundLabel->setParent(NodeWidget);
+
+
+    //TO-DO should use layouts instead of hardcoded position!
+    NodeWidget->setGeometry(5,position * 55, BackgroundLabel->width(), BackgroundLabel->height());
+    NodeWidget->show();
+    //Nodes<< BackgroundLabel ;
+
+
+}
+
+void RenderClass::renderCatalogContent(QVector<Node> NodeVektor, QWidget *CatalogParent){
+    int position = 0;
+    foreach (Node nodeTyp, NodeVektor) {
+        renderNodeType(&nodeTyp, CatalogParent, position);
+        position++;
+    }
+}
 

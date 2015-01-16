@@ -11,6 +11,7 @@ class NodeCatalog
 public:
     NodeCatalog();
     QVector<Node> Content;
+    void insert(Node *nodeToInsert);
 };
 
 #endif // NODECATALOG_H
