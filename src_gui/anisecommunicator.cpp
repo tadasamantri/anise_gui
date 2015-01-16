@@ -1,43 +1,52 @@
 #include "anisecommunicator.h"
 #include <QDebug>
 
+
 QProcess *AniseCommunicator::anise_process = new QProcess();
 QString AniseCommunicator::path;
 QString AniseCommunicator::readOutput;
 
-void AniseCommunicator::readAll(){
 
+//reads all available bytes from the Standard Output Channel
+void AniseCommunicator::read(){
+
+   //Sets the channel to be read to StandardOutput
+   anise_process->setReadChannel(QProcess::StandardOutput);
    QByteArray ba = anise_process->readAll();
    readOutput = QString(ba);
 }
 
-QString AniseCommunicator::getAllNodeTypes(){
+//reads all available bytes from given Process Channel -- USE QProcess::... (see overloaded function read)
+void AniseCommunicator::read(QProcess::ProcessChannel pc){
 
-    QStringList arguments;
-    arguments << "--nodes" << "--machine";
-    qDebug() << path << arguments;
-
-    //QObject::connect(anise_process, &QProcess::finished, readAll);
-    AniseCommunicator::anise_process->start(path, arguments);
-    anise_process->setReadChannel(QProcess::StandardOutput);
-
-    anise_process->waitForFinished();
-    qDebug() << "finished";
-
-    readAll();
-
-    QByteArray byteArrayOutput = anise_process->readAllStandardOutput();
-
-    QString output(byteArrayOutput);
-
-
-
-    qDebug() << output;
-    //if(byteArrayOutput.isEmpty()){
-   // qDebug() << byteArrayOutput;
-    return "";
+   //Sets the channel to be read
+   anise_process->setReadChannel(pc);
+   QByteArray ba = anise_process->readAll();
+   readOutput = QString(ba);
 }
 
+//Returns Json String with all available Node Files
+QString AniseCommunicator::getAllNodeTypes(){
+
+   //create parameters needed for executing framework
+   QStringList arguments;
+   arguments << "--nodes" << "--machine";// << "--help";
+
+   //execute framework
+   AniseCommunicator::anise_process->start(path, arguments);
+
+   //wait for prints
+   anise_process->waitForFinished();
+
+   //qDebug() << "finished";
+
+   //read printed stuff
+   read();
+
+   qDebug() << readOutput;
+
+   return "";
+}
 
 
 void AniseCommunicator::setFrameworkPath(QString newPath){

@@ -31,8 +31,9 @@ private slots:
     void on_actionNew_triggered();
 
 private:
-    Ui::MainWindow *ui;
 
+    Ui::MainWindow *ui;
+    void initializeGUI();
     void NodeCatalog_Render(Node* nodeToRender);
 
 };

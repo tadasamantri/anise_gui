@@ -21,45 +21,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    //general initialization of the mainwindow
-    ui->setupUi(this);//generate gui from xml
-    menuBar()->setNativeMenuBar(false); //schaltet natives ubuntu menu aus
-    new Q_DebugStream(std::cout, ui->qDebug_out); //leitet qDebug ins logfenster
-    Q_DebugStream::registerQDebugMessageHandler();
-
-    //initalize stored Settings
-    SettingsHandler::setSettingsPath(QApplication::applicationDirPath() + "/settings.ini");
-    qDebug() << QApplication::applicationDirPath() + "/settings.ini";
-
-    //Check if Framework path is set
-
-    if(SettingsHandler::contains("frameworkpath"))
-        AniseCommunicator::setFrameworkPath(SettingsHandler::loadSetting("frameworkpath"));
-    else{
-
-        /*
-         * TODO different outcome of buttons
-         * right now whatever you click will result in the same outcome
-         */
-        QMessageBox::information(0, QString("Please, set your framework path"), QString("You haven't set your framework path yet.\nChoose first!"), "Choose", "Not yet");
 
 
-        QString fileName = QFileDialog::getOpenFileName(this,
-                                                        "Set your framework path",
-                                                        "",
-                                                        "(anids_framework (*)");
-
-       SettingsHandler::storeSetting("frameworkpath", fileName);
-
-    }
-
-
-
-    SettingsHandler::initializeSettings();
-
-
-
-
+    initializeGUI();
 
 
 
@@ -110,13 +74,60 @@ MainWindow::MainWindow(QWidget *parent) :
     NodeCatalog_Render(tempTestNode);
 
 
+
+
+
+
+}
+
+void MainWindow::initializeGUI(){
+
+    //general initialization of the mainwindow
+    ui->setupUi(this);//generate gui from xml
+    menuBar()->setNativeMenuBar(false); //schaltet natives ubuntu menu aus
+    new Q_DebugStream(std::cout, ui->qDebug_out); //leitet qDebug ins logfenster
+    Q_DebugStream::registerQDebugMessageHandler();
+
+    //initalize stored Settings
+    SettingsHandler::setSettingsPath(QApplication::applicationDirPath() + "/settings.ini");
+    //qDebug() << QApplication::applicationDirPath() + "/settings.ini";
+
+    //Check if Framework path is set
+
+    if(SettingsHandler::contains("frameworkpath"))
+        AniseCommunicator::setFrameworkPath(SettingsHandler::loadSetting("frameworkpath"));
+    else{
+
+        /*
+         * TODO different outcome of buttons
+         * right now whatever you click will result in the same outcome
+         */
+        QMessageBox::information(0, QString("Please, set your framework path"), QString("You haven't set your framework path yet.\nChoose first!"), "Choose", "Not yet");
+
+
+        QString fileName = QFileDialog::getOpenFileName(this,
+                                                        "Set your framework path",
+                                                        "",
+                                                        "(anids_framework (*)");
+
+       SettingsHandler::storeSetting("frameworkpath", fileName);
+
+    }
+
+    //initialize settings from .ini file
+    SettingsHandler::initializeSettings();
+
+    //START LOADING NODE TYPES
+
     //load all available NodeTypes
     AniseCommunicator::getAllNodeTypes();
 
 
 
 
+
 }
+
 
 MainWindow::~MainWindow()
 {

@@ -4,8 +4,7 @@
 
 QString SettingsHandler::settingsFilePath;
 
-
-//functions definitions
+//checks if setting with given key exists
 bool SettingsHandler::contains(QString key){
 
     QSettings settings(settingsFilePath, QSettings::IniFormat);
@@ -14,6 +13,7 @@ bool SettingsHandler::contains(QString key){
 
 }
 
+//loads a setting from .ini file with given key
 QString SettingsHandler::loadSetting(QString key){
 
     QSettings settings(settingsFilePath, QSettings::IniFormat);
@@ -25,7 +25,7 @@ QString SettingsHandler::loadSetting(QString key){
 
 }
 
-
+//Stores setting in .ini file. When storing setting ensure loading in function initializeSettings()
 void SettingsHandler::storeSetting(QString SettingsKey, QString SettingsValue){
 
     QSettings settings(settingsFilePath, QSettings::IniFormat);
@@ -53,7 +53,7 @@ QMap<QString, QString> SettingsHandler::loadAllSettings(){
 }
 
 
-/* To ensure initalization when GUI starts please copy if cause for your implemented Setting.
+/* To ensure initalization when GUI starts please copy if-case for your implemented Setting.
  * Make sure your stored Setting is loaded by adding if-cause and internal variable is set!
  */
 void SettingsHandler::initializeSettings(){
