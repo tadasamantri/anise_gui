@@ -32,6 +32,17 @@ QString AniseCommunicator::getAllNodeTypes(){
    QStringList arguments;
    arguments << "--nodes" << "--machine";// << "--help";
 
+   //get framework Path
+   QString dir;
+   dir += path;
+
+   //remove name of Executable
+   dir.chop(dir.length() - dir.lastIndexOf("/") - 1);
+
+
+   //change working Directioy to get the Nodes =)
+   AniseCommunicator::anise_process->setWorkingDirectory(dir);
+
    //execute framework
    AniseCommunicator::anise_process->start(path, arguments);
 
