@@ -16,8 +16,9 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+    //Ui::MainWindow *getUi();
     ~MainWindow();
-
+    Ui::MainWindow *ui;
 
 
 
@@ -33,7 +34,7 @@ private slots:
 
 private:
 
-    Ui::MainWindow *ui;
+
     void initializeGUI();
 
 

@@ -11,7 +11,7 @@ class Mesh
 public:
 
     //add Node to mesh
-    void addNode(Node &Node);
+    void addNode(Node *Node);
 
     //add Connection to mesh
     void addConnection();

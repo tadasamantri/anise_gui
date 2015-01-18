@@ -9,6 +9,11 @@
 #include "dragwidget.h"
 #include <QVector>
 #include "drawobject.h"
+#include "data.h"
+#include "dataholder.h"
+
+QMap<QString, QPixmap*> RenderClass::Catalog;
+
 
 RenderClass::RenderClass()
 {
@@ -76,20 +81,34 @@ bool RenderClass::loadImages(){
     return result;
 }
 
+void RenderClass::renderMesh(Mesh *workMesh, QWidget* parent){
+
+    //calls render method for every node in the mesh
+    foreach (Node *node, workMesh->nodes) {
+        RenderClass::renderNode(node, parent);
+    }
+
+
+}
+
 
 void RenderClass::renderNode(Node* nodeToRender,QWidget* parent){
 
     //TO-DO code dublication in renderNode and renderNodeType!
-    DrawObject *NodeDrawObject = new DrawObject(parent);
+    QLabel *NodeDrawObject = new QLabel(parent);
+    //qDebug() << NodeDrawObject->parent();
 
     //Zeichne den hintergrund:
-    //QLabel *BackgroundLabel = new QLabel();
+    //NodeDrawObject->setParent(parent);
+    NodeDrawObject->setPixmap(*Catalog["background.png"]);
+    NodeDrawObject->setGeometry(0,0,50,50);
 
-    NodeDrawObject->labelOfThis->setPixmap(*Catalog["background.png"]);
 
-    //NodeWidget->setGeometry(int(nodeToRender->position_x),int(nodeToRender->position_y), BackgroundLabel->width(), BackgroundLabel->height());
-    //NodeDrawObject->labelOfThis->show();
-    //Nodes<< BackgroundLabel ;
+    //TO-DO should use layouts instead of hardcoded position!
+    NodeDrawObject->move( 5, 60);
+
+    //NodeDrawObject->labelOfThis->setGeometry(x,y,height,width);
+    NodeDrawObject->show();
 
 }
 
@@ -113,7 +132,6 @@ void RenderClass::renderNodeType(Node* nodeToRender,QWidget* parent, int positio
     NodeDrawObject->show();
 
 
-//Nodes<< BackgroundLabel;
 }
 
 void RenderClass::renderCatalogContent(QVector<Node> NodeVektor, QWidget *CatalogParent){

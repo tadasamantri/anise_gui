@@ -11,9 +11,6 @@ public:
     explicit DataHolder(QObject *parent = 0);
     static Data *getData();
 
-signals:
-
-public slots:
 
 private:
 

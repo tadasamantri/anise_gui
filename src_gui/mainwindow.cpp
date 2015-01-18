@@ -15,14 +15,19 @@
 
 #include "renderclass.h"
 #include "nodecatalog.h"
+#include "data.h"
+#include "dataholder.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-   
-    initializeGUI();
+
+   //
+   initializeGUI();
+   DataHolder::getData()->setUi(this->ui);
+   qDebug() << this->ui->mesh_edt_area->parent();
 
 }
 
@@ -94,6 +99,11 @@ void MainWindow::initializeGUI(){
 
 
 }
+/*
+Ui::MainWindow MainWindow::getUi(){
+    return this->ui;
+
+}*/
 
 MainWindow::~MainWindow()
 {

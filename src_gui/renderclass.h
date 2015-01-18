@@ -14,6 +14,7 @@
 #include <QImage>
 #include <QWidget>
 #include "node.h"
+#include "mesh.h"
 
 class RenderClass
 {
@@ -21,34 +22,37 @@ public:
 
     RenderClass();
 
-    bool loadImages();
+    static bool loadImages();
 
 
     // Catalog is a Map containing all *png files in teh image folder
     // Catalog["nameOfFile"] returns the picture
-    QMap<QString, QPixmap*> Catalog;
+    static QMap<QString, QPixmap*> Catalog;
 
-    QWidget buildWidget(Node* node);
+    static QWidget buildWidget(Node* node);
 
-    void testBildRender();
+    /*
+     * Renders the whole mesh
+     */
+    static void renderMesh(Mesh *workMesh, QWidget* parent);
 
     /*
      * Renders a node.
      *
      */
-    void renderNode(Node* nodeToRender,QWidget* parent);
+    static void renderNode(Node* nodeToRender,QWidget* parent);
 
     /*
      * Render one Node Type in the Catalog
      *
      */
-    void renderNodeType(Node* nodeToRender,QWidget* parent, int position);
+    static void renderNodeType(Node* nodeToRender,QWidget* parent, int position);
 
 
     /*
      * This will Render all Nodes in the Type Catalog.
      */
-    void renderCatalogContent(QVector<Node> NodeVektor, QWidget *CatalogParent);
+    static void renderCatalogContent(QVector<Node> NodeVektor, QWidget *CatalogParent);
 
 };
 

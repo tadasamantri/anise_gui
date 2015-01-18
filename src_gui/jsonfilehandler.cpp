@@ -87,7 +87,7 @@ Mesh JsonFileHandler::parseJsonString(QString &jsonString){
             }
         }
         Node tmp = NodeFactory::createNode(_class, _name, _params); //let the datafactory create a node and insert it into mesh
-        mesh.addNode(tmp);
+        mesh.addNode(&tmp);
         qDebug() << "Node parsed:\n"<< tmp.toString();
     }
 
