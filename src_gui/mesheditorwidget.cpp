@@ -30,7 +30,21 @@ void MeshEditorWidget::dropEvent(QDropEvent *event){
     qDebug()<<"dropEvent";
 
     Node *newNode = NodeFactory::createTestNode();
-    //newNode.setPosition();
+
+    //qDebug() << QString(event->mimeData()->data("application/customthingy"));
+    QPoint DropPoint = event->pos() - this->pos();
+
+
+    QByteArray Data = event->mimeData()->data("application/customthingy");
+    QDataStream dataStream(&Data, QIODevice::ReadOnly);
+    dataStream >> DropPoint;
+    DropPoint = event->pos() - DropPoint + this->pos() + QPoint(1,1);
+
+    //qDebug()<< "event->pos()" << event->pos();
+    qDebug()<< "DropPoint" << DropPoint;
+
+
+    newNode->setPosition(DropPoint.x(), DropPoint.y());
 
     qDebug() << "x:" << newNode->position_x << " y: " << newNode->position_y;
     DataHolder::getData()->addNodeToMesh(newNode);
