@@ -1,9 +1,6 @@
 #include "connection.h"
 
-Connection::Connection(QObject *parent) :
-    QObject(parent)
-{
-}
+
 
 Connection::Connection(Gate &src, Gate &dest)
 {
@@ -27,4 +24,20 @@ Gate* Connection::getDestGate(){
 
 Gate*  Connection::getSrcGate(){
     return gateA;
+}
+
+void Connection::setDestNode(Node &node){
+    dest_node = &node;
+}
+
+void Connection::setSrcNode(Node &node){
+    src_node = &node;
+}
+
+Node* Connection::getSrcNode(){
+    return src_node;
+}
+
+Node* Connection::getDestNode(){
+    return dest_node;
 }
