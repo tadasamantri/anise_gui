@@ -20,6 +20,7 @@ public:
 
     void setUi(Ui::MainWindow *ui);
     void addNodeToMesh(Node *newNode);
+    void moveNodeInMesh(QPoint *Position, int numberOfNode);
 
 
 };

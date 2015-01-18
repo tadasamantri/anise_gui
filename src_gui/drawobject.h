@@ -6,13 +6,17 @@
 #include <QLabel>
 
 
-class DrawObject
+class DrawObject : public QLabel
 {
+
+
+
+
 public:
-    DrawObject(QWidget *parent );
-    void show();
-    QWidget *widget;
-    QLabel *labelOfThis;
+    int numberOfNode;
+    DrawObject(int numberOfNode, QWidget *parent);
+
+
 
 };
 

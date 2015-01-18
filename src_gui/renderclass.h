@@ -40,7 +40,7 @@ public:
      * Renders a node.
      *
      */
-    static void renderNode(Node* nodeToRender,QWidget* parent);
+    static void renderNode(Node* nodeToRender,QWidget* parent, int numberOfNode);
 
     /*
      * Render one Node Type in the Catalog

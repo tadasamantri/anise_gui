@@ -83,19 +83,26 @@ bool RenderClass::loadImages(){
 
 void RenderClass::renderMesh(Mesh *workMesh, QWidget* parent){
 
+    //kills all children
+    foreach (QObject *child, parent->children()) {
+        child->deleteLater();
+    }
+    int i = 0;
+
     //calls render method for every node in the mesh
     foreach (Node *node, workMesh->nodes) {
-        RenderClass::renderNode(node, parent);
+        RenderClass::renderNode(node, parent, i);
+        i++;
     }
 
 
 }
 
 
-void RenderClass::renderNode(Node* nodeToRender,QWidget* parent){
+void RenderClass::renderNode(Node* nodeToRender,QWidget* parent, int numberOfNode){
 
     //TO-DO code dublication in renderNode and renderNodeType!
-    QLabel *NodeDrawObject = new QLabel(parent);
+    DrawObject *NodeDrawObject = new DrawObject(numberOfNode, parent);
     //qDebug() << NodeDrawObject->parent();
 
     //Zeichne den hintergrund:

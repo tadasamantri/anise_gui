@@ -3,8 +3,8 @@
 #include <QWidget>
 
 
-DrawObject::DrawObject(QWidget *parent = 0)
+DrawObject::DrawObject(int numberOfNode , QWidget *parent = 0)
 {
-    this->widget = new QWidget(parent);
-    this->labelOfThis = new QLabel(this->widget);
+    this->numberOfNode = numberOfNode;
+    this->setParent(parent);
 }
