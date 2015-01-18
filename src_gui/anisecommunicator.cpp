@@ -41,7 +41,7 @@ QString AniseCommunicator::getAllNodeTypes(){
    //qDebug() << "finished";
 
    //read printed stuff
-   read();
+   read(QProcess::StandardError);
 
    qDebug() << readOutput;
 
