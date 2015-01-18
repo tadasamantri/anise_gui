@@ -26,23 +26,6 @@ MainWindow::MainWindow(QWidget *parent) :
     initializeGUI();
 
   
- 
-
-  //declarations which will be needed to test rendering of ndoes
-    NodeCatalog TypeCatalog;
-    RenderClass *A = new RenderClass() ;
-
-    
-
-       //now we want to render this Node with the render class:
-    //RenderClass testRenderer = new
-    for (int i = 0; i < 20; ++i) {
-
-
-        Node *tempTestNode = NodeFactory::createTestNode();
-        TypeCatalog.insert(tempTestNode);
-    }
-    A->renderCatalogContent(TypeCatalog.Content,ui->nodeCatalogContent);
 
 
 
@@ -76,8 +59,7 @@ void MainWindow::initializeGUI(){
         QMessageBox::information(0, QString("Please, set your framework path"), QString("You haven't set your framework path yet.\nChoose first!"), "Choose", "Not yet");
 
 
-        QString fileName = QFileDialog::getOpenFileName(this,
-                                                        "Set your framework path",
+        QString fileName = QFileDialog::getOpenFileName(this, "Set your framework path",
                                                         "",
                                                         "(anids_framework (*)");
 
@@ -93,12 +75,32 @@ void MainWindow::initializeGUI(){
     //load all available NodeTypes
     AniseCommunicator::getAllNodeTypes();
 
+    //make the mesh editor accept drops
+    ui->mesh_edt_area->setAcceptDrops(true);
+
+
+    //create the Node catalog
+    NodeCatalog TypeCatalog;
+    //create the render object
+    RenderClass *A = new RenderClass() ;
+
+
+
+
+    //create 20 test nodes
+    for (int i = 0; i < 20; ++i) {
+
+        Node *tempTestNode = NodeFactory::createTestNode();
+        TypeCatalog.insert(tempTestNode);
+    }
+    //render the node catalog filled with test nodes
+    A->renderCatalogContent(TypeCatalog.Content,ui->nodeCatalogContent);
+
 
 
 
 
 }
-
 
 MainWindow::~MainWindow()
 {
@@ -138,7 +140,6 @@ void MainWindow::on_actionSet_framework_path_triggered()
 
 }
 
-
 void MainWindow::on_actionNew_triggered()
 {
 
@@ -146,10 +147,4 @@ void MainWindow::on_actionNew_triggered()
 
 
 }
-
-
-
-
-
-
 

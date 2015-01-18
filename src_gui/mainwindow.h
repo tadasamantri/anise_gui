@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QFile>
+#include <QMouseEvent>
 #include <QMainWindow>
 #include "jsonfilehandler.h"
 
@@ -34,7 +35,7 @@ private:
 
     Ui::MainWindow *ui;
     void initializeGUI();
-    void NodeCatalog_Render(Node* nodeToRender);
+
 
 };
 
