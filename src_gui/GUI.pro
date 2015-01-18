@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     renderclass.cpp \
     nodecatalog.cpp \
     dragwidget.cpp \
-    drawobject.cpp
+    drawobject.cpp \
+    mesheditorwidget.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -42,7 +43,8 @@ HEADERS  += mainwindow.h \
     renderclass.h \
     nodecatalog.h \
     dragwidget.h \
-    drawobject.h
+    drawobject.h \
+    mesheditorwidget.h
 
 FORMS    += mainwindow.ui
 

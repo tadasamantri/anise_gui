@@ -143,7 +143,7 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
-            <widget class="QWidget" name="meshWorkWidget" native="true">
+            <widget class="MeshEditorWidget" name="meshField" native="true">
              <property name="mouseTracking">
               <bool>true</bool>
              </property>
@@ -392,6 +392,12 @@
    <class>DragWidget</class>
    <extends>QWidget</extends>
    <header>dragwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MeshEditorWidget</class>
+   <extends>QWidget</extends>
+   <header>mesheditorwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
