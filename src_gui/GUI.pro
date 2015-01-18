@@ -23,7 +23,9 @@ SOURCES += main.cpp\
     anisecommunicator.cpp \
     nodefactory.cpp \
     renderclass.cpp \
-    nodecatalog.cpp
+    nodecatalog.cpp \
+    dragwidget.cpp \
+    drawobject.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -38,7 +40,9 @@ HEADERS  += mainwindow.h \
     anisecommunicator.h \
     nodefactory.h \
     renderclass.h \
-    nodecatalog.h
+    nodecatalog.h \
+    dragwidget.h \
+    drawobject.h
 
 FORMS    += mainwindow.ui
 

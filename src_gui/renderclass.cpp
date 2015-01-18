@@ -6,7 +6,9 @@
 #include <QtWidgets>
 #include <QMap>
 #include "node.h"
+#include "dragwidget.h"
 #include <QVector>
+#include "drawobject.h"
 
 RenderClass::RenderClass()
 {
@@ -52,13 +54,7 @@ bool RenderClass::loadImages(){
 
     listOfFiles = listOfFiles.filter(".png");
 
-
-    /*
-    for (int i = 0; i < listOfFiles.size(); ++i) {
-        qDebug() << "file found: " << listOfFiles.at(i);
-    }
-*/
-
+    //loads all images; if one coudlnt be loaded it will return false
     for (int i = 0; i < listOfFiles.size(); ++i) {
         if (result == true) {
 
@@ -83,41 +79,47 @@ bool RenderClass::loadImages(){
 
 void RenderClass::renderNode(Node* nodeToRender,QWidget* parent){
 
-
-    QWidget *NodeWidget = new QWidget(parent);
+    //TO-DO code dublication in renderNode and renderNodeType!
+    DrawObject *NodeDrawObject = new DrawObject(parent);
 
     //Zeichne den hintergrund:
-    QLabel *BackgroundLabel = new QLabel();
+    //QLabel *BackgroundLabel = new QLabel();
 
-    BackgroundLabel->setPixmap(*Catalog["background.png"]);
-    BackgroundLabel->setParent(NodeWidget);
+    NodeDrawObject->labelOfThis->setPixmap(*Catalog["background.png"]);
 
-    NodeWidget->setGeometry(int(nodeToRender->position_x),int(nodeToRender->position_y), BackgroundLabel->width(), BackgroundLabel->height());
-    NodeWidget->show();
+    //NodeWidget->setGeometry(int(nodeToRender->position_x),int(nodeToRender->position_y), BackgroundLabel->width(), BackgroundLabel->height());
+    //NodeDrawObject->labelOfThis->show();
     //Nodes<< BackgroundLabel ;
 
 }
 
 void RenderClass::renderNodeType(Node* nodeToRender,QWidget* parent, int position){
-    QWidget *NodeWidget = new QWidget(parent);
+
+
+    //TO-DO code dublication in renderNode and renderNodeType!
+    QLabel *NodeDrawObject = new QLabel(parent);
+    //qDebug() << NodeDrawObject->parent();
 
     //Zeichne den hintergrund:
-    QLabel *BackgroundLabel = new QLabel();
-
-    BackgroundLabel->setPixmap(*Catalog["background.png"]);
-    BackgroundLabel->setParent(NodeWidget);
+    //NodeDrawObject->setParent(parent);
+    NodeDrawObject->setPixmap(*Catalog["background.png"]);
+    NodeDrawObject->setGeometry(0,0,50,50);
 
 
     //TO-DO should use layouts instead of hardcoded position!
-    NodeWidget->setGeometry(5,position * 55, BackgroundLabel->width(), BackgroundLabel->height());
-    NodeWidget->show();
-    //Nodes<< BackgroundLabel ;
+    NodeDrawObject->move( 5,5+position * 60);
+
+    //NodeDrawObject->labelOfThis->setGeometry(x,y,height,width);
+    NodeDrawObject->show();
 
 
+//Nodes<< BackgroundLabel;
 }
 
 void RenderClass::renderCatalogContent(QVector<Node> NodeVektor, QWidget *CatalogParent){
     int position = 0;
+    //TO-DO scroll weite sollte nicht hard coded sein
+    CatalogParent->setMinimumHeight(NodeVektor.size()*60+10);
     foreach (Node nodeTyp, NodeVektor) {
         renderNodeType(&nodeTyp, CatalogParent, position);
         position++;
