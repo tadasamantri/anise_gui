@@ -163,31 +163,32 @@ QString* JsonFileHandler::meshToJson(Mesh *mesh){
         }
         //remove obsolete last ","
         if(*(jsonString->end()) == ',')
-            jsonString->chop(jsonString->length()-1);
+            jsonString->chop(1);
         *jsonString += "]},";
 
     }
     //remove obsolete last ","
     if(*(jsonString->end()) == ',')
-        jsonString->chop(jsonString->length()-1);
+        jsonString->chop(1);
     *jsonString += "\t],\n";
     *jsonString += "\"connections\": [";
 
     foreach (Connection* localConnection, mesh->connections) {
+        Node *src = localConnection->getSrcNode(), *dst = localConnection->getDestNode();
         *jsonString += "\n\t{\"src_node\": \"";
-        *jsonString += /*TODO: NodeName*/ "NodeNameDummy";
+        *jsonString += src->getName();
         *jsonString += "\", \"src_gate\": \"" ;
-        *jsonString += /*TODO:GateName*/ "GateNameDummy (out)";
+        *jsonString += localConnection->getSrcGate()->getName();
         *jsonString += "\", ";
         *jsonString += "\"dest_node\": \"";
-        *jsonString += /*TODO: NodeName*/ "NodeNameDummy";
+        *jsonString += dst->getName();
         *jsonString += "\", \"dest_gate\": \"";
-        *jsonString += /*T + ODO:GateName*/ "GateNameDummy (in)";
+        *jsonString += localConnection->getDestGate()->getName();
         *jsonString += "\"},";
     }
     //remove obsolete last ","
     if(*(jsonString->end()) == ',')
-        jsonString->chop(jsonString->length()-1);
+        jsonString->chop(1);
     *jsonString += "\n\t]\n}";
 
     return jsonString;
