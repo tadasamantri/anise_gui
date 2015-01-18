@@ -35,10 +35,10 @@ void MeshEditorWidget::dropEvent(QDropEvent *event){
     QPoint DropPoint = event->pos() - this->pos();
 
 
-    //QByteArray Data = event->mimeData()->data("application/customthingy");
-    //QDataStream dataStream(&Data, QIODevice::ReadOnly);
-    //dataStream >>DropPoint ;
-
+    QByteArray Data = event->mimeData()->data("application/customthingy");
+    QDataStream dataStream(&Data, QIODevice::ReadOnly);
+    dataStream >> DropPoint;
+    DropPoint = event->pos() - DropPoint + this->pos();
 
     //qDebug()<< "event->pos()" << event->pos();
     qDebug()<< "DropPoint" << DropPoint;

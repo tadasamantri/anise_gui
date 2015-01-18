@@ -37,7 +37,7 @@ void DragWidget::mousePressEvent(QMouseEvent *event){
 
     QByteArray Data ;
     QDataStream dataStream(&Data, QIODevice::WriteOnly);
-    dataStream << child << QPoint(hotSpot);
+    dataStream /*<< child */<< QPoint(hotSpot);
 
     //something about mime data...
     QMimeData *mimeData = new QMimeData;
