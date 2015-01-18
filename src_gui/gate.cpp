@@ -20,3 +20,7 @@ void Gate::setDirection(bool in){
 QVector<QString> Gate::getTypes(){
     return types;
 }
+
+QString Gate::getName(){
+    return name;
+}

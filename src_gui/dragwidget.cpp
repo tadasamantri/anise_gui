@@ -26,9 +26,8 @@ void DragWidget::mousePressEvent(QMouseEvent *event){
     }
 
     //ensure a left-mouse-click
-
     if(!(event->button() == Qt::LeftButton)){
-        qDebug() << "that was not the left mouse button!\n\n";
+        qDebug() << "that was not the left mouse button!\n";
         return ;
     }
 

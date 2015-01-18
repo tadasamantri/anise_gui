@@ -14,7 +14,10 @@ public:
     void addNode(Node *Node);
 
     //add Connection to mesh
-    void addConnection();
+    void addConnection(Connection *connection);
+
+    //returns pointer to Node behind name
+    Node* getNodeByName(QString name);
 
     //return node's address behind ID
     Node* getNodeByID(int ID);
