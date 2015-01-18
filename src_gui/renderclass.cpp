@@ -105,7 +105,7 @@ void RenderClass::renderNode(Node* nodeToRender,QWidget* parent){
 
 
     //TO-DO should use layouts instead of hardcoded position!
-    NodeDrawObject->move( 5, 60);
+    NodeDrawObject->move( nodeToRender->position_x,nodeToRender->position_y);
 
     //NodeDrawObject->labelOfThis->setGeometry(x,y,height,width);
     NodeDrawObject->show();
