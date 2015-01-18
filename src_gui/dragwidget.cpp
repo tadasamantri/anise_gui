@@ -60,7 +60,7 @@ void DragWidget::mousePressEvent(QMouseEvent *event){
 
 void DragWidget::dragEnterEvent(QDragEnterEvent *event){
     qDebug()<<"dragEnterEvent";
-    if (event->mimeData()->hasFormat("application/customthingy")) {
+    if (event->mimeData()->hasFormat("blabla")) {
              if (event->source() == this) {
                  event->setDropAction(Qt::MoveAction);
                  event->accept();
@@ -72,7 +72,16 @@ void DragWidget::dragEnterEvent(QDragEnterEvent *event){
          }
 }
 void DragWidget::dragMoveEvent(QDragMoveEvent *event){
-    qDebug()<<"1";
+    if (event->mimeData()->hasFormat("blabla")) {
+            if (event->source() == this) {
+                event->setDropAction(Qt::MoveAction);
+                event->accept();
+            } else {
+                event->acceptProposedAction();
+            }
+        } else {
+            event->ignore();
+        }
 }
 void DragWidget::dropEvent(QDropEvent *event){
     qDebug()<<"1";
