@@ -22,14 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
    
-
     initializeGUI();
-
-  
-
-
-
-
 
 }
 
@@ -82,7 +75,7 @@ void MainWindow::initializeGUI(){
     //create the Node catalog
     NodeCatalog TypeCatalog;
     //create the render object
-    RenderClass *A = new RenderClass() ;
+    RenderClass *A = new RenderClass();
 
 
 

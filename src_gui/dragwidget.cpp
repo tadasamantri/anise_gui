@@ -10,6 +10,7 @@
 #include <QLabel>
 #include "drawobject.h"
 #include <QPainter>
+#include "nodefactory.h"
 
 DragWidget::DragWidget(QWidget *parent) :
     QWidget(parent)
@@ -39,6 +40,7 @@ void DragWidget::mousePressEvent(QMouseEvent *event){
     drag->setPixmap(*child->pixmap());
     drag->setHotSpot(hotSpot);
 /*
+ // This will change the color of the drag icon; could also be used to generate new images
     QPixmap tempPixmap = child->pixmap();
     QPainter painter;
     painter.begin(&tempPixmap);
@@ -58,33 +60,6 @@ void DragWidget::mousePressEvent(QMouseEvent *event){
 
 }
 
-void DragWidget::dragEnterEvent(QDragEnterEvent *event){
-    qDebug()<<"dragEnterEvent";
-    if (event->mimeData()->hasFormat("blabla")) {
-             if (event->source() == this) {
-                 event->setDropAction(Qt::MoveAction);
-                 event->accept();
-             } else {
-                 event->acceptProposedAction();
-             }
-         } else {
-             event->ignore();
-         }
-}
-void DragWidget::dragMoveEvent(QDragMoveEvent *event){
-    if (event->mimeData()->hasFormat("blabla")) {
-            if (event->source() == this) {
-                event->setDropAction(Qt::MoveAction);
-                event->accept();
-            } else {
-                event->acceptProposedAction();
-            }
-        } else {
-            event->ignore();
-        }
-}
-void DragWidget::dropEvent(QDropEvent *event){
-    qDebug()<<"1";
-}
+
 
 
