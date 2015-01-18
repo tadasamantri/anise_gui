@@ -24,6 +24,14 @@ void DragWidget::mousePressEvent(QMouseEvent *event){
         qDebug() << "no child";
         return;
     }
+
+    //ensure a left-mouse-click
+
+    if(!(event->button() == Qt::LeftButton)){
+        qDebug() << "that was not the left mouse button!\n\n";
+        return ;
+    }
+
     qDebug() << "child";
     QPoint hotSpot = event->pos() - child->pos();
 
