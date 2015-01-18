@@ -8,6 +8,11 @@ Connection::Connection(Gate &src, Gate &dest)
     gateB = &dest;
 }
 
+Connection::Connection(Node &src, Node &dest){
+    src_node = &src;
+    dest_node = &dest;
+}
+
 void Connection::setDestGate(Gate &dest)
 {
     gateB = &dest;

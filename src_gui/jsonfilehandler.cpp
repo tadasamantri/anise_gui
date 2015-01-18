@@ -77,7 +77,7 @@ Mesh JsonFileHandler::parseJsonString(QString &jsonString){
         QVariantMap _params = QVariantMap(); //set up params map
 
         QJsonArray jParams = jNode["params"].toArray(); //extract params as array from json file
-
+//TODO: Talk about Gates ands Connections to get this working
         foreach (QJsonValue paramJValue, jParams) { //for each of them..
 
             QJsonObject paramObject = paramJValue.toObject(); //...make it an Object...
@@ -96,32 +96,37 @@ Mesh JsonFileHandler::parseJsonString(QString &jsonString){
         QJsonArray connections = jsonObject["connections"].toArray();
         if(connections.isEmpty()) //are there any connections?
             return mesh;
-        foreach (QJsonValue vConnection, connections) {
-            QJsonObject object = vConnection.toObject();
+        foreach (QJsonValue localConnection, connections) {
+            QJsonObject connectionObject = localConnection.toObject();
 
             //some error handling
-            if(!(object.contains("src_node")
-                 && object.contains("src_gate")
-                 && object.contains("dest_node")
-                 && object.contains("dest_gate"))){
+            if(!(connectionObject.contains("src_node")
+                 && connectionObject.contains("src_gate")
+                 && connectionObject.contains("dest_node")
+                 && connectionObject.contains("dest_gate"))){
                 QString message = "";
-                if(!object.contains("src_node")){
+                if(!connectionObject.contains("src_node")){
                     message += "A connection has no src_node!\n";
                 }
-                if(!object.contains("src_gate")){
+                if(!connectionObject.contains("src_gate")){
                     message += "A connection has no src_gate!\n";
                 }
-                if(!object.contains("dest_node")){
+                if(!connectionObject.contains("dest_node")){
                     message += "A connection has no dest_node!\n";
                 }
-                if(!object.contains("dest_gate")){
+                if(!connectionObject.contains("dest_gate")){
                     message += "A connection has no dest_gate!\n";
                 }
                 QMessageBox::information(0,QString("Error"),message, "Thanks for that!");
                 return mesh;
             }//error handling
 
-            //TODO: Talk about Gates ands Connections to get this working
+            Node *src_node = mesh.getNodeByName(connectionObject["src_node"].toString()), *dest_node = mesh.getNodeByName(connectionObject["dest_node"].toString());
+            Connection *tmp = new Connection(*src_node, *dest_node);
+            tmp->setSrcGate(src_node->getOutputGates().first());
+            tmp->setDestGate(dest_node->getInputGates().first());
+
+            mesh.addConnection(tmp);
         }
 
     }
