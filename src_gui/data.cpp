@@ -17,13 +17,13 @@ void Data::setUi(Ui::MainWindow *ui){
 
 void Data::addNodeToMesh(Node *newNode){
     this->mesh->addNode(newNode);
-    singletonRender::instance()->renderMesh(this->mesh, this->ui->meshField);
+    SingletonRender::instance()->renderMesh(this->mesh, this->ui->meshField);
 
 }
 
 void Data::moveNodeInMesh(QPoint *Position, int numberOfNode) {
 
     this->mesh->nodes.at(numberOfNode)->setPosition(Position->x(), Position->y());
-    singletonRender::instance()->renderMesh(this->mesh, this->ui->meshField);
+    SingletonRender::instance()->renderMesh(this->mesh, this->ui->meshField);
 
 }
