@@ -55,7 +55,7 @@ void MainWindow::initializeGUI() {
         "Choose", "Not yet");
 
     QString fileName = QFileDialog::getOpenFileName(
-        this, "Set your framework path", "", "(anids_framework (*)");
+        this, "Set your framework path", "", "");
 
     SettingsHandler::storeSetting("frameworkpath", fileName);
   }
@@ -116,7 +116,7 @@ void MainWindow::on_actionSet_framework_path_triggered() {
   QFileDialog dialog(this);
 
   QString fileName = QFileDialog::getOpenFileName(
-      this, "Set your framework path", "", "(All Files (anids-framework)");
+      this, "Set your framework path", "", "");
 
   SettingsHandler::storeSetting("frameworkpath", fileName);
   AniseCommunicator::setFrameworkPath(fileName);
