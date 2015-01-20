@@ -1,18 +1,8 @@
 #include "mesh.h"
 #include "renderclass.h"
 
+void Mesh::addNode(Node *node) { this->nodes.append(node); }
 
+Node *Mesh::getNodeByName(QString name) {}
 
-void Mesh::addNode(Node *node){
-    this->nodes.append( node);
-}
-
-
-Node* Mesh::getNodeByName(QString name){
-
-}
-
-
-void Mesh::addConnection(Connection *connection){
-
-}
+void Mesh::addConnection(Connection *connection) {}

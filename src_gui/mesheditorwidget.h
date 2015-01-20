@@ -16,20 +16,18 @@
 #include <Qt>
 #include <QMimeData>
 
-class MeshEditorWidget : public QWidget
-{
-    Q_OBJECT
+class MeshEditorWidget : public QWidget {
+  Q_OBJECT
 public:
-    explicit MeshEditorWidget(QWidget *parent = 0);
-    QPoint dragStartPosition;
+  explicit MeshEditorWidget(QWidget *parent = 0);
+  QPoint dragStartPosition;
+
 protected:
-
-    void mousePressEvent(QMouseEvent *event);
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dragMoveEvent(QDragMoveEvent *event);
-    void dropEvent(QDropEvent *event);
-    //void mouseMoveEvent(QMouseEvent *event);
-
+  void mousePressEvent(QMouseEvent *event);
+  void dragEnterEvent(QDragEnterEvent *event);
+  void dragMoveEvent(QDragMoveEvent *event);
+  void dropEvent(QDropEvent *event);
+  // void mouseMoveEvent(QMouseEvent *event);
 };
 
 #endif // MESHEDITORWIDGET_H

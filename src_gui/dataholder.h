@@ -4,17 +4,14 @@
 #include <QObject>
 #include "data.h"
 
-class DataHolder : public QObject
-{
-    Q_OBJECT
+class DataHolder : public QObject {
+  Q_OBJECT
 public:
-    explicit DataHolder(QObject *parent = 0);
-    static Data *getData();
-
+  explicit DataHolder(QObject *parent = 0);
+  static Data *getData();
 
 private:
-
-    static Data *data;
+  static Data *data;
 };
 
 #endif // DATAHOLDER_H
