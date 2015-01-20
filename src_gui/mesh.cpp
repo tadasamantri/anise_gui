@@ -2,7 +2,7 @@
 #include "QDebug"
 
 Mesh::Mesh(){
-    ;
+
     this->nodesInMash = QMap<int, Node*>();
     this->connectionsInMash = QMap<int, Connection*>();
 
@@ -46,5 +46,6 @@ Node* Mesh::getNodeByID(int ID){
 
 
 int Mesh::generateId(){
-    return this->iDCounter+1;
+    iDCounter++;
+    return this->iDCounter;
 }

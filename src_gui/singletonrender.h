@@ -20,10 +20,7 @@
 
 class SingletonRender {
 public:
-  // this is the map containing all raw Images.
-  // Qstring is the same as the filename
-  // QPixmap a .png image
-  QMap<QString, QPixmap *> allImages;
+
 
   // The instance function returns a pointer to a static variable and thus is
   // declared static.
@@ -58,6 +55,26 @@ public:
   void renderCatalogContent(QVector<Node> NodeVektor, QWidget *CatalogParent);
 
 private:
+
+
+  // this is the map containing all raw Images.
+  // Qstring is the same as the filename
+  // QPixmap a .png image
+  QMap<QString, QPixmap *> allImages;
+
+  // a map containing all nodes that have been rendered
+  // int ID
+  // and the widget
+  QMap<int, DrawObject *> allDrawObjects;
+
+  //window of application
+  Ui::MainWindow *ui;
+
+
+
+
+  //###### singleton stuff ########
+
   // Private so that it can  not be called
   // Only the class function Instance can call the constructor. Public access to
   // the constructor is denied.
@@ -76,9 +93,6 @@ private:
 
   // pointer to this instance
   static SingletonRender *m_pInstance;
-
-  //window of application
-  Ui::MainWindow *ui;
 };
 
 #endif // SINGLETONRENDER_H

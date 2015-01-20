@@ -49,10 +49,10 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
 
     if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) ==
             Qt::MoveAction)
-        qDebug() << "never happens?";
+        qDebug() << "never happens? IF it does check mesheditorwidget";
     // child->close();
     else {
-        qDebug() << "drag end";
+        //qDebug() << "drag end";
         child->show();
         // child->setPixmap(pixmap);
     }
@@ -61,7 +61,7 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
 void MeshEditorWidget::dragEnterEvent(QDragEnterEvent *event) {
 
     if (event->mimeData()->hasFormat("application/customthingy")) {
-        qDebug() << "dragEnterEvent";
+        //qDebug() << "dragEnterEvent";
         if (event->source() == this) {
             event->setDropAction(Qt::MoveAction);
             event->accept();
@@ -79,7 +79,7 @@ void MeshEditorWidget::dragMoveEvent(QDragMoveEvent *event) {
 }
 
 void MeshEditorWidget::dropEvent(QDropEvent *event) {
-    qDebug() << "dropEvent";
+    //qDebug() << "dropEvent";
 
     Node *newNode = NodeFactory::createTestNode();
 
@@ -100,7 +100,7 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
     newNode->setPosition(DropPoint.x(), DropPoint.y());
 
     //qDebug() << "x:" << newNode->position_x << " y: " << newNode->position_y;
-    qDebug() << "source of drop"<<event->source()->objectName();
+    //qDebug() << "source of drop"<<event->source()->objectName();
     if (event->source()->objectName() == "nodeCatalogContent")
         Data::instance()->addNodeToMesh(newNode);
     if (event->source()->objectName() == "meshField")

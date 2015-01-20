@@ -19,12 +19,19 @@ SingletonRender* SingletonRender::instance()
 }
 
 SingletonRender::SingletonRender(){
+    //initialize all maps
+    this->allDrawObjects = QMap<int, DrawObject*>();
+    this->allImages = QMap<QString, QPixmap*>();
+
+
     //load all images
     if (loadImages() == true) {
         qDebug() << "images loaded successfully";
     }else{
         qDebug() << "images loading failed";
     }
+
+
 }
 
 
@@ -80,44 +87,47 @@ void SingletonRender::setUi(Ui::MainWindow *ui){
 
 void SingletonRender::renderNode(Node* nodeToRender, int nodeID){
 
-    //create a Drawobject
-    DrawObject *NodeDrawObject = new DrawObject(nodeID, this->ui->meshField);
+    if (!allDrawObjects.contains(nodeID)) {
 
-    //Draw the Background
-    NodeDrawObject->setPixmap(*allImages["background.png"]);
-    //Set the geometry to the right size
-    NodeDrawObject->setGeometry(0,0,50,50);
+        //create a Drawobject
+        DrawObject *NodeDrawObject = new DrawObject(nodeID, this->ui->meshField);
+
+        if (allImages.contains("background.png")) {
+            //Draw the Background
+            NodeDrawObject->setPixmap(*allImages["background.png"]);
+            //Set the geometry to the right size
+            NodeDrawObject->setGeometry(0,0,50,50);
+        }else{
+
+            qDebug() << "background.png did not load correctly!" ;
+        }
 
 
+        allDrawObjects.insert(nodeID, NodeDrawObject);
+
+    }
     //TODO should use layouts instead of hardcoded position!
-    NodeDrawObject->move( nodeToRender->position_x,nodeToRender->position_y);
+    allDrawObjects.value(nodeID)->move( nodeToRender->position_x,nodeToRender->position_y);
 
-    NodeDrawObject->show();
+    allDrawObjects.value(nodeID)->show();
 
 }
 
 
 
 void SingletonRender::renderMesh(Mesh *workMesh){
-    //TODO should be optimised. Move the Widgets istead of killing them!
-
-    //qDebug() << this->ui->meshField->children();
-    //kills all children
-    foreach (QObject *child, this->ui->meshField->children()) {
-        child-> deleteLater();
-    }
 
     QMap<int,Node*> temp = workMesh->nodesInMash;
     //calls render method for every node in the mesh
     foreach( int ID, temp.keys() )
     {
-        //Only do it if a Node with this ID exists
+        //Only do it if a Node with this ID exists in the mesh
         if (temp.contains(ID)) {
             renderNode(temp.value( ID ), ID);
+        }else{
+            qDebug() << "tried to render a node that doesnt exist!";
         }
-
     }
-
 }
 
 

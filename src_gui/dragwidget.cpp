@@ -68,7 +68,7 @@ void DragWidget::mousePressEvent(QMouseEvent *event) {
     qDebug() << "never happens?";
   // child->close();
   else {
-    qDebug() << "drag end";
+    //qDebug() << "drag end";
     child->show();
     // child->setPixmap(pixmap);
   }
