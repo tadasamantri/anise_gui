@@ -30,8 +30,8 @@ void MainWindow::initializeGUI() {
   // general initialization of the mainwindow
   ui->setupUi(this); // generate gui from xml
   menuBar()->setNativeMenuBar(false); // schaltet natives ubuntu menu aus
-  new Q_DebugStream(std::cout, ui->qDebug_out); // leitet qDebug ins logfenster
-  Q_DebugStream::registerQDebugMessageHandler();
+  //new Q_DebugStream(std::cout, ui->qDebug_out); // leitet qDebug ins logfenster
+  //Q_DebugStream::registerQDebugMessageHandler();
 
   // initalize stored Settings
   SettingsHandler::setSettingsPath(QApplication::applicationDirPath() +

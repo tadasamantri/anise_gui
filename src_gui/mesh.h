@@ -2,30 +2,60 @@
 #define MESHHANDLER_H
 
 #include <QVector>
+#include <QMap>
+#include <QString>
+#include <QList>
+
+
 #include "connection.h"
 #include "node.h"
 
 class Mesh {
+
+    friend class JsonFilehandler;
+
 public:
-  // add Node to mesh
-  void addNode(Node *Node);
+    //konstruktor
+    Mesh();
 
-  // add Connection to mesh
-  void addConnection(Connection *connection);
+    // add Node to mesh
+    //return the id of the new node
+    int addNode(Node *Node);
 
-  // returns pointer to Node behind name
-  Node *getNodeByName(QString name);
+    // add Connection to mesh
+    //return the id of the new connection
+    int addConnection(Connection *connection);
 
-  // return node's address behind ID
-  Node *getNodeByID(int ID);
+    // returns pointer to Node behind name
+    Node getNodeByName(QString name);
 
-  // return connection's address behind ID
-  Connection *getConnectionByID(int ID);
-  friend class JsonFilehandler;
-  // private:
-  //TODO nodes und connections als Map mit id
-  QVector<Node *> nodes;
-  QVector<Connection *> connections;
+    // return node's address behind ID
+    Node *getNodeByID(int ID);
+
+    // return connection's address behind ID
+    Connection *getConnectionByID(int ID);
+
+    //returns all Nodes from nodesInMash as a QList
+    QList<Node *> getAllNodes();
+
+    //returns all Connection from connectionsInMash as a QList
+    QList<Connection *> getAllConnections();
+
+    //Nodes and connections
+    QMap<int, Node*>          nodesInMash;
+    QMap<int, Connection *>   connectionsInMash;
+
+
+private:
+    //counter for ids.
+    // prevents double id numbers
+    int iDCounter;
+
+
+
+    //generate an unique id key;
+    int generateId();
+
 };
 
 #endif // MESHHANDLER_H

@@ -106,13 +106,18 @@ void SingletonRender::renderMesh(Mesh *workMesh){
     foreach (QObject *child, this->ui->meshField->children()) {
         child-> deleteLater();
     }
-    int nodeID = 0;
 
+    QMap<int,Node*> temp = workMesh->nodesInMash;
     //calls render method for every node in the mesh
-    foreach (Node *node, workMesh->nodes) {
-        renderNode(node, nodeID);
-        nodeID++;
+    foreach( int ID, temp.keys() )
+    {
+        //Only do it if a Node with this ID exists
+        if (temp.contains(ID)) {
+            renderNode(temp.value( ID ), ID);
+        }
+
     }
+
 }
 
 

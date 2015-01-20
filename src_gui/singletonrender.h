@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QStringList>
 #include <QDir>
+#include <QList>
 
 // our own classes
 #include "mesh.h"

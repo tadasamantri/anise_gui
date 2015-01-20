@@ -34,7 +34,7 @@ void Data::addNodeToMesh(Node *newNode){
 
 void Data::moveNodeInMesh(QPoint *Position, int numberOfNode) {
 
-    this->mesh->nodes.at(numberOfNode)->setPosition(Position->x(), Position->y());
+    this->mesh->getNodeByID(numberOfNode)->setPosition(Position->x(), Position->y());
     SingletonRender::instance()->renderMesh(this->mesh);
 
 }
