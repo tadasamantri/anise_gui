@@ -72,11 +72,16 @@ bool SingletonRender::loadImages(){
     return result;
 }
 
+void SingletonRender::setUi(Ui::MainWindow *ui){
 
-void SingletonRender::renderNode(Node* nodeToRender,QWidget* parent, int nodeID){
+    this->ui = ui;
+}
+
+
+void SingletonRender::renderNode(Node* nodeToRender, int nodeID){
 
     //create a Drawobject
-    DrawObject *NodeDrawObject = new DrawObject(nodeID, parent);
+    DrawObject *NodeDrawObject = new DrawObject(nodeID, this->ui->meshField);
 
     //Draw the Background
     NodeDrawObject->setPixmap(*allImages["background.png"]);
@@ -93,18 +98,19 @@ void SingletonRender::renderNode(Node* nodeToRender,QWidget* parent, int nodeID)
 
 
 
-void SingletonRender::renderMesh(Mesh *workMesh, QWidget* parent){
+void SingletonRender::renderMesh(Mesh *workMesh){
     //TODO should be optimised. Move the Widgets istead of killing them!
 
+    //qDebug() << this->ui->meshField->children();
     //kills all children
-    foreach (QObject *child, parent->children()) {
+    foreach (QObject *child, this->ui->meshField->children()) {
         child-> deleteLater();
     }
     int nodeID = 0;
 
     //calls render method for every node in the mesh
     foreach (Node *node, workMesh->nodes) {
-        renderNode(node, parent, nodeID);
+        renderNode(node, nodeID);
         nodeID++;
     }
 }

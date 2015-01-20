@@ -1,6 +1,5 @@
 #include "mesheditorwidget.h"
 #include "nodefactory.h"
-#include "dataholder.h"
 #include "data.h"
 #include "node.h"
 #include "drawobject.h"
@@ -103,7 +102,7 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
     //qDebug() << "x:" << newNode->position_x << " y: " << newNode->position_y;
     qDebug() << "source of drop"<<event->source()->objectName();
     if (event->source()->objectName() == "nodeCatalogContent")
-        DataHolder::getData()->addNodeToMesh(newNode);
+        Data::instance()->addNodeToMesh(newNode);
     if (event->source()->objectName() == "meshField")
-        DataHolder::getData()->moveNodeInMesh(&DropPoint, numberOfNode);
+        Data::instance()->moveNodeInMesh(&DropPoint, numberOfNode);
 }

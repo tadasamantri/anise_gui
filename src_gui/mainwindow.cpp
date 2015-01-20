@@ -14,14 +14,14 @@
 #include "singletonrender.h"
 #include "nodecatalog.h"
 #include "data.h"
-#include "dataholder.h"
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
 
   //
   initializeGUI();
-  DataHolder::getData()->setUi(this->ui);
+  SingletonRender::instance()->setUi(this->ui);
   qDebug() << this->ui->mesh_edt_area->parent();
 }
 

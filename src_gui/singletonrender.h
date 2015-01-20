@@ -12,6 +12,7 @@
 #include "mesh.h"
 #include "node.h"
 #include "drawobject.h"
+#include "ui_mainwindow.h"
 
 // The life of the singleton instantiation is for the duration of the
 // application.
@@ -30,16 +31,19 @@ public:
   // will load all images in ../Data/Images/ into the allImages Map
   bool loadImages();
 
+
+  void setUi(Ui::MainWindow *ui);
+
   /*
    * Renders the whole mesh
    */
-  void renderMesh(Mesh *workMesh, QWidget *parent);
+  void renderMesh(Mesh *workMesh);
 
   /*
    * Renders a node.
    *
    */
-  void renderNode(Node *nodeToRender, QWidget *parent, int nodeID);
+  void renderNode(Node *nodeToRender, int nodeID);
 
   /*
    * Render one Node Type in the Catalog
@@ -71,6 +75,9 @@ private:
 
   // pointer to this instance
   static SingletonRender *m_pInstance;
+
+  //window of application
+  Ui::MainWindow *ui;
 };
 
 #endif // SINGLETONRENDER_H
