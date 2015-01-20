@@ -2,7 +2,7 @@
 #include "singletonrender.h"
 
 // Global static pointer used to ensure a single instance of the class.
-singletonRender* singletonRender::m_pInstance = NULL;
+SingletonRender* SingletonRender::m_pInstance = NULL;
 
 
 /** This function is called to create an instance of the class.
@@ -10,15 +10,15 @@ singletonRender* singletonRender::m_pInstance = NULL;
     is private and is only called by this Instance function.
 */
 
-singletonRender* singletonRender::instance()
+SingletonRender* SingletonRender::instance()
 {
     if (!m_pInstance)   // Only allow one instance of class to be generated.
-        m_pInstance = new singletonRender;
+        m_pInstance = new SingletonRender;
 
     return m_pInstance;
 }
 
-singletonRender::singletonRender(){
+SingletonRender::SingletonRender(){
     //load all images
     if (loadImages() == true) {
         qDebug() << "images loaded successfully";
@@ -30,7 +30,7 @@ singletonRender::singletonRender(){
 
 //loads all images in the ../DataIimages folder.
 //saves them in the map "allImages"
-bool singletonRender::loadImages(){
+bool SingletonRender::loadImages(){
     bool result = true;
     QStringList listOfFiles;
 
@@ -73,7 +73,7 @@ bool singletonRender::loadImages(){
 }
 
 
-void singletonRender::renderNode(Node* nodeToRender,QWidget* parent, int nodeID){
+void SingletonRender::renderNode(Node* nodeToRender,QWidget* parent, int nodeID){
 
     //create a Drawobject
     DrawObject *NodeDrawObject = new DrawObject(nodeID, parent);
@@ -93,7 +93,7 @@ void singletonRender::renderNode(Node* nodeToRender,QWidget* parent, int nodeID)
 
 
 
-void singletonRender::renderMesh(Mesh *workMesh, QWidget* parent){
+void SingletonRender::renderMesh(Mesh *workMesh, QWidget* parent){
     //TODO should be optimised. Move the Widgets istead of killing them!
 
     //kills all children
@@ -111,7 +111,7 @@ void singletonRender::renderMesh(Mesh *workMesh, QWidget* parent){
 
 
 
-void singletonRender::renderNodeType(Node* nodeToRender,QWidget* parent, int position){
+void SingletonRender::renderNodeType(Node* nodeToRender,QWidget* parent, int position){
 
 
     //TODO code dublication in renderNode and renderNodeType!
@@ -129,7 +129,7 @@ void singletonRender::renderNodeType(Node* nodeToRender,QWidget* parent, int pos
 
 }
 
-void singletonRender::renderCatalogContent(QVector<Node> NodeVektor, QWidget *CatalogParent){
+void SingletonRender::renderCatalogContent(QVector<Node> NodeVektor, QWidget *CatalogParent){
     int position = 0;
     //TODO scroll weite sollte nicht hard coded sein
     CatalogParent->setMinimumHeight(NodeVektor.size()*60+10);
