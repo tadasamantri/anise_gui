@@ -10,7 +10,7 @@ singletonRender* singletonRender::m_pInstance = NULL;
     is private and is only called by this Instance function.
 */
 
-singletonRender* singletonRender::Instance()
+singletonRender* singletonRender::instance()
 {
     if (!m_pInstance)   // Only allow one instance of class to be generated.
         m_pInstance = new singletonRender;

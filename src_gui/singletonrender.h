@@ -27,7 +27,7 @@ public:
 
 
     // The instance function returns a pointer to a static variable and thus is declared static.
-    static singletonRender* Instance();
+    static singletonRender* instance();
 
     //will load all images in ../Data/Images/ into the allImages Map
     bool loadImages();
