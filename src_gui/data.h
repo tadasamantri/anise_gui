@@ -6,7 +6,7 @@
 #include "nodecatalog.h"
 #include "mainwindow.h"
 #include "data.h"
-#include "renderclass.h"
+#include "singletonrender.h"
 #include "ui_mainwindow.h"
 
 class Data : public QObject

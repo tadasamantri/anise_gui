@@ -13,7 +13,7 @@
 #include "mesh.h"
 
 
-#include "renderclass.h"
+#include "singletonrender.h"
 #include "nodecatalog.h"
 #include "data.h"
 #include "dataholder.h"
@@ -80,7 +80,7 @@ void MainWindow::initializeGUI(){
     //create the Node catalog
     NodeCatalog TypeCatalog;
     //create the render object
-    RenderClass *A = new RenderClass();
+    singletonRender::Instance();
 
 
 
@@ -92,7 +92,7 @@ void MainWindow::initializeGUI(){
         TypeCatalog.insert(tempTestNode);
     }
     //render the node catalog filled with test nodes
-    A->renderCatalogContent(TypeCatalog.Content,ui->nodeCatalogContent);
+    singletonRender::Instance()->renderCatalogContent(TypeCatalog.Content,ui->nodeCatalogContent);
 
 
 

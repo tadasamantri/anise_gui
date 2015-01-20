@@ -1,5 +1,5 @@
 #include "data.h"
-#include "renderclass.h"
+#include "singletonrender.h"
 #include "ui_mainwindow.h"
 
 Data::Data(QObject *parent) :
@@ -19,11 +19,11 @@ void Data::setUi(Ui::MainWindow *ui){
 
 void Data::addNodeToMesh(Node *newNode){
     this->mesh->addNode(newNode);
-    RenderClass::renderMesh(this->mesh, this->ui->meshField);
+    singletonRender::Instance()->renderMesh(this->mesh, this->ui->meshField);
 }
 
 void Data::moveNodeInMesh(QPoint *Position, int numberOfNode){
 
     this->mesh->nodes.at(numberOfNode)->setPosition(Position->x(), Position->y());
-    RenderClass::renderMesh(this->mesh, this->ui->meshField);
+    singletonRender::Instance()->renderMesh(this->mesh, this->ui->meshField);
 }

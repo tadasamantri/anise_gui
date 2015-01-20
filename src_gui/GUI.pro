@@ -22,13 +22,13 @@ SOURCES += main.cpp\
     settingshandler.cpp \
     anisecommunicator.cpp \
     nodefactory.cpp \
-    renderclass.cpp \
     nodecatalog.cpp \
     dragwidget.cpp \
     drawobject.cpp \
     mesheditorwidget.cpp \
     data.cpp \
-    dataholder.cpp
+    dataholder.cpp \
+    singletonrender.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -42,13 +42,13 @@ HEADERS  += mainwindow.h \
     qdebugstreamredirector.h \
     anisecommunicator.h \
     nodefactory.h \
-    renderclass.h \
     nodecatalog.h \
     dragwidget.h \
     drawobject.h \
     mesheditorwidget.h \
     data.h \
-    dataholder.h
+    dataholder.h \
+    singletonrender.h
 
 FORMS    += mainwindow.ui
 
