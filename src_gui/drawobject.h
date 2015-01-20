@@ -5,19 +5,11 @@
 #include <QPixmap>
 #include <QLabel>
 
-
-class DrawObject : public QLabel
-{
-
-
-
+class DrawObject : public QLabel {
 
 public:
-    int numberOfNode;
-    DrawObject(int numberOfNode, QWidget *parent);
-
-
-
+  int numberOfNode;
+  DrawObject(int numberOfNode, QWidget *parent);
 };
 
 #endif // DRAWOBJECT_H

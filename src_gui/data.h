@@ -9,20 +9,17 @@
 #include "renderclass.h"
 #include "ui_mainwindow.h"
 
-class Data : public QObject
-{
-    Q_OBJECT
+class Data : public QObject {
+  Q_OBJECT
 public:
-    explicit Data(QObject *parent = 0);
-    Mesh *mesh;
-    NodeCatalog *nodeCatalog;
-    Ui::MainWindow *ui;
+  explicit Data(QObject *parent = 0);
+  Mesh *mesh;
+  NodeCatalog *nodeCatalog;
+  Ui::MainWindow *ui;
 
-    void setUi(Ui::MainWindow *ui);
-    void addNodeToMesh(Node *newNode);
-    void moveNodeInMesh(QPoint *Position, int numberOfNode);
-
-
+  void setUi(Ui::MainWindow *ui);
+  void addNodeToMesh(Node *newNode);
+  void moveNodeInMesh(QPoint *Position, int numberOfNode);
 };
 
 #endif // DATA_H

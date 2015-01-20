@@ -13,7 +13,6 @@
  *
  */
 
-
 #include <QFile>
 #include <QString>
 #include <QVector>
@@ -30,34 +29,33 @@
 #include "nodefactory.h"
 #include "mesh.h"
 
-class JsonFileHandler{
+class JsonFileHandler {
 
 public:
-    /*
-     *will simply load the file
-    */
-    static QString loadFile(const QString &path);
+  /*
+   *will simply load the file
+  */
+  static QString loadFile(const QString &path);
 
-    /*
-     * Will extract information from the file
-    */
-    static Mesh parseJsonString(QString &jsonString);
+  /*
+   * Will extract information from the file
+  */
+  static Mesh parseJsonString(QString &jsonString);
 
+  /*
+  * will write the file to diskQString
+  */
 
-    /*
-    * will write the file to diskQString
-    */
+  void writeFile(const QString &path, const QString &fileContent);
 
-    void writeFile(const QString &path, const QString &fileContent);
+  /*
+   * Print the File
+   * (just for debugging)
+  */
 
-    /*
-     * Print the File
-     * (just for debugging)
-    */
+  static void printFile(const QString &fileContent);
 
-    static void printFile(const QString &fileContent);
-
-    static QString* meshToJson(Mesh* mesh);
+  static QString *meshToJson(Mesh *mesh);
 };
 
-#endif //FILEHANDLER_H
+#endif // FILEHANDLER_H

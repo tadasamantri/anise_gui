@@ -1,14 +1,7 @@
 #include "nodecatalog.h"
 
+NodeCatalog::NodeCatalog() {}
+void NodeCatalog::insert(Node *nodeToInsert) {
 
-
-NodeCatalog::NodeCatalog()
-{
+  this->Content.append(*nodeToInsert);
 }
-void NodeCatalog::insert(Node *nodeToInsert)
-{
-
-    this->Content.append(*nodeToInsert);
-}
-
-

@@ -16,44 +16,40 @@
 #include "node.h"
 #include "mesh.h"
 
-class RenderClass
-{
+class RenderClass {
 public:
+  RenderClass();
 
-    RenderClass();
+  static bool loadImages();
 
-    static bool loadImages();
+  // Catalog is a Map containing all *png files in teh image folder
+  // Catalog["nameOfFile"] returns the picture
+  static QMap<QString, QPixmap *> Catalog;
 
+  static QWidget buildWidget(Node *node);
 
-    // Catalog is a Map containing all *png files in teh image folder
-    // Catalog["nameOfFile"] returns the picture
-    static QMap<QString, QPixmap*> Catalog;
+  /*
+   * Renders the whole mesh
+   */
+  static void renderMesh(Mesh *workMesh, QWidget *parent);
 
-    static QWidget buildWidget(Node* node);
+  /*
+   * Renders a node.
+   *
+   */
+  static void renderNode(Node *nodeToRender, QWidget *parent, int numberOfNode);
 
-    /*
-     * Renders the whole mesh
-     */
-    static void renderMesh(Mesh *workMesh, QWidget* parent);
+  /*
+   * Render one Node Type in the Catalog
+   *
+   */
+  static void renderNodeType(Node *nodeToRender, QWidget *parent, int position);
 
-    /*
-     * Renders a node.
-     *
-     */
-    static void renderNode(Node* nodeToRender,QWidget* parent, int numberOfNode);
-
-    /*
-     * Render one Node Type in the Catalog
-     *
-     */
-    static void renderNodeType(Node* nodeToRender,QWidget* parent, int position);
-
-
-    /*
-     * This will Render all Nodes in the Type Catalog.
-     */
-    static void renderCatalogContent(QVector<Node> NodeVektor, QWidget *CatalogParent);
-
+  /*
+   * This will Render all Nodes in the Type Catalog.
+   */
+  static void renderCatalogContent(QVector<Node> NodeVektor,
+                                   QWidget *CatalogParent);
 };
 
 #endif // RENDERCLASS_H

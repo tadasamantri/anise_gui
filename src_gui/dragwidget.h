@@ -14,22 +14,17 @@
 #include <Qt>
 #include <QMimeData>
 
-class DragWidget : public QWidget
-{
-    Q_OBJECT
+class DragWidget : public QWidget {
+  Q_OBJECT
 public:
-    explicit DragWidget(QWidget *parent = 0);
+  explicit DragWidget(QWidget *parent = 0);
 
 protected:
-
-    void mousePressEvent(QMouseEvent *event);
-
-
+  void mousePressEvent(QMouseEvent *event);
 
 signals:
 
 public slots:
-
 };
 
 #endif // DRAGWIDGET_H
