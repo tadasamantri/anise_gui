@@ -66,7 +66,7 @@ void MainWindow::initializeGUI() {
     //create the Node catalog
     NodeCatalog TypeCatalog;
     //create the render object
-    singletonRender::instance();
+    SingletonRender::instance();
 
 
 
@@ -78,7 +78,7 @@ void MainWindow::initializeGUI() {
         TypeCatalog.insert(tempTestNode);
     }
     //render the node catalog filled with test nodes
-    singletonRender::instance()->renderCatalogContent(TypeCatalog.Content,ui->nodeCatalogContent);
+    SingletonRender::instance()->renderCatalogContent(TypeCatalog.Content,ui->nodeCatalogContent);
 
   // START LOADING NODE TYPES
 
