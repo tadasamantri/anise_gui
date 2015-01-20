@@ -16,6 +16,7 @@ void AniseCommunicator::read() {
 
 // reads all available bytes from given Process Channel -- USE QProcess::...
 // (see overloaded function read)
+// changes readOutput
 void AniseCommunicator::read(QProcess::ProcessChannel pc) {
 
   // Sets the channel to be read
@@ -37,13 +38,15 @@ QString AniseCommunicator::getAllNodeTypes() {
   dir += path;
 
   // remove name of Executable
+  // dir is now path of directory containing anise
+  // from "~/bla/bla/anise" to "~/bla/bla/"
   dir.chop(dir.length() - dir.lastIndexOf("/") - 1);
 
   // change working Directioy to get the Nodes =)
-  AniseCommunicator::anise_process->setWorkingDirectory(dir);
+  anise_process->setWorkingDirectory(dir);
 
   // execute framework
-  AniseCommunicator::anise_process->start(path, arguments);
+  anise_process->start(path, arguments);
 
   // wait for prints
   anise_process->waitForFinished();
@@ -51,11 +54,11 @@ QString AniseCommunicator::getAllNodeTypes() {
   // qDebug() << "finished";
 
   // read printed stuff
-  read(QProcess::StandardError);
+  read();
 
   qDebug() << readOutput;
 
-  return "";
+  return readOutput;
 }
 
 void AniseCommunicator::setFrameworkPath(QString newPath) {

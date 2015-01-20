@@ -1,5 +1,5 @@
 #include "nodefactory.h"
-
+//TODO friend Node, node should have a private konstruktor
 NodeFactory::NodeFactory() {}
 Node NodeFactory::createNode() {
   Node node = Node();

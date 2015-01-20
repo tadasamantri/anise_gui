@@ -8,12 +8,11 @@ class Connection {
 public:
   Connection(Gate &src, Gate &dest);
   Connection(Node &src, Node &dest);
+  //TODO source_ndoe destination_Node source_Gate sourec_gate als konstruktor
   Gate *getSrcGate();
   Gate *getDestGate();
   void setSrcGate(Gate &src);
   void setDestGate(Gate &dest);
-  // return true if validConnection(Node &src, &dest); Connection is made
-  bool isValid();
   Node *getSrcNode();
   Node *getDestNode();
   void setSrcNode(Node &node);

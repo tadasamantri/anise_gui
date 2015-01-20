@@ -1,7 +1,8 @@
-#include "mainwindow.h"
 #include <QApplication>
 #include <QCoreApplication>
 #include <QDir>
+
+#include "mainwindow.h"
 #include "singletonrender.h"
 
 int main(int argc, char *argv[]) {

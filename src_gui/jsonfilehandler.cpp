@@ -22,10 +22,8 @@ QString JsonFileHandler::loadFile(const QString &path) {
   return fileContent;
 }
 
+//creates a new mesh and fills it with the Json content
 Mesh JsonFileHandler::parseJsonString(QString &jsonString) {
-  // convert QString to char[]
-  jsonString.remove(' ');
-  jsonString.remove("\n");
 
   // create QJsonObject from string given
   QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonString.toUtf8());
@@ -137,6 +135,8 @@ Mesh JsonFileHandler::parseJsonString(QString &jsonString) {
            *dest_node =
                mesh.getNodeByName(connectionObject["dest_node"].toString());
       Connection *tmp = new Connection(*src_node, *dest_node);
+
+      //TODO getGateByNAme
       tmp->setSrcGate(src_node->getOutputGates().first());
       tmp->setDestGate(dest_node->getInputGates().first());
 
@@ -146,6 +146,7 @@ Mesh JsonFileHandler::parseJsonString(QString &jsonString) {
   return mesh;
 }
 
+//TODO rename, is printString not printFile
 void JsonFileHandler::printFile(const QString &fileContent) {
   if (fileContent == "") {
     qDebug() << "no File Content loaded! \nthe parser didn't read the file "

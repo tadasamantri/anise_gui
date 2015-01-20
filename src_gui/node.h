@@ -7,6 +7,8 @@
 #include <QStringBuilder>
 #include "gate.h"
 
+
+//Node konstruktor should be private
 class Node
 {
 public:

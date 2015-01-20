@@ -5,6 +5,7 @@
 
 /*
  * authors:
+ * Tobi Lippert
  * Artur Fast
  * Mehrad Mohammadian
  *

@@ -4,6 +4,8 @@
 #include <QObject>
 #include "data.h"
 
+
+
 class DataHolder : public QObject {
   Q_OBJECT
 public:

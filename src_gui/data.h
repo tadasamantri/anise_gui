@@ -9,6 +9,9 @@
 #include "singletonrender.h"
 #include "ui_mainwindow.h"
 
+//TODO FRED dataholder vs data nur eine klasse!
+//und aufräumen du schmutzfink
+
 class Data : public QObject {
   Q_OBJECT
 public:

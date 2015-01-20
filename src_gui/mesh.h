@@ -23,6 +23,7 @@ public:
   Connection *getConnectionByID(int ID);
   friend class JsonFilehandler;
   // private:
+  //TODO nodes und connections als Map mit id
   QVector<Node *> nodes;
   QVector<Connection *> connections;
 };

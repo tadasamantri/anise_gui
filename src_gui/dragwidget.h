@@ -22,9 +22,6 @@ public:
 protected:
   void mousePressEvent(QMouseEvent *event);
 
-signals:
-
-public slots:
 };
 
 #endif // DRAGWIDGET_H

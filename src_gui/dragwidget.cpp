@@ -12,28 +12,32 @@
 #include <QPainter>
 #include "nodefactory.h"
 
+
 DragWidget::DragWidget(QWidget *parent) : QWidget(parent) {}
 
 void DragWidget::mousePressEvent(QMouseEvent *event) {
-  qDebug() << "click";
+
+    // user pressed the mouse button
+    // ensure a left-mouse-click
+    if (!(event->button() == Qt::LeftButton)) {
+      qDebug() << "that was not the left mouse button!\n";
+      return;
+    }
+
+
   QLabel *child = static_cast<QLabel *>(childAt(event->pos()));
   if (!child) {
-    qDebug() << "no child";
+    //if no child at this position return
     return;
   }
 
-  // ensure a left-mouse-click
-  if (!(event->button() == Qt::LeftButton)) {
-    qDebug() << "that was not the left mouse button!\n";
-    return;
-  }
-
-  qDebug() << "child";
+  //user pressed on a child
+  // mouse position relative to child top left corner
   QPoint hotSpot = event->pos() - child->pos();
 
   QByteArray Data;
   QDataStream dataStream(&Data, QIODevice::WriteOnly);
-  dataStream /*<< child */ << QPoint(hotSpot);
+  dataStream << QPoint(hotSpot);
 
   // something about mime data...
   QMimeData *mimeData = new QMimeData;
@@ -43,19 +47,24 @@ void DragWidget::mousePressEvent(QMouseEvent *event) {
   drag->setMimeData(mimeData);
   drag->setPixmap(*child->pixmap());
   drag->setHotSpot(hotSpot);
-  /*
+
+/*
+ *
+ * //TODO in die render klasse damit!
    // This will change the color of the drag icon; could also be used to
-   generate new images
-      QPixmap tempPixmap = child->pixmap();
+   //generate new images
+      QPixmap *tempPixmap = *(child->pixmap());
       QPainter painter;
-      painter.begin(&tempPixmap);
+      painter.begin(tempPixmap);
       painter.fillRect(pixmap.rect(), QColor(127, 127, 127, 127));
       painter.end();
-  */
-  // child->setPixmap(tempPixmap);
 
-  if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) ==
-      Qt::MoveAction)
+  // child->setPixmap(tempPixmap);
+*/
+
+
+  //TODO rausinfdne was das hier macht und der gruppe erklären
+  if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) == Qt::MoveAction)
     qDebug() << "never happens?";
   // child->close();
   else {
