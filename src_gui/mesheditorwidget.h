@@ -15,6 +15,7 @@
 #include <QDebug>
 #include <Qt>
 #include <QMimeData>
+#include <QPainter>
 
 class MeshEditorWidget : public QWidget {
     Q_OBJECT
@@ -27,6 +28,7 @@ protected:
     void dragEnterEvent(QDragEnterEvent *event);
     void dragMoveEvent(QDragMoveEvent *event);
     void dropEvent(QDropEvent *event);
+    void paintEvent(QPaintEvent *event);
     // void mouseMoveEvent(QMouseEvent *event);
 };
 

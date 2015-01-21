@@ -17,17 +17,13 @@ SingletonRender *SingletonRender::instance() {
 }
 
 
-// bug right now:
-// need a paintevent to draw something...
-DrawObject* SingletonRender::drawLine(int start_x, int start_y, int end_x ,int end_y){
-    QLineF line(start_x,  start_y, end_x , end_y);
-    int lineID = 1101;
-    DrawObject *newDrawObject = new DrawObject(lineID, this->ui->meshField);
-    newDrawObject->setGeometry(start_x,  start_y, end_x , end_y);
+// will have to be called from a paint event!
+void SingletonRender::drawLine(double start_x, double start_y, double end_x , double end_y){
+    qDebug() << "drawline";
+    QPainter painter(this->ui->meshField);
+    QLineF line(start_x, start_y, end_x , end_y);
     painter.setPen(Qt::blue);
-    //painter.setFont(QFont("Arial", 30));
     painter.drawLine(line);
-    return newDrawObject;
 }
 
 
@@ -36,11 +32,12 @@ DrawObject* SingletonRender::drawLine(int start_x, int start_y, int end_x ,int e
 void SingletonRender::paintEvent(QPaintEvent *event)
 {
     qDebug() << "draw event";
-    foreach (DrawObject* d, this->allDrawnLines) {
+   /*
+    foreach (QLine* d, this->allDrawnLines) {
         QPainter painter(this->ui->meshField);
         painter.setPen(QPen(Qt::black, 12, Qt::DashDotLine, Qt::RoundCap));
-        painter.drawLine(0, 0, 200, 200);
-    }
+        painter.drawLine(d);
+    }*/
 }
 
 
@@ -48,7 +45,7 @@ void SingletonRender::paintEvent(QPaintEvent *event)
 SingletonRender::SingletonRender() {
     // initialize all maps
     this->allDrawnNodes = QMap<int, DrawObject *>();
-    this->allDrawnLines = QMap<int, DrawObject *>();
+    this->allDrawnLines = QMap<int, QLine *>();
     this->allImages = QMap<QString, QPixmap *>();
 
     // load all images

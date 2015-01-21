@@ -56,7 +56,7 @@ public:
      * Draws a line from start x y to end x y
      *
      */
-    DrawObject* drawLine(int start_x, int start_y, int end_x ,int end_y);
+    void drawLine(double start_x, double start_y, double end_x ,double end_y);
 
 private:
 
@@ -73,7 +73,7 @@ private:
     // int ID
     // and the widget
     QMap<int, DrawObject *> allDrawnNodes;
-    QMap<int, DrawObject *> allDrawnLines;
+    QMap<int, QLine *> allDrawnLines;
 
     // window of application
     Ui::MainWindow *ui;

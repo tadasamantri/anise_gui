@@ -13,5 +13,4 @@ public:
     DrawObject(int nodeID, QWidget *parent);
 };
 
-
 #endif  // DRAWOBJECT_H

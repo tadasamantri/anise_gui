@@ -100,3 +100,8 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
     if (event->source()->objectName() == "meshField")
         Data::instance()->moveNodeInMesh(&DropPoint, numberOfNode);
 }
+
+void MeshEditorWidget::paintEvent(QPaintEvent *event){
+    //TTtest linie, please ignore
+    SingletonRender::instance()->drawLine(10, 20, 80, 60);
+}
