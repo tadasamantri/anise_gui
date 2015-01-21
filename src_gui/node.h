@@ -13,11 +13,11 @@ public:
     Node();
     float position_x;
     float position_y;
-    Node(QVector<Gate> &inputGates, QVector<Gate> &outputGates, QString &type,
-         QString &name, QVariantMap &params);
+
+    Node(QVector<Gate> &inputGates, QVector<Gate> &outputGates, QString &type, QString &name, QVariantMap &params);
 
     /*
-   * TO-DO:
+   * TODO:
    * add gate ist sehr umständlich, am besten übergeben wir nur noch einen
    *zusätzlichen
    * type als(string, bool) und er erweitert seinen vector<gate> selber
@@ -33,19 +33,32 @@ public:
     void setPosition(float x, float y);
 
     void setType(QString type);
+
     QString getType();
+
     void setName(QString name);
+
     QString getName();
+
     QVector<Gate> getInputGates();
+
     QVector<Gate> getOutputGates();
+
     bool addParam(QString _key, QVariant _value);
+
     bool removeParam(QString _key);
+
     QString getParamByKey(const QString &_key);
+
     QString toString();
+
     Gate *getGateByName(const QString &name);
+
     // private:
     QVector<Gate> inputGates, outputGates;
+
     QString type, name;
+
     QVariantMap params;  // maps <identifier, value>
 };
 

@@ -53,7 +53,7 @@ public:
    * (just for debugging)
   */
 
-    static void printFile(const QString &fileContent);
+    static void printString(const QString &fileContent);
 
     static QString *meshToJson(Mesh *mesh);
 };

@@ -71,7 +71,9 @@ QString Node::toString() {
         out = out.append("key:")
                 .append(key)
                 .append(", ")
-                .append("value:")
+                .append("value: ")
+                .append(params.find(key).value().typeName())
+                .append(" ")
                 .append(params.find(key).value().toString())
                 .append("\n");
     }

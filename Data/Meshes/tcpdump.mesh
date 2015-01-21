@@ -3,6 +3,7 @@
     {"class": "tcpdump", "name": "TDump",
      "params": [
           {"file": "/home/boy/Documents/CASED/Development/LERAD/dataset/samples/small.tcpdump"}
-     ]}
+     ]
+    }
   ]
 }

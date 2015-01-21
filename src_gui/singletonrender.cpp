@@ -19,7 +19,7 @@ SingletonRender *SingletonRender::instance() {
 
 // will have to be called from a paint event!
 void SingletonRender::drawLine(double start_x, double start_y, double end_x , double end_y){
-    qDebug() << "drawline";
+    //qDebug() << "drawline";
     QPainter painter(this->ui->meshField);
     QLineF line(start_x, start_y, end_x , end_y);
     painter.setPen(Qt::blue);

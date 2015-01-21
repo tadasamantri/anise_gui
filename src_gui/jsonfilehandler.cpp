@@ -1,4 +1,5 @@
 ﻿#include "jsonfilehandler.h"
+#include <QJsonParseError>
 
 QString JsonFileHandler::loadFile(const QString &path) {
     // QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
@@ -22,20 +23,25 @@ QString JsonFileHandler::loadFile(const QString &path) {
 
 // creates a new mesh and fills it with the Json content
 Mesh JsonFileHandler::parseJsonString(QString &jsonString) {
+
     // create QJsonObject from string given
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonString.toUtf8());
+
+    QJsonParseError *errorWhileParsing;
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonString.toUtf8(),errorWhileParsing);
+    QString errorMessage = errorWhileParsing->errorString();
     QJsonObject jsonObject = jsonDoc.object();
+    qDebug()<<"creating Json file:" << errorMessage;
+
+    //create a new empty Mesh
     Mesh mesh = Mesh();
     // check if JSON-File is ok
-    if (!(jsonObject.contains(QString("nodes")) &&
-          jsonObject["nodes"].isArray())) {
-        // && jsonObject.contains(QString("connections"))
-        //&& jsonObject["connections"].isArray())) {
+    if (!(jsonObject.contains(QString("nodes")) && !jsonDoc.isEmpty() && jsonObject["nodes"].isArray())) {
 
         QMessageBox::information(
                     0, QString("Error"),
                     QString("The file you selected has an unknown Format"),
-                    "Thanks for that!");
+                    "Ok");
+
         return mesh;
     }
 
@@ -49,23 +55,23 @@ Mesh JsonFileHandler::parseJsonString(QString &jsonString) {
         if (!jNode.contains("class"))  // check  if nodes are ok
         {
             QMessageBox::information(0, QString("Error"), QString("No Class given"),
-                                     "Thanks for that!");
+                                     "Ok");
             return mesh;
         } else if (!jNode.contains("name")) {
             QMessageBox::information(0, QString("Error"), QString("No Name given"),
-                                     "Thanks for that!");
+                                     "Ok");
             return mesh;
 
         } else if (!jNode.contains("params")) {
             QMessageBox::information(0, QString("Error"),
                                      QString("no parameters given"),
-                                     "Thanks for that!");
+                                     "Ok");
             return mesh;
 
         } else if (!jNode["params"].isArray()) {
             QMessageBox::information(0, QString("Error"),
                                      QString("params is no array"),
-                                     "Thanks for that!");
+                                     "Ok");
             return mesh;
         }
 
@@ -123,7 +129,7 @@ Mesh JsonFileHandler::parseJsonString(QString &jsonString) {
                     message += "A connection has no dest_gate!\n";
                 }
                 QMessageBox::information(0, QString("Error"), message,
-                                         "Thanks for that!");
+                                         "Ok");
                 return mesh;
             }  // error handling
 
@@ -148,14 +154,14 @@ Mesh JsonFileHandler::parseJsonString(QString &jsonString) {
     return mesh;
 }
 
-// TODO rename, is printString not printFile
-void JsonFileHandler::printFile(const QString &fileContent) {
+
+void JsonFileHandler::printString(const QString &fileContent) {
     if (fileContent == "") {
         qDebug() << "no File Content loaded! \nthe parser didn't read the file "
                     "correctly!";
     } else {
-        qDebug() << "File Content loaded!:\n";
-        qDebug() << "\n" << fileContent << "\n";
+        qDebug() << "File Content loaded!\n";
+        //qDebug() << "\n" << fileContent << "\n";
     }
 }
 
