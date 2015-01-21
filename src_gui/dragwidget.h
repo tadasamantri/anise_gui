@@ -16,12 +16,11 @@
 
 class DragWidget : public QWidget {
   Q_OBJECT
-public:
+ public:
   explicit DragWidget(QWidget *parent = 0);
 
-protected:
+ protected:
   void mousePressEvent(QMouseEvent *event);
-
 };
 
-#endif // DRAGWIDGET_H
+#endif  // DRAGWIDGET_H

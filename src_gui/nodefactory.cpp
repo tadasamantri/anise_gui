@@ -1,5 +1,5 @@
 #include "nodefactory.h"
-//TODO friend Node, node should have a private konstruktor
+// TODO friend Node, node should have a private konstruktor
 NodeFactory::NodeFactory() {}
 Node NodeFactory::createNode() {
   Node node = Node();
@@ -30,7 +30,7 @@ Node *NodeFactory::createTestNode() {
   // ##### generate a node just for testing purpose
   // later nodes should be created by reading from a json file
 
-  Node *tempTestNode = new Node(); // using standart construktor
+  Node *tempTestNode = new Node();  // using standart construktor
   // setting individual variables
 
   // name and type

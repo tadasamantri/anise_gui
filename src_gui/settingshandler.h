@@ -6,11 +6,10 @@
 #include <QMap>
 
 class SettingsHandler {
-
-private:
+ private:
   static QString settingsFilePath;
 
-public:
+ public:
   static QString loadSetting(QString key);
   static void storeSetting(QString SettingsKey, QString SettingsValue);
   static void initializeSettings();
@@ -19,7 +18,7 @@ public:
   static QMap<QString, QString> loadAllSettings();
 };
 
-#endif // SETTINGSHANDLER_H
+#endif  // SETTINGSHANDLER_H
 
 /*-----------ALL EXISTING KEYS (please keep it up to
  *date)---------------------------------

@@ -19,16 +19,13 @@
 // application.
 
 class SingletonRender {
-public:
-
-
+ public:
   // The instance function returns a pointer to a static variable and thus is
   // declared static.
   static SingletonRender *instance();
 
   // will load all images in ../Data/Images/ into the allImages Map
   bool loadImages();
-
 
   void setUi(Ui::MainWindow *ui);
 
@@ -54,9 +51,7 @@ public:
    */
   void renderCatalogContent(QVector<Node> NodeVektor, QWidget *CatalogParent);
 
-private:
-
-
+ private:
   // this is the map containing all raw Images.
   // Qstring is the same as the filename
   // QPixmap a .png image
@@ -67,11 +62,8 @@ private:
   // and the widget
   QMap<int, DrawObject *> allDrawObjects;
 
-  //window of application
+  // window of application
   Ui::MainWindow *ui;
-
-
-
 
   //###### singleton stuff ########
 
@@ -95,4 +87,4 @@ private:
   static SingletonRender *m_pInstance;
 };
 
-#endif // SINGLETONRENDER_H
+#endif  // SINGLETONRENDER_H

@@ -18,11 +18,11 @@
 
 class MeshEditorWidget : public QWidget {
   Q_OBJECT
-public:
+ public:
   explicit MeshEditorWidget(QWidget *parent = 0);
   QPoint dragStartPosition;
 
-protected:
+ protected:
   void mousePressEvent(QMouseEvent *event);
   void dragEnterEvent(QDragEnterEvent *event);
   void dragMoveEvent(QDragMoveEvent *event);
@@ -30,4 +30,4 @@ protected:
   // void mouseMoveEvent(QMouseEvent *event);
 };
 
-#endif // MESHEDITORWIDGET_H
+#endif  // MESHEDITORWIDGET_H

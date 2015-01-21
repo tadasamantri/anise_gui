@@ -10,7 +10,7 @@
 #include <QTextBrowser>
 
 class Q_DebugStream : public std::basic_streambuf<char> {
-public:
+ public:
   Q_DebugStream(std::ostream &stream, QTextBrowser *text_edit)
       : m_stream(stream) {
     log_window = text_edit;
@@ -24,13 +24,13 @@ public:
     qInstallMessageHandler(myQDebugMessageHandler);
   }
 
-private:
+ private:
   static void myQDebugMessageHandler(QtMsgType, const QMessageLogContext &,
                                      const QString &msg) {
     std::cout << msg.toStdString().c_str();
   }
 
-protected:
+ protected:
   // This is called when a std::endl has been inserted into the stream
   virtual int_type overflow(int_type v) {
     /*if (v == '\n')
@@ -49,10 +49,10 @@ protected:
     return n;
   }
 
-private:
+ private:
   std::ostream &m_stream;
   std::streambuf *m_old_buf;
   QTextBrowser *log_window;
 };
 
-#endif // Q_DEBUGSTREAM_H
+#endif  // Q_DEBUGSTREAM_H

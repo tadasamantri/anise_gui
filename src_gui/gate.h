@@ -5,8 +5,7 @@
 #include <QVector>
 
 class Gate {
-
-public:
+ public:
   Gate();
   Gate(bool in, QVector<QString> tpyes);
   bool getDirection();
@@ -17,11 +16,11 @@ public:
   QString getName();
   void setName(QString name);
 
-private:
+ private:
   QVector<QString> types;
   bool in;
   QString name;
   // Node* parent;
 };
 
-#endif // GATE_H
+#endif  // GATE_H

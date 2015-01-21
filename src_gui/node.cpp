@@ -17,8 +17,6 @@ Node::Node(QVector<Gate> &inputGates, QVector<Gate> &outputGates, QString &type,
   this->name = name;
 }
 
-Node::~Node() {}
-
 void Node::setPosition(float x, float y) {
   this->position_x = x;
   this->position_y = y;
@@ -61,8 +59,7 @@ bool Node::removeParam(QString _key) {
 }
 
 QString Node::getParamByKey(const QString &_key) {
-  if (!this->params.contains(_key))
-    return QString("@@invalid@@");
+  if (!this->params.contains(_key)) return QString("@@invalid@@");
   return params.find(_key).value().toString();
 }
 
@@ -79,4 +76,21 @@ QString Node::toString() {
               .append("\n");
   }
   return out;
+}
+
+Gate *Node::getGateByName(const QString &name) {
+  Gate *g;
+  foreach (Gate gate, this->inputGates)
+    if (gate.getName() == name) {
+      g = &gate;
+      goto theEnd;
+    }
+
+  foreach (Gate gate, this->outputGates)
+    if (gate.getName() == name) {
+      g = &gate;
+      break;
+    }
+theEnd:
+  return g;
 }

@@ -13,13 +13,13 @@ class MainWindow;
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
-public:
+ public:
   explicit MainWindow(QWidget *parent = 0);
   // Ui::MainWindow *getUi();
   ~MainWindow();
   Ui::MainWindow *ui;
 
-private slots:
+ private slots:
 
   // Action for loading .mesh files
   void on_actionLoad_triggered();
@@ -28,8 +28,8 @@ private slots:
 
   void on_actionNew_triggered();
 
-private:
+ private:
   void initializeGUI();
 };
 
-#endif // MAINWINDOW_H
+#endif  // MAINWINDOW_H

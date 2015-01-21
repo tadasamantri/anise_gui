@@ -5,10 +5,10 @@
 #include <QVector>
 
 class NodeCatalog {
-public:
+ public:
   NodeCatalog();
   QVector<Node> Content;
   void insert(Node *nodeToInsert);
 };
 
-#endif // NODECATALOG_H
+#endif  // NODECATALOG_H

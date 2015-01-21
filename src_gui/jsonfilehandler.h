@@ -31,8 +31,7 @@
 #include "mesh.h"
 
 class JsonFileHandler {
-
-public:
+ public:
   /*
    *will simply load the file
   */
@@ -59,4 +58,4 @@ public:
   static QString *meshToJson(Mesh *mesh);
 };
 
-#endif // FILEHANDLER_H
+#endif  // FILEHANDLER_H

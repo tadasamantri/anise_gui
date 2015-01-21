@@ -1,7 +1,6 @@
 ﻿#include "jsonfilehandler.h"
 
 QString JsonFileHandler::loadFile(const QString &path) {
-
   // QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 
   QString fileContent = "";
@@ -13,7 +12,6 @@ QString JsonFileHandler::loadFile(const QString &path) {
 
   // read each line of that file and append it to the String
   while (file.bytesAvailable()) {
-
     QByteArray line = file.readLine();
     fileContent.append(line);
   }
@@ -22,9 +20,8 @@ QString JsonFileHandler::loadFile(const QString &path) {
   return fileContent;
 }
 
-//creates a new mesh and fills it with the Json content
+// creates a new mesh and fills it with the Json content
 Mesh JsonFileHandler::parseJsonString(QString &jsonString) {
-
   // create QJsonObject from string given
   QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonString.toUtf8());
   QJsonObject jsonObject = jsonDoc.object();
@@ -44,13 +41,12 @@ Mesh JsonFileHandler::parseJsonString(QString &jsonString) {
 
   QJsonArray nodes;
   // create new mesh for returning it later
-  nodes = jsonObject["nodes"].toArray(); // extract all nodes as Array
+  nodes = jsonObject["nodes"].toArray();  // extract all nodes as Array
   foreach (QJsonValue node, nodes) {
-
-    QJsonObject jNode = node.toObject(); // create a JSonObjec for each node
+    QJsonObject jNode = node.toObject();  // create a JSonObjec for each node
     QString _class, _name;
 
-    if (!jNode.contains("class")) // check  if nodes are ok
+    if (!jNode.contains("class"))  // check  if nodes are ok
     {
       QMessageBox::information(0, QString("Error"), QString("No Class given"),
                                "Thanks for that!");
@@ -73,36 +69,37 @@ Mesh JsonFileHandler::parseJsonString(QString &jsonString) {
       return mesh;
     }
 
-    _class = jNode["class"].toString(); // extract node type
-    _name = jNode["name"].toString(); // extract node name
+    _class = jNode["class"].toString();  // extract node type
+    _name = jNode["name"].toString();    // extract node name
 
-    QVariantMap _params = QVariantMap(); // set up params map
+    QVariantMap _params = QVariantMap();  // set up params map
 
     QJsonArray jParams =
-        jNode["params"].toArray(); // extract params as array from json file
+        jNode["params"].toArray();  // extract params as array from json file
     // TODO: Talk about Gates ands Connections to get this working
-    foreach (QJsonValue paramJValue, jParams) { // for each of them..
+    foreach (QJsonValue paramJValue, jParams) {  // for each of them..
 
       QJsonObject paramObject =
-          paramJValue.toObject(); //...make it an Object...
+          paramJValue.toObject();  //...make it an Object...
 
       foreach (QString paramKey, paramObject.keys()) {
-        _params.insert(paramKey, paramObject.find(paramKey)
-                                     .value()
-                                     .toString()); //...and push it into the map
+        _params.insert(paramKey,
+                       paramObject.find(paramKey)
+                           .value()
+                           .toString());  //...and push it into the map
       }
     }
     Node tmp = NodeFactory::createNode(
         _class, _name,
-        _params); // let the datafactory create a node and insert it into mesh
+        _params);  // let the datafactory create a node and insert it into mesh
     mesh.addNode(&tmp);
     qDebug() << "Node parsed:\n" << tmp.toString();
   }
 
-  if (jsonObject.contains("connections")) { // are there any connections?
+  if (jsonObject.contains("connections")) {  // are there any connections?
 
     QJsonArray connections = jsonObject["connections"].toArray();
-    if (connections.isEmpty()) // are there any connections?
+    if (connections.isEmpty())  // are there any connections?
       return mesh;
     foreach (QJsonValue localConnection, connections) {
       QJsonObject connectionObject = localConnection.toObject();
@@ -128,17 +125,22 @@ Mesh JsonFileHandler::parseJsonString(QString &jsonString) {
         QMessageBox::information(0, QString("Error"), message,
                                  "Thanks for that!");
         return mesh;
-      } // error handling
+      }  // error handling
 
+      // get the Nodes
       Node *src_node =
                mesh.getNodeByName(connectionObject["src_node"].toString()),
            *dest_node =
                mesh.getNodeByName(connectionObject["dest_node"].toString());
-      Connection *tmp = new Connection(*src_node, *dest_node);
+      // get the Gates
+      Gate *src_gate =
+               src_node->getGateByName(connectionObject["src_gate"].toString()),
+           *dest_gate = dest_node->getGateByName(
+               connectionObject["dest_gate"].toString());
 
-      //TODO getGateByNAme
-      tmp->setSrcGate(src_node->getOutputGates().first());
-      tmp->setDestGate(dest_node->getInputGates().first());
+      // build up the Connection
+      Connection *tmp =
+          new Connection(*src_node, *src_gate, *dest_node, *dest_gate);
 
       mesh.addConnection(tmp);
     }
@@ -146,7 +148,7 @@ Mesh JsonFileHandler::parseJsonString(QString &jsonString) {
   return mesh;
 }
 
-//TODO rename, is printString not printFile
+// TODO rename, is printString not printFile
 void JsonFileHandler::printFile(const QString &fileContent) {
   if (fileContent == "") {
     qDebug() << "no File Content loaded! \nthe parser didn't read the file "
@@ -159,7 +161,6 @@ void JsonFileHandler::printFile(const QString &fileContent) {
 
 void JsonFileHandler::writeFile(const QString &path,
                                 const QString &fileContent) {
-
   QFile file(path);
   file.open(QIODevice::WriteOnly | QIODevice::Text);
   QTextStream out(&file);
@@ -168,12 +169,11 @@ void JsonFileHandler::writeFile(const QString &path,
 }
 
 QString *JsonFileHandler::meshToJson(Mesh *mesh) {
-
   QString *jsonString = new QString();
 
   *jsonString += "{\n\t\"nodes: [";
 
-  foreach (Node *localNode, mesh->nodes) {
+  foreach (Node *localNode, mesh->getAllNodes()) {
     *jsonString += "\n\t\t{\"class\": " + localNode->getType() + "\",\n";
     *jsonString += "\t\t \"name\": \"" + localNode->getName() + "\", \n";
     *jsonString += "\t\t \"params\": [";
@@ -182,17 +182,15 @@ QString *JsonFileHandler::meshToJson(Mesh *mesh) {
                      localNode->params[key].toString() + "\"},";
     }
     // remove obsolete last ","
-    if (*(jsonString->end()) == ',')
-      jsonString->chop(1);
+    if (*(jsonString->end()) == ',') jsonString->chop(1);
     *jsonString += "]},";
   }
   // remove obsolete last ","
-  if (*(jsonString->end()) == ',')
-    jsonString->chop(1);
+  if (*(jsonString->end()) == ',') jsonString->chop(1);
   *jsonString += "\t],\n";
   *jsonString += "\"connections\": [";
 
-  foreach (Connection *localConnection, mesh->connections) {
+  foreach (Connection *localConnection, mesh->getAllConnections()) {
     Node *src = localConnection->getSrcNode(),
          *dst = localConnection->getDestNode();
     *jsonString += "\n\t{\"src_node\": \"";
@@ -207,8 +205,7 @@ QString *JsonFileHandler::meshToJson(Mesh *mesh) {
     *jsonString += "\"},";
   }
   // remove obsolete last ","
-  if (*(jsonString->end()) == ',')
-    jsonString->chop(1);
+  if (*(jsonString->end()) == ',') jsonString->chop(1);
   *jsonString += "\n\t]\n}";
 
   return jsonString;

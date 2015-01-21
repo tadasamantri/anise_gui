@@ -6,10 +6,9 @@
 #include <QLabel>
 
 class DrawObject : public QLabel {
-
-public:
+ public:
   int numberOfNode;
   DrawObject(int numberOfNode, QWidget *parent);
 };
 
-#endif // DRAWOBJECT_H
+#endif  // DRAWOBJECT_H

@@ -4,7 +4,7 @@
 #include <QVariantMap>
 
 class NodeFactory {
-public:
+ public:
   NodeFactory();
   // static damit man kein objekt davon erstellen muss.
   static Node createNode();
@@ -14,4 +14,4 @@ public:
   static Node *createTestNode();
 };
 
-#endif // NODEFACTORY_H
+#endif  // NODEFACTORY_H

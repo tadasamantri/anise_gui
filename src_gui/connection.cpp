@@ -1,22 +1,20 @@
 #include "connection.h"
 
-Connection::Connection(Gate &src, Gate &dest) {
-  gateA = &src;
-  gateB = &dest;
+Connection::Connection(Node &src_node, Gate &src_gate, Node &dest_node,
+                       Gate &dest_gate) {
+  this->src_gate = &src_gate;
+  this->dest_gate = &dest_gate;
+  this->src_node = &src_node;
+  this->dest_node = &dest_node;
 }
 
-Connection::Connection(Node &src, Node &dest) {
-  src_node = &src;
-  dest_node = &dest;
-}
+void Connection::setDestGate(Gate &dest) { dest_gate = &dest; }
 
-void Connection::setDestGate(Gate &dest) { gateB = &dest; }
+void Connection::setSrcGate(Gate &src) { src_gate = &src; }
 
-void Connection::setSrcGate(Gate &src) { gateA = &src; }
+Gate *Connection::getDestGate() { return dest_gate; }
 
-Gate *Connection::getDestGate() { return gateB; }
-
-Gate *Connection::getSrcGate() { return gateA; }
+Gate *Connection::getSrcGate() { return src_gate; }
 
 void Connection::setDestNode(Node &node) { dest_node = &node; }
 

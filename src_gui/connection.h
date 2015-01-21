@@ -5,10 +5,8 @@
 #include "gate.h"
 
 class Connection {
-public:
-  Connection(Gate &src, Gate &dest);
-  Connection(Node &src, Node &dest);
-  //TODO source_ndoe destination_Node source_Gate sourec_gate als konstruktor
+ public:
+  Connection(Node &src_node, Gate &src_gate, Node &dest_node, Gate &dest_gate);
   Gate *getSrcGate();
   Gate *getDestGate();
   void setSrcGate(Gate &src);
@@ -18,9 +16,9 @@ public:
   void setSrcNode(Node &node);
   void setDestNode(Node &node);
 
-private:
-  Gate *gateA, *gateB;
+ private:
+  Gate *src_gate, *dest_gate;
   Node *src_node, *dest_node;
 };
 
-#endif // CONNECTION_H
+#endif  // CONNECTION_H

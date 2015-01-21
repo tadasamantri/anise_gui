@@ -7,7 +7,6 @@ QString AniseCommunicator::readOutput;
 
 // reads all available bytes from the Standard Output Channel
 void AniseCommunicator::read() {
-
   // Sets the channel to be read to StandardOutput
   anise_process->setReadChannel(QProcess::StandardOutput);
   QByteArray ba = anise_process->readAll();
@@ -18,7 +17,6 @@ void AniseCommunicator::read() {
 // (see overloaded function read)
 // changes readOutput
 void AniseCommunicator::read(QProcess::ProcessChannel pc) {
-
   // Sets the channel to be read
   anise_process->setReadChannel(pc);
   QByteArray ba = anise_process->readAll();
@@ -27,11 +25,10 @@ void AniseCommunicator::read(QProcess::ProcessChannel pc) {
 
 // Returns Json String with all available Node Files
 QString AniseCommunicator::getAllNodeTypes() {
-
   // create parameters needed for executing framework
   QStringList arguments;
   arguments << "--nodes"
-            << "--machine"; // << "--help";
+            << "--machine";  // << "--help";
 
   // get framework Path
   QString dir;
@@ -62,6 +59,5 @@ QString AniseCommunicator::getAllNodeTypes() {
 }
 
 void AniseCommunicator::setFrameworkPath(QString newPath) {
-
   AniseCommunicator::path = newPath;
 }
