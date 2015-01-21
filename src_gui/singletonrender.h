@@ -60,6 +60,8 @@ public:
 
 private:
 
+    void paintEvent(QPaintEvent *event);
+
     QPainter painter;
 
     // this is the map containing all raw Images.
@@ -67,10 +69,11 @@ private:
     // QPixmap a .png image
     QMap<QString, QPixmap *> allImages;
 
-    // a map containing all nodes that have been rendered
+    // Maps containing everything that have been rendered
     // int ID
     // and the widget
-    QMap<int, DrawObject *> allDrawObjects;
+    QMap<int, DrawObject *> allDrawnNodes;
+    QMap<int, DrawObject *> allDrawnLines;
 
     // window of application
     Ui::MainWindow *ui;

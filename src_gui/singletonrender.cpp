@@ -16,6 +16,9 @@ SingletonRender *SingletonRender::instance() {
     return m_pInstance;
 }
 
+
+// bug right now:
+// need a paintevent to draw something...
 DrawObject* SingletonRender::drawLine(int start_x, int start_y, int end_x ,int end_y){
     QLineF line(start_x,  start_y, end_x , end_y);
     int lineID = 1101;
@@ -23,14 +26,29 @@ DrawObject* SingletonRender::drawLine(int start_x, int start_y, int end_x ,int e
     newDrawObject->setGeometry(start_x,  start_y, end_x , end_y);
     painter.setPen(Qt::blue);
     //painter.setFont(QFont("Arial", 30));
-    painter.drawLine( line);
+    painter.drawLine(line);
     return newDrawObject;
-
 }
+
+
+//bug right now:
+// paint events are never called
+void SingletonRender::paintEvent(QPaintEvent *event)
+{
+    qDebug() << "draw event";
+    foreach (DrawObject* d, this->allDrawnLines) {
+        QPainter painter(this->ui->meshField);
+        painter.setPen(QPen(Qt::black, 12, Qt::DashDotLine, Qt::RoundCap));
+        painter.drawLine(0, 0, 200, 200);
+    }
+}
+
+
 
 SingletonRender::SingletonRender() {
     // initialize all maps
-    this->allDrawObjects = QMap<int, DrawObject *>();
+    this->allDrawnNodes = QMap<int, DrawObject *>();
+    this->allDrawnLines = QMap<int, DrawObject *>();
     this->allImages = QMap<QString, QPixmap *>();
 
     // load all images
@@ -90,7 +108,7 @@ bool SingletonRender::loadImages() {
 void SingletonRender::setUi(Ui::MainWindow *ui) { this->ui = ui; }
 
 void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
-    if (!allDrawObjects.contains(nodeID)) {
+    if (!allDrawnNodes.contains(nodeID)) {
         // create a Drawobject
         DrawObject *NodeDrawObject = new DrawObject(nodeID, this->ui->meshField);
 
@@ -103,17 +121,18 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
             qDebug() << "background.png did not load correctly!";
         }
 
-        allDrawObjects.insert(nodeID, NodeDrawObject);
+        allDrawnNodes.insert(nodeID, NodeDrawObject);
     }
     // TODO should use layouts instead of hardcoded position!
-    allDrawObjects.value(nodeID)
+    allDrawnNodes.value(nodeID)
             ->move(nodeToRender->position_x, nodeToRender->position_y);
 
-    allDrawObjects.value(nodeID)->show();
+    allDrawnNodes.value(nodeID)->show();
 }
 
 void SingletonRender::renderMesh(Mesh *workMesh) {
     QMap<int, Node *> temp = workMesh->nodesInMash;
+
     // calls render method for every node in the mesh
     foreach (int ID, temp.keys()) {
         // Only do it if a Node with this ID exists in the mesh
