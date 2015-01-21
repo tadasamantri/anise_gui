@@ -43,7 +43,7 @@ Mesh JsonFileHandler::parseJsonString(QString &jsonString) {
                     "Ok");
 
         return mesh;
-    }
+    }   
 
     QJsonArray nodes;
     // create new mesh for returning it later
@@ -161,7 +161,7 @@ void JsonFileHandler::printString(const QString &fileContent) {
                     "correctly!";
     } else {
         qDebug() << "File Content loaded!\n";
-        //qDebug() << "\n" << fileContent << "\n";
+        qDebug() << "\n" << fileContent << "\n";
     }
 }
 
