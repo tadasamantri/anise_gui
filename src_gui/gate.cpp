@@ -3,8 +3,8 @@
 Gate::Gate() {}
 
 Gate::Gate(bool in, QVector<QString> types) {
-  this->in = in;
-  this->types = types;
+    this->in = in;
+    this->types = types;
 }
 
 bool Gate::getDirection() { return this->in; }

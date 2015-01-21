@@ -2,10 +2,10 @@
 
 Connection::Connection(Node &src_node, Gate &src_gate, Node &dest_node,
                        Gate &dest_gate) {
-  this->src_gate = &src_gate;
-  this->dest_gate = &dest_gate;
-  this->src_node = &src_node;
-  this->dest_node = &dest_node;
+    this->src_gate = &src_gate;
+    this->dest_gate = &dest_gate;
+    this->src_node = &src_node;
+    this->dest_node = &dest_node;
 }
 
 void Connection::setDestGate(Gate &dest) { dest_gate = &dest; }

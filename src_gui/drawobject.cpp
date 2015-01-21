@@ -2,7 +2,7 @@
 #include <QPixmap>
 #include <QWidget>
 
-DrawObject::DrawObject(int numberOfNode, QWidget *parent = 0) {
-  this->numberOfNode = numberOfNode;
-  this->setParent(parent);
+DrawObject::DrawObject(int nodeID, QWidget *parent = 0) {
+    this->nodeID = nodeID;
+    this->setParent(parent);
 }

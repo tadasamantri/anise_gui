@@ -11,24 +11,24 @@ Data *Data::data = NULL;
 */
 
 Data *Data::instance() {
-  if (!data)  // Only allow one instance of class to be generated.
-    data = new Data;
+    if (!data)  // Only allow one instance of class to be generated.
+        data = new Data;
 
-  return data;
+    return data;
 }
 
 Data::Data(QObject *parent) : QObject(parent) {
-  mesh = new Mesh();
-  nodeCatalog = new NodeCatalog();
+    mesh = new Mesh();
+    nodeCatalog = new NodeCatalog();
 }
 
 void Data::addNodeToMesh(Node *newNode) {
-  this->mesh->addNode(newNode);
-  SingletonRender::instance()->renderMesh(this->mesh);
+    this->mesh->addNode(newNode);
+    SingletonRender::instance()->renderMesh(this->mesh);
 }
 
 void Data::moveNodeInMesh(QPoint *Position, int numberOfNode) {
-  this->mesh->getNodeByID(numberOfNode)
-      ->setPosition(Position->x(), Position->y());
-  SingletonRender::instance()->renderMesh(this->mesh);
+    this->mesh->getNodeByID(numberOfNode)
+            ->setPosition(Position->x(), Position->y());
+    SingletonRender::instance()->renderMesh(this->mesh);
 }

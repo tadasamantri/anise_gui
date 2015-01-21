@@ -8,6 +8,7 @@
 #include <QStringList>
 #include <QDir>
 #include <QList>
+#include <QPainter>
 
 // our own classes
 #include "mesh.h"
@@ -19,72 +20,81 @@
 // application.
 
 class SingletonRender {
- public:
-  // The instance function returns a pointer to a static variable and thus is
-  // declared static.
-  static SingletonRender *instance();
+public:
+    // The instance function returns a pointer to a static variable and thus is
+    // declared static.
+    static SingletonRender *instance();
 
-  // will load all images in ../Data/Images/ into the allImages Map
-  bool loadImages();
+    // will load all images in ../Data/Images/ into the allImages Map
+    bool loadImages();
 
-  void setUi(Ui::MainWindow *ui);
+    void setUi(Ui::MainWindow *ui);
 
-  /*
+    /*
    * Renders the whole mesh
    */
-  void renderMesh(Mesh *workMesh);
+    void renderMesh(Mesh *workMesh);
 
-  /*
+    /*
    * Renders a node.
    *
    */
-  void renderNode(Node *nodeToRender, int nodeID);
+    void renderNode(Node *nodeToRender, int nodeID);
 
-  /*
+    /*
    * Render one Node Type in the Catalog
    *
    */
-  void renderNodeType(Node *nodeToRender, QWidget *parent, int position);
+    void renderNodeType(Node *nodeToRender, QWidget *parent, int position);
 
-  /*
+    /*
    * This will Render all Nodes in the Type Catalog.
    */
-  void renderCatalogContent(QVector<Node> NodeVektor, QWidget *CatalogParent);
+    void renderCatalogContent(QVector<Node> NodeVektor, QWidget *CatalogParent);
 
- private:
-  // this is the map containing all raw Images.
-  // Qstring is the same as the filename
-  // QPixmap a .png image
-  QMap<QString, QPixmap *> allImages;
+    /*
+     * Draws a line from start x y to end x y
+     *
+     */
+    DrawObject* drawLine(int start_x, int start_y, int end_x ,int end_y);
 
-  // a map containing all nodes that have been rendered
-  // int ID
-  // and the widget
-  QMap<int, DrawObject *> allDrawObjects;
+private:
 
-  // window of application
-  Ui::MainWindow *ui;
+    QPainter painter;
 
-  //###### singleton stuff ########
+    // this is the map containing all raw Images.
+    // Qstring is the same as the filename
+    // QPixmap a .png image
+    QMap<QString, QPixmap *> allImages;
 
-  // Private so that it can  not be called
-  // Only the class function Instance can call the constructor. Public access to
-  // the constructor is denied.
-  SingletonRender();
+    // a map containing all nodes that have been rendered
+    // int ID
+    // and the widget
+    QMap<int, DrawObject *> allDrawObjects;
 
-  // The constructor, copy constructor and assignment operator are all private
-  // to ensure that the
-  // programmer using the singleton class can only create a single instance of
-  // the class using only the Instance() function.
+    // window of application
+    Ui::MainWindow *ui;
 
-  // copy constructor is private
-  SingletonRender(SingletonRender const &){};
+    //###### singleton stuff ########
 
-  // assignment operator is private
-  SingletonRender &operator=(SingletonRender const &){};
+    // Private so that it can  not be called
+    // Only the class function Instance can call the constructor. Public access to
+    // the constructor is denied.
+    SingletonRender();
 
-  // pointer to this instance
-  static SingletonRender *m_pInstance;
+    // The constructor, copy constructor and assignment operator are all private
+    // to ensure that the
+    // programmer using the singleton class can only create a single instance of
+    // the class using only the Instance() function.
+
+    // copy constructor is private
+    SingletonRender(SingletonRender const &){};
+
+    // assignment operator is private
+    SingletonRender &operator=(SingletonRender const &){};
+
+    // pointer to this instance
+    static SingletonRender *m_pInstance;
 };
 
 #endif  // SINGLETONRENDER_H

@@ -6,16 +6,16 @@
 #include <QMap>
 
 class SettingsHandler {
- private:
-  static QString settingsFilePath;
+private:
+    static QString settingsFilePath;
 
- public:
-  static QString loadSetting(QString key);
-  static void storeSetting(QString SettingsKey, QString SettingsValue);
-  static void initializeSettings();
-  static bool contains(QString key);
-  static void setSettingsPath(QString path);
-  static QMap<QString, QString> loadAllSettings();
+public:
+    static QString loadSetting(QString key);
+    static void storeSetting(QString SettingsKey, QString SettingsValue);
+    static void initializeSettings();
+    static bool contains(QString key);
+    static void setSettingsPath(QString path);
+    static QMap<QString, QString> loadAllSettings();
 };
 
 #endif  // SETTINGSHANDLER_H

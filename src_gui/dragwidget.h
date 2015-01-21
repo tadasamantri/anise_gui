@@ -15,12 +15,12 @@
 #include <QMimeData>
 
 class DragWidget : public QWidget {
-  Q_OBJECT
- public:
-  explicit DragWidget(QWidget *parent = 0);
+    Q_OBJECT
+public:
+    explicit DragWidget(QWidget *parent = 0);
 
- protected:
-  void mousePressEvent(QMouseEvent *event);
+protected:
+    void mousePressEvent(QMouseEvent *event);
 };
 
 #endif  // DRAGWIDGET_H

@@ -15,37 +15,37 @@
 DragWidget::DragWidget(QWidget *parent) : QWidget(parent) {}
 
 void DragWidget::mousePressEvent(QMouseEvent *event) {
-  // user pressed the mouse button
-  // ensure a left-mouse-click
-  if (!(event->button() == Qt::LeftButton)) {
-    qDebug() << "that was not the left mouse button!\n";
-    return;
-  }
+    // user pressed the mouse button
+    // ensure a left-mouse-click
+    if (!(event->button() == Qt::LeftButton)) {
+        qDebug() << "that was not the left mouse button!\n";
+        return;
+    }
 
-  QLabel *child = static_cast<QLabel *>(childAt(event->pos()));
-  if (!child) {
-    // if no child at this position return
-    return;
-  }
+    QLabel *child = static_cast<QLabel *>(childAt(event->pos()));
+    if (!child) {
+        // if no child at this position return
+        return;
+    }
 
-  // user pressed on a child
-  // mouse position relative to child top left corner
-  QPoint hotSpot = event->pos() - child->pos();
+    // user pressed on a child
+    // mouse position relative to child top left corner
+    QPoint hotSpot = event->pos() - child->pos();
 
-  QByteArray Data;
-  QDataStream dataStream(&Data, QIODevice::WriteOnly);
-  dataStream << QPoint(hotSpot);
+    QByteArray Data;
+    QDataStream dataStream(&Data, QIODevice::WriteOnly);
+    dataStream << QPoint(hotSpot);
 
-  // something about mime data...
-  QMimeData *mimeData = new QMimeData;
-  mimeData->setData("application/customthingy", Data);
+    // something about mime data...
+    QMimeData *mimeData = new QMimeData;
+    mimeData->setData("application/customthingy", Data);
 
-  QDrag *drag = new QDrag(this);
-  drag->setMimeData(mimeData);
-  drag->setPixmap(*child->pixmap());
-  drag->setHotSpot(hotSpot);
+    QDrag *drag = new QDrag(this);
+    drag->setMimeData(mimeData);
+    drag->setPixmap(*child->pixmap());
+    drag->setHotSpot(hotSpot);
 
-  /*
+    /*
    *
    * //TODO in die render klasse damit!
      // This will change the color of the drag icon; could also be used to
@@ -59,14 +59,14 @@ void DragWidget::mousePressEvent(QMouseEvent *event) {
     // child->setPixmap(tempPixmap);
   */
 
-  // TODO rausinfdne was das hier macht und der gruppe erklären
-  if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) ==
-      Qt::MoveAction)
-    qDebug() << "never happens?";
-  // child->close();
-  else {
-    // qDebug() << "drag end";
-    child->show();
-    // child->setPixmap(pixmap);
-  }
+    // TODO rausinfdne was das hier macht und der gruppe erklären
+    if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) ==
+            Qt::MoveAction)
+        qDebug() << "never happens?";
+    // child->close();
+    else {
+        // qDebug() << "drag end";
+        child->show();
+        // child->setPixmap(pixmap);
+    }
 }

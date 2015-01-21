@@ -31,31 +31,31 @@
 #include "mesh.h"
 
 class JsonFileHandler {
- public:
-  /*
+public:
+    /*
    *will simply load the file
   */
-  static QString loadFile(const QString &path);
+    static QString loadFile(const QString &path);
 
-  /*
+    /*
    * Will extract information from the file
   */
-  static Mesh parseJsonString(QString &jsonString);
+    static Mesh parseJsonString(QString &jsonString);
 
-  /*
+    /*
   * will write the file to diskQString
   */
 
-  void writeFile(const QString &path, const QString &fileContent);
+    void writeFile(const QString &path, const QString &fileContent);
 
-  /*
+    /*
    * Print the File
    * (just for debugging)
   */
 
-  static void printFile(const QString &fileContent);
+    static void printFile(const QString &fileContent);
 
-  static QString *meshToJson(Mesh *mesh);
+    static QString *meshToJson(Mesh *mesh);
 };
 
 #endif  // FILEHANDLER_H
