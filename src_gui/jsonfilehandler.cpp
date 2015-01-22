@@ -43,10 +43,14 @@ QJsonObject *JsonFileHandler::readFile(const QString &path) {
 
 void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj, QList<Node*> &nodelist, QList<Connection*> &connectionlist) {
     // check if there are any nodes
+    int i = 1, j = 1; //for debug only
     if (!obj["nodes"].isArray()) {
-        qDebug() << "no nodes in JSON-Object";
+        qWarning() << "no nodes in JSON-Object";
         return;
     }
+
+    qDebug() << "File contains nodes, so let's parse them";
+
     QMap<QString, Node*> nodemap;
     // for every node (represented as jsonvalue)...
     foreach (QJsonValue var, obj["nodes"].toArray()) {
@@ -56,14 +60,15 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj, QList<N
         // check if nodes are declared correctly
         if (!(theNode["class"].isString() && theNode["name"].isString() &&
               theNode["params"].isArray()))
-            qDebug() << "Error while extracting node:\n" << theNode;
+            qWarning() << "Error while extracting node:\n" << theNode;
 
         // node is welldefined =)
         else {
             // get name and class(type) of node
             QString type = theNode["class"].toString(),
                     name = theNode["name"].toString();
-
+            qDebug() << "node " << i++ << " parsed:\n name = " << name << " | type = "<<type;
+            qDebug() << "params:";
             // ok, parameters are quite more difficult
             QVariantMap params;
 
@@ -72,12 +77,18 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj, QList<N
                 // make every object a qvariantmap
                 QVariantMap map = local.toObject().toVariantMap();
                 // insert all records into params map
-                foreach (QString key, map.keys()) { params[key] = map[key]; }
+
+                foreach (QString key, map.keys()) {
+                    params[key] = map[key];
+                    qDebug() << j++ << ": " << key << " = " << params[key];
+                }
             }
+            j = 1; //for debugging only
+            qDebug() << "\n";
             // node is complete, so let's insert it
             Node createdNode = NodeFactory::createNode(type, name, params);
             nodemap[createdNode.getName()] = &createdNode;
-        }
+        };
     }
 
     if (!obj["connections"].isArray()) {
