@@ -12,6 +12,17 @@ int Mesh::addNode(Node *node) {
     return id;
 }
 
+void Mesh::addNodes(QList<Node *> &list){
+    foreach(Node *node, list)
+        this->addNode(node);
+}
+
+
+void Mesh::addConnections(QList<Connection *> &list){
+    foreach(Connection *connection, list)
+            this->addConnection(connection);
+}
+
 int Mesh::addConnection(Connection *connection) {
     int id = this->generateId();
     this->connectionsInMash.insert(id, connection);

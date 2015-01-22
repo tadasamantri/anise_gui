@@ -24,6 +24,7 @@
 #include <QJsonDocument>
 #include <QJsonValue>
 #include <QJsonArray>
+#include <QJsonParseError>
 #include <QErrorMessage>
 #include <QMessageBox>
 #include "node.h"
@@ -33,29 +34,39 @@
 class JsonFileHandler {
 public:
     /*
-   *will simply load the file
-  */
+     * will simply load the file
+     */
     static QString loadFile(const QString &path);
 
     /*
-   * Will extract information from the file
-  */
+     * Will extract information from the file
+     */
     static Mesh parseJsonString(QString &jsonString);
 
     /*
-  * will write the file to diskQString
-  */
+     * will write the file to diskQString
+     */
 
     void writeFile(const QString &path, const QString &fileContent);
 
     /*
-   * Print the File
-   * (just for debugging)
-  */
+     * Print the File
+     * (just for debugging)
+     */
 
     static void printString(const QString &fileContent);
 
     static QString *meshToJson(Mesh *mesh);
+
+    /*
+     * reads the given file and returns a QJsonObject
+     */
+    static QJsonObject *readFile(const QString &path);
+
+    /*
+     * extracts all nodes given in QJsonObject and pushes them into the given list
+     */
+    static void extractNodesAndConnections(const QJsonObject &obj, QList<Node*> &nodelist, QList<Connection*> &connectionlist);
 };
 
 #endif  // FILEHANDLER_H

@@ -24,6 +24,10 @@ public:
     // return the id of the new connection
     int addConnection(Connection *connection);
 
+    void addConnections(QList<Connection*> &list);
+
+    void addNodes(QList<Node *> &list);
+
     // returns pointer to Node behind name
     Node *getNodeByName(QString name);
 

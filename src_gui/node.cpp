@@ -34,8 +34,8 @@ QString Node::getName() { return this->name; }
 
 QString Node::getType() { return this->type; }
 
-void Node::addGate(Gate &gate, bool input) {
-    if (input == true) {
+void Node::addGate(Gate &gate) {
+    if (gate.getDirection() == true) {
         this->inputGates.append(gate);
     } else {
         this->outputGates.append((gate));

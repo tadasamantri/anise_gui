@@ -23,7 +23,7 @@ public:
    * type als(string, bool) und er erweitert seinen vector<gate> selber
    *
    */
-    void addGate(Gate &gate, bool input);
+    void addGate(Gate &gate);
 
     /*
    * Set the position of the Node
@@ -43,6 +43,7 @@ public:
     QVector<Gate> getInputGates();
 
     QVector<Gate> getOutputGates();
+
 
     bool addParam(QString _key, QVariant _value);
 
