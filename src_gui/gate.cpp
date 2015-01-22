@@ -7,6 +7,11 @@ Gate::Gate(bool in, QVector<QString> types) {
     this->types = types;
 }
 
+Gate::Gate(bool in, QString name) {
+    this->in = in;
+    this->name = name;
+}
+
 bool Gate::getDirection() { return this->in; }
 
 void Gate::setDirection(bool in) { this->in = in; }
