@@ -10,13 +10,13 @@ QString JsonFileHandler::loadFile(const QString &path) {
     qDebug() << "trying to open: \n" << path << "\n";
     QFile file(path);
     file.open(QIODevice::ReadOnly);
-    /*
+
       // read each line of that file and append it to the String
       while (file.bytesAvailable()) {
           QByteArray line = file.readLine();
           fileContent.append(line);
       }
-  */
+
     file.close();
     return fileContent;
 }
@@ -229,6 +229,7 @@ Mesh JsonFileHandler::parseJsonString(QString &jsonString) {
             mesh.addConnection(tmp);
         }
     }
+    qDebug() << "created a mesh from the json file!";
     return mesh;
 }
 

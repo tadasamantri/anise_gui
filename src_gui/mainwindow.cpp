@@ -104,15 +104,16 @@ void MainWindow::on_actionLoad_triggered() {
     QList<Node*> nodes;
     QList<Connection*> connections;
     QJsonObject *obj = JsonFileHandler::readFile(fileName);
-    JsonFileHandler::extractNodes(*obj, nodes, connections);
+    JsonFileHandler::extractNodesAndConnections(*obj, nodes, connections);
     Mesh mesh;
     mesh.addNodes(nodes);
     mesh.addConnections(connections);
 
-/*
+    //qDebug() << "loading file";
     QString fileStringContent = JsonFileHandler::loadFile(fileName);
+
     JsonFileHandler::printString(fileStringContent);  // only for debugging // TODO remove
-    JsonFileHandler::parseJsonString(fileStringContent);*/
+    JsonFileHandler::parseJsonString(fileStringContent);
 }
 
 void MainWindow::on_actionSet_framework_path_triggered() {
