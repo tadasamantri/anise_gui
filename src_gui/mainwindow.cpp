@@ -109,11 +109,6 @@ void MainWindow::on_actionLoad_triggered() {
     mesh.addNodes(nodes);
     mesh.addConnections(connections);
 
-    //qDebug() << "loading file";
-    QString fileStringContent = JsonFileHandler::loadFile(fileName);
-
-    JsonFileHandler::printString(fileStringContent);  // only for debugging // TODO remove
-    JsonFileHandler::parseJsonString(fileStringContent);
 }
 
 void MainWindow::on_actionSet_framework_path_triggered() {

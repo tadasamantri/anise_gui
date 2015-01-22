@@ -41,6 +41,7 @@ Node *Mesh::getNodeByName(QString name) {
     foreach (Node *n, this->nodesInMash.values()) {
         if (n->name == name) {
             node = n;
+            break;
         }
     }
     return node;
