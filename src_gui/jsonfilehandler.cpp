@@ -1,5 +1,4 @@
 ﻿#include "jsonfilehandler.h"
-#include <QJsonParseError>
 
 QString JsonFileHandler::loadFile(const QString &path) {
     // QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
@@ -39,6 +38,68 @@ QJsonObject *JsonFileHandler::readFile(const QString &path) {
     // no error =) wonderful
     QJsonObject *obj = new QJsonObject(jdoc.object());
     return obj;
+}
+
+void JsonFileHandler::parseNodeTypesFromAnise(QString & output)
+{
+    if(output =="")
+        return;
+
+    //QJsonParseError *error;
+    QJsonDocument doc = QJsonDocument::fromJson(output.toUtf8());
+    NodeCatalog *catalog = NodeCatalog::instance();
+    qDebug() << "trying to read all node types. Loading json data...\n";
+
+    //if(error->error != QJsonParseError::NoError)
+    //   return;
+    QJsonObject obj = doc.object();
+
+    if (!obj["nodes"].isArray()) {
+        qWarning() << "no nodes in JSON-Object";
+        return;
+    }
+
+    foreach (QJsonValue var, obj["nodes"].toArray()) {
+        QString type;
+        QList<Gate> input_gates, output_gates;
+
+        QJsonObject localNode = var.toObject();
+        type = localNode["class"].toString();
+        QJsonArray inputs = localNode["input_gates"].toArray(),
+                outputs = localNode["output_gates"].toArray();
+
+        if(!inputs.isEmpty())
+            foreach (QJsonValue value, inputs) {
+                QJsonObject localGate = value.toObject();
+                QString gateName = localGate["name"].toString(),
+                        gateType = localGate["type"].toString();
+                Gate gate;
+                gate.setDirection(true);
+                gate.setName(gateName);
+                gate.addType(gateType);
+                input_gates << gate;
+            }
+        if(!outputs.isEmpty())
+            foreach (QJsonValue value, outputs) {
+                QJsonObject localGate = value.toObject();
+                QString gateName = localGate["name"].toString(),
+                        gateType = localGate["type"].toString();
+                Gate gate;
+                gate.setDirection(false);
+                gate.setName(gateName);
+                gate.addType(gateType);
+                output_gates << gate;
+            }
+        Node node;
+        node.setType(type);
+        node.addGates(input_gates.toVector(), true);
+        node.addGates(output_gates.toVector(), false);
+        catalog->insert(node);
+        qDebug() << "added node to Catalog:\n"
+                 << "class: " << node.getType()
+                 << "\ninputs: " << input_gates.size()
+                 << "\noutputs: " << output_gates.size();
+    }
 }
 
 void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj, QList<Node*> &nodelist, QList<Connection*> &connectionlist) {
@@ -115,7 +176,7 @@ END:
 }
 
 // creates a new mesh and fills it with the Json content
-Mesh JsonFileHandler::parseJsonString(QString &jsonString) {
+/*Mesh JsonFileHandler::parseJsonString(QString &jsonString) {// <--- obsolete!
     // create QJsonObject from string given
 
     QJsonParseError *errorWhileParsing;
@@ -242,7 +303,7 @@ Mesh JsonFileHandler::parseJsonString(QString &jsonString) {
     }
     qDebug() << "created a mesh from the json file!";
     return mesh;
-}
+}*/
 
 void JsonFileHandler::printString(const QString &fileContent) {
     if (fileContent == "") {

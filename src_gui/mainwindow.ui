@@ -276,6 +276,7 @@
     <addaction name="actionNew"/>
     <addaction name="actionSave"/>
     <addaction name="actionLoad"/>
+    <addaction name="actionLoad_Catalog"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -383,6 +384,11 @@
   <action name="actionSet_framework_path">
    <property name="text">
     <string>Set framework path...</string>
+   </property>
+  </action>
+  <action name="actionLoad_Catalog">
+   <property name="text">
+    <string>Load Catalog</string>
    </property>
   </action>
  </widget>

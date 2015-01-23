@@ -56,12 +56,12 @@ Node *NodeFactory::createTestNode() {
 
     // generate and add test gates:
     // input
-    QVector<QString> *tempTestGateInputTypes = new QVector<QString>();
+    QList<QString> *tempTestGateInputTypes = new QList<QString>();
     tempTestGateInputTypes->append("type1");
     tempTestGateInputTypes->append("type2");
     tempTestGateInputTypes->append("type3");
     // output
-    QVector<QString> *tempTestGateOutputTypes = new QVector<QString>();
+    QList<QString> *tempTestGateOutputTypes = new QList<QString>();
     tempTestGateInputTypes->append("type4");
     tempTestGateInputTypes->append("type1");
     tempTestGateInputTypes->append("type5");

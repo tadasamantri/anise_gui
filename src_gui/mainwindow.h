@@ -28,6 +28,8 @@ private slots:
 
     void on_actionNew_triggered();
 
+    void on_actionLoad_Catalog_triggered();
+
 private:
     void initializeGUI();
 };

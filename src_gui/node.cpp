@@ -36,10 +36,22 @@ QString Node::getType() { return this->type; }
 
 void Node::addGate(Gate &gate) {
     if (gate.getDirection() == true) {
-        this->inputGates.append(gate);
+        this->inputGates << gate;
     } else {
-        this->outputGates.append((gate));
+        this->outputGates << gate;
     }
+}
+
+void Node::addGates(QVector<Gate> gates, const bool &direction)
+{
+    if(direction == true)
+        foreach (Gate gate, gates) {
+            inputGates.append(gate);
+        }
+    else
+        foreach (Gate gate, gates) {
+            outputGates.append(gate);
+        }
 }
 
 bool Node::addParam(QString _key, QVariant _value) {

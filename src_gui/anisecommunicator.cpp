@@ -28,7 +28,7 @@ QString AniseCommunicator::getAllNodeTypes() {
     // create parameters needed for executing framework
     QStringList arguments;
     arguments << "--nodes"
-              << "--machine";  // << "--help";
+              << "--machine";
 
     // get framework Path
     QString dir;
@@ -53,9 +53,8 @@ QString AniseCommunicator::getAllNodeTypes() {
     // read printed stuff
     read();
 
-    qDebug() << readOutput;
-
-    return readOutput;
+    qDebug() << readOutput.mid(2,readOutput.length()-4);
+    return readOutput.mid(2,readOutput.length()-4);
 }
 
 void AniseCommunicator::setFrameworkPath(QString newPath) {

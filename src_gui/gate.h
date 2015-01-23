@@ -2,23 +2,26 @@
 #define GATE_H
 
 #include <QString>
-#include <QVector>
+#include <QList>
 
 class Gate {
 public:
     Gate();
-    Gate(bool in, QVector<QString> tpyes);
+    Gate(bool in, QList<QString> types);
     Gate(bool in, QString name);
     bool getDirection();
+    bool hasType(const QString &type);
+    void addType(QString &type);
+    bool removeType(const QString &type);
     void setDirection(bool in);
-    QVector<QString> getTypes();
-    static const bool DIRECTION_IN = true;
-    static const bool DIRECTION_OUT = false;
+    QList<QString> getTypes();
+    static const bool DIRECTION_IN;
+    static const bool DIRECTION_OUT;
     QString getName();
     void setName(QString name);
 
 private:
-    QVector<QString> types;
+    QList<QString> types;
     bool in;
     QString name;
     // Node* parent;

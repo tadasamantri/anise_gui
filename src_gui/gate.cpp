@@ -1,8 +1,11 @@
 #include "gate.h"
 
+const bool DIRECTION_IN = true;
+const bool DIRECTION_OUT = false;
+
 Gate::Gate() {}
 
-Gate::Gate(bool in, QVector<QString> types) {
+Gate::Gate(bool in, QList<QString> types) {
     this->in = in;
     this->types = types;
 }
@@ -14,8 +17,31 @@ Gate::Gate(bool in, QString name) {
 
 bool Gate::getDirection() { return this->in; }
 
+bool Gate::hasType(const QString &type)
+{
+    return types.contains(type);
+}
+
+void Gate::addType(QString &type)
+{
+    if(!hasType(type))
+        types << type;
+}
+
+bool Gate::removeType(const QString &type)
+{
+    if(hasType(type))
+        types.removeAll(type);
+    else return false;
+    return true;
+}
+
+void Gate::setName(QString name){
+    this->name = name;
+}
+
 void Gate::setDirection(bool in) { this->in = in; }
 
-QVector<QString> Gate::getTypes() { return types; }
+QList<QString> Gate::getTypes() { return types; }
 
 QString Gate::getName() { return name; }

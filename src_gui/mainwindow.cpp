@@ -61,23 +61,28 @@ void MainWindow::initializeGUI() {
     SettingsHandler::initializeSettings();
 
     // create the Node catalog
-    NodeCatalog TypeCatalog;
+    NodeCatalog::instance();
     // create the render object
     SingletonRender::instance();
+    //create NodeFactory
+    NodeFactory::instance();
 
     // create 20 test nodes
     for (int i = 0; i < 20; ++i) {
         Node *tempTestNode = NodeFactory::createTestNode();
-        TypeCatalog.insert(tempTestNode);
+        NodeCatalog::instance()->insert(*tempTestNode);
     }
+
+
     // render the node catalog filled with test nodes
-    SingletonRender::instance()->renderCatalogContent(TypeCatalog.Content,
+    SingletonRender::instance()->renderCatalogContent(NodeCatalog::instance()->Content.values().toVector(),
                                                       ui->nodeCatalogContent);
 
     // START LOADING NODE TYPES
 
     // load all available NodeTypes
     AniseCommunicator::getAllNodeTypes();
+
 
     // make the mesh editor accept drops
     ui->mesh_edt_area->setAcceptDrops(true);
@@ -123,3 +128,9 @@ void MainWindow::on_actionSet_framework_path_triggered() {
 }
 
 void MainWindow::on_actionNew_triggered() { Mesh newMesh(); }
+
+void MainWindow::on_actionLoad_Catalog_triggered()
+{
+    QString out = AniseCommunicator::getAllNodeTypes();
+    JsonFileHandler::parseNodeTypesFromAnise(out);
+}

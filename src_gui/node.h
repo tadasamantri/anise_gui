@@ -24,6 +24,7 @@ public:
    *
    */
     void addGate(Gate &gate);
+    void addGates(QVector<Gate> gates, const bool &direction);
 
     /*
    * Set the position of the Node

@@ -26,10 +26,13 @@
 #include <QJsonArray>
 #include <QJsonParseError>
 #include <QErrorMessage>
+#include <QJsonParseError>
 #include <QMessageBox>
+#include "gate.h"
 #include "node.h"
 #include "nodefactory.h"
 #include "mesh.h"
+#include "nodecatalog.h"
 
 class JsonFileHandler {
 public:
@@ -41,13 +44,13 @@ public:
     /*
      * Will extract information from the file
      */
-    static Mesh parseJsonString(QString &jsonString);
+    //static Mesh parseJsonString(QString &jsonString);  <-- obsolete!
 
     /*
      * will write the file to diskQString
      */
 
-    void writeFile(const QString &path, const QString &fileContent);
+    static void writeFile(const QString &path, const QString &fileContent);
 
     /*
      * Print the File
@@ -62,6 +65,8 @@ public:
      * reads the given file and returns a QJsonObject
      */
     static QJsonObject *readFile(const QString &path);
+
+    static void parseNodeTypesFromAnise(QString & output);
 
     /*
      * extracts all nodes given in QJsonObject and pushes them into the given list

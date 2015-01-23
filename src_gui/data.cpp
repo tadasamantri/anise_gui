@@ -19,7 +19,7 @@ Data *Data::instance() {
 
 Data::Data(QObject *parent) : QObject(parent) {
     mesh = new Mesh();
-    nodeCatalog = new NodeCatalog();
+    nodeCatalog = NodeCatalog::instance();
 }
 
 void Data::addNodeToMesh(Node *newNode) {

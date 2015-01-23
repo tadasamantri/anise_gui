@@ -3,16 +3,18 @@
 #include "node.h"
 #include <QVariantMap>
 
-class NodeFactory {
+
+class NodeFactory { //singleton
 public:
 
-    // static damit man kein objekt davon erstellen muss.
     static NodeFactory *instance();
     static Node createNode();
     static Node createNode(QString _class);
     static Node createNode(QString _class, QString name);
     static Node createNode(QString _class, QString name, QVariantMap params);
     static Node *createTestNode();
+
+
 private:
     NodeFactory();
     // copy constructor is private
