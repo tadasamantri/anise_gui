@@ -52,9 +52,9 @@ QString AniseCommunicator::getAllNodeTypes() {
 
     // read printed stuff
     read();
-
-    qDebug() << readOutput.mid(2,readOutput.length()-4);
-    return readOutput.mid(2,readOutput.length()-4);
+    readOutput = readOutput.mid(readOutput.indexOf("{"),readOutput.lastIndexOf("}") - 1);
+    qDebug() << "this is what the communicator got from the framework:\n"<<readOutput <<"\n";
+    return readOutput;
 }
 
 void AniseCommunicator::setFrameworkPath(QString newPath) {

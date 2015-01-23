@@ -2,6 +2,8 @@
 #define NODEFACTORY_H
 #include "node.h"
 #include <QVariantMap>
+#include <QDebug>
+#include "nodecatalog.h"
 
 
 class NodeFactory { //singleton

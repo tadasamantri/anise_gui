@@ -3,6 +3,7 @@
 
 #include "node.h"
 #include <QMap>
+#include <QDebug>
 
 /*
  * this class does not do any graphics stuff. It's part of the data structure!

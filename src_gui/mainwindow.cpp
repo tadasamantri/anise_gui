@@ -81,7 +81,8 @@ void MainWindow::initializeGUI() {
     // START LOADING NODE TYPES
 
     // load all available NodeTypes
-    AniseCommunicator::getAllNodeTypes();
+    QString out = AniseCommunicator::getAllNodeTypes();
+    JsonFileHandler::parseNodeTypesFromAnise(out);
 
 
     // make the mesh editor accept drops

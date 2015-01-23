@@ -4,6 +4,12 @@ NodeCatalog *NodeCatalog::m_pInstance = NULL;
 
 NodeCatalog::NodeCatalog() {
     Content = QMap<QString, Node>();
+    Node blackbox;
+    Gate in (true, "in"), out(false, "out");
+    blackbox.addGate(in);
+    blackbox.addGate(out);
+    blackbox.setType("blackbox");
+    Content["blackbox"] = blackbox;
 }
 
 
@@ -14,7 +20,11 @@ void NodeCatalog::insert(Node nodeToInsert) {
 
 Node NodeCatalog::getNodeOfType(const QString &type){
     Node node;
-    node = Content[type];
+    QString _class = type;
+    if(Content.contains(_class))
+        _class = "blackbox";
+    node = Content[_class];
+    qDebug() << "node of type " << _class <<" returned";
     return node;
 }
 

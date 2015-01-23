@@ -1,5 +1,4 @@
 #include "nodefactory.h"
-#include "QDebug"
 
 // Global static pointer used to ensure a single instance of the class.
 NodeFactory *NodeFactory::m_pInstance = NULL;
@@ -19,7 +18,7 @@ Node NodeFactory::createNode() {
 }
 
 Node NodeFactory::createNode(QString _class) {
-    Node node = createNode();
+    Node node(NodeCatalog::instance()->getNodeOfType(_class));
     node.setType(_class);
     return node;
 }
