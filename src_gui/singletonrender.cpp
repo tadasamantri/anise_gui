@@ -4,11 +4,27 @@
 // Global static pointer used to ensure a single instance of the class.
 SingletonRender *SingletonRender::m_pInstance = NULL;
 
+
+
+
+SingletonRender::SingletonRender() {
+    // initialize all maps
+    this->allDrawnNodes = QMap<int, DrawObject *>();
+    this->allDrawnLines = QMap<int, QLine *>();
+    this->allImages = QMap<QString, QPixmap *>();
+
+    // load all images
+    if (loadImages() == true) {
+        qDebug() << "images loaded successfully";
+    } else {
+        qDebug() << "images loading failed";
+    }
+}
+
 /** This function is called to create an instance of the class.
     Calling the constructor publicly is not allowed. The constructor
     is private and is only called by this Instance function.
 */
-
 SingletonRender *SingletonRender::instance() {
     if (!m_pInstance)  // Only allow one instance of class to be generated.
         m_pInstance = new SingletonRender;
@@ -41,20 +57,6 @@ void SingletonRender::paintEvent(QPaintEvent *event)
 }
 
 
-
-SingletonRender::SingletonRender() {
-    // initialize all maps
-    this->allDrawnNodes = QMap<int, DrawObject *>();
-    this->allDrawnLines = QMap<int, QLine *>();
-    this->allImages = QMap<QString, QPixmap *>();
-
-    // load all images
-    if (loadImages() == true) {
-        qDebug() << "images loaded successfully";
-    } else {
-        qDebug() << "images loading failed";
-    }
-}
 
 // loads all images in the ../DataIimages folder.
 // saves them in the map "allImages"
@@ -105,6 +107,7 @@ bool SingletonRender::loadImages() {
 void SingletonRender::setUi(Ui::MainWindow *ui) { this->ui = ui; }
 
 void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
+
     if (!allDrawnNodes.contains(nodeID)) {
         // create a Drawobject
         DrawObject *NodeDrawObject = new DrawObject(nodeID, this->ui->meshField);
@@ -141,8 +144,15 @@ void SingletonRender::renderMesh(Mesh *workMesh) {
     }
 }
 
+void SingletonRender::clearMeshField(){
+
+    clearAll(ui->meshField);
+
+}
+
 void SingletonRender::renderNodeType(Node *nodeToRender, QWidget *parent,
                                      int position) {
+
     // TODO code dublication in renderNode and renderNodeType!
     QLabel *NodeDrawObject = new QLabel(parent);
 
@@ -156,13 +166,30 @@ void SingletonRender::renderNodeType(Node *nodeToRender, QWidget *parent,
     NodeDrawObject->show();
 }
 
-void SingletonRender::renderCatalogContent(QVector<Node> NodeVektor,
-                                           QWidget *CatalogParent) {
+void SingletonRender::renderCatalogContent(QVector<Node> NodeVektor) {
+
+    QWidget *CatalogParent = ui->nodeCatalogContent;
     int position = 0;
     // TODO scroll weite sollte nicht hard coded sein
     CatalogParent->setMinimumHeight(NodeVektor.size() * 60 + 10);
     foreach (Node nodeTyp, NodeVektor) {
         renderNodeType(&nodeTyp, CatalogParent, position);
         position++;
+    }
+}
+
+void SingletonRender::clearAll(QWidget *parent){
+
+
+    //
+    while ( QWidget* w = parent->findChild<DrawObject*>() )
+        delete w;
+
+
+    //TODO NOT COOL THIS SOLUTION!
+    if(parent == ui->meshField){
+
+        this->allDrawnNodes = QMap<int, DrawObject *>();
+        this->allDrawnLines = QMap<int, QLine *>();
     }
 }

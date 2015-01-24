@@ -5,7 +5,6 @@
 #include "mesh.h"
 #include "nodecatalog.h"
 #include "mainwindow.h"
-#include "data.h"
 #include "singletonrender.h"
 #include "ui_mainwindow.h"
 
@@ -29,8 +28,12 @@ public:
     // declared static.
     static Data *instance();
 
+    void initialize(MainWindow *mainWindow);
+
     void addNodeToMesh(Node *newNode);
     void moveNodeInMesh(QPoint *Position, int numberOfNode);
+    void deleteItem(int nodeID);
+    void newMeshProject();
 
 private:
     explicit Data(QObject *parent = 0);

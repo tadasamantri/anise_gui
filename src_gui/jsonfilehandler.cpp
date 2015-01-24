@@ -59,7 +59,12 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString & output)
         return;
     }
 
+
+
     foreach (QJsonValue var, obj["nodes"].toArray()) {
+
+
+
         QString type;
         QList<Gate> input_gates, output_gates;
 

@@ -4,6 +4,7 @@
 Mesh::Mesh() {
     this->nodesInMash = QMap<int, Node *>();
     this->connectionsInMash = QMap<int, Connection *>();
+    this->iDCounter = 0;
 }
 
 int Mesh::addNode(Node *node) {
@@ -51,5 +52,6 @@ Node *Mesh::getNodeByID(int ID) { return this->nodesInMash.value(ID); }
 
 int Mesh::generateId() {
     iDCounter++;
+
     return this->iDCounter;
 }

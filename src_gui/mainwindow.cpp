@@ -17,10 +17,21 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
-    //
-    initializeGUI();
+
+    //Important to do first! SingletonRender is used in initialize GUI
     SingletonRender::instance()->setUi(this->ui);
-    qDebug() << this->ui->mesh_edt_area->parent();
+
+    initializeGUI();
+/*
+    // create the shortcut after the list widget has been created
+
+    // option A (pressing DEL anywhere in the main window activates the slot)
+    new QShortcut(QKeySequence(Qt::Key_Delete), this, SLOT(deleteItem()));
+
+    // option B (pressing DEL activates the slots only when list widget has focus)
+    QShortcut* shortcut = new QShortcut(QKeySequence(Qt::Key_Delete), listWidget);
+    connect(shortcut, SIGNAL(activated()), this, SLOT(deleteItem()));
+*/
 }
 
 void MainWindow::initializeGUI() {
@@ -31,62 +42,12 @@ void MainWindow::initializeGUI() {
     // logfenster
     // Q_DebugStream::registerQDebugMessageHandler();
 
-    // initalize stored Settings
-    SettingsHandler::setSettingsPath(QApplication::applicationDirPath() +
-                                     "/settings.ini");
-    // qDebug() << QApplication::applicationDirPath() + "/settings.ini";
-
-    // Check if Framework path is set
-
-    if (SettingsHandler::contains("frameworkpath"))
-        AniseCommunicator::setFrameworkPath(
-                    SettingsHandler::loadSetting("frameworkpath"));
-    else {
-        /*
-     * TODO different outcome of buttons
-     * right now whatever you click will result in the same outcome
-     */
-        QMessageBox::information(
-                    0, QString("Please, set your framework path"),
-                    QString("You haven't set your framework path yet.\nChoose first!"),
-                    "Choose", "Not yet");
-
-        QString fileName =
-                QFileDialog::getOpenFileName(this, "Set your framework path", "", "");
-
-        SettingsHandler::storeSetting("frameworkpath", fileName);
-    }
-
-    // initialize settings from .ini file
-    SettingsHandler::initializeSettings();
-
-    // create the Node catalog
-    NodeCatalog::instance();
-    // create the render object
-    SingletonRender::instance();
-    //create NodeFactory
-    NodeFactory::instance();
-
-    // create 20 test nodes
-    for (int i = 0; i < 20; ++i) {
-        Node *tempTestNode = NodeFactory::createTestNode();
-        NodeCatalog::instance()->insert(*tempTestNode);
-    }
-
-
-    // render the node catalog filled with test nodes
-    SingletonRender::instance()->renderCatalogContent(NodeCatalog::instance()->Content.values().toVector(),
-                                                      ui->nodeCatalogContent);
-
-    // START LOADING NODE TYPES
-
-    // load all available NodeTypes
-    QString out = AniseCommunicator::getAllNodeTypes();
-    JsonFileHandler::parseNodeTypesFromAnise(out);
-
-
     // make the mesh editor accept drops
     ui->mesh_edt_area->setAcceptDrops(true);
+
+    //initialize all data content
+    Data::instance()->initialize(this);
+
 }
 /*
 Ui::MainWindow MainWindow::getUi(){
@@ -128,7 +89,13 @@ void MainWindow::on_actionSet_framework_path_triggered() {
     AniseCommunicator::setFrameworkPath(fileName);
 }
 
-void MainWindow::on_actionNew_triggered() { Mesh newMesh(); }
+void MainWindow::on_actionNew_triggered() {
+
+    //TODO ask if old is wished to thrown away if not saved
+    //qDebug() << "Mesh before NEW:\t Nodes: " << Data::instance()->mesh->getAllNodes().size();
+    Data::instance()->newMeshProject();
+    //qDebug() << "Mesh after NEW:\t Nodes: " << Data::instance()->mesh->getAllNodes().size();
+}
 
 void MainWindow::on_actionLoad_Catalog_triggered()
 {

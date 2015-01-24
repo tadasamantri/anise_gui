@@ -36,6 +36,14 @@ public:
     void renderMesh(Mesh *workMesh);
 
     /*
+     * Clears the MeshField
+     */
+    void clearMeshField();
+
+
+
+
+    /*
    * Renders a node.
    *
    */
@@ -50,7 +58,7 @@ public:
     /*
    * This will Render all Nodes in the Type Catalog.
    */
-    void renderCatalogContent(QVector<Node> NodeVektor, QWidget *CatalogParent);
+    void renderCatalogContent(QVector<Node> NodeVektor);
 
     /*
      * Draws a line from start x y to end x y
@@ -62,6 +70,8 @@ private:
 
     void paintEvent(QPaintEvent *event);
 
+    void clearAll(QWidget *parent); // Deletes all children of given parent
+
     QPainter painter;
 
     // this is the map containing all raw Images.
@@ -72,6 +82,8 @@ private:
     // Maps containing everything that have been rendered
     // int ID
     // and the widget
+    //TODO WHY do we need This??
+
     QMap<int, DrawObject *> allDrawnNodes;
     QMap<int, QLine *> allDrawnLines;
 
