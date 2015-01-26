@@ -74,7 +74,6 @@ void MeshEditorWidget::dragMoveEvent(QDragMoveEvent *event) {
 
 void MeshEditorWidget::dropEvent(QDropEvent *event) {
     // qDebug() << "dropEvent";
-
     Node *newNode = NodeFactory::createTestNode();
 
     // qDebug() << QString(event->mimeData()->data("application/customthingy"));

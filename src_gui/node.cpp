@@ -26,15 +26,15 @@ void Node::setType(QString type) { this->type = type; }
 
 void Node::setName(QString name) { this->name = name; }
 
-QVector<Gate> Node::getInputGates() { return this->inputGates; }
+QVector<Gate> *Node::getInputGates() { return &this->inputGates; }
 
-QVector<Gate> Node::getOutputGates() { return this->outputGates; }
+QVector<Gate> *Node::getOutputGates() { return &this->outputGates; }
 
 QString Node::getName() { return this->name; }
 
 QString Node::getType() { return this->type; }
 
-void Node::addGate(Gate &gate) {
+void Node::addGate(Gate &gate){
     if (gate.getDirection() == true) {
         this->inputGates << gate;
     } else {

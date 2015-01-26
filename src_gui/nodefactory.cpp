@@ -32,10 +32,6 @@ Node NodeFactory::createNode(QString _class, QString name, QVariantMap params) {
     Node node = createNode(_class, name);
     foreach (QString key, params.keys()) {
 
-        //BUG "params.find(key).value()" returns "" if not String
-        //qDebug() << "params.find(key).value() " << params.find(key).value();
-
-
         node.addParam(key, params[key]);
     }
     return node;
