@@ -4,6 +4,7 @@
 #include <QLabel>
 #include <QShortcut>
 #include <QDebug>
+#include <QVector>
 
 //#include "data.h"
 
@@ -37,14 +38,23 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position) {
     label->setPixmap(*pic);
 
     qDebug() << "dummy läuft";
-
+    this->labelvector.append(label);
     label->setGeometry(0, 0, 70, 70);
 
-    this->show();
+    //this->show();
+
+}
+
+void DrawObject::show(){
 
 
 
 
-
+    QWidget::show();
+/*
+    foreach (QLabel *label, this->labelvector) {
+        qDebug()<<"trying to show";
+        label->show();
+    }*/
 
 }
