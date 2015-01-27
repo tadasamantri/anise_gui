@@ -9,6 +9,7 @@
 #include <QDir>
 #include <QList>
 #include <QPainter>
+#include <QPoint>
 
 // our own classes
 #include "mesh.h"
