@@ -61,6 +61,12 @@ public:
     QString type, name;
 
     QVariantMap params;  // maps <identifier, value>
+
+    QString getDescription();
+    void setDescription(const QString &value);
+
+private:
+    QString description;
 };
 
 #endif  // NODE_H
