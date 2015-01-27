@@ -41,10 +41,9 @@ public:
 
     QString getName();
 
-    QVector<Gate> getInputGates();
+    QVector<Gate> *getInputGates();
 
-    QVector<Gate> getOutputGates();
-
+    QVector<Gate> *getOutputGates();
 
     bool addParam(QString _key, QVariant _value);
 

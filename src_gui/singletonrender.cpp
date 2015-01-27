@@ -160,7 +160,11 @@ void SingletonRender::renderNodeType(Node *nodeToRender, QWidget *parent,
     // Zeichne den hintergrund:
     NodeDrawObject->setPixmap(*allImages["background.png"]);
     NodeDrawObject->setGeometry(0, 0, 50, 50);
-
+    //Generate a Tooltip
+    QString toolTip;
+    toolTip = "NodeClass = " + nodeToRender->getType() + "\nInputs: " + QString::number(nodeToRender->getInputGates()->size())
+            + "\nOutputs: " + QString::number(nodeToRender->getOutputGates()->size());
+    NodeDrawObject->setToolTip(toolTip);
     // TODO should use layouts instead of hardcoded position!
     NodeDrawObject->move(5, 5 + position * 60);
 

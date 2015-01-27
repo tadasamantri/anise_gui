@@ -68,13 +68,13 @@ void MainWindow::on_actionLoad_triggered() {
 
     if(fileName == "")
         return;
-    QList<Node*> nodes;
-    QList<Connection*> connections;
+    QList<Node> nodes;
+    QList<Connection> connections;
     QJsonObject *obj = JsonFileHandler::readFile(fileName);
     JsonFileHandler::extractNodesAndConnections(*obj, nodes, connections);
-    Mesh mesh;
-    mesh.addNodes(nodes);
-    mesh.addConnections(connections);
+    //Mesh mesh;
+    //mesh.addNodes(nodes);
+    //mesh.addConnections(connections);
 
 }
 
