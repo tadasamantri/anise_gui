@@ -43,7 +43,7 @@ void  Data::initialize(MainWindow *mainWindow){
     /**
       * Create the NodeFactory
       */
-    NodeFactory::instance();
+    this->nodeFactory = new NodeFactory();
 
     /**
       * Initialize stored settings
@@ -114,7 +114,7 @@ void Data::moveNodeInMesh(QPoint *Position, int numberOfNode) {
 
 void Data::deleteItem(int nodeID){
 
-    qDebug() << "HEY SOMEBODY GOT DELETED";
+    qDebug() << "HEY SOMEBODY GOT DELETED" << " nodeID: " << nodeID;
 
 }
 

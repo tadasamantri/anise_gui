@@ -105,7 +105,7 @@ void MainWindow::on_actionLoad_Catalog_triggered()
 
 void MainWindow::on_buttonBox_clicked(QAbstractButton *button){
 
-    qDebug() << "hey man ich wurde aufgerufen";
+    qDebug() << "hey man ich wurde aufgerufen" ;
       SingletonRender::instance()->showTestWidget();
 
 

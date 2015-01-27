@@ -113,7 +113,9 @@ private:
     SingletonRender(SingletonRender const &){};
 
     // assignment operator is private
-    SingletonRender &operator=(SingletonRender const &){};
+    SingletonRender &operator=(SingletonRender const &){
+        return *this;
+    };
 
     // pointer to this instance
     static SingletonRender *m_pInstance;

@@ -31,6 +31,13 @@ public:
     NodeCatalog *nodeCatalog;
 
     /**
+     * @brief nodeFactory
+     * This will create any kind of Node and Node Templates.
+     *
+     */
+    NodeFactory *nodeFactory;
+
+    /**
       * The instance function returns a pointer to a static variable and thus is
       * declared static
       */
@@ -56,10 +63,16 @@ private:
       * single instance of the class using only the instance() function.
       *
       */
-    Data(Data const &){};
+
+    //copy constructor does not need to be overridden because QObject doesnt has a public copy instruktor
 
 
-    Data &operator=(Data const &){};
+    // assignment constructor
+    Data &operator=(Data const &){
+
+        return *this;
+
+    };
 
     /**
       * Pointer to this instance
