@@ -330,9 +330,11 @@ void JsonFileHandler::writeFile(const QString &path,
                                 const QString &fileContent) {
 
     QString command = "touch";
+    QProcess touch;
     QStringList arg;
     arg << path;
-    QProcess::start(command, arg);
+    touch.start(command, arg);
+    touch.waitForFinished(3000);
     QFile file(path);
     file.open(QIODevice::WriteOnly | QIODevice::Text);
     QTextStream out(&file);
