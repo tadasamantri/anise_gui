@@ -32,12 +32,7 @@ DrawObject::DrawObject(int nodeID, QPoint position, QWidget *parent = 0) {
 void DrawObject::addPicture(QPixmap *pic, QPoint position) {
 
     QLabel *label = new QLabel(this);
-
-    qDebug() << "dummy läuft";
-
     label->setPixmap(*pic);
-
-    qDebug() << "dummy läuft";
     this->labelvector.append(label);
     label->setGeometry(0, 0, 70, 70);
 

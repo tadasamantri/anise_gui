@@ -1,8 +1,5 @@
 #include "mesheditorwidget.h"
-#include "nodefactory.h"
 #include "data.h"
-#include "node.h"
-#include "drawobject.h"
 
 MeshEditorWidget::MeshEditorWidget(QWidget *parent) : QWidget(parent) {
 
@@ -35,15 +32,15 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     // relative point of mouse to child
     QPoint hotSpot = event->pos() - child->pos();
 
-    QByteArray Data;
-    QDataStream dataStream(&Data, QIODevice::WriteOnly);
+    QByteArray arrayData;
+    QDataStream dataStream(&arrayData, QIODevice::WriteOnly);
     // TODO correct use of node ID
     dataStream << QPoint(hotSpot) << child->nodeID;
 
     // something about mime data...
     // TODO correct mimedata
     QMimeData *mimeData = new QMimeData;
-    mimeData->setData("application/customthingy", Data);
+    mimeData->setData("application/customthingy", arrayData);
 
     // hides the child so only the drag object at mouse position is shown
     child->hide();
@@ -87,30 +84,39 @@ void MeshEditorWidget::dragMoveEvent(QDragMoveEvent *event) {
 
 void MeshEditorWidget::dropEvent(QDropEvent *event) {
     // qDebug() << "dropEvent";
-    Node *newNode = NodeFactory::createTestNode();
+
 
     // qDebug() << QString(event->mimeData()->data("application/customthingy"));
     QPoint DropPoint = event->pos();
     QPoint offset;
-    int numberOfNode;
+    int nodeID;
 
-    QByteArray Data = event->mimeData()->data("application/customthingy");
-    QDataStream dataStream(&Data, QIODevice::ReadOnly);
+    QByteArray arrayData = event->mimeData()->data("application/customthingy");
+    QDataStream dataStream(&arrayData, QIODevice::ReadOnly);
     dataStream >> offset;
-    dataStream >> numberOfNode;
+    dataStream >> nodeID;
 
     DropPoint -= offset;
 
-    // qDebug() << "DropPoint" << DropPoint;
 
-    newNode->setPosition(DropPoint.x(), DropPoint.y());
 
-    // qDebug() << "x:" << newNode->position_x << " y: " << newNode->position_y;
-    // qDebug() << "source of drop"<<event->source()->objectName();
-    if (event->source()->objectName() == "nodeCatalogContent")
-        Data::instance()->addNodeToMesh(newNode);
-    if (event->source()->objectName() == "meshField")
-        Data::instance()->moveNodeInMesh(&DropPoint, numberOfNode);
+
+
+    qDebug() << "source of drop"<<event->source()->objectName();
+    qDebug() << "DropPoint" << DropPoint;
+
+    if (event->source()->objectName() == "nodeCatalogContent"){
+
+        //should create the correct node type and not a "testnode"
+        Node *newNode = Data::instance()->nodeFactory->createTestNode();
+        newNode->setPosition(DropPoint.x(), DropPoint.y());
+        Data::instance()->addNodeToMesh(newNode);}
+
+    if (event->source()->objectName() == "meshField"){
+        //will move the correct node to the new position
+        qDebug() << "trying to move the node to the new position";
+        Data::instance()->moveNodeInMesh(&DropPoint, nodeID);
+    }
 }
 
 void MeshEditorWidget::paintEvent(QPaintEvent *event){
