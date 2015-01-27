@@ -13,7 +13,7 @@
  * 2.12.2014
  *
  */
-
+#include <QProcess>
 #include <QFile>
 #include <QString>
 #include <QVector>
