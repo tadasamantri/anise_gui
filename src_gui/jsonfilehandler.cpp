@@ -35,7 +35,7 @@ QJsonObject *JsonFileHandler::readFile(const QString &path) {
         // return NULL;
     }
 
-    // no error =) wonderful
+    // no error
     QJsonObject *obj = new QJsonObject(jdoc.object());
     return obj;
 }
@@ -43,13 +43,11 @@ QJsonObject *JsonFileHandler::readFile(const QString &path) {
 void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
     if (output == "") return;
 
-    // QJsonParseError *error;
     QJsonDocument doc = QJsonDocument::fromJson(output.toUtf8());
     NodeCatalog *catalog = NodeCatalog::instance();
     qDebug() << "trying to read all node types. Loading json data...\n";
 
-    // if(error->error != QJsonParseError::NoError)
-    //   return;
+
     QJsonObject obj = doc.object();
 
     if (!obj["nodes"].isArray()) {
@@ -58,11 +56,12 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
     }
 
     foreach (QJsonValue var, obj["nodes"].toArray()) {
-        QString type;
+        QString type, descr;
         QList<Gate> input_gates, output_gates;
 
         QJsonObject localNode = var.toObject();
         type = localNode["class"].toString();
+        descr = localNode["description"].toString();
         QJsonArray inputs = localNode["input_gates"].toArray(),
                 outputs = localNode["output_gates"].toArray();
 
@@ -88,6 +87,7 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
         }
         Node node;
         node.setType(type);
+        node.setDescription(descr);
         node.addGates(input_gates.toVector(), true);
         node.addGates(output_gates.toVector(), false);
         catalog->insert(node);

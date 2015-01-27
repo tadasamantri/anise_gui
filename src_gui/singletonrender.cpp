@@ -1,12 +1,9 @@
-#include <stddef.h>  // defines NULL
+#include <stddef.h> // defines NULL
 #include "singletonrender.h"
 #include "testdrawobject.h"
 
 // Global static pointer used to ensure a single instance of the class.
 SingletonRender *SingletonRender::m_pInstance = NULL;
-
-
-
 
 SingletonRender::SingletonRender() {
     // initialize all maps
@@ -27,37 +24,33 @@ SingletonRender::SingletonRender() {
     is private and is only called by this Instance function.
 */
 SingletonRender *SingletonRender::instance() {
-    if (!m_pInstance)  // Only allow one instance of class to be generated.
+    if (!m_pInstance) // Only allow one instance of class to be generated.
         m_pInstance = new SingletonRender;
 
     return m_pInstance;
 }
 
-
 // will have to be called from a paint event!
-void SingletonRender::drawLine(double start_x, double start_y, double end_x , double end_y){
-    //qDebug() << "drawline";
+void SingletonRender::drawLine(double start_x, double start_y, double end_x,
+                               double end_y) {
+    // qDebug() << "drawline";
     QPainter painter(this->ui->meshField);
-    QLineF line(start_x, start_y, end_x , end_y);
+    QLineF line(start_x, start_y, end_x, end_y);
     painter.setPen(Qt::blue);
     painter.drawLine(line);
 }
 
-
-//bug right now:
+// bug right now:
 // paint events are never called
-void SingletonRender::paintEvent(QPaintEvent *event)
-{
+void SingletonRender::paintEvent(QPaintEvent *event) {
     qDebug() << "draw event";
-   /*
-    foreach (QLine* d, this->allDrawnLines) {
-        QPainter painter(this->ui->meshField);
-        painter.setPen(QPen(Qt::black, 12, Qt::DashDotLine, Qt::RoundCap));
-        painter.drawLine(d);
-    }*/
+    /*
+   foreach (QLine* d, this->allDrawnLines) {
+       QPainter painter(this->ui->meshField);
+       painter.setPen(QPen(Qt::black, 12, Qt::DashDotLine, Qt::RoundCap));
+       painter.drawLine(d);
+   }*/
 }
-
-
 
 // loads all images in the ../DataIimages folder.
 // saves them in the map "allImages"
@@ -145,11 +138,7 @@ void SingletonRender::renderMesh(Mesh *workMesh) {
     }
 }
 
-void SingletonRender::clearMeshField(){
-
-    clearAll(ui->meshField);
-
-}
+void SingletonRender::clearMeshField() { clearAll(ui->meshField); }
 
 void SingletonRender::renderNodeType(Node *nodeToRender, QWidget *parent,
                                      int position) {
@@ -160,10 +149,13 @@ void SingletonRender::renderNodeType(Node *nodeToRender, QWidget *parent,
     // Zeichne den hintergrund:
     NodeDrawObject->setPixmap(*allImages["background.png"]);
     NodeDrawObject->setGeometry(0, 0, 50, 50);
-    //Generate a Tooltip
+    // Generate a Tooltip
     QString toolTip;
-    toolTip = "NodeClass = " + nodeToRender->getType() + "\nInputs: " + QString::number(nodeToRender->getInputGates()->size())
-            + "\nOutputs: " + QString::number(nodeToRender->getOutputGates()->size());
+    toolTip = "NodeClass = " + nodeToRender->getType() + "\nInputs: " +
+            QString::number(nodeToRender->getInputGates()->size()) +
+            "\nOutputs: " +
+            QString::number(nodeToRender->getOutputGates()->size()) + "\n" +
+            nodeToRender->getDescription();
     NodeDrawObject->setToolTip(toolTip);
     // TODO should use layouts instead of hardcoded position!
     NodeDrawObject->move(5, 5 + position * 60);
@@ -183,16 +175,14 @@ void SingletonRender::renderCatalogContent(QVector<Node> NodeVektor) {
     }
 }
 
-void SingletonRender::clearAll(QWidget *parent){
-
+void SingletonRender::clearAll(QWidget *parent) {
 
     //
-    while ( QWidget* w = parent->findChild<DrawObject*>() )
+    while (QWidget *w = parent->findChild<DrawObject *>())
         delete w;
 
-
-    //TODO NOT COOL THIS SOLUTION!
-    if(parent == ui->meshField){
+    // TODO NOT COOL THIS SOLUTION!
+    if (parent == ui->meshField) {
 
         this->allDrawnNodes = QMap<int, DrawObject *>();
         this->allDrawnLines = QMap<int, QLine *>();
@@ -206,16 +196,16 @@ void SingletonRender::clearAll(QWidget *parent){
  *
  */
 
-void SingletonRender::showTestWidget(){
+void SingletonRender::showTestWidget() {
 
-    TestDrawObject* dummy = new TestDrawObject(100, QPoint (20,20), ui->meshField);
-      TestDrawObject* dummy2 = new TestDrawObject(100, QPoint (40,40), ui->meshField);
+    TestDrawObject *dummy =
+            new TestDrawObject(100, QPoint(20, 20), ui->meshField);
+    TestDrawObject *dummy2 =
+            new TestDrawObject(100, QPoint(40, 40), ui->meshField);
 
     qDebug() << "dummy läuft";
 
-    dummy->addPicture(this->allImages.value("background.png"), QPoint (20,20));
-    dummy2->addPicture(this->allImages.value("background.png"), QPoint (40,40));
-qDebug() << "dummy läuft";
+    dummy->addPicture(this->allImages.value("background.png"), QPoint(20, 20));
+    dummy2->addPicture(this->allImages.value("background.png"), QPoint(40, 40));
+    qDebug() << "dummy läuft";
 }
-
-

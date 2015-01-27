@@ -108,3 +108,13 @@ Gate *Node::getGateByName(const QString &name) {
 theEnd:
     return g;
 }
+QString Node::getDescription()
+{
+    return description;
+}
+
+void Node::setDescription(const QString &value)
+{
+    description = value;
+}
+
