@@ -1,5 +1,6 @@
 #include <stddef.h>  // defines NULL
 #include "singletonrender.h"
+#include "testdrawobject.h"
 
 // Global static pointer used to ensure a single instance of the class.
 SingletonRender *SingletonRender::m_pInstance = NULL;
@@ -193,3 +194,24 @@ void SingletonRender::clearAll(QWidget *parent){
         this->allDrawnLines = QMap<int, QLine *>();
     }
 }
+
+/**
+ * @brief SingletonRender::showTestWidget
+ *
+ * Here we show testwidgets if we click on a button.
+ *
+ */
+
+void SingletonRender::showTestWidget(){
+
+    TestDrawObject* dummy = new TestDrawObject(100, QPoint (20,20), ui->meshField);
+      TestDrawObject* dummy2 = new TestDrawObject(100, QPoint (40,40), ui->meshField);
+
+    qDebug() << "dummy läuft";
+
+    dummy->addPicture(this->allImages.value("background.png"), QPoint (20,20));
+    dummy2->addPicture(this->allImages.value("background.png"), QPoint (40,40));
+qDebug() << "dummy läuft";
+}
+
+

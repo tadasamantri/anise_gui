@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     drawobject.cpp \
     mesheditorwidget.cpp \
     data.cpp \
-    singletonrender.cpp
+    singletonrender.cpp \
+    testdrawobject.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -46,7 +47,8 @@ HEADERS  += mainwindow.h \
     drawobject.h \
     mesheditorwidget.h \
     data.h \
-    singletonrender.h
+    singletonrender.h \
+    testdrawobject.h
 
 FORMS    += mainwindow.ui
 

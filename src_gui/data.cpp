@@ -16,7 +16,10 @@ Data *Data::data = NULL;
 */
 
 Data *Data::instance() {
-    if (!data)  // Only allow one instance of class to be generated.
+    /**
+      * Allows only one instance of class to be generated.
+      */
+    if (!data)
         data = new Data;
 
     return data;
@@ -29,20 +32,28 @@ Data::Data(QObject *parent) : QObject(parent) {
 
 void  Data::initialize(MainWindow *mainWindow){
 
-    // create the Node catalog
+    /**
+      * Create the Nodecatalog
+      */
     NodeCatalog::instance();
-    // create the render object
+    /**
+      * Create the render object
+      */
     SingletonRender::instance();
-    //create NodeFactory
+    /**
+      * Create the NodeFactory
+      */
     NodeFactory::instance();
 
-    // initalize stored Settings
+    /**
+      * Initialize stored settings
+      */
     SettingsHandler::setSettingsPath(QApplication::applicationDirPath() +
                                      "/settings.ini");
-    // qDebug() << QApplication::applicationDirPath() + "/settings.ini";
 
-    // Check if Framework path is set
-
+    /**
+      * Checks if Framework path is set
+      */
     if (SettingsHandler::contains("frameworkpath"))
         AniseCommunicator::setFrameworkPath(
                     SettingsHandler::loadSetting("frameworkpath"));
@@ -62,25 +73,30 @@ void  Data::initialize(MainWindow *mainWindow){
         SettingsHandler::storeSetting("frameworkpath", fileName);
     }
 
-    // initialize settings from .ini file
+    /**
+      * Initialize settings from .ini file
+      */
     SettingsHandler::initializeSettings();
 /*
-    // create 20 test nodes
+    //create 20 test nodes
+
     for (int i = 0; i < 20; ++i) {
         Node *tempTestNode = NodeFactory::createTestNode();
         NodeCatalog::instance()->insert(*tempTestNode);
     }
 */
 
-
-    // START LOADING NODE TYPES
-
-    // load all available NodeTypes
+    /**
+      * Start loading node types
+      * Load all available NodeTypes
+      */
     QString out = AniseCommunicator::getAllNodeTypes();
     qDebug() << "outputANISE: " << out;
     JsonFileHandler::parseNodeTypesFromAnise(out);
 
-    // render the node catalog filled with test nodes
+    /**
+      * Render the Nodecatalog filled with test nodes
+      */
     SingletonRender::instance()->renderCatalogContent(NodeCatalog::instance()->Content.values().toVector());
 
 }
@@ -105,12 +121,18 @@ void Data::deleteItem(int nodeID){
 
 void Data::newMeshProject(){
 
-    //create new Mesh Object
+    /**
+      * Create new Mesh object
+      */
     mesh = new Mesh();
 
-    //clearMeshField
+    /**
+      * Clears a Meshfield
+      */
     SingletonRender::instance()->clearMeshField();
 
-    //renderNewMesh
+    /**
+      * Render a NewMesh
+      */
     SingletonRender::instance()->renderMesh(mesh);
 }

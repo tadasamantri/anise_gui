@@ -15,8 +15,10 @@
 DragWidget::DragWidget(QWidget *parent) : QWidget(parent) {}
 
 void DragWidget::mousePressEvent(QMouseEvent *event) {
-    // user pressed the mouse button
-    // ensure a left-mouse-click
+    /**
+      * User pressed the mouse button
+      * Ensure a left mouse click
+      */
     if (!(event->button() == Qt::LeftButton)) {
         qDebug() << "that was not the left mouse button!\n";
         return;
@@ -24,19 +26,25 @@ void DragWidget::mousePressEvent(QMouseEvent *event) {
 
     QLabel *child = static_cast<QLabel *>(childAt(event->pos()));
     if (!child) {
-        // if no child at this position return
+        /**
+          * If no child at this position - return
+          */
         return;
     }
 
-    // user pressed on a child
-    // mouse position relative to child top left corner
+    /**
+      * User pressed on a child
+      * Mouse position relative to child top left corner
+      */
     QPoint hotSpot = event->pos() - child->pos();
 
     QByteArray Data;
     QDataStream dataStream(&Data, QIODevice::WriteOnly);
     dataStream << QPoint(hotSpot);
 
-    // something about mime data...
+    /**
+      * Something about mime data
+      */
     QMimeData *mimeData = new QMimeData;
     mimeData->setData("application/customthingy", Data);
 

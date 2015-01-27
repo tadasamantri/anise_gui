@@ -42,6 +42,8 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     drag->setPixmap(*child->pixmap());
     drag->setHotSpot(hotSpot);
 
+
+
     if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) ==
             Qt::MoveAction)
         qDebug() << "never happens? IF it does check mesheditorwidget";
@@ -51,6 +53,7 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
         child->show();
         // child->setPixmap(pixmap);
     }
+
 }
 
 void MeshEditorWidget::dragEnterEvent(QDragEnterEvent *event) {

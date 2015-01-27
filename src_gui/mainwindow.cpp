@@ -102,3 +102,14 @@ void MainWindow::on_actionLoad_Catalog_triggered()
     QString out = AniseCommunicator::getAllNodeTypes();
     JsonFileHandler::parseNodeTypesFromAnise(out);
 }
+
+void MainWindow::on_buttonBox_clicked(QAbstractButton *button){
+
+    qDebug() << "hey man ich wurde aufgerufen";
+      SingletonRender::instance()->showTestWidget();
+
+
+}
+
+
+

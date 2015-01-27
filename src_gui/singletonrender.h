@@ -41,6 +41,8 @@ public:
     void clearMeshField();
 
 
+    // TEST WIdget für DrawObject
+    void showTestWidget();
 
 
     /*
@@ -65,6 +67,11 @@ public:
      *
      */
     void drawLine(double start_x, double start_y, double end_x ,double end_y);
+
+private slots:
+    void on_buttonBox_clicked(QAbstractButton *button);
+
+    void on_Apply_clicked(QAbstractButton *button);
 
 private:
 

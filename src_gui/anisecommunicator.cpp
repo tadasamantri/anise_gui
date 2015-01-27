@@ -5,52 +5,80 @@ QProcess *AniseCommunicator::anise_process = new QProcess();
 QString AniseCommunicator::path;
 QString AniseCommunicator::readOutput;
 
-// reads all available bytes from the Standard Output Channel
+
+/**
+  * AniseCommunicator read all available bytes from the Standard output Channel
+  *
+  */
 void AniseCommunicator::read() {
-    // Sets the channel to be read to StandardOutput
+    /**
+      * Sets the channel to be read to StandardOutput
+      */
     anise_process->setReadChannel(QProcess::StandardOutput);
     QByteArray ba = anise_process->readAll();
     readOutput = QString(ba);
 }
 
-// reads all available bytes from given Process Channel -- USE QProcess::...
-// (see overloaded function read)
-// changes readOutput
+/**
+  * AniseCommunicator read all available bytes from given Process Channel
+  * It use QProcess.
+  * Changes the readOutput.
+  * @see    Overloaded function read
+  */
 void AniseCommunicator::read(QProcess::ProcessChannel pc) {
-    // Sets the channel to be read
+    /**
+      * Sets the channel to be read
+      */
     anise_process->setReadChannel(pc);
     QByteArray ba = anise_process->readAll();
     readOutput = QString(ba);
 }
 
-// Returns Json String with all available Node Files
+/**
+  * Returns a Json string with all available Node files.
+  * This method always returns the existing node types in the
+  * Json string.
+  *
+  */
 QString AniseCommunicator::getAllNodeTypes() {
-    // create parameters needed for executing framework
+    /**
+      * Created parameters for executing the Framework:
+      */
     QStringList arguments;
     arguments << "--nodes"
               << "--machine";
 
-    // get framework Path
+    /**
+      * QString dir has the framework path.
+      */
     QString dir;
     dir += path;
 
-    // remove name of Executable
-    // dir is now path of directory containing anise
-    // from "~/bla/bla/anise" to "~/bla/bla/"
+    /**
+      * Removes name of the Executable.
+      * dir is now path of directory containing anise.
+      * Example: from "~/bla/bla/anise" to "~/bla/bla/"
+      */
     dir.chop(dir.length() - dir.lastIndexOf("/") - 1);
 
-    // change working Directioy to get the Nodes =)
+    /**
+      * Changes the working Directory to get the Nodes.
+      */
     anise_process->setWorkingDirectory(dir);
 
-    // execute framework
+    /**
+      * Starts the Framework.
+      */
     anise_process->start(path, arguments);
 
-    // wait for prints
+    /**
+      * Waits for prints.
+      */
     anise_process->waitForFinished();
 
-    // qDebug() << "finished";
-
-    // read printed stuff
+    /**
+      * Read printed stuff.
+      */
     read();
     readOutput = readOutput.mid(readOutput.indexOf("{"),readOutput.lastIndexOf("}") - 1);
     qDebug() << "this is what the communicator got from the framework:\n"<<readOutput <<"\n";
