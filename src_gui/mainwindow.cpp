@@ -4,6 +4,7 @@
 #include <QCoreApplication>
 #include <QVector>
 #include <QCursor>
+#include <QShortcut>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -27,11 +28,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     // option A (pressing DEL anywhere in the main window activates the slot)
     new QShortcut(QKeySequence(Qt::Key_Delete), this, SLOT(deleteItem()));
-
-    // option B (pressing DEL activates the slots only when list widget has focus)
-    QShortcut* shortcut = new QShortcut(QKeySequence(Qt::Key_Delete), listWidget);
-    connect(shortcut, SIGNAL(activated()), this, SLOT(deleteItem()));
 */
+    // option B (pressing DEL activates the slots only when list widget has focus)
+    QShortcut* shortcut = new QShortcut(QKeySequence(Qt::Key_B), this);
+
+    qDebug() << "FOCUSWINDOW: " << QApplication::focusWidget();
+    connect(shortcut, SIGNAL(activated()), Data::instance(), SLOT(deleteItem()));
+
+
 }
 
 void MainWindow::initializeGUI() {
@@ -72,7 +76,7 @@ void MainWindow::on_actionLoad_triggered() {
     QList<Connection*> connections;
     QJsonObject *obj = JsonFileHandler::readFile(fileName);
     JsonFileHandler::extractNodesAndConnections(*obj, nodes, connections);
-    Mesh mesh;
+    Mesh mesh(0);
     mesh.addNodes(nodes);
     mesh.addConnections(connections);
 
@@ -102,3 +106,5 @@ void MainWindow::on_actionLoad_Catalog_triggered()
     QString out = AniseCommunicator::getAllNodeTypes();
     JsonFileHandler::parseNodeTypesFromAnise(out);
 }
+
+

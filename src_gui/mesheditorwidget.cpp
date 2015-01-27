@@ -4,7 +4,12 @@
 #include "node.h"
 #include "drawobject.h"
 
-MeshEditorWidget::MeshEditorWidget(QWidget *parent) : QWidget(parent) {}
+MeshEditorWidget::MeshEditorWidget(QWidget *parent) : QWidget(parent) {
+
+    connect(this, SIGNAL(onWidgetClicked(int)), Data::instance()->getMesh(), SLOT(setFocusMeshObject(int)));
+
+
+}
 
 void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     // ensure a left-mouse-click
@@ -15,11 +20,17 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     // get child at mouse position
     DrawObject *child = static_cast<DrawObject *>(childAt(event->pos()));
     if (!child) {
+        emit onWidgetClicked(-1);
         // return if no child at mouse position
         return;
     }
 
     // pressed on a child
+
+    emit onWidgetClicked(child->nodeID);
+    // set focus on it
+
+
 
     // relative point of mouse to child
     QPoint hotSpot = event->pos() - child->pos();
@@ -51,6 +62,8 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
         child->show();
         // child->setPixmap(pixmap);
     }
+
+
 }
 
 void MeshEditorWidget::dragEnterEvent(QDragEnterEvent *event) {
@@ -105,3 +118,24 @@ void MeshEditorWidget::paintEvent(QPaintEvent *event){
     //TTtest linie, please ignore
     SingletonRender::instance()->drawLine(10, 20, 80, 60);
 }
+
+bool MeshEditorWidget::containsID(int objectID){
+
+
+    foreach(QObject *child, this->children()){
+
+        DrawObject *castChild = static_cast<DrawObject *>(child);
+
+        if(!castChild)
+            continue;
+
+        if(castChild->nodeID == objectID)
+            return true;
+
+    }
+    return false;
+
+}
+
+
+

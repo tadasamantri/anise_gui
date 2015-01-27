@@ -1,10 +1,15 @@
 #include "mesh.h"
 #include "QDebug"
+#include "singletonrender.h"
 
-Mesh::Mesh() {
+Mesh::Mesh(QObject *parent) : QObject(parent){
+
+
     this->nodesInMash = QMap<int, Node *>();
     this->connectionsInMash = QMap<int, Connection *>();
     this->iDCounter = 0;
+    this->focusObject = -1;
+
 }
 
 int Mesh::addNode(Node *node) {
@@ -54,4 +59,49 @@ int Mesh::generateId() {
     iDCounter++;
 
     return this->iDCounter;
+}
+
+void Mesh::setFocusMeshObject(int nodeID){
+
+    this->focusObject = nodeID;
+
+   // qDebug() << "I GOT CKLICKED. MY ID: " << nodeID;
+}
+
+
+bool Mesh::deleteItem(){
+
+    if(this->focusObject == -1)
+        return false;
+
+    if(nodesInMash.contains(focusObject))
+        return this->deleteNode();
+    if(connectionsInMash.contains((focusObject)))
+        return this->deleteConnection();
+    return false;
+
+}
+
+bool Mesh::deleteNode(){
+
+    nodesInMash.remove(focusObject);
+    bool allRemoved = !nodesInMash.contains(focusObject) && SingletonRender::instance()->deleteMeshDrawing(focusObject);
+
+
+
+    if(allRemoved)
+        focusObject = -1;
+
+    return allRemoved;
+}
+
+bool Mesh::deleteConnection(){
+
+    connectionsInMash.remove(focusObject);
+    bool allRemoved = connectionsInMash.contains(focusObject) && SingletonRender::instance()->deleteMeshDrawing(focusObject);
+
+    if(allRemoved)
+        focusObject = -1;
+
+    return allRemoved;
 }

@@ -16,6 +16,8 @@ public:
     int nodeID;
     DrawObject(int nodeID, QWidget *parent);
 
+
+
 //public slots:
    // void deleteItem();
 };

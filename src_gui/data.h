@@ -32,8 +32,14 @@ public:
 
     void addNodeToMesh(Node *newNode);
     void moveNodeInMesh(QPoint *Position, int numberOfNode);
-    void deleteItem(int nodeID);
+
     void newMeshProject();
+
+    Mesh *getMesh();
+
+
+public slots:
+    bool deleteItem();
 
 private:
     explicit Data(QObject *parent = 0);

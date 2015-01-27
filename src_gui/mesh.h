@@ -5,16 +5,22 @@
 #include <QMap>
 #include <QString>
 #include <QList>
+#include <QObject>
+
 
 #include "connection.h"
 #include "node.h"
 
-class Mesh {
+
+class Mesh : public QObject {
+    Q_OBJECT
+
     friend class JsonFilehandler;
 
 public:
     // konstruktor
-    Mesh();
+    explicit Mesh(QObject *parent = 0);
+
 
     // add Node to mesh
     // return the id of the new node
@@ -47,13 +53,30 @@ public:
     QMap<int, Node *> nodesInMash;
     QMap<int, Connection *> connectionsInMash;
 
+    //deletingfunctions
+    bool deleteItem();
+
+
+public slots:
+
+    void setFocusMeshObject(int nodeID);
+
+
 private:
+
+
     // counter for ids.
     // prevents double id numbers
     int iDCounter;
 
     // generate an unique id key;
     int generateId();
+
+    int focusObject;
+
+    //internal deletingfunctions
+    bool deleteNode();
+    bool deleteConnection();
 };
 
 #endif  // MESHHANDLER_H

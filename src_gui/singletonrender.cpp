@@ -128,6 +128,7 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
             ->move(nodeToRender->position_x, nodeToRender->position_y);
 
     allDrawnNodes.value(nodeID)->show();
+
 }
 
 void SingletonRender::renderMesh(Mesh *workMesh) {
@@ -182,8 +183,11 @@ void SingletonRender::clearAll(QWidget *parent){
 
 
     //
-    while ( QWidget* w = parent->findChild<DrawObject*>() )
+    while ( QWidget* w = parent->findChild<DrawObject*>() ){
+        w->deleteLater();
         delete w;
+}
+
 
 
     //TODO NOT COOL THIS SOLUTION!
@@ -193,3 +197,42 @@ void SingletonRender::clearAll(QWidget *parent){
         this->allDrawnLines = QMap<int, QLine *>();
     }
 }
+
+
+bool SingletonRender::deleteMeshDrawing(int objectID){
+
+
+
+   DrawObject *childToDelete = allDrawnNodes.value(objectID);
+
+
+   allDrawnNodes.remove(objectID);
+   childToDelete->deleteLater();
+
+
+
+   return !allDrawnNodes.contains(objectID);
+
+}
+
+QVector<int> *SingletonRender::getChildrenIDs(){
+
+
+    QVector<int>* ids = new QVector<int>();
+    QObjectList children = this->ui->meshField->children();
+
+
+    foreach(QObject *child , children){
+
+
+        DrawObject* node  = dynamic_cast<DrawObject*> (child);
+
+        if(node != NULL)
+            ids->push_back(node->nodeID);
+    }
+
+    return ids;
+
+}
+
+

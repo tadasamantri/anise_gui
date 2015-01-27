@@ -96,10 +96,10 @@ void Data::moveNodeInMesh(QPoint *Position, int numberOfNode) {
     SingletonRender::instance()->renderMesh(this->mesh);
 }
 
-void Data::deleteItem(int nodeID){
 
-    qDebug() << "HEY SOMEBODY GOT DELETED";
+Mesh *Data::getMesh(){
 
+    return this->mesh;
 }
 
 
@@ -113,4 +113,14 @@ void Data::newMeshProject(){
 
     //renderNewMesh
     SingletonRender::instance()->renderMesh(mesh);
+}
+
+bool Data::deleteItem(){
+
+    bool deleted = this->mesh->deleteItem();
+    //qDebug() << "Node Got Deleted: " << deleted;
+    //qDebug() << "NodeMap: " << this->getMesh()->nodesInMash;
+    //qDebug() << "Drawings: " << SingletonRender::instance()->getChildrenIDs()->toList();
+    return deleted;
+
 }

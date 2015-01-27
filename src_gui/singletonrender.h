@@ -40,8 +40,14 @@ public:
      */
     void clearMeshField();
 
+    bool deleteMeshDrawing(int objectID);
 
 
+    /*
+     *Testfunction of Deleting
+     * Returns all ID's of given widget
+     */
+    QVector<int> *getChildrenIDs();
 
     /*
    * Renders a node.
@@ -66,6 +72,9 @@ public:
      */
     void drawLine(double start_x, double start_y, double end_x ,double end_y);
 
+private slots:
+    void on_actionNew_triggered();
+
 private:
 
     void paintEvent(QPaintEvent *event);
@@ -84,6 +93,8 @@ private:
     // and the widget
     //TODO WHY do we need This??
 
+
+    //TODO JOIN BOTH LISTS TO ONE
     QMap<int, DrawObject *> allDrawnNodes;
     QMap<int, QLine *> allDrawnLines;
 
