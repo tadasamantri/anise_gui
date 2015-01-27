@@ -50,7 +50,7 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
 
     QDrag *drag = new QDrag(this);
     drag->setMimeData(mimeData);
-    drag->setPixmap(*child->pixmap());
+    //drag->setPixmap(*child->pixmap());
     drag->setHotSpot(hotSpot);
 
     if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) ==

@@ -8,18 +8,23 @@
 
 
 
-class DrawObject : public QLabel {
+class DrawObject : public QWidget {
 
   //  Q_OBJECT
 
 public:
     int nodeID;
-    DrawObject(int nodeID, QWidget *parent);
+    DrawObject(int nodeID, QPoint position, QWidget *parent);
+
+void addPicture (QPixmap *pic, QPoint position);
+
+void getPicture ();
 
 
 
-//public slots:
-   // void deleteItem();
+
+
 };
 
-#endif  // DRAWOBJECT_H
+
+#endif // DRAWOBJECT_H
