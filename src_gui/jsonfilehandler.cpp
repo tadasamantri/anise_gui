@@ -1,4 +1,5 @@
 ﻿#include "jsonfilehandler.h"
+#include "data.h"
 
 QString JsonFileHandler::loadFile(const QString &path) {
     // QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
@@ -53,7 +54,8 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
     if (output == "") return;
 
     QJsonDocument doc = QJsonDocument::fromJson(output.toUtf8());
-    NodeCatalog *catalog = NodeCatalog::instance();
+
+    NodeCatalog *catalog = Data::instance()->nodeCatalog;
     qDebug() << "trying to read all node types. Loading json data...\n";
 
 
