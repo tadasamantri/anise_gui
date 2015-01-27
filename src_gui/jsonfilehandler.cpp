@@ -20,6 +20,11 @@ QString JsonFileHandler::loadFile(const QString &path) {
     return fileContent;
 }
 
+/**
+ * @brief JsonFileHandler::readFile converts a textfile into a QJsonDocument-Object
+ * @param path contains path to a text file in json format
+ * @return filecontent as QJsonObject
+ */
 QJsonObject *JsonFileHandler::readFile(const QString &path) {
     // read the file
     QJsonParseError jerror;
@@ -40,6 +45,10 @@ QJsonObject *JsonFileHandler::readFile(const QString &path) {
     return obj;
 }
 
+/**
+ * @brief JsonFileHandler::parseNodeTypesFromAnise fills the nodeCatalog with Node Templates
+ * @param output the output of the framework with parameters "--nodes --machine"
+ */
 void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
     if (output == "") return;
 
@@ -98,6 +107,12 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
     }
 }
 
+/**
+ * @brief JsonFileHandler::extractNodesAndConnections Extracts all Nodes and Connections of a QJsonObject
+ * @param obj the QJsonObject containing the JSON File
+ * @param nodelist List in which the nodes will be written
+ * @param connectionlist List in which the connections will be written
+ */
 void JsonFileHandler::extractNodesAndConnections(
         /*input*/ const QJsonObject &obj, /*output*/ QList<Node> &nodelist,
         /*output*/ QList<Connection> &connectionlist) {
@@ -306,18 +321,18 @@ it into mesh
     return mesh;
 }*/
 
-void JsonFileHandler::printString(const QString &fileContent) {
-    if (fileContent == "") {
-        qDebug() << "no File Content loaded! \nthe parser didn't read the file "
-                    "correctly!";
-    } else {
-        qDebug() << "File Content loaded!\n";
-        qDebug() << "\n" << fileContent << "\n";
-    }
-}
-
+/**
+ * @brief JsonFileHandler::writeFile writes a string into a given file
+ * @param path path to file
+ * @param fileContent the content written to the specified file
+ */
 void JsonFileHandler::writeFile(const QString &path,
                                 const QString &fileContent) {
+
+    QString command = "touch";
+    QStringList arg;
+    arg << path;
+    QProcess::start(command, arg);
     QFile file(path);
     file.open(QIODevice::WriteOnly | QIODevice::Text);
     QTextStream out(&file);
