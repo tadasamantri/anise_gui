@@ -4,10 +4,10 @@
 #include <QString>
 #include <QProcess>
 
-/*
- * Author: Frederik Lührs (luehrs.fred@gmail.com)
+/**
+ * @Author Frederik Lührs (luehrs.fred@gmail.com)
  *
- * Execute ANISE framework. Mainly used to get console prints as a string
+ * Execute ANISE framework. Mainly used to get console prints as a string.
  *
  */
 
@@ -16,11 +16,17 @@ class AniseCommunicator : public QObject {
     Q_OBJECT
 
 private:
-    // readOutput always has the last output read
+    /**
+      * readOuput always has the last output read
+      */
     static QString readOutput;
-    // path to framework, should be initialized while starting gui
+    /**
+      * path to framework should be initialized while starting the gui
+      */
     static QString path;
-    // Executes ANISE framework
+    /**
+      * Executes ANISE Framework
+      */
     static QProcess *anise_process;
     static bool path_is_set;
 

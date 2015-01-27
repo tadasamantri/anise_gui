@@ -41,10 +41,9 @@ public:
 
     QString getName();
 
-    QVector<Gate> getInputGates();
+    QVector<Gate> *getInputGates();
 
-    QVector<Gate> getOutputGates();
-
+    QVector<Gate> *getOutputGates();
 
     bool addParam(QString _key, QVariant _value);
 
@@ -62,6 +61,12 @@ public:
     QString type, name;
 
     QVariantMap params;  // maps <identifier, value>
+
+    QString getDescription();
+    void setDescription(const QString &value);
+
+private:
+    QString description;
 };
 
 #endif  // NODE_H

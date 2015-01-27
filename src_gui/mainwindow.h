@@ -31,7 +31,7 @@ private slots:
     void on_actionLoad_Catalog_triggered();
 
     void on_buttonBox_clicked(QAbstractButton *button);
-    
+
 private:
     void initializeGUI();
 };

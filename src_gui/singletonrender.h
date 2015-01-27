@@ -42,6 +42,8 @@ public:
 
     bool deleteMeshDrawing(int objectID);
 
+    // TEST WIdget für DrawObject
+    void showTestWidget();
 
     /*
      *Testfunction of Deleting
@@ -73,7 +75,9 @@ public:
     void drawLine(double start_x, double start_y, double end_x ,double end_y);
 
 private slots:
-    void on_actionNew_triggered();
+    void on_buttonBox_clicked(QAbstractButton *button);
+
+    void on_Apply_clicked(QAbstractButton *button);
 
 private:
 
@@ -117,7 +121,9 @@ private:
     SingletonRender(SingletonRender const &){};
 
     // assignment operator is private
-    SingletonRender &operator=(SingletonRender const &){};
+    SingletonRender &operator=(SingletonRender const &){
+        return *this;
+    };
 
     // pointer to this instance
     static SingletonRender *m_pInstance;

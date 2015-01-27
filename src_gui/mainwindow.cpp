@@ -72,13 +72,13 @@ void MainWindow::on_actionLoad_triggered() {
 
     if(fileName == "")
         return;
-    QList<Node*> nodes;
-    QList<Connection*> connections;
+    QList<Node> nodes;
+    QList<Connection> connections;
     QJsonObject *obj = JsonFileHandler::readFile(fileName);
     JsonFileHandler::extractNodesAndConnections(*obj, nodes, connections);
-    Mesh mesh(0);
-    mesh.addNodes(nodes);
-    mesh.addConnections(connections);
+    //Mesh mesh;
+    //mesh.addNodes(nodes);
+    //mesh.addConnections(connections);
 
 }
 
@@ -106,5 +106,14 @@ void MainWindow::on_actionLoad_Catalog_triggered()
     QString out = AniseCommunicator::getAllNodeTypes();
     JsonFileHandler::parseNodeTypesFromAnise(out);
 }
+
+void MainWindow::on_buttonBox_clicked(QAbstractButton *button){
+
+    qDebug() << "hey man ich wurde aufgerufen" ;
+      SingletonRender::instance()->showTestWidget();
+
+
+}
+
 
 

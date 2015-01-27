@@ -3,8 +3,8 @@
 
 #include <QWidget>
 #include <QPixmap>
-#include <QLabel>
 #include <QPainter>
+#include <QLabel>
 
 
 

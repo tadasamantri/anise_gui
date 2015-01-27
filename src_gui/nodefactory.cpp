@@ -1,25 +1,16 @@
 #include "nodefactory.h"
 
-// Global static pointer used to ensure a single instance of the class.
-NodeFactory *NodeFactory::m_pInstance = NULL;
-
-NodeFactory *NodeFactory::instance() {
-    if (!m_pInstance)  // Only allow one instance of class to be generated.
-        m_pInstance = new NodeFactory;
-
-    return m_pInstance;
-}
-
 // TODO friend Node, node should have a private konstruktor
+// Nodes should only be created in this factory!
 NodeFactory::NodeFactory() {}
+
 Node NodeFactory::createNode() {
     Node node = Node();
     return node;
 }
 
 Node NodeFactory::createNode(QString _class) {
-    Node node(NodeCatalog::instance()->getNodeOfType(_class));
-    node.setType(_class);
+    Node node = NodeCatalog::instance()->getNodeOfType(_class);
     return node;
 }
 
@@ -33,11 +24,7 @@ Node NodeFactory::createNode(QString _class, QString name, QVariantMap params) {
     Node node = createNode(_class, name);
     foreach (QString key, params.keys()) {
 
-        //BUG "params.find(key).value()" returns "" if not String
-        //qDebug() << "params.find(key).value() " << params.find(key).value();
-
-
-        node.addParam(key, params.find(key).value());
+        node.addParam(key, params[key]);
     }
     return node;
 }

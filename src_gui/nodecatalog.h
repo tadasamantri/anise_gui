@@ -22,7 +22,9 @@ private:
     NodeCatalog(NodeCatalog const &){};
 
     // assignment operator is private
-    NodeCatalog &operator=(NodeCatalog const &){};
+    NodeCatalog &operator=(NodeCatalog const &){
+        return *this;
+    };
 
     // pointer to this instance
     static NodeCatalog *m_pInstance;
