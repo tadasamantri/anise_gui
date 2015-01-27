@@ -32,7 +32,7 @@ void TestDrawObject::addPicture(QPixmap *pic, QPoint position) {
 
     QLabel *label = new QLabel(this);
 
-    qDebug() << "dummy läuft";
+    qDebug() << "dummy läuft" << position;
 
     label->setPixmap(*pic);
 
