@@ -96,7 +96,7 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
     dataStream >> offset;
     dataStream >> nodeID;
 
-    DropPoint -= offset;
+   // DropPoint -= offset;
 
 
 
@@ -114,6 +114,8 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
 
     if (event->source()->objectName() == "meshField"){
         //will move the correct node to the new position
+        qDebug()<<"event position"<< event->pos();
+        qDebug() <<"mime:" <<event->mimeData()->data("application/customthingy");
         qDebug() << "trying to move the node to the new position";
         Data::instance()->moveNodeInMesh(&DropPoint, nodeID);
     }
