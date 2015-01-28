@@ -45,7 +45,8 @@ public:
 
     void initialize(MainWindow *mainWindow);
 
-    void addNodeToMesh(Node *newNode);
+    int addNodeToMesh(Node *newNode);
+    void removeNodeFromMesh(int ID);
     void moveNodeInMesh(QPoint *Position, int numberOfNode);
 
     void newMeshProject();

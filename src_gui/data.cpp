@@ -101,9 +101,17 @@ void  Data::initialize(MainWindow *mainWindow){
 
 }
 
-void Data::addNodeToMesh(Node *newNode) {
-    this->mesh->addNode(newNode);
+int Data::addNodeToMesh(Node *newNode) {
+    int id = this->mesh->addNode(newNode);
     SingletonRender::instance()->renderMesh(this->mesh);
+    return id;
+}
+
+void Data::removeNodeFromMesh(int ID)
+{
+    if(!mesh->nodesInMash.contains(ID))
+        return;
+    mesh->removeNode(ID);
 }
 
 void Data::moveNodeInMesh(QPoint *Position, int numberOfNode) {
