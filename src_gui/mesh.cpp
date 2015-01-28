@@ -15,7 +15,9 @@ Mesh::Mesh(QObject *parent) : QObject(parent){
 int Mesh::addNode(Node *node) {
     int id = this->generateId();
     this->nodesInMash.insert(id, node);
+    this->focusObject = id;             //A new created Node is always focussed in the beginning
     return id;
+
 }
 
 void Mesh::addNodes(QList<Node *> &list){
@@ -65,7 +67,7 @@ void Mesh::setFocusMeshObject(int nodeID){
 
     this->focusObject = nodeID;
 
-   // qDebug() << "I GOT CKLICKED. MY ID: " << nodeID;
+  qDebug() << "I GOT CKLICKED. MY ID: " << nodeID;
 }
 
 
