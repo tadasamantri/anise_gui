@@ -27,7 +27,7 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     else
         //IF NOT THEN MAYBE I CLICKED ON THE WIDGET (CAUSE THE PICTURES DONT FILL UP ALL THE SPACE OF THE WIDGET)
         child = dynamic_cast<DrawObject *>(childAt(event->pos()));
-    ---------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------
 
     //IF IT IS STILL 0, THEN I CLICKED ON MESHFIELD NOT A NODE
     if (!child) {

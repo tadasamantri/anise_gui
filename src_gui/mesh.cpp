@@ -61,13 +61,13 @@ Node *Mesh::getNodeByName(QString name) {
 }
 
 Node *Mesh::getNodeByID(int ID) {
-    qDebug() << "getNodeByID returned Node with ID " << ID <<"\nName of Node is "
+    //qDebug() << "getNodeByID returned Node with ID " << ID <<"\nName of Node is "
                 << nodesInMash[ID]->getName();
     return this->nodesInMash[ID];
 }
 
 int Mesh::generateId() {
-    qDebug() << "new Node with ID " << iDCounter << " added";
+    //qDebug() << "new Node with ID " << iDCounter << " added";
     return this->iDCounter++;
 }
 
