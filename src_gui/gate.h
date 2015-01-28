@@ -15,8 +15,6 @@ public:
     bool removeType(const QString &type);
     void setDirection(bool in);
     QList<QString> getTypes();
-    static const bool DIRECTION_IN;
-    static const bool DIRECTION_OUT;
     QString getName();
     void setName(QString name);
 

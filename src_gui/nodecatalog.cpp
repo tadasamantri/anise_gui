@@ -9,6 +9,7 @@ NodeCatalog::NodeCatalog() {
     blackbox.addGate(in);
     blackbox.addGate(out);
     blackbox.setType("blackbox");
+    blackbox.setDescription("A Blackbox Node for all unknown Nodes");
     Content["blackbox"] = blackbox;
 }
 

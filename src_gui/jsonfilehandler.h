@@ -72,7 +72,9 @@ public:
     /*
      * extracts all nodes given in QJsonObject and pushes them into the given list
      */
-    static void extractNodesAndConnections(const QJsonObject &obj, QList<Node> &nodelist, QList<Connection> &connectionlist);
+    static void extractNodesAndConnections(const QJsonObject &obj, QList<Node *> &nodelist, QList<Connection *> &connectionlist);
+private:
+    static Node *findNodeByName(const QList<Node *> &nodes, const QString &name);
 };
 
 #endif  // FILEHANDLER_H

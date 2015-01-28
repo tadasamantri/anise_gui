@@ -9,22 +9,22 @@ Node NodeFactory::createNode() {
     return node;
 }
 
-Node NodeFactory::createNode(QString _class) {
-    Node node = NodeCatalog::instance()->getNodeOfType(_class);
+Node *NodeFactory::createNode(QString _class) {
+    Node *node = new Node(NodeCatalog::instance()->getNodeOfType(_class));
     return node;
 }
 
-Node NodeFactory::createNode(QString _class, QString name) {
-    Node node = createNode(_class);
-    node.setName(name);
+Node *NodeFactory::createNode(QString _class, QString name) {
+    Node *node = createNode(_class);
+    node->setName(name);
     return node;
 }
 
-Node NodeFactory::createNode(QString _class, QString name, QVariantMap params) {
-    Node node = createNode(_class, name);
+Node *NodeFactory::createNode(QString _class, QString name, QVariantMap params) {
+    Node *node = createNode(_class, name);
     foreach (QString key, params.keys()) {
 
-        node.addParam(key, params[key]);
+        node->addParam(key, params[key]);
     }
     return node;
 }

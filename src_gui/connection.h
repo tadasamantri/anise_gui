@@ -7,7 +7,7 @@
 class Connection {
 
 public:
-    Connection(Node &src_node, Gate &src_gate, Node &dest_node, Gate &dest_gate);
+    Connection(Node *src_node, Gate *src_gate, Node *dest_node, Gate *dest_gate);
     Gate *getSrcGate();
     Gate *getDestGate();
     void setSrcGate(Gate &src);
