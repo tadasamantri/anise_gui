@@ -11,6 +11,8 @@
 DrawObject::DrawObject(int nodeID, QPoint position, QWidget *parent = 0) {
 
 
+   // qDebug() << "DRAWOBJECT CREATED. ID: " << nodeID;
+   // qDebug() << this;
     this->nodeID = nodeID;
     this->setParent(parent);
 
@@ -34,7 +36,7 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position) {
     QLabel *label = new QLabel(this);
     label->setPixmap(*pic);
     this->labelvector.append(label);
-    label->setGeometry(0, 0, 70, 70);
+    label->setGeometry(0, 0, 10, 10);
 
     //this->show();
 

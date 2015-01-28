@@ -67,7 +67,7 @@ void Mesh::setFocusMeshObject(int nodeID){
 
     this->focusObject = nodeID;
 
-  qDebug() << "I GOT CKLICKED. MY ID: " << nodeID;
+  //qDebug() << "I GOT CKLICKED. MY ID: " << nodeID;
 }
 
 

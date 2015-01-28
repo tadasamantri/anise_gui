@@ -13,9 +13,23 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     if (!(event->button() == Qt::LeftButton)) {
         return;
     }
-
+    qDebug() << childAt(event->pos());
     // get child at mouse position
-    DrawObject *child = static_cast<DrawObject *>(childAt(event->pos()));
+    //TODO NOTLÖSUNG - HAS TO BE CHANGED PROPERLY------------------------------------------
+    DrawObject *child;
+    //CHECK OF CLICKING ON LABEL (PICTURE)
+    QLabel *grandChild = dynamic_cast<QLabel *>(childAt(event->pos()));
+    //IF I CLICKED ON PICTURE...
+    if(grandChild){
+        //THEN MY PARENT WILL BE THE DRAWOBJECT (HOPEFULLY)
+        child = dynamic_cast<DrawObject *>(grandChild->parent());
+    }
+    else
+        //IF NOT THEN MAYBE I CLICKED ON THE WIDGET (CAUSE THE PICTURES DONT FILL UP ALL THE SPACE OF THE WIDGET)
+        child = dynamic_cast<DrawObject *>(childAt(event->pos()));
+    ---------------------------------------------------------------------------------------
+
+    //IF IT IS STILL 0, THEN I CLICKED ON MESHFIELD NOT A NODE
     if (!child) {
         emit onWidgetClicked(-1);
         // return if no child at mouse position
@@ -37,6 +51,7 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     // TODO correct use of node ID
     dataStream << QPoint(hotSpot) << child->nodeID;
 
+    //qDebug() << "NODEID BEFORE DATASTREAM: " << child->nodeID;
     // something about mime data...
     // TODO correct mimedata
     QMimeData *mimeData = new QMimeData;
@@ -95,6 +110,7 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
     QDataStream dataStream(&arrayData, QIODevice::ReadOnly);
     dataStream >> offset;
     dataStream >> nodeID;
+
 
    // DropPoint -= offset;
 
