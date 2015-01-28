@@ -62,7 +62,7 @@ Node *Mesh::getNodeByName(QString name) {
 
 Node *Mesh::getNodeByID(int ID) {
     //qDebug() << "getNodeByID returned Node with ID " << ID <<"\nName of Node is "
-                << nodesInMash[ID]->getName();
+                //<< nodesInMash[ID]->getName();
     return this->nodesInMash[ID];
 }
 
