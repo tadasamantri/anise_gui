@@ -34,6 +34,8 @@ public:
 
     void addNodes(QList<Node *> &list);
 
+    void removeNode(int ID);
+
     // returns pointer to Node behind name
     Node *getNodeByName(QString name);
 
