@@ -104,16 +104,30 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
 
     if (!allDrawnNodes.contains(nodeID)) {
         // create a Drawobject
-        DrawObject *NodeDrawObject = new DrawObject(nodeID, this->ui->meshField);
+        DrawObject *NodeDrawObject = new DrawObject(nodeID, QPoint (int (nodeToRender->position_x), int (nodeToRender->position_y)), this->ui->meshField);
+
 
         if (allImages.contains("background.png")) {
-            // Draw the Background
-            NodeDrawObject->setPixmap(*allImages["background.png"]);
-            // Set the geometry to the right size
-            NodeDrawObject->setGeometry(0, 0, 50, 50);
+            // Draw the bg
+            NodeDrawObject->addPicture(allImages["background.png"], QPoint(-10,0));
+                qDebug() << "background.png loaded";
+
         } else {
             qDebug() << "background.png did not load correctly!";
         }
+
+
+
+        if (allImages.contains("monster.png")) {
+            // Draw the mnster
+            NodeDrawObject->addPicture(allImages["monster.png"], QPoint (10,0));
+            // Set the geometry to the right size
+            NodeDrawObject->setGeometry(0, 0, 50, 50);
+        } else {
+            qDebug() << "monster.png did not load correctly!";
+        }
+
+
 
         allDrawnNodes.insert(nodeID, NodeDrawObject);
     }
@@ -218,17 +232,16 @@ bool SingletonRender::deleteMeshDrawing(int objectID){
 
 void SingletonRender::showTestWidget() {
 
-    TestDrawObject *dummy =
-            new TestDrawObject(100, QPoint(20, 20), ui->meshField);
-    TestDrawObject *dummy2 =
-            new TestDrawObject(100, QPoint(40, 40), ui->meshField);
+    DrawObject *dummy =
+            new DrawObject(100, QPoint(20, 20), ui->meshField);
 
     qDebug() << "dummy läuft";
 
     dummy->addPicture(this->allImages.value("background.png"), QPoint(20, 20));
-    dummy2->addPicture(this->allImages.value("background.png"), QPoint(40, 40));
+    dummy->addPicture(this->allImages.value("background.png"), QPoint(40, 40));
     qDebug() << "dummy läuft";
 }
+
 
 QVector<int> *SingletonRender::getChildrenIDs(){
 

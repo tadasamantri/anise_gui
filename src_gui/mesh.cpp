@@ -58,9 +58,9 @@ Node *Mesh::getNodeByName(QString name) {
 Node *Mesh::getNodeByID(int ID) { return this->nodesInMash.value(ID); }
 
 int Mesh::generateId() {
-    iDCounter++;
 
-    return this->iDCounter;
+    qDebug() << iDCounter;
+    return this->iDCounter++;
 }
 
 void Mesh::setFocusMeshObject(int nodeID){

@@ -19,6 +19,9 @@
 #include <QObject>
 
 #include "drawobject.h"
+#include "nodefactory.h"
+
+#include "node.h"
 
 class MeshEditorWidget : public QWidget {
     Q_OBJECT

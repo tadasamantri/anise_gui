@@ -1,4 +1,5 @@
 ﻿#include "jsonfilehandler.h"
+#include "data.h"
 
 QString JsonFileHandler::loadFile(const QString &path) {
     // QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
@@ -53,7 +54,8 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
     if (output == "") return;
 
     QJsonDocument doc = QJsonDocument::fromJson(output.toUtf8());
-    NodeCatalog *catalog = NodeCatalog::instance();
+
+    NodeCatalog *catalog = Data::instance()->nodeCatalog;
     qDebug() << "trying to read all node types. Loading json data...\n";
 
 
@@ -114,8 +116,8 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
  * @param connectionlist List in which the connections will be written
  */
 void JsonFileHandler::extractNodesAndConnections(
-        /*input*/ const QJsonObject &obj, /*output*/ QList<Node> &nodelist,
-        /*output*/ QList<Connection> &connectionlist) {
+        /*input*/ const QJsonObject &obj, /*output*/ QList<Node *> &nodelist,
+        /*output*/ QList<Connection *> &connectionlist) {
     // check if there are any nodes
     int i = 1, j = 1;  // for debug only
     if (!obj["nodes"].isArray()) {
@@ -125,7 +127,7 @@ void JsonFileHandler::extractNodesAndConnections(
 
     qDebug() << "File contains nodes, so let's parse them";
 
-    QMap<QString, Node> nodemap;
+    QMap<QString, Node*> nodemap;
     // for every node (represented as jsonvalue)...
     foreach (QJsonValue var, obj["nodes"].toArray()) {
         //...convert it to json object...
@@ -161,8 +163,8 @@ void JsonFileHandler::extractNodesAndConnections(
             j = 1;  // for debugging only
             qDebug() << "\n";
             // node is complete, so let's insert it
-            Node createdNode = NodeFactory::createNode(type, name, params);
-            nodemap[createdNode.getName()] = createdNode;
+            Node *createdNode = NodeFactory::createNode(type, name, params);
+            nodemap[createdNode->getName()] = createdNode;
         }
     }
 
@@ -174,152 +176,27 @@ void JsonFileHandler::extractNodesAndConnections(
         return;
     }
 
-    // TODO: SEGFAULT bei addGate in Node!!!
     foreach (QJsonValue var, obj["connections"].toArray()) {
         QVariantMap theConnection = var.toObject().toVariantMap();
-        Node src_node = nodemap[theConnection["src_node"].toString()];
-        Node dest_node = nodemap[theConnection["dest_node"].toString()];
-        Connection connection(src_node, *src_node.getGateByName(theConnection["src_gate"].toString()), dest_node,  *dest_node.getGateByName(theConnection["dest_gate"].toString()));
+        Node *src_node = findNodeByName(nodelist,theConnection["src_node"].toString());
+        Node *dest_node = findNodeByName(nodelist, theConnection["dest_node"].toString());
+        Connection *connection = new Connection(src_node, src_node->getGateByName(theConnection["src_gate"].toString()), dest_node,  dest_node->getGateByName(theConnection["dest_gate"].toString()));
         connectionlist << connection;
     }
 }
 
-// creates a new mesh and fills it with the Json content
-/*Mesh JsonFileHandler::parseJsonString(QString &jsonString) {// <--- obsolete!
-    // create QJsonObject from string given
-
-    QJsonParseError *errorWhileParsing;
-    QJsonDocument jsonDoc =
-            QJsonDocument::fromJson(jsonString.toUtf8(), errorWhileParsing);
-    QString errorMessage = errorWhileParsing->errorString();
-    QJsonObject jsonObject = jsonDoc.object();
-    qDebug() << "creating Json file:" << errorMessage;
-
-    // create a new empty Mesh
-    Mesh mesh = Mesh();
-    // check if JSON-File is ok
-    if (!(jsonObject.contains(QString("nodes")) && !jsonDoc.isEmpty() &&
-          jsonObject["nodes"].isArray())) {
-        QMessageBox::information(
-                    0, QString("Error"),
-                    QString("The file you selected has an unknown Format"),
-"Ok");
-
-        return mesh;
-    }
-
-    QJsonArray nodes;
-    // create new mesh for returning it later
-    nodes = jsonObject["nodes"].toArray();  // extract all nodes as Array
-    foreach (QJsonValue node, nodes) {
-        QJsonObject jNode = node.toObject();  // create a JSonObjec for each
-node
-        QString _class, _name;
-
-        if (!jNode.contains("class"))  // check  if nodes are ok
-        {
-            QMessageBox::information(0, QString("Error"), QString("No Class
-given"),
-                                     "Ok");
-            return mesh;
-        } else if (!jNode.contains("name")) {
-            QMessageBox::information(0, QString("Error"), QString("No Name
-given"),
-                                     "Ok");
-            return mesh;
-
-        } else if (!jNode.contains("params")) {
-            QMessageBox::information(0, QString("Error"),
-                                     QString("no parameters given"), "Ok");
-            return mesh;
-
-        } else if (!jNode["params"].isArray()) {
-            QMessageBox::information(0, QString("Error"),
-                                     QString("params is no array"), "Ok");
-            return mesh;
-        }
-
-        _class = jNode["class"].toString();  // extract node type
-        _name = jNode["name"].toString();    // extract node name
-
-        QVariantMap _params = QVariantMap();  // set up params map
-
-        QJsonArray jParams =
-                jNode["params"].toArray();  // extract params as array from json
-file
-        // TODO: Talk about Gates ands Connections to get this working
-        foreach (QJsonValue paramJValue, jParams) {  // for each of them..
-
-            QJsonObject paramObject =
-                    paramJValue.toObject(); //...make it an Object...
-
-            foreach (QString paramKey, paramObject.keys()) {
-                _params.insert(paramKey,
-                               paramObject.find(paramKey)
-                               .value()
-                               .toString());  //...and push it into the map
-            }
-        }
-        Node tmp = NodeFactory::createNode(
-                    _class, _name,
-                    _params);  // let the datafactory create a node and insert
-it into mesh
-        mesh.addNode(&tmp);
-        qDebug() << "Node parsed:\n" << tmp.toString();
-    }
-
-    if (jsonObject.contains("connections")) {  // are there any connections?
-
-        QJsonArray connections = jsonObject["connections"].toArray();
-        if (connections.isEmpty())  // are there any connections?
-            return mesh;
-        foreach (QJsonValue localConnection, connections) {
-            QJsonObject connectionObject = localConnection.toObject();
-
-            // some error handling
-            if (!(connectionObject.contains("src_node") &&
-                  connectionObject.contains("src_gate") &&
-                  connectionObject.contains("dest_node") &&
-                  connectionObject.contains("dest_gate"))) {
-                QString message = "";
-                if (!connectionObject.contains("src_node")) {
-                    message += "A connection has no src_node!\n";
-                }
-                if (!connectionObject.contains("src_gate")) {
-                    message += "A connection has no src_gate!\n";
-                }
-                if (!connectionObject.contains("dest_node")) {
-                    message += "A connection has no dest_node!\n";
-                }
-                if (!connectionObject.contains("dest_gate")) {
-                    message += "A connection has no dest_gate!\n";
-                }
-                QMessageBox::information(0, QString("Error"), message, "Ok");
-                return mesh;
-            }  // error handling
-
-            // get the Nodes
-            Node *src_node =
-                    mesh.getNodeByName(connectionObject["src_node"].toString()),
-                    *dest_node =
-                    mesh.getNodeByName(connectionObject["dest_node"].toString());
-            // get the Gates
-            Gate *src_gate =
-                    src_node->getGateByName(connectionObject["src_gate"].toString()),
-                    *dest_gate = dest_node->getGateByName(
-                        connectionObject["dest_gate"].toString());
-
-            // build up the Connection
-            Connection *tmp =
-                    new Connection(*src_node, *src_gate, *dest_node,
-*dest_gate);
-
-            mesh.addConnection(tmp);
-        }
-    }
-    qDebug() << "created a mesh from the json file!";
-    return mesh;
-}*/
+/**
+ * @brief JsonFileHandler::findNodeByName searches Node with special name in given list
+ * @param nodes
+ * @param name
+ * @return node if found, NULL else
+ */
+Node *JsonFileHandler::findNodeByName(const QList<Node*> &nodes, const QString &name){
+    foreach(Node* node, nodes)
+        if(node->getName()==name)
+            return node;
+    return NULL;
+}
 
 /**
  * @brief JsonFileHandler::writeFile writes a string into a given file

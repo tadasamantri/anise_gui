@@ -17,6 +17,8 @@ public:
 
 void addPicture (QPixmap *pic, QPoint position);
 
+void getPicture ();
+
 
 
 

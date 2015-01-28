@@ -5,21 +5,25 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QLabel>
+#include <QVector>
 
 
 
-class DrawObject : public QLabel {
+class DrawObject : public QWidget {
 
   //  Q_OBJECT
 
 public:
     int nodeID;
-    DrawObject(int nodeID, QWidget *parent);
+    QVector<QLabel*> labelvector;
+    DrawObject(int nodeID, QPoint position, QWidget *parent);
 
+void addPicture (QPixmap *pic, QPoint position);
 
+void getPicture ();
 
-//public slots:
-   // void deleteItem();
+void show();
 };
 
-#endif  // DRAWOBJECT_H
+
+#endif // DRAWOBJECT_H

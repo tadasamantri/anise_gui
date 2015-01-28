@@ -1,8 +1,5 @@
 #include "gate.h"
 
-const bool DIRECTION_IN = true;
-const bool DIRECTION_OUT = false;
-
 Gate::Gate() {}
 
 Gate::Gate(bool in, QList<QString> types) {

@@ -5,7 +5,7 @@
 #include <QShortcut>
 #include <qdebug.h>
 
-//#include "data.h"
+#include "data.h"
 
 TestDrawObject::TestDrawObject(int nodeID, QPoint position, QWidget *parent = 0) {
 
@@ -13,7 +13,7 @@ TestDrawObject::TestDrawObject(int nodeID, QPoint position, QWidget *parent = 0)
     this->nodeID = nodeID;
     this->setParent(parent);
 
-    // We say the constructor which position he has
+    // We tell the constructor which position he has
     this->setGeometry(position.x(), position.y(), 100, 100);
 
 }
@@ -32,7 +32,7 @@ void TestDrawObject::addPicture(QPixmap *pic, QPoint position) {
 
     QLabel *label = new QLabel(this);
 
-    qDebug() << "dummy läuft";
+    qDebug() << "dummy läuft" << position;
 
     label->setPixmap(*pic);
 

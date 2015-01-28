@@ -32,6 +32,7 @@ private:
 
     static void read(QProcess::ProcessChannel pc);
     static void read();
+    static bool validPath(const QString &path);
 
 public:
     static QString getAllNodeTypes();
