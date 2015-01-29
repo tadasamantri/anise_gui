@@ -11,8 +11,11 @@
 #include "drawobject.h"
 #include <QPainter>
 #include "nodefactory.h"
+#include "nodetypelabel.h"
 
-DragWidget::DragWidget(QWidget *parent) : QWidget(parent) {}
+DragWidget::DragWidget(QWidget *parent) : QWidget(parent) {
+    setWindowOpacity(100);
+}
 
 void DragWidget::mousePressEvent(QMouseEvent *event) {
     /**
@@ -24,7 +27,7 @@ void DragWidget::mousePressEvent(QMouseEvent *event) {
         return;
     }
 
-    QLabel *child = static_cast<QLabel *>(childAt(event->pos()));
+    NodeTypeLabel *child = static_cast<NodeTypeLabel *>(childAt(event->pos()));
     if (!child) {
         /**
           * If no child at this position - return
@@ -41,6 +44,10 @@ void DragWidget::mousePressEvent(QMouseEvent *event) {
     QByteArray Data;
     QDataStream dataStream(&Data, QIODevice::WriteOnly);
     dataStream << QPoint(hotSpot);
+    int id = 0;
+    dataStream << id;
+    dataStream << child->getType();
+
 
     /**
       * Something about mime data
@@ -52,7 +59,7 @@ void DragWidget::mousePressEvent(QMouseEvent *event) {
     drag->setMimeData(mimeData);
     drag->setPixmap(*child->pixmap());
     drag->setHotSpot(hotSpot);
-
+    this->setWindowOpacity(0.0);
     /*
    *
    * //TODO in die render klasse damit!

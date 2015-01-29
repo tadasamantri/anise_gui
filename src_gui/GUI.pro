@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     mesheditorwidget.cpp \
     data.cpp \
     singletonrender.cpp \
-    testdrawobject.cpp
+    testdrawobject.cpp \
+    nodetypelabel.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -48,7 +49,8 @@ HEADERS  += mainwindow.h \
     mesheditorwidget.h \
     data.h \
     singletonrender.h \
-    testdrawobject.h
+    testdrawobject.h \
+    nodetypelabel.h
 
 FORMS    += mainwindow.ui
 

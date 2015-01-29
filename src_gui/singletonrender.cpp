@@ -1,6 +1,7 @@
 #include <stddef.h> // defines NULL
 #include "singletonrender.h"
 #include "testdrawobject.h"
+#include "nodetypelabel.h"
 
 // Global static pointer used to ensure a single instance of the class.
 SingletonRender *SingletonRender::m_pInstance = NULL;
@@ -158,12 +159,14 @@ void SingletonRender::renderNodeType(Node *nodeToRender, QWidget *parent,
                                      int position) {
 
     // TODO code dublication in renderNode and renderNodeType!
-    QLabel *NodeDrawObject = new QLabel(parent);
+    NodeTypeLabel *NodeDrawObject = new NodeTypeLabel(parent);
 
     // Zeichne den hintergrund:
     NodeDrawObject->setPixmap(*allImages["background.png"]);
     NodeDrawObject->setGeometry(0, 0, 50, 50);
     // Generate a Tooltip
+    QString type = nodeToRender->getType();
+    NodeDrawObject->setType(type);
     QString toolTip;
     toolTip = "NodeClass = " + nodeToRender->getType() + "\nInputs: " +
             QString::number(nodeToRender->getInputGates()->size()) +

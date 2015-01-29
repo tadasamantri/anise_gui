@@ -9,9 +9,15 @@ class NodeTypeLabel : public QLabel
 public:
     explicit NodeTypeLabel(QWidget *parent = 0);
 
+    QString getType() const;
+    void setType(const QString &value);
+
 signals:
 
 public slots:
+
+private:
+    QString type;
 
 };
 
