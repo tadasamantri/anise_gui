@@ -110,7 +110,7 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
 
         if (allImages.contains("background.png")) {
             // Draw the bg
-            NodeDrawObject->addPicture(allImages["background.png"], QPoint(-10,0));
+            NodeDrawObject->addPicture(allImages["background.png"], QPoint(10,10));
                 qDebug() << "background.png loaded";
 
         } else {
@@ -119,14 +119,15 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
 
 
 
-        if (allImages.contains("monster.png")) {
+       /* if (allImages.contains("monster.png")) {
             // Draw the mnster
+
             NodeDrawObject->addPicture(allImages["monster.png"], QPoint (10,0));
             // Set the geometry to the right size
             NodeDrawObject->setGeometry(0, 0, 50, 50);
         } else {
             qDebug() << "monster.png did not load correctly!";
-        }
+        }*/
 
 
 

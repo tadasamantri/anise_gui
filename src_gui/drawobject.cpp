@@ -5,6 +5,7 @@
 #include <QShortcut>
 #include <QDebug>
 #include <QVector>
+#include <QBitmap>
 
 //#include "data.h"
 
@@ -35,9 +36,28 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position) {
 
     QLabel *label = new QLabel(this);
     label->setPixmap(*pic);
-    this->labelvector.append(label);
-    label->setGeometry(0, 0, 10, 10);
+    this->setMask(pic->mask());
 
+    qDebug() << "PIXMAP: " << pic->size();
+    qDebug() << "BITMAP: " << pic->mask();
+    label->setMask(pic->mask());
+    this->labelvector.append(label);
+    label->setGeometry(0, 0, 50, 50);
+
+
+    /*
+     Something to build your own mask
+
+     Draw the mask.
+   QBitmap  mask(original.size());
+   QPainter painter(&mask);
+   mask.fill(Qt::white);
+   painter.setBrush(Qt::black);
+   painter.drawEllipse(QPoint(mask.width()/2, mask.height()/2), 100, 100);
+
+   // Draw the final image.
+   original.setMask(mask);
+*/
     //this->show();
 
 }
