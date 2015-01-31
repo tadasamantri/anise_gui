@@ -128,11 +128,12 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
 
         if (allImages.contains("gate.png")) {
                     // Draw the body
+            /*
                     NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0,10), 15, 15);
                     NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0,32), 15, 15);
                     NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0,55), 15, 15);
                     NodeDrawObject->addPicture(allImages["gate.png"], QPoint(75,30), 15, 15);
-                        qDebug() << "gate.png loaded";
+                        qDebug() << "gate.png loaded";*/
 
                 } else {
                     qDebug() << "body.png did not load correctly!";

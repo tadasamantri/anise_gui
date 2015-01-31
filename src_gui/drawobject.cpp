@@ -20,8 +20,6 @@ DrawObject::DrawObject(int nodeID, QPoint position, QWidget *parent = 0) {
     this->setParent(parent);
 
 
-    mask = QBitmap(this->size());
-    mask.fill(Qt::white);
 
 
    // allOverPic= QPixmap(QSize(100,100));
@@ -29,7 +27,8 @@ DrawObject::DrawObject(int nodeID, QPoint position, QWidget *parent = 0) {
 
     // We say the constructor which position he has
     this->setGeometry(position.x(), position.y(), 100, 100);
-
+    mask = QBitmap(this->size());
+    mask.fill(Qt::color0);
 }
 
 /**
@@ -45,27 +44,26 @@ DrawObject::DrawObject(int nodeID, QPoint position, QWidget *parent = 0) {
 void DrawObject::addPicture(QPixmap *pic, QPoint position, int width, int height) {
 
     QLabel *label = new QLabel(this);
+    label->setGeometry(position.x(), position.y(), width, height);
     label->setPixmap(*pic);
-    //this->setMask(pic->mask());
+    //this->setMask(mask);
+    
+    this->setMask(pic->mask());
     label->setMask(pic->mask());
 
     this->labelvector.append(label);
-    label->setGeometry(position.x(), position.y(), width, height);
-
-
-
    //  Something to build your own mask
-
+/*
    QPainter painter(&mask);
    painter.setBrush(Qt::black);
-   painter.drawPixmap(position.x(), position.y(), width, height, *pic);
+   painter.drawPixmap(position.x(), position.y(), width, height, pic->mask());
 
-   qDebug() << mask.colorCount();
+*/
    //painter.~QPainter();
 
 
    // Draw the final image.
-   this->setMask(mask);
+   //this->setMask(mask);
 
 
 
