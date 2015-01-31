@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QLabel>
 #include <QVector>
+#include <QBitmap>
 
 
 
@@ -17,8 +18,10 @@ public:
     int nodeID;
     QVector<QLabel*> labelvector;
     DrawObject(int nodeID, QPoint position, QWidget *parent);
+    QBitmap  mask;
+    QPainter painter;
 
-void addPicture (QPixmap *pic, QPoint position);
+void addPicture (QPixmap *pic, QPoint position, int width, int height);
 
 void getPicture ();
 

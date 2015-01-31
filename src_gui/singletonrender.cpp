@@ -108,14 +108,35 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
         DrawObject *NodeDrawObject = new DrawObject(nodeID, QPoint (int (nodeToRender->position_x), int (nodeToRender->position_y)), this->ui->meshField);
 
 
-        if (allImages.contains("background.png")) {
+       /* if (allImages.contains("background.png")) {
             // Draw the bg
             NodeDrawObject->addPicture(allImages["background.png"], QPoint(10,10));
                 qDebug() << "background.png loaded";
 
         } else {
             qDebug() << "background.png did not load correctly!";
-        }
+        }*/
+
+        if (allImages.contains("body.png")) {
+                    // Draw the body
+                    NodeDrawObject->addPicture(allImages["body.png"], QPoint(15,0), 60, 80);
+                        qDebug() << "body.png loaded";
+
+                } else {
+                    qDebug() << "body.png did not load correctly!";
+                }
+
+        if (allImages.contains("gate.png")) {
+                    // Draw the body
+                    NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0,10), 15, 15);
+                    NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0,32), 15, 15);
+                    NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0,55), 15, 15);
+                    NodeDrawObject->addPicture(allImages["gate.png"], QPoint(75,30), 15, 15);
+                        qDebug() << "gate.png loaded";
+
+                } else {
+                    qDebug() << "body.png did not load correctly!";
+                }
 
 
 
@@ -241,8 +262,8 @@ void SingletonRender::showTestWidget() {
 
     qDebug() << "dummy läuft";
 
-    dummy->addPicture(this->allImages.value("background.png"), QPoint(20, 20));
-    dummy->addPicture(this->allImages.value("background.png"), QPoint(40, 40));
+    dummy->addPicture(this->allImages.value("background.png"), QPoint(20, 20), 10, 10);
+    dummy->addPicture(this->allImages.value("background.png"), QPoint(40, 40), 10, 10);
     qDebug() << "dummy läuft";
 }
 
