@@ -94,6 +94,9 @@ bool SingletonRender::loadImages() {
                          << result;
             }
 
+            //set transparency to magic pink
+           temp->setMask(temp->createMaskFromColor(Qt::magenta));
+
             allImages.insert(listOfFiles.at(i), temp);
         }
     }

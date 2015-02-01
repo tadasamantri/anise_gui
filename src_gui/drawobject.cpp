@@ -8,9 +8,6 @@
 #include <QBitmap>
 #include <QSize>
 
-
-//#include "data.h"
-
 DrawObject::DrawObject(int nodeID, QPoint position, QWidget *parent = 0) {
 
     this->nodeID = nodeID;
@@ -39,6 +36,8 @@ DrawObject::DrawObject(int nodeID, QPoint position, QWidget *parent = 0) {
  * @param position  position relativ to top left corner
  */
 void DrawObject::addPicture(QPixmap *pic, QPoint position) {
+
+    //safe dimensions
     int height = pic->height();
     int width = pic->width();
 
@@ -49,14 +48,20 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position) {
     this->labelvector.append(label);
 
     //Instanstiate the non-transparent mask with size of pic
-    //QBitmap picMask(width, height);     //This is a mask manually produced with size of picture
-    //picMask.fill(Qt::color1);
-    QBitmap picMask = pic->createMaskFromColor(Qt::magenta);    //This is used to get the mask automatically from the picture but doesnt work all the time
+    QBitmap picMask = pic->mask();    //This is used to get the mask automatically from the picture but doesnt work all the time
+
+    //If there is no nontransparency, create nontransparentmask manually (no other option so far)
+    if(picMask.size().isEmpty()){
+        picMask = QBitmap(width, height);
+        picMask.fill(Qt::color1);
+    }
 
     //Include the picture (non-transparent) to the main Mask to get the area of the picture to be visible
     QPainter painter(&mainMask);
     painter.setBrush(Qt::color1);
     painter.drawPixmap(position.x(), position.y(), width, height, picMask);
+
+    //TODO call Destructor
 
     //Now set the masks to the widgets
     label->setMask(pic->mask());
@@ -70,25 +75,17 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position) {
 }
 
 void DrawObject::updateOverAllPicture(QPixmap *newPicture, QPoint position ){
+
     //save the dimension of the new picture
     int height = newPicture->height();
     int width = newPicture->width();
 
-    newPicture->setMask(newPicture->createMaskFromColor(Qt::magenta));
-
     //create a painter
-    //newPicture->setMask(mainMask);
     QPainter painter(&(this->overAllPicture));
     painter.setBrush(Qt::black);
     painter.drawPixmap(position.x(), position.y(), width, height, *newPicture);
 
-
-
-//reateMaskFromColor(Qt::magenta);
-
-    //de struktor!!
-    //~painter;
-
+    //TODO call painterdestructor
 
 }
 
