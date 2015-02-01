@@ -22,6 +22,10 @@ DrawObject::DrawObject(int nodeID, QPoint position, QWidget *parent = 0) {
     //initialize mainMask with complete Transparency
     mainMask = QBitmap(this->size());
     mainMask.fill(Qt::color0);
+
+    //initialize the over all picture
+    this->overAllPicture = QPixmap (this->size());
+    overAllPicture.fill(QColor(127,127,127,0));
 }
 
 /**
@@ -34,19 +38,20 @@ DrawObject::DrawObject(int nodeID, QPoint position, QWidget *parent = 0) {
  * @param pic       picture which you want to add
  * @param position  position relativ to top left corner
  */
-void DrawObject::addPicture(QPixmap *pic, QPoint position, int width, int height) {
-
+void DrawObject::addPicture(QPixmap *pic, QPoint position) {
+    int height = pic->height();
+    int width = pic->width();
 
     //Instanstiate the drawing to be shown
     QLabel *label = new QLabel(this);
     label->setGeometry(position.x(), position.y(), width, height);
     label->setPixmap(*pic);
     this->labelvector.append(label);
-    
+
     //Instanstiate the non-transparent mask with size of pic
     //QBitmap picMask(width, height);     //This is a mask manually produced with size of picture
     //picMask.fill(Qt::color1);
-    QBitmap picMask = pic->mask();    //This is used to get the mask automatically from the picture but doesnt work all the time
+    QBitmap picMask = pic->createMaskFromColor(Qt::magenta);    //This is used to get the mask automatically from the picture but doesnt work all the time
 
     //Include the picture (non-transparent) to the main Mask to get the area of the picture to be visible
     QPainter painter(&mainMask);
@@ -57,27 +62,39 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position, int width, int height
     label->setMask(pic->mask());
     this->setMask(mainMask);
 
+    //update the over all picture
+    // thats the one used for dragging etc.
+    this->updateOverAllPicture(pic, position);
+
 
 }
 
-void DrawObject::show(){
+void DrawObject::updateOverAllPicture(QPixmap *newPicture, QPoint position ){
+    //save the dimension of the new picture
+    int height = newPicture->height();
+    int width = newPicture->width();
+
+    newPicture->setMask(newPicture->createMaskFromColor(Qt::magenta));
+
+    //create a painter
+    //newPicture->setMask(mainMask);
+    QPainter painter(&(this->overAllPicture));
+    painter.setBrush(Qt::black);
+    painter.drawPixmap(position.x(), position.y(), width, height, *newPicture);
 
 
 
+//reateMaskFromColor(Qt::magenta);
 
-    QWidget::show();
-/*
-    foreach (QLabel *label, this->labelvector) {
-        qDebug()<<"trying to show";
-        label->show();
-    }*/
+    //de struktor!!
+    //~painter;
+
 
 }
 
-/*
-void addMask(QBitmap map){
+QPixmap DrawObject::getPicture(){
 
-    map.
+    return this->overAllPicture;
 
+}
 
-}*/

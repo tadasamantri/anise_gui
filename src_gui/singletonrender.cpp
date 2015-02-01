@@ -121,9 +121,9 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
          qDebug() << "background.png did not load correctly!";
      }*/
 
-        if (allImages.contains("body.png")) {
+        if (allImages.contains("magicPink.png")) {
             // Draw the body
-            NodeDrawObject->addPicture(allImages["body.png"], QPoint(15, 0), 60, 80);
+            NodeDrawObject->addPicture(allImages["magicPink.png"], QPoint(15, 0));
 
             qDebug() << "body.png loaded";
 
@@ -137,15 +137,11 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
 
 
 
-              NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0,10),
-         15, 15);
-              NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0,32),
-         15, 15);
-              NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0,55),
-         15, 15);
-              NodeDrawObject->addPicture(allImages["gate.png"], QPoint(75,30),
-         15, 15);
-                  qDebug() << "gate.png loaded";
+            NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0,10));
+            NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0,32));
+            NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0,55));
+            NodeDrawObject->addPicture(allImages["gate.png"], QPoint(75,30));
+            qDebug() << "gate.png loaded";
 
 
         } else {
@@ -260,10 +256,8 @@ void SingletonRender::showTestWidget() {
 
     qDebug() << "dummy läuft";
 
-    dummy->addPicture(this->allImages.value("background.png"), QPoint(20, 20), 10,
-                      10);
-    dummy->addPicture(this->allImages.value("background.png"), QPoint(40, 40), 10,
-                      10);
+    dummy->addPicture(this->allImages.value("background.png"), QPoint(20, 20));
+    dummy->addPicture(this->allImages.value("background.png"), QPoint(40, 40));
     qDebug() << "dummy läuft";
 }
 

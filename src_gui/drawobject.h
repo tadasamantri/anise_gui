@@ -20,12 +20,18 @@ public:
     DrawObject(int nodeID, QPoint position, QWidget *parent);
     QBitmap  mainMask;
     QPainter painter;
+    QPixmap overAllPicture;
 
-void addPicture (QPixmap *pic, QPoint position, int width, int height);
+void addPicture (QPixmap *pic, QPoint position);
 
-void getPicture ();
 
-void show();
+
+QPixmap getPicture ();
+
+private:
+
+void updateOverAllPicture(QPixmap *newPicture, QPoint position);
+
 };
 
 
