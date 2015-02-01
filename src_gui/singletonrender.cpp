@@ -107,22 +107,40 @@ void SingletonRender::setUi(Ui::MainWindow *ui) { this->ui = ui; }
 
 void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
     if (!allDrawnNodes.contains(nodeID)) {
+
+
+        //some Variables needed often
+        int gateHeight = allImages["gate.png"]->height();
+        int gateOffset = 10;
+
         // create a Drawobject
         int maxNumberGates = nodeToRender->getInputGates()->size();
+        if(maxNumberGates < nodeToRender->getOutputGates()->size())
+            maxNumberGates = nodeToRender->getOutputGates()->size();
+
+        //Set height of DrawObject
+        int drawObjectHeight = maxNumberGates*(gateHeight + gateOffset);
+        if(drawObjectHeight < 50)
+            drawObjectHeight = 50;
+
 
         DrawObject *NodeDrawObject = new DrawObject(
                     nodeID,
-                    QPoint(int(nodeToRender->position_x), int(nodeToRender->position_y)),
+                    QPoint(int(nodeToRender->position_x), int(nodeToRender->position_y)), drawObjectHeight,
                     this->ui->meshField);
+
+
+
+
 
         /* if (allImages.contains("background.png")) {
          // Draw the bg
          NodeDrawObject->addPicture(allImages["background.png"], QPoint(10,10));
              qDebug() << "background.png loaded";
 
-     } else {
+        } else {
          qDebug() << "background.png did not load correctly!";
-     }*/
+        }*/
 
         if (allImages.contains("magicPink.png")) {
             // Draw the body
@@ -138,12 +156,24 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
             // Draw the gates
 
 
+            int numberInputGates = nodeToRender->getInputGates()->size();
+            int numberOutputGates = nodeToRender->getOutputGates()->size();
 
 
-            NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0,10));
-            NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0,32));
-            NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0,55));
-            NodeDrawObject->addPicture(allImages["gate.png"], QPoint(75,30));
+            for(int i = 0; i < numberInputGates; i++){
+
+                NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0, i*(gateHeight + gateOffset) + 5));
+
+
+            }
+
+            for(int i = 0; i < numberOutputGates; i++){
+
+                NodeDrawObject->addPicture(allImages["gate.png"], QPoint(75, i*(gateHeight + gateOffset) + 5));
+
+
+            }
+
             qDebug() << "gate.png loaded";
 
 
@@ -255,7 +285,7 @@ bool SingletonRender::deleteMeshDrawing(int objectID) {
  */
 
 void SingletonRender::showTestWidget() {
-    DrawObject *dummy = new DrawObject(100, QPoint(20, 20), ui->meshField);
+    DrawObject *dummy = new DrawObject(100, QPoint(20, 20), 100,  ui->meshField);
 
     qDebug() << "dummy läuft";
 

@@ -17,7 +17,7 @@ class DrawObject : public QWidget {
 public:
     int nodeID;
     QVector<QLabel*> labelvector;
-    DrawObject(int nodeID, QPoint position, QWidget *parent);
+    DrawObject(int nodeID, QPoint position, int height, QWidget *parent);
     QBitmap  mainMask;
     QPainter painter;
     QPixmap overAllPicture;

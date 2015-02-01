@@ -8,13 +8,13 @@
 #include <QBitmap>
 #include <QSize>
 
-DrawObject::DrawObject(int nodeID, QPoint position, QWidget *parent = 0) {
+DrawObject::DrawObject(int nodeID, QPoint position, int height,  QWidget *parent = 0) {
 
     this->nodeID = nodeID;
     this->setParent(parent);
 
     // We say the constructor which position he has
-    this->setGeometry(position.x(), position.y(), 100, 100);
+    this->setGeometry(position.x(), position.y(), 100, height);
 
     //initialize mainMask with complete Transparency
     mainMask = QBitmap(this->size());
