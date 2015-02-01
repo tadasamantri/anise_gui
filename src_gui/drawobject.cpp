@@ -13,22 +13,15 @@
 
 DrawObject::DrawObject(int nodeID, QPoint position, QWidget *parent = 0) {
 
-
-   // qDebug() << "DRAWOBJECT CREATED. ID: " << nodeID;
-   // qDebug() << this;
     this->nodeID = nodeID;
     this->setParent(parent);
 
-
-
-
-   // allOverPic= QPixmap(QSize(100,100));
-   // painter = QPainter(&allOverPic);
-
     // We say the constructor which position he has
     this->setGeometry(position.x(), position.y(), 100, 100);
-    mask = QBitmap(this->size());
-    mask.fill(Qt::color0);
+
+    //initialize mainMask with complete Transparency
+    mainMask = QBitmap(this->size());
+    mainMask.fill(Qt::color0);
 }
 
 /**
@@ -43,30 +36,26 @@ DrawObject::DrawObject(int nodeID, QPoint position, QWidget *parent = 0) {
  */
 void DrawObject::addPicture(QPixmap *pic, QPoint position, int width, int height) {
 
+
+    //Instanstiate the drawing to be shown
     QLabel *label = new QLabel(this);
     label->setGeometry(position.x(), position.y(), width, height);
     label->setPixmap(*pic);
-    //this->setMask(mask);
-    
-    this->setMask(pic->mask());
-    label->setMask(pic->mask());
-
     this->labelvector.append(label);
-   //  Something to build your own mask
-/*
-   QPainter painter(&mask);
-   painter.setBrush(Qt::black);
-   painter.drawPixmap(position.x(), position.y(), width, height, pic->mask());
+    
+    //Instanstiate the non-transparent mask with size of pic
+    //QBitmap picMask(width, height);     //This is a mask manually produced with size of picture
+    //picMask.fill(Qt::color1);
+    QBitmap picMask = pic->mask();    //This is used to get the mask automatically from the picture but doesnt work all the time
 
-*/
-   //painter.~QPainter();
+    //Include the picture (non-transparent) to the main Mask to get the area of the picture to be visible
+    QPainter painter(&mainMask);
+    painter.setBrush(Qt::color1);
+    painter.drawPixmap(position.x(), position.y(), width, height, picMask);
 
-
-   // Draw the final image.
-   //this->setMask(mask);
-
-
-
+    //Now set the masks to the widgets
+    label->setMask(pic->mask());
+    this->setMask(mainMask);
 
 
 }

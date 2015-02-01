@@ -3,6 +3,7 @@
 #include "testdrawobject.h"
 #include "nodetypelabel.h"
 
+
 // Global static pointer used to ensure a single instance of the class.
 SingletonRender *SingletonRender::m_pInstance = NULL;
 
@@ -104,6 +105,8 @@ void SingletonRender::setUi(Ui::MainWindow *ui) { this->ui = ui; }
 void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
     if (!allDrawnNodes.contains(nodeID)) {
         // create a Drawobject
+        int maxNumberGates = nodeToRender->getInputGates()->size();
+
         DrawObject *NodeDrawObject = new DrawObject(
                     nodeID,
                     QPoint(int(nodeToRender->position_x), int(nodeToRender->position_y)),
@@ -120,8 +123,8 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
 
         if (allImages.contains("body.png")) {
             // Draw the body
-            NodeDrawObject->addPicture(allImages["body.png"], QPoint(0, 0), 60, 80);
-            NodeDrawObject->setMask(allImages["body.png"]->mask());
+            NodeDrawObject->addPicture(allImages["body.png"], QPoint(15, 0), 60, 80);
+
             qDebug() << "body.png loaded";
 
         } else {
@@ -129,8 +132,11 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
         }
 
         if (allImages.contains("gate.png")) {
-            // Draw the body
-            /*
+            // Draw the gates
+
+
+
+
               NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0,10),
          15, 15);
               NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0,32),
@@ -139,7 +145,8 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
          15, 15);
               NodeDrawObject->addPicture(allImages["gate.png"], QPoint(75,30),
          15, 15);
-                  qDebug() << "gate.png loaded";*/
+                  qDebug() << "gate.png loaded";
+
 
         } else {
             qDebug() << "body.png did not load correctly!";

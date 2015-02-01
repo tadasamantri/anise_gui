@@ -18,7 +18,7 @@ public:
     int nodeID;
     QVector<QLabel*> labelvector;
     DrawObject(int nodeID, QPoint position, QWidget *parent);
-    QBitmap  mask;
+    QBitmap  mainMask;
     QPainter painter;
 
 void addPicture (QPixmap *pic, QPoint position, int width, int height);
