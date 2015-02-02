@@ -1,4 +1,5 @@
 #include "gate.h"
+#include <QDebug>
 
 Gate::Gate() {}
 

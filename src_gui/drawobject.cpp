@@ -8,8 +8,8 @@
 #include <QBitmap>
 #include <QSize>
 
-DrawObject::DrawObject(int nodeID, QPoint position, int height, QWidget *parent = 0) {
-
+DrawObject::DrawObject(int nodeID, QPoint position, int height,
+                       QWidget *parent = 0) {
     this->nodeID = nodeID;
     this->setParent(parent);
 
@@ -41,51 +41,53 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position) {
     int height = pic->height();
     int width = pic->width();
 
-    //Instanstiate the drawing to be shown
+    // Instanstiate the drawing to be shown
     QLabel *label = new QLabel(this);
     label->setGeometry(position.x(), position.y(), width, height);
     label->setPixmap(*pic);
     this->labelvector.append(label);
 
-    //Instanstiate the non-transparent mask with size of pic
-    QBitmap picMask = pic->mask();    //This is used to get the mask automatically from the picture but doesnt work all the time
+    // Instanstiate the non-transparent mask with size of pic
+    QBitmap picMask = pic->mask();  // This is used to get the mask automatically
+    // from the picture but doesnt work all the
+    // time
 
-    //If there is no nontransparency, create nontransparentmask manually (no other option so far)
-    if(picMask.size().isEmpty()){
+    // If there is no nontransparency, create nontransparentmask manually (no
+    // other option so far)
+    if (picMask.size().isEmpty()) {
         picMask = QBitmap(width, height);
         picMask.fill(Qt::color1);
     }
 
-    //Include the picture (non-transparent) to the main Mask to get the area of the picture to be visible
+    // Include the picture (non-transparent) to the main Mask to get the area of
+    // the picture to be visible
     QPainter painter(&mainMask);
     painter.setBrush(Qt::color1);
     painter.drawPixmap(position.x(), position.y(), width, height, picMask);
 
-    //TODO call Destructor
-
-    //Now set the masks to the widgets
+    // Now set the masks to the widgets
     label->setMask(pic->mask());
     this->setMask(mainMask);
 
-    //update the over all picture
+    // update the over all picture
     // thats the one used for dragging etc.
     this->updateOverAllPicture(pic, position);
-
-
 }
 
 void DrawObject::addPicture(QPixmap *pic, QPoint position, QString typeName){
 
+    QPixmap newPic = pic->copy(pic->rect());
+
     // tell the painter to draw on the QImage
-    QPainter* painter = new QPainter(pic);
+    QPainter* painter = new QPainter(&newPic);
     painter->setPen(Qt::blue);
     painter->setFont(QFont("Arial", 8));
     // Write Typename onto picture
-    painter->drawText(pic->rect(), Qt::AlignLeading, typeName);
+    painter->drawText(newPic.rect(), Qt::AlignLeading, typeName);
 
 
     //actually call addPicture with modified picture
-    this->addPicture(pic, position);
+    this->addPicture(&newPic, position);
 
 }
 
@@ -95,18 +97,11 @@ void DrawObject::updateOverAllPicture(QPixmap *newPicture, QPoint position ){
     int height = newPicture->height();
     int width = newPicture->width();
 
-    //create a painter
+    // create a painter
     QPainter painter(&(this->overAllPicture));
     painter.setBrush(Qt::black);
     painter.drawPixmap(position.x(), position.y(), width, height, *newPicture);
 
-    //TODO call painterdestructor
-
 }
 
-QPixmap DrawObject::getPicture(){
-
-    return this->overAllPicture;
-
-}
-
+QPixmap DrawObject::getPicture() { return this->overAllPicture; }

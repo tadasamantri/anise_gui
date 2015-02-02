@@ -47,7 +47,7 @@ void SingletonRender::drawLine(double start_x, double start_y, double end_x,
 void SingletonRender::paintEvent(QPaintEvent *event) {
     qDebug() << "draw event";
     /*
- foreach (QLine* d, this->allDrawnLines) {
+ foreach (QLine* d, this->all    // TODO call painterdestructorDrawnLines) {
      QPainter painter(this->ui->meshField);
      painter.setPen(QPen(Qt::black, 12, Qt::DashDotLine, Qt::RoundCap));
      painter.drawLine(d);
