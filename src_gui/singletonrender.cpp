@@ -112,6 +112,7 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
         //some Variables needed often
         int gateHeight = allImages["gate.png"]->height();
         int gateOffset = 10;
+        QString typeName = nodeToRender->getType();
 
         // create a Drawobject
         int maxNumberGates = nodeToRender->getInputGates()->size();
@@ -142,9 +143,9 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
          qDebug() << "background.png did not load correctly!";
         }*/
 
-        if (allImages.contains("magicPink.png")) {
+        if (allImages.contains("body.png")) {
             // Draw the body
-            NodeDrawObject->addPicture(allImages["magicPink.png"], QPoint(15, 0));
+            NodeDrawObject->addPicture(allImages["body.png"], QPoint(15, 0), typeName);
 
             qDebug() << "body.png loaded";
 

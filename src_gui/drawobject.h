@@ -18,15 +18,16 @@ public:
     int nodeID;
     QVector<QLabel*> labelvector;
     DrawObject(int nodeID, QPoint position, int height, QWidget *parent);
+
     QBitmap  mainMask;
     QPainter painter;
     QPixmap overAllPicture;
 
-void addPicture (QPixmap *pic, QPoint position);
+    void addPicture (QPixmap *pic, QPoint position);
+    void addPicture(QPixmap *pic, QPoint position, QString typeName);
 
 
-
-QPixmap getPicture ();
+    QPixmap getPicture ();
 
 private:
 

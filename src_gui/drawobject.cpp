@@ -8,7 +8,7 @@
 #include <QBitmap>
 #include <QSize>
 
-DrawObject::DrawObject(int nodeID, QPoint position, int height,  QWidget *parent = 0) {
+DrawObject::DrawObject(int nodeID, QPoint position, int height, QWidget *parent = 0) {
 
     this->nodeID = nodeID;
     this->setParent(parent);
@@ -71,6 +71,21 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position) {
     // thats the one used for dragging etc.
     this->updateOverAllPicture(pic, position);
 
+
+}
+
+void DrawObject::addPicture(QPixmap *pic, QPoint position, QString typeName){
+
+    // tell the painter to draw on the QImage
+    QPainter* painter = new QPainter(pic);
+    painter->setPen(Qt::blue);
+    painter->setFont(QFont("Arial", 8));
+    // Write Typename onto picture
+    painter->drawText(pic->rect(), Qt::AlignLeading, typeName);
+
+
+    //actually call addPicture with modified picture
+    this->addPicture(pic, position);
 
 }
 
