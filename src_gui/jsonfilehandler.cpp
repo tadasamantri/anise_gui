@@ -239,8 +239,11 @@ QString *JsonFileHandler::meshToJson(Mesh *mesh) {
     // remove obsolete last ","
     if (*(jsonString->end()) == ',') jsonString->chop(1);
     *jsonString += "],";
-    *jsonString += "\"connections\": [";
 
+    //*jsonString += "\"connections\": [";
+
+
+    /* TODO: problem with gates. maybe not created properly?
     foreach (Connection *localConnection, mesh->getAllConnections()) {
         Node *src = localConnection->getSrcNode(),
                 *dst = localConnection->getDestNode();
@@ -257,7 +260,7 @@ QString *JsonFileHandler::meshToJson(Mesh *mesh) {
     }
     // remove obsolete last ","
     if (*(jsonString->end()) == ',') jsonString->chop(1);
-    *jsonString += "]}";
-
+    *jsonString += "]}";*/
+    *jsonString += "}";
     return jsonString;
 }

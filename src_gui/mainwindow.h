@@ -19,10 +19,14 @@ public:
     ~MainWindow();
     Ui::MainWindow *ui;
 
+public slots:
+
 private slots:
 
     // Action for loading .mesh files
     void on_actionLoad_triggered();
+
+    void on_actionSave_triggered();
 
     void on_actionSet_framework_path_triggered();
 

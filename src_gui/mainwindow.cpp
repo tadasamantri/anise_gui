@@ -18,24 +18,21 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
-
-    //Important to do first! SingletonRender is used in initialize GUI
+    // Important to do first! SingletonRender is used in initialize GUI
     SingletonRender::instance()->setUi(this->ui);
 
     initializeGUI();
-/*
-    // create the shortcut after the list widget has been created
+    /*
+      // create the shortcut after the list widget has been created
 
-    // option A (pressing DEL anywhere in the main window activates the slot)
-    new QShortcut(QKeySequence(Qt::Key_Delete), this, SLOT(deleteItem()));
-*/
+      // option A (pressing DEL anywhere in the main window activates the slot)
+      new QShortcut(QKeySequence(Qt::Key_Delete), this, SLOT(deleteItem()));
+  */
     // option B (pressing DEL activates the slots only when list widget has focus)
-    QShortcut* shortcut = new QShortcut(QKeySequence(Qt::Key_B), this);
+    QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_B), this);
 
     qDebug() << "FOCUSWINDOW: " << QApplication::focusWidget();
     connect(shortcut, SIGNAL(activated()), Data::instance(), SLOT(deleteItem()));
-
-
 }
 
 void MainWindow::initializeGUI() {
@@ -49,9 +46,13 @@ void MainWindow::initializeGUI() {
     // make the mesh editor accept drops
     ui->mesh_edt_area->setAcceptDrops(true);
 
-    //initialize all data content
-    Data::instance()->initialize(this);
+    // setup viewports
+    ui->Node_Catalog->setupViewport(ui->nodeCatalogContent);
+    ui->mesh_edt_area->setupViewport(ui->meshField);
 
+    ui->tabWidget->hide();
+    // initialize all data content
+    Data::instance()->initialize(this);
 }
 /*
 Ui::MainWindow MainWindow::getUi(){
@@ -70,16 +71,13 @@ void MainWindow::on_actionLoad_triggered() {
     qDebug() << "Path to File loaded\nPath is" << fileName
              << "\nnow let's load it to the FileHandler!";
 
-    if(fileName == "")
-        return;
-    QList<Node*> nodes;
-    QList<Connection*> connections;
+    if (fileName == "") return;
+    QList<Node *> nodes;
+    QList<Connection *> connections;
     QJsonObject *obj = JsonFileHandler::readFile(fileName);
     JsonFileHandler::extractNodesAndConnections(*obj, nodes, connections);
-    //Mesh mesh;
-    //mesh.addNodes(nodes);
-    //mesh.addConnections(connections);
-
+    Data::instance()->getMesh()->addNodes(nodes);
+    Data::instance()->getMesh()->addConnections(connections);
 }
 
 void MainWindow::on_actionSet_framework_path_triggered() {
@@ -94,26 +92,41 @@ void MainWindow::on_actionSet_framework_path_triggered() {
 }
 
 void MainWindow::on_actionNew_triggered() {
-
-    //TODO ask if old is wished to thrown away if not saved
-    //qDebug() << "Mesh before NEW:\t Nodes: " << Data::instance()->mesh->getAllNodes().size();
+    // TODO ask if old is wished to thrown away if not saved
+    // qDebug() << "Mesh before NEW:\t Nodes: " <<
+    // Data::instance()->mesh->getAllNodes().size();
     Data::instance()->newMeshProject();
-    //qDebug() << "Mesh after NEW:\t Nodes: " << Data::instance()->mesh->getAllNodes().size();
+    // qDebug() << "Mesh after NEW:\t Nodes: " <<
+    // Data::instance()->mesh->getAllNodes().size();
 }
 
-void MainWindow::on_actionLoad_Catalog_triggered()
-{
+void MainWindow::on_actionLoad_Catalog_triggered() {
     QString out = AniseCommunicator::getAllNodeTypes();
     JsonFileHandler::parseNodeTypesFromAnise(out);
 }
 
-void MainWindow::on_buttonBox_clicked(QAbstractButton *button){
-
-    qDebug() << "hey man ich wurde aufgerufen" ;
-      SingletonRender::instance()->showTestWidget();
-
-
+void MainWindow::on_buttonBox_clicked(QAbstractButton *button) {
+    qDebug() << "hey man ich wurde aufgerufen";
+    SingletonRender::instance()->showTestWidget();
 }
 
-
-
+void MainWindow::on_actionSave_triggered(){
+    Mesh* theMesh = Data::instance()->getMesh();
+    QString out,
+            fileName = QFileDialog::getSaveFileName(this, "Save current project to...", "", "Mesh-Files (*.mesh *.json);;All Files(*)");
+    QFile file(fileName);
+    if(file.exists()){
+        QMessageBox::warning(this, "File will be overwritten!", "File Already Exist", "OK", "Cancel");
+    }
+    else{
+        QProcess p;
+        QStringList args;
+        args << fileName;
+        p.start("touch", args);
+        p.waitForFinished();
+        file.open(QIODevice::WriteOnly);
+        //QByteArray data = *JsonFileHandler::meshToJson(theMesh);
+        file.write(JsonFileHandler::meshToJson(theMesh)->toUtf8());
+        file.close();
+    }
+}

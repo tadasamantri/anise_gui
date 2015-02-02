@@ -4,6 +4,8 @@
 MeshEditorWidget::MeshEditorWidget(QWidget *parent) : QWidget(parent) {
     connect(this, SIGNAL(onWidgetClicked(int)), Data::instance()->getMesh(),
             SLOT(setFocusMeshObject(int)));
+    this->setMinimumHeight(5000);
+    this->setMinimumWidth(5000);
 }
 
 void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
@@ -88,7 +90,7 @@ void MeshEditorWidget::dragEnterEvent(QDragEnterEvent *event) {
 
 void MeshEditorWidget::dragMoveEvent(QDragMoveEvent *event) {
     // TODO track mouse for updating position
-    // qDebug()<<"dragMoveEvent" << event->pos();
+    //autoscroll
 }
 
 void MeshEditorWidget::dropEvent(QDropEvent *event) {
