@@ -68,7 +68,7 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
 
     foreach (QJsonValue var, obj["nodes"].toArray()) {
         QString type, descr;
-        QList<Gate> input_gates, output_gates;
+        QList<Gate *> input_gates, output_gates;
 
         QJsonObject localNode = var.toObject();
         type = localNode["class"].toString();
@@ -80,20 +80,20 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
             QJsonObject localGate = value.toObject();
             QString gateName = localGate["name"].toString(),
                     gateType = localGate["type"].toString();
-            Gate gate;
-            gate.setDirection(true);
-            gate.setName(gateName);
-            gate.addType(gateType);
+            Gate* gate = new Gate();
+            gate->setDirection(true);
+            gate->setName(gateName);
+            gate->addType(gateType);
             input_gates << gate;
         }
         if (!outputs.isEmpty()) foreach (QJsonValue value, outputs) {
             QJsonObject localGate = value.toObject();
             QString gateName = localGate["name"].toString(),
                     gateType = localGate["type"].toString();
-            Gate gate;
-            gate.setDirection(false);
-            gate.setName(gateName);
-            gate.addType(gateType);
+            Gate *gate = new Gate();
+            gate->setDirection(false);
+            gate->setName(gateName);
+            gate->addType(gateType);
             output_gates << gate;
         }
         Node node;
@@ -127,7 +127,7 @@ void JsonFileHandler::extractNodesAndConnections(
 
     qDebug() << "File contains nodes, so let's parse them";
 
-    QMap<QString, Node*> nodemap;
+    //QMap<QString, Node*> nodemap;
     // for every node (represented as jsonvalue)...
     foreach (QJsonValue var, obj["nodes"].toArray()) {
         //...convert it to json object...
@@ -164,12 +164,12 @@ void JsonFileHandler::extractNodesAndConnections(
             qDebug() << "\n";
             // node is complete, so let's insert it
             Node *createdNode = NodeFactory::createNode(type, name, params);
-            nodemap[createdNode->getName()] = createdNode;
+            nodelist << createdNode;
         }
     }
 
     // nodes parsed
-    nodelist = nodemap.values();
+    //nodelist = nodemap.values();
 
     if (!obj["connections"].isArray()) {
         qDebug() << "no connections found";
@@ -178,8 +178,8 @@ void JsonFileHandler::extractNodesAndConnections(
 
     foreach (QJsonValue var, obj["connections"].toArray()) {
         QVariantMap theConnection = var.toObject().toVariantMap();
-        Node *src_node = findNodeByName(nodelist,theConnection["src_node"].toString());
-        Node *dest_node = findNodeByName(nodelist, theConnection["dest_node"].toString());
+        Node *src_node = findNodeByName(&nodelist,theConnection["src_node"].toString());
+        Node *dest_node = findNodeByName(&nodelist, theConnection["dest_node"].toString());
         Connection *connection = new Connection(src_node, src_node->getGateByName(theConnection["src_gate"].toString()), dest_node,  dest_node->getGateByName(theConnection["dest_gate"].toString()));
         connectionlist << connection;
     }
@@ -191,11 +191,14 @@ void JsonFileHandler::extractNodesAndConnections(
  * @param name
  * @return node if found, NULL else
  */
-Node *JsonFileHandler::findNodeByName(const QList<Node*> &nodes, const QString &name){
-    foreach(Node* node, nodes)
+Node *JsonFileHandler::findNodeByName(const QList<Node*> *nodes, const QString &name){
+    Node *node;
+    for(int i = 0; i < nodes->size(); i++){
+        node = nodes->at(i);
         if(node->getName()==name)
             return node;
-    return NULL;
+    }
+    return 0;
 }
 
 /**
@@ -240,10 +243,10 @@ QString *JsonFileHandler::meshToJson(Mesh *mesh) {
     if (*(jsonString->end()) == ',') jsonString->chop(1);
     *jsonString += "],";
 
-    //*jsonString += "\"connections\": [";
+    *jsonString += "\"connections\": [";
 
 
-    /* TODO: problem with gates. maybe not created properly?
+    /* TODO: problem with gates. maybe not created properly? */
     foreach (Connection *localConnection, mesh->getAllConnections()) {
         Node *src = localConnection->getSrcNode(),
                 *dst = localConnection->getDestNode();
@@ -260,7 +263,6 @@ QString *JsonFileHandler::meshToJson(Mesh *mesh) {
     }
     // remove obsolete last ","
     if (*(jsonString->end()) == ',') jsonString->chop(1);
-    *jsonString += "]}";*/
-    *jsonString += "}";
+    *jsonString += "]}";
     return jsonString;
 }

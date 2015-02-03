@@ -5,7 +5,7 @@ NodeCatalog *NodeCatalog::m_pInstance = NULL;
 NodeCatalog::NodeCatalog() {
     Content = QMap<QString, Node>();
     Node blackbox;
-    Gate in (true, "in"), out(false, "out");
+    Gate *in = new Gate(true, "in"), *out = new Gate(false, "out");
     blackbox.addGate(in);
     blackbox.addGate(out);
     blackbox.setType("blackbox");

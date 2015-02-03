@@ -42,4 +42,6 @@ void Gate::setDirection(bool in) { this->in = in; }
 
 QList<QString> Gate::getTypes() { return types; }
 
+QString Gate::getType(){ return types.first(); }
+
 QString Gate::getName() { return name; }

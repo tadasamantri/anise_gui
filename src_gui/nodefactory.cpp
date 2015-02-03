@@ -54,8 +54,8 @@ Node *NodeFactory::createTestNode() {
 
     Gate *tempTestGateInput = new Gate(true, *tempTestGateInputTypes);
     Gate *tempTestGateOutput = new Gate(false, *tempTestGateOutputTypes);
-    tempTestNode->addGate(*tempTestGateInput);
-    tempTestNode->addGate(*tempTestGateOutput);
+    tempTestNode->addGate(tempTestGateInput);
+    tempTestNode->addGate(tempTestGateOutput);
 
     // add parameter
     tempTestNode->addParam("param1", 1);
