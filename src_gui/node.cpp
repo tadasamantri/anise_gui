@@ -1,8 +1,8 @@
 #include "node.h"
 
 Node::Node() {
-    inputGates = QVector<Gate>();
-    outputGates = QVector<Gate>();
+    inputGates = QVector<Gate*>();
+    outputGates = QVector<Gate*>();
     params = QVariantMap();
     type = QString();
     name = QString();
@@ -13,7 +13,7 @@ QVariantMap *Node::getParams()
     return &this->params;
 }
 
-Node::Node(QVector<Gate> &inputGates, QVector<Gate> &outputGates, QString &type,
+Node::Node(QVector<Gate*> &inputGates, QVector<Gate*> &outputGates, QString &type,
            QString &name, QVariantMap &params) {
     this->inputGates = inputGates;
     this->outputGates = outputGates;
@@ -31,30 +31,30 @@ void Node::setType(QString type) { this->type = type; }
 
 void Node::setName(QString name) { this->name = name; }
 
-QVector<Gate> *Node::getInputGates() { return &this->inputGates; }
+QVector<Gate *> *Node::getInputGates() { return &this->inputGates; }
 
-QVector<Gate> *Node::getOutputGates() { return &this->outputGates; }
+QVector<Gate *> *Node::getOutputGates() { return &this->outputGates; }
 
 QString Node::getName() { return this->name; }
 
 QString Node::getType() { return this->type; }
 
-void Node::addGate(Gate &gate){
-    if (gate.getDirection() == true) {
+void Node::addGate(Gate *gate){
+    if (gate->getDirection() == true) {
         this->inputGates << gate;
     } else {
         this->outputGates << gate;
     }
 }
 
-void Node::addGates(QVector<Gate> gates, const bool &direction)
+void Node::addGates(QVector<Gate*> gates, const bool &direction)
 {
     if(direction == true)
-        foreach (Gate gate, gates) {
+        foreach (Gate *gate, gates) {
             inputGates.append(gate);
         }
     else
-        foreach (Gate gate, gates) {
+        foreach (Gate *gate, gates) {
             outputGates.append(gate);
         }
 }
@@ -98,19 +98,19 @@ QString Node::toString() {
 }
 
 Gate *Node::getGateByName(const QString &name) {
-    Gate *g;
-    foreach (Gate gate, this->inputGates)
-        if (gate.getName() == name) {
-            g = &gate;
-            goto theEnd;
+    Gate *g = 0;
+    foreach (Gate *gate, this->inputGates)
+        if (gate->getName() == name) {
+            g = gate;
+            return g;
         }
 
-    foreach (Gate gate, this->outputGates)
-        if (gate.getName() == name) {
-            g = &gate;
+    foreach (Gate* gate, this->outputGates)
+        if (gate->getName() == name) {
+            g = gate;
             break;
         }
-theEnd:
+
     return g;
 }
 QString Node::getDescription()

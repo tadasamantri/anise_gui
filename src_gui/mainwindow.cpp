@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
       new QShortcut(QKeySequence(Qt::Key_Delete), this, SLOT(deleteItem()));
   */
     // option B (pressing DEL activates the slots only when list widget has focus)
+    //EDIT: works fine now =)
     QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_Delete), this);
 
     qDebug() << "FOCUSWINDOW: " << QApplication::focusWidget();
@@ -50,7 +51,9 @@ void MainWindow::initializeGUI() {
     ui->Node_Catalog->setupViewport(ui->nodeCatalogContent);
     ui->mesh_edt_area->setupViewport(ui->meshField);
 
+    //hides the tab-widget
     ui->tabWidget->hide();
+
     // initialize all data content
     Data::instance()->initialize(this);
 }

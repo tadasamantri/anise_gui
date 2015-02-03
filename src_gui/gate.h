@@ -18,6 +18,7 @@ public:
     QString getName();
     void setName(QString name);
 
+    QString getType();
 private:
     QList<QString> types;
     bool in;
