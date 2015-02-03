@@ -14,6 +14,11 @@ public:
     float position_x;
     float position_y;
 
+
+
+    QVariantMap* getParams();
+
+
     Node(QVector<Gate> &inputGates, QVector<Gate> &outputGates, QString &type, QString &name, QVariantMap &params);
 
     /*

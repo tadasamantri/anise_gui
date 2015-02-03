@@ -8,6 +8,11 @@ Node::Node() {
     name = QString();
 }
 
+QVariantMap *Node::getParams()
+{
+    return &this->params;
+}
+
 Node::Node(QVector<Gate> &inputGates, QVector<Gate> &outputGates, QString &type,
            QString &name, QVariantMap &params) {
     this->inputGates = inputGates;

@@ -130,3 +130,4 @@ void MainWindow::on_actionSave_triggered(){
         file.close();
     }
 }
+
