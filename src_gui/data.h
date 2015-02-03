@@ -25,12 +25,6 @@ public:
     Mesh *mesh;
 
     /**
-      * Contains all Node types
-      * (Unique list of node objects of all types)
-      */
-    NodeCatalog *nodeCatalog;
-
-    /**
      * @brief nodeFactory
      * This will create any kind of Node and Node Templates.
      *
@@ -45,6 +39,12 @@ public:
 
     void initialize(MainWindow *mainWindow);
 
+    /**
+     * @brief Data::getNodeCatalog
+     * @return the NodeCatalog containing all types of nodes available
+     */
+    NodeCatalog *getNodeCatalog();
+
     int addNodeToMesh(Node *newNode);
     void removeNodeFromMesh(int ID);
     void moveNodeInMesh(QPoint *Position, int numberOfNode);
@@ -52,6 +52,7 @@ public:
     void newMeshProject();
 
     Mesh *getMesh();
+
 
 
 public slots:
@@ -85,6 +86,12 @@ private:
       * Pointer to this instance
       */
     static Data *data;
+
+    /**
+      * Contains all Node types
+      * (Unique list of node objects of all types)
+      */
+    NodeCatalog *nodeCatalog;
 };
 
 #endif  // DATA_H

@@ -1,4 +1,5 @@
 #include "nodefactory.h"
+#include "data.h"
 
 // TODO friend Node, node should have a private konstruktor
 // Nodes should only be created in this factory!
@@ -10,7 +11,7 @@ Node NodeFactory::createNode() {
 }
 
 Node *NodeFactory::createNode(QString _class) {
-    Node *node = new Node(NodeCatalog::instance()->getNodeOfType(_class));
+    Node *node = new Node(Data::instance()->getNodeCatalog()->getNodeOfType(_class));
     return node;
 }
 

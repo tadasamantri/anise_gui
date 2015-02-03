@@ -55,7 +55,7 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
 
     QJsonDocument doc = QJsonDocument::fromJson(output.toUtf8());
 
-    NodeCatalog *catalog = Data::instance()->nodeCatalog;
+    NodeCatalog *catalog = Data::instance()->getNodeCatalog();
     qDebug() << "trying to read all node types. Loading json data...\n";
 
 
