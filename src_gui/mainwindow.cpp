@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
       new QShortcut(QKeySequence(Qt::Key_Delete), this, SLOT(deleteItem()));
   */
     // option B (pressing DEL activates the slots only when list widget has focus)
-    QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_B), this);
+    QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_Delete), this);
 
     qDebug() << "FOCUSWINDOW: " << QApplication::focusWidget();
     connect(shortcut, SIGNAL(activated()), Data::instance(), SLOT(deleteItem()));
