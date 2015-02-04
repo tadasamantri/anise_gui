@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QVector>
 #include <QBitmap>
+#include <QPushButton>
 
 
 
@@ -17,6 +18,7 @@ class DrawObject : public QWidget {
 public:
     int nodeID;
     QVector<QLabel*> labelvector;
+    QVector<QPushButton*> buttonvector;
     DrawObject(int nodeID, QPoint position, int height, QWidget *parent);
 
     QBitmap  mainMask;
@@ -25,7 +27,10 @@ public:
 
     void addPicture (QPixmap *pic, QPoint position);
     void addPicture(QPixmap *pic, QPoint position, QString typeName);
+    void addButton(QPixmap *pic, QPoint position);
 
+    //Modify the mask of the drawobject inserting the mask of the pixmap at given position
+    void modifyMask(QPixmap *pic, QPoint position);
 
     QPixmap getPicture ();
 

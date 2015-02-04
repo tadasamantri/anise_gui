@@ -43,9 +43,6 @@ public:
 
     bool deleteMeshDrawing(int objectID);
 
-    // TEST WIdget für DrawObject
-    void showTestWidget();
-
     /*
      *Testfunction of Deleting
      * Returns all ID's of given widget
