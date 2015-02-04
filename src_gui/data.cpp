@@ -28,9 +28,19 @@ Data::Data(QObject *parent) : QObject(parent) {
     mesh = new Mesh();
 
 }
+MainWindow *Data::getMainWindow() const
+{
+    return mainWindow;
+}
+
+void Data::setMainWindow(MainWindow *value)
+{
+    mainWindow = value;
+}
+
 
 void  Data::initialize(MainWindow *mainWindow){
-
+    this->mainWindow = mainWindow;
     /**
       * Create the Nodecatalog
       */

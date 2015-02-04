@@ -54,6 +54,9 @@ void MainWindow::initializeGUI() {
     //hides the tab-widget
     ui->tabWidget->hide();
 
+    //prepare propertytable
+    ui->tableWidget->hide();
+    ui->tableWidget->setColumnCount(2);
     // initialize all data content
     Data::instance()->initialize(this);
 }
