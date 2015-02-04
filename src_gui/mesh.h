@@ -59,6 +59,7 @@ public:
     bool deleteItem();
 
 
+    int getCurrentID();
 public slots:
 
     void setFocusMeshObject(int nodeID);

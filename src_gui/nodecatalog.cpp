@@ -9,6 +9,10 @@ NodeCatalog::NodeCatalog() {
     blackbox.addGate(out);
     blackbox.setType("blackbox");
     blackbox.setDescription("A Blackbox Node for all unknown Nodes");
+    blackbox.addParam("boolean", true);
+    blackbox.addParam("boolean2" ,false);
+    blackbox.addParam("integer", -5);
+    blackbox.addParam("String", "Test String");
     Content["blackbox"] = blackbox;
 }
 

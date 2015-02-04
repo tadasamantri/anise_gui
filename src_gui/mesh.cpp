@@ -2,6 +2,10 @@
 #include "QDebug"
 #include "singletonrender.h"
 #include "data.h"
+#include <QTableWidget>
+#include <QTableWidgetItem>
+#include <QSpinBox>
+#include <limits>
 
 Mesh::Mesh(QObject *parent) : QObject(parent) {
     this->nodesInMash = QMap<int, Node *>();
@@ -78,13 +82,82 @@ void Mesh::setFocusMeshObject(int nodeID) {
     {
         Node* n = nodesInMash[nodeID];
         QTableWidget *table = Data::instance()->getMainWindow()->ui->tableWidget;
-        table->setRowCount(n->getParams()->size());
+        table->setRowCount(n->getParams()->size() + 3);
 
+        //create the entries all nodes have
+        QTableWidgetItem *name = new QTableWidgetItem(),
+                *ID = new QTableWidgetItem(),
+                *type = new QTableWidgetItem();
+
+        //set the data
+        ID->setData(0, nodeID);
+        name->setData(0, n->getName());
+        type->setData(0, n->getType());
+
+        //asign to table
+        table->setItem(0,0, new QTableWidgetItem("NodeID"));
+        table->setItem(0,1, ID);
+        table->setItem(1,0, new QTableWidgetItem("Node Class"));
+        table->setItem(1,1, type);
+        table->setItem(2,0, new QTableWidgetItem("Node Name"));
+        table->setItem(2,1, name);
+
+        //make name editable
+        name->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+
+        //avoid editing keys, and nodeID/type
+        ID->setFlags(ID->flags() ^ Qt::ItemIsEditable);
+        type->setFlags(type->flags() ^ Qt::ItemIsEditable);
+        for(int i = 0; i < 3; i++)
+            table->item(i,0)->setFlags(table->item(i,0)->flags()  ^ Qt::ItemIsEditable);
+        QVariantMap *map = n->getParams();
+        QStringList keys = map->keys();
+        for(int i = 0; i < keys.size(); i++){
+            //create key item
+            QString key = keys.value(i);
+            QTableWidgetItem *key_item = new QTableWidgetItem(key);
+            key_item->setFlags(key_item->flags() ^ Qt::ItemIsEditable);
+            table->setItem(3 + i,0,key_item);
+
+            //create value item
+            QVariant value = map->value(key);
+            QTableWidgetItem *value_item;
+            QSpinBox *spinner;
+            switch(value.userType()){
+            case QVariant::Bool:
+                value_item = new QTableWidgetItem();
+                //value_item->setData(0, value);
+                value_item->setCheckState(value.toBool()? Qt::Checked : Qt::Unchecked);
+                table->setItem(3 +i, 1, value_item);
+                break;
+            case QVariant::Int:
+                spinner = new QSpinBox(table);
+                spinner->setMaximum(std::numeric_limits<int>::max());
+                spinner->setMinimum(std::numeric_limits<int>::min());
+                spinner->setValue(value.toInt());
+                table->setCellWidget(3 +i, 1, spinner);
+                break;
+            default:
+                value_item = new QTableWidgetItem();
+                value_item->setData(0, value);
+                table->setItem(3 + i, 1, value_item);
+                break;
+            }
+
+        }
         //TODO: generate TableContents dynamicly
         table->show();
     }
-    else
-        Data::instance()->getMainWindow()->ui->tableWidget->hide();
+    else{
+        QTableWidget* table = Data::instance()->getMainWindow()->ui->tableWidget;
+        table->hide();
+        //dele all tableitems, because they aren't needed any more
+        for(int col = 0; col < table->columnCount(); col++)
+            for(int row = 0; row < table->rowCount(); row++)
+                delete table->item(row, col);
+    }
+
+
   //qDebug() << "I GOT CKLICKED. MY ID: " << nodeID;
 }
 
@@ -116,3 +189,5 @@ bool Mesh::deleteConnection() {
 
     return allRemoved;
 }
+
+int Mesh::getCurrentID(){ return iDCounter;}

@@ -116,6 +116,7 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
         QString _class;
         dataStream >> _class;
         Node *newNode = Data::instance()->nodeFactory->createNode(_class);
+        newNode->setName("Node" + QString::number(Data::instance()->getMesh()->getCurrentID()));
         newNode->setPosition(DropPoint.x(), DropPoint.y());
         qDebug() << "new node of tpye " << _class << " created at position ("
                  << DropPoint.x() << "|" << DropPoint.y() << ")";
