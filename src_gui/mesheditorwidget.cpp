@@ -1,25 +1,40 @@
 #include "mesheditorwidget.h"
 #include "data.h"
 
+
 MeshEditorWidget::MeshEditorWidget(QWidget *parent) : QWidget(parent) {
     connect(this, SIGNAL(onWidgetClicked(int)), Data::instance()->getMesh(),
             SLOT(setFocusMeshObject(int)));
     this->setMinimumHeight(5000);
     this->setMinimumWidth(5000);
+    drawLine = false;
 }
 
 void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     // ensure a left-mouse-click
     if (!(event->button() == Qt::LeftButton)) {
+        this->lineWayPoints.clear();
         return;
     }
+
+
+
+
+
+
+
+
+
     qDebug() << childAt(event->pos());
     // get child at mouse position
     // TODO NOTLÖSUNG - HAS TO BE CHANGED
     // PROPERLY------------------------------------------
+
     DrawObject *child;
+
     // CHECK OF CLICKING ON LABEL (PICTURE)
     QLabel *grandChild = dynamic_cast<QLabel *>(childAt(event->pos()));
+
     // IF I CLICKED ON PICTURE...
     if (grandChild) {
         // THEN MY PARENT WILL BE THE DRAWOBJECT (HOPEFULLY)
@@ -32,6 +47,10 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
 
     // IF IT IS STILL 0, THEN I CLICKED ON MESHFIELD NOT A NODE
     if (!child) {
+
+        //add a way point for the line to draw
+        this->lineWayPoints.push_back( event->pos());
+
         emit onWidgetClicked(-1);
         // return if no child at mouse position
         return;
@@ -88,6 +107,20 @@ void MeshEditorWidget::dragEnterEvent(QDragEnterEvent *event) {
     }
 }
 
+void MeshEditorWidget::mouseMoveEvent(QMouseEvent *event){
+    //will draw a line from drawLineStartPosition to mouse
+    this->mousePosition = event->pos();
+
+    this->drawLine = true;
+
+    if (drawLine == true) {
+        //TODO optimize the drawing
+        //right now it redraws everything !
+        this->repaint();
+    }
+
+}
+
 void MeshEditorWidget::dragMoveEvent(QDragMoveEvent *event) {
     // TODO track mouse for updating position
     //autoscroll
@@ -132,8 +165,11 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
 }
 
 void MeshEditorWidget::paintEvent(QPaintEvent *event) {
-    // TTtest linie, please ignore
-    SingletonRender::instance()->drawLine(10, 20, 80, 60);
+
+    if (this->drawLine == true) {
+        //this will draw the vector with points as a line
+        SingletonRender::instance()->drawLines(&lineWayPoints, &mousePosition);
+    }
 }
 
 bool MeshEditorWidget::containsID(int objectID) {

@@ -52,6 +52,23 @@ public:
      */
     QVector<int> *getChildrenIDs();
 
+
+
+
+
+
+
+
+    /**
+      will render a connection
+
+     * @brief renderConnection
+     * @param conToRender the connection that will be rendered
+     */
+    void renderConnection(Connection conToRender);
+
+
+
     /*
    * Renders a node.
    *
@@ -74,6 +91,17 @@ public:
      *
      */
     void drawLine(double start_x, double start_y, double end_x ,double end_y);
+
+    void drawLine(QPoint start, QPoint end);
+
+    void drawLines(QVector<QPoint> *pointVector);
+
+    void drawLines(QVector<QPoint> *pointVector, QPoint *point);
+
+
+
+
+
 
 private slots:
     void on_buttonBox_clicked(QAbstractButton *button);

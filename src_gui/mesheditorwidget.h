@@ -17,6 +17,7 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QObject>
+#include <QVector>
 
 #include "drawobject.h"
 #include "nodefactory.h"
@@ -35,12 +36,18 @@ public:
     bool containsID(int objectID);
 
 protected:
+
+    //variables for drawing a line to the mouse cursor
+    bool drawLine;
+    QPoint mousePosition;
+    QVector<QPoint> lineWayPoints;
+
     void mousePressEvent(QMouseEvent *event);
     void dragEnterEvent(QDragEnterEvent *event);
     void dragMoveEvent(QDragMoveEvent *event);
     void dropEvent(QDropEvent *event);
     void paintEvent(QPaintEvent *event);
-    // void mouseMoveEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
 
 
 private:
