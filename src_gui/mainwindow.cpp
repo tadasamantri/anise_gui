@@ -75,12 +75,8 @@ void MainWindow::on_actionLoad_triggered() {
              << "\nnow let's load it to the FileHandler!";
 
     if (fileName == "") return;
-    QList<Node *> nodes;
-    QList<Connection *> connections;
     QJsonObject *obj = JsonFileHandler::readFile(fileName);
-    JsonFileHandler::extractNodesAndConnections(*obj, nodes, connections);
-    Data::instance()->getMesh()->addNodes(nodes);
-    Data::instance()->getMesh()->addConnections(connections);
+    JsonFileHandler::extractNodesAndConnections(*obj);
 }
 
 void MainWindow::on_actionSet_framework_path_triggered() {
@@ -109,28 +105,18 @@ void MainWindow::on_actionLoad_Catalog_triggered() {
 }
 
 void MainWindow::on_buttonBox_clicked(QAbstractButton *button) {
-    qDebug() << "hey man ich wurde aufgerufen";
+    qDebug() << "hey man ich wurde aufgerufen:"<<button;
     SingletonRender::instance()->showTestWidget();
 }
 
 void MainWindow::on_actionSave_triggered(){
     Mesh* theMesh = Data::instance()->getMesh();
-    QString out,
-            fileName = QFileDialog::getSaveFileName(this, "Save current project to...", "", "Mesh-Files (*.mesh *.json);;All Files(*)");
+    QString fileName = QFileDialog::getSaveFileName(this, "Save current project to...", "", "Mesh-Files (*.mesh *.json);;All Files(*)");
     QFile file(fileName);
-    if(file.exists()){
-        QMessageBox::warning(this, "File will be overwritten!", "File Already Exist", "OK", "Cancel");
-    }
-    else{
-        QProcess p;
-        QStringList args;
-        args << fileName;
-        p.start("touch", args);
-        p.waitForFinished();
+
         file.open(QIODevice::WriteOnly);
         //QByteArray data = *JsonFileHandler::meshToJson(theMesh);
-        file.write(JsonFileHandler::meshToJson(theMesh)->toUtf8());
+        file.write(JsonFileHandler::meshToJson(theMesh).toUtf8());
         file.close();
-    }
 }
 

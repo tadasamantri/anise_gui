@@ -60,7 +60,7 @@ public:
 
     static void printString(const QString &fileContent);
 
-    static QString *meshToJson(Mesh *mesh);
+    static QString meshToJson(Mesh *mesh);
 
     /*
      * reads the given file and returns a QJsonObject
@@ -72,7 +72,7 @@ public:
     /*
      * extracts all nodes given in QJsonObject and pushes them into the given list
      */
-    static void extractNodesAndConnections(const QJsonObject &obj, QList<Node *> &nodelist, QList<Connection *> &connectionlist);
+    static void extractNodesAndConnections(const QJsonObject &obj);
 private:
     static Node *findNodeByName(const QList<Node *> *nodes, const QString &name);
 };
