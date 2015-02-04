@@ -33,26 +33,63 @@ SingletonRender *SingletonRender::instance() {
 }
 
 // will have to be called from a paint event!
-void SingletonRender::drawLine(double start_x, double start_y, double end_x,
-                               double end_y) {
+void SingletonRender::drawLine(double start_x, double start_y, double end_x,double end_y) {
     // qDebug() << "drawline";
     QPainter painter(this->ui->meshField);
+
     QLineF line(start_x, start_y, end_x, end_y);
     painter.setPen(Qt::blue);
     painter.drawLine(line);
+    //painter.draw
+
 }
 
-// bug right now:
-// paint events are never called
-void SingletonRender::paintEvent(QPaintEvent *event) {
-    qDebug() << "draw event";
-    /*
- foreach (QLine* d, this->all    // TODO call painterdestructorDrawnLines) {
-     QPainter painter(this->ui->meshField);
-     painter.setPen(QPen(Qt::black, 12, Qt::DashDotLine, Qt::RoundCap));
-     painter.drawLine(d);
- }*/
+
+
+void SingletonRender::drawLine(QPoint start, QPoint end) {
+    // qDebug() << "drawline";
+    QPainter painter(this->ui->meshField);
+
+    QLineF line(start,end);
+    painter.setPen(Qt::blue);
+    painter.drawLine(line);
+    //painter.draw
+
 }
+
+
+
+
+void SingletonRender::drawLines(QVector<QPoint> *pointVector){
+
+    //draws a line from point to point
+    QPainter painter(this->ui->meshField);
+    painter.setPen(Qt::red);
+
+    QVector<QPoint> copy(*pointVector) ;
+
+    copy.remove(0);
+
+
+    painter.drawLines(*pointVector);
+    painter.drawLines(copy);
+
+
+}
+
+void SingletonRender::drawLines(QVector<QPoint>* pointVector,QPoint* point){
+
+    if (pointVector->empty()) {
+        qDebug() << "tried to Draw an empty point Vector in SingleTon render!";
+        return;
+    }
+    this->drawLines(pointVector);
+    this->drawLine(pointVector->last(), *point);
+
+}
+
+
+
 
 // loads all images in the ../DataIimages folder.
 // saves them in the map "allImages"
@@ -114,7 +151,7 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
         int gateOffset = 10;
         QString typeName = nodeToRender->getType();
 
-        // create a Drawobject
+        // find out how high the node is depending on the number of gates
         int maxNumberGates = nodeToRender->getInputGates()->size();
         if(maxNumberGates < nodeToRender->getOutputGates()->size())
             maxNumberGates = nodeToRender->getOutputGates()->size();
@@ -124,7 +161,7 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
         if(drawObjectHeight < 50)
             drawObjectHeight = 50;
 
-
+        // create a Drawobject
         DrawObject *NodeDrawObject = new DrawObject(
                     nodeID,
                     QPoint(int(nodeToRender->position_x), int(nodeToRender->position_y)), drawObjectHeight,

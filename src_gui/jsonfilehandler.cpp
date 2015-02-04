@@ -285,10 +285,11 @@ QString JsonFileHandler::meshToJson(Mesh *mesh) {
             QJsonObject param;
             QVariant var = map->value(key);
             param[key] = QJsonValue::fromVariant(var);
-            params << param;
+            //TODO gebuggt!
+            params.push_back( param);
         }
         theNode["params"] = params;
-        nodes << theNode;
+        nodes.push_back( theNode);
     }
     foreach (Connection *c, mesh->getAllConnections()) {
         QJsonObject theConnection;
@@ -296,7 +297,7 @@ QString JsonFileHandler::meshToJson(Mesh *mesh) {
         theConnection["src_gate"] = c->getSrcGate()->getName();
         theConnection["dest_node"] = c->getDestNode()->getName();
         theConnection["dest_gate"] = c->getDestGate()->getName();
-        connections << theConnection;
+        connections.push_back( theConnection);
     }
     QJsonObject obj;
     obj["connections"] = connections;
