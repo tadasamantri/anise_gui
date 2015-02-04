@@ -60,12 +60,12 @@ public:
 
 
     /**
-      will render a connection
+      recieves a connection and will render it on the mesheditor widget
 
      * @brief renderConnection
      * @param conToRender the connection that will be rendered
      */
-    void renderConnection(Connection conToRender);
+    void renderConnection(Connection *conToRender,int ID);
 
 
 
@@ -127,9 +127,9 @@ private:
     //TODO WHY do we need This??
 
 
-    //TODO JOIN BOTH LISTS TO ONE
+    //Different lists because we will need to work differently with them
     QMap<int, DrawObject *> allDrawnNodes;
-    QMap<int, QLine *> allDrawnLines;
+    QMap<int, QVector<DrawObject *> > allConnections;
 
     // window of application
     Ui::MainWindow *ui;

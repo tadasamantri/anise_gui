@@ -58,7 +58,7 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
 
     // pressed on a child
 
-    emit onWidgetClicked(child->nodeID);
+    emit onWidgetClicked(child->ID);
     // set focus on it
 
     // relative point of mouse to child
@@ -66,7 +66,7 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     QByteArray arrayData;
     QDataStream dataStream(&arrayData, QIODevice::WriteOnly);
     // TODO correct use of node ID
-    dataStream << QPoint(hotSpot) << child->nodeID;
+    dataStream << QPoint(hotSpot) << child->ID;
 
     // qDebug() << "NODEID BEFORE DATASTREAM: " << child->nodeID;
     // something about mime data...
@@ -167,7 +167,7 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
 
 void MeshEditorWidget::paintEvent(QPaintEvent *event) {
 
-    if (this->drawLine == true) {
+    if (this->drawLine == true && !lineWayPoints.empty()) {
         //this will draw the vector with points as a line
         SingletonRender::instance()->drawLines(&lineWayPoints, &mousePosition);
     }
@@ -179,7 +179,7 @@ bool MeshEditorWidget::containsID(int objectID) {
 
         if (!castChild) continue;
 
-        if (castChild->nodeID == objectID) return true;
+        if (castChild->ID == objectID) return true;
     }
     return false;
 }

@@ -59,6 +59,8 @@ void MainWindow::initializeGUI() {
     ui->tableWidget->setColumnCount(2);
     // initialize all data content
     Data::instance()->initialize(this);
+
+
 }
 /*
 Ui::MainWindow MainWindow::getUi(){

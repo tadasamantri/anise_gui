@@ -8,13 +8,13 @@
 #include <QBitmap>
 #include <QSize>
 
-DrawObject::DrawObject(int nodeID, QPoint position, int height,
+DrawObject::DrawObject(int id, QPoint position, int width, int height,
                        QWidget *parent = 0) {
-    this->nodeID = nodeID;
+    this->ID = id;
     this->setParent(parent);
 
     // We say the constructor which position he has
-    this->setGeometry(position.x(), position.y(), 100, height);
+    this->setGeometry(position.x(), position.y(), width, height);
 
     //initialize mainMask with complete Transparency
     mainMask = QBitmap(this->size());
@@ -22,7 +22,7 @@ DrawObject::DrawObject(int nodeID, QPoint position, int height,
 
     //initialize the over all picture
     this->overAllPicture = QPixmap (this->size());
-    overAllPicture.fill(QColor(127,127,127,0));
+    overAllPicture.fill(QColor(0,0,0,0)); //make it transparent
 }
 
 /**

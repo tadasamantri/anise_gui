@@ -86,14 +86,7 @@ void  Data::initialize(MainWindow *mainWindow){
       * Initialize settings from .ini file
       */
     SettingsHandler::initializeSettings();
-/*
-    //create 20 test nodes
 
-    for (int i = 0; i < 20; ++i) {
-        Node *tempTestNode = NodeFactory::createTestNode();
-        Data::instance()->getNodeCatalog()->insert(*tempTestNode);
-    }
-*/
 
     /**
       * Start loading node types
@@ -108,10 +101,30 @@ void  Data::initialize(MainWindow *mainWindow){
       */
     SingletonRender::instance()->renderCatalogContent(Data::instance()->getNodeCatalog()->Content.values().toVector());
 
+
+
+
+        //create a test connection
+/*
+        for (int i = 0; i < 2; ++i) {
+            Connection *tempTestConnection = NodeFactory::createTestConnection(i);
+            Data::instance()->addConnectionToMesh(tempTestConnection);
+        }
+*/
+
+
+
+
 }
 
 int Data::addNodeToMesh(Node *newNode) {
     int id = this->mesh->addNode(newNode);
+    SingletonRender::instance()->renderMesh(this->mesh);
+    return id;
+}
+
+int Data::addConnectionToMesh(Connection *newConnection){
+    int id = this->mesh->addConnection(newConnection);
     SingletonRender::instance()->renderMesh(this->mesh);
     return id;
 }

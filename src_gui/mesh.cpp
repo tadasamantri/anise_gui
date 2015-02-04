@@ -36,11 +36,6 @@ void Mesh::removeNode(int ID)
     delete n;
 }
 
-void Mesh::addConnections(QList<Connection *> &list) {
-    foreach (Connection *connection, list)
-        this->addConnection(connection);
-}
-
 int Mesh::addConnection(Connection *connection) {
     int id = this->generateId();
     this->connectionsInMash.insert(id, connection);
