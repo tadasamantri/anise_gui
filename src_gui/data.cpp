@@ -14,7 +14,6 @@ Data *Data::data = NULL;
     Calling the constructor publicly is not allowed. The constructor
     is private and is only called by this Instance function.
 */
-
 Data *Data::instance() {
     /**
       * Allows only one instance of class to be generated.
@@ -27,15 +26,25 @@ Data *Data::instance() {
 
 Data::Data(QObject *parent) : QObject(parent) {
     mesh = new Mesh();
-    nodeCatalog = NodeCatalog::instance();
+
+}
+MainWindow *Data::getMainWindow() const
+{
+    return mainWindow;
 }
 
-void  Data::initialize(MainWindow *mainWindow){
+void Data::setMainWindow(MainWindow *value)
+{
+    mainWindow = value;
+}
 
+
+void  Data::initialize(MainWindow *mainWindow){
+    this->mainWindow = mainWindow;
     /**
       * Create the Nodecatalog
       */
-    NodeCatalog::instance();
+    nodeCatalog = new NodeCatalog();
     /**
       * Create the render object
       */
@@ -82,7 +91,7 @@ void  Data::initialize(MainWindow *mainWindow){
 
     for (int i = 0; i < 20; ++i) {
         Node *tempTestNode = NodeFactory::createTestNode();
-        NodeCatalog::instance()->insert(*tempTestNode);
+        Data::instance()->getNodeCatalog()->insert(*tempTestNode);
     }
 */
 
@@ -97,7 +106,7 @@ void  Data::initialize(MainWindow *mainWindow){
     /**
       * Render the Nodecatalog filled with test nodes
       */
-    SingletonRender::instance()->renderCatalogContent(NodeCatalog::instance()->Content.values().toVector());
+    SingletonRender::instance()->renderCatalogContent(Data::instance()->getNodeCatalog()->Content.values().toVector());
 
 }
 
@@ -153,4 +162,9 @@ bool Data::deleteItem(){
     //qDebug() << "Drawings: " << SingletonRender::instance()->getChildrenIDs()->toList();
     return deleted;
 
+}
+
+NodeCatalog *Data::getNodeCatalog(){
+
+    return nodeCatalog;
 }

@@ -150,7 +150,6 @@
              <property name="acceptDrops">
               <bool>true</bool>
              </property>
-             <zorder>buttonBox</zorder>
             </widget>
            </item>
           </layout>
@@ -239,6 +238,9 @@
     </item>
     <item>
      <widget class="QTableWidget" name="tableWidget">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -257,6 +259,24 @@
         <height>16777215</height>
        </size>
       </property>
+      <property name="columnCount">
+       <number>4</number>
+      </property>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>Key</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Value</string>
+       </property>
+      </column>
+      <column/>
+      <column/>
      </widget>
     </item>
    </layout>

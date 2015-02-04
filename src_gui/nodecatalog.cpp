@@ -1,11 +1,10 @@
 #include "nodecatalog.h"
 
-NodeCatalog *NodeCatalog::m_pInstance = NULL;
 
 NodeCatalog::NodeCatalog() {
     Content = QMap<QString, Node>();
     Node blackbox;
-    Gate in (true, "in"), out(false, "out");
+    Gate *in = new Gate(true, "in"), *out = new Gate(false, "out");
     blackbox.addGate(in);
     blackbox.addGate(out);
     blackbox.setType("blackbox");
@@ -27,12 +26,4 @@ Node NodeCatalog::getNodeOfType(const QString &type){
     node = Content[_class];
     qDebug() << "node of type " << _class <<" returned";
     return node;
-}
-
-NodeCatalog *NodeCatalog::instance()
-{
-    if (!m_pInstance)  // Only allow one instance of class to be generated.
-        m_pInstance = new NodeCatalog();
-
-    return m_pInstance;
 }

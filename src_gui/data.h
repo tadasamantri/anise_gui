@@ -15,35 +15,34 @@
  * important paths, ...)
  */
 class Data : public QObject {
-
     Q_OBJECT
 
 public:
     /**
-      * The Mesh of user is currently working at
-      */
+    * The Mesh of user is currently working at
+    */
     Mesh *mesh;
 
     /**
-      * Contains all Node types
-      * (Unique list of node objects of all types)
-      */
-    NodeCatalog *nodeCatalog;
-
-    /**
-     * @brief nodeFactory
-     * This will create any kind of Node and Node Templates.
-     *
-     */
+   * @brief nodeFactory
+   * This will create any kind of Node and Node Templates.
+   *
+   */
     NodeFactory *nodeFactory;
 
     /**
-      * The instance function returns a pointer to a static variable and thus is
-      * declared static
-      */
+    * The instance function returns a pointer to a static variable and thus is
+    * declared static
+    */
     static Data *instance();
 
     void initialize(MainWindow *mainWindow);
+
+    /**
+   * @brief Data::getNodeCatalog
+   * @return the NodeCatalog containing all types of nodes available
+   */
+    NodeCatalog *getNodeCatalog();
 
     int addNodeToMesh(Node *newNode);
     void removeNodeFromMesh(int ID);
@@ -53,6 +52,8 @@ public:
 
     Mesh *getMesh();
 
+    MainWindow *getMainWindow() const;
+    void setMainWindow(MainWindow *value);
 
 public slots:
     bool deleteItem();
@@ -61,30 +62,32 @@ private:
     explicit Data(QObject *parent = 0);
 
     /**
-      * It is Private so that it can't be called.
-      * Only the class function Instance can call the constructor.
-      * Public access to the constructor is denied.
-      *
-      * The constructor, copy constructor and assignment operator are all private
-      * to ensure that the programmer using the singleton class can only create a
-      * single instance of the class using only the instance() function.
-      *
-      */
+    * It is Private so that it can't be called.
+    * Only the class function Instance can call the constructor.
+    * Public access to the constructor is denied.
+    *
+    * The constructor, copy constructor and assignment operator are all private
+    * to ensure that the programmer using the singleton class can only create a
+    * single instance of the class using only the instance() function.
+    *
+    */
 
-    //copy constructor does not need to be overridden because QObject doesnt has a public copy instruktor
-
+    // copy constructor does not need to be overridden because QObject doesnt has
+    // a public copy instruktor
 
     // assignment constructor
-    Data &operator=(Data const &){
-
-        return *this;
-
-    };
+    Data &operator=(Data const &) { return *this; }
 
     /**
-      * Pointer to this instance
-      */
+    * Pointer to this instance
+    */
     static Data *data;
+    MainWindow *mainWindow;
+    /**
+    * Contains all Node types
+    * (Unique list of node objects of all types)
+    */
+    NodeCatalog *nodeCatalog;
 };
 
 #endif  // DATA_H

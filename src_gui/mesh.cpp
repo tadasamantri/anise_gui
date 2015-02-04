@@ -1,6 +1,7 @@
 #include "mesh.h"
 #include "QDebug"
 #include "singletonrender.h"
+#include "data.h"
 
 Mesh::Mesh(QObject *parent) : QObject(parent) {
     this->nodesInMash = QMap<int, Node *>();
@@ -73,7 +74,17 @@ int Mesh::generateId() {
 
 void Mesh::setFocusMeshObject(int nodeID) {
     this->focusObject = nodeID;
+    if(nodeID > -1)
+    {
+        Node* n = nodesInMash[nodeID];
+        QTableWidget *table = Data::instance()->getMainWindow()->ui->tableWidget;
+        table->setRowCount(n->getParams()->size());
 
+        //TODO: generate TableContents dynamicly
+        table->show();
+    }
+    else
+        Data::instance()->getMainWindow()->ui->tableWidget->hide();
   //qDebug() << "I GOT CKLICKED. MY ID: " << nodeID;
 }
 
