@@ -1,3 +1,6 @@
+#include <QPushButton>
+#include <QIcon>
+
 #include <stddef.h>  // defines NULL
 #include "singletonrender.h"
 #include "testdrawobject.h"
@@ -283,14 +286,15 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
 
             for(int i = 0; i < numberInputGates; i++){
 
-                NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0, i*(gateHeight + gateOffset) + 5));
+                NodeDrawObject->addButton(allImages["gate.png"], QPoint(0, i*(gateHeight + gateOffset) + 5));
+
 
 
             }
 
             for(int i = 0; i < numberOutputGates; i++){
 
-                NodeDrawObject->addPicture(allImages["gate.png"], QPoint(75, i*(gateHeight + gateOffset) + 5));
+                NodeDrawObject->addButton(allImages["gate.png"], QPoint(75, i*(gateHeight + gateOffset) + 5));
 
 
             }
@@ -405,22 +409,6 @@ bool SingletonRender::deleteMeshDrawing(int objectID) {
     return !allDrawnNodes.contains(objectID);
 }
 
-/**
- * @brief SingletonRender::showTestWidget
- *
- * Here we show testwidgets if we click on a button.
- *
- */
-
-void SingletonRender::showTestWidget() {
-    DrawObject *dummy = new DrawObject(100, QPoint(20, 20),100, 100,  ui->meshField);
-
-    qDebug() << "dummy läuft";
-
-    dummy->addPicture(this->allImages.value("background.png"), QPoint(20, 20));
-    dummy->addPicture(this->allImages.value("background.png"), QPoint(40, 40));
-    qDebug() << "dummy läuft";
-}
 
 QVector<int> *SingletonRender::getChildrenIDs() {
     QVector<int> *ids = new QVector<int>();
