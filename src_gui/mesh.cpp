@@ -62,7 +62,7 @@ Node *Mesh::getNodeByName(QString name) {
 
 Node *Mesh::getNodeByID(int ID) {
     //qDebug() << "getNodeByID returned Node with ID " << ID <<"\nName of Node is "
-                //<< nodesInMash[ID]->getName();
+    //<< nodesInMash[ID]->getName();
     return this->nodesInMash[ID];
 }
 
@@ -92,26 +92,28 @@ void Mesh::setFocusMeshObject(int nodeID) {
         //asign to table
         table->setItem(0,0, new QTableWidgetItem("NodeID"));
         table->setItem(0,1, ID);
+        table->item(0,0)->setFlags(table->item(0,0)->flags() ^ (Qt::ItemIsEnabled | Qt::ItemIsSelectable));
         table->setItem(1,0, new QTableWidgetItem("Node Class"));
         table->setItem(1,1, type);
+        table->item(1,0)->setFlags(table->item(1,0)->flags() ^ (Qt::ItemIsEnabled | Qt::ItemIsSelectable));
         table->setItem(2,0, new QTableWidgetItem("Node Name"));
         table->setItem(2,1, name);
 
         //make name editable
-        name->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+        name->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable);
 
         //avoid editing keys, and nodeID/type
-        ID->setFlags(ID->flags() ^ Qt::ItemIsEditable);
-        type->setFlags(type->flags() ^ Qt::ItemIsEditable);
+        ID->setFlags(ID->flags() ^ (Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+        type->setFlags(type->flags() ^ (Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled));
         for(int i = 0; i < 3; i++)
-            table->item(i,0)->setFlags(table->item(i,0)->flags()  ^ Qt::ItemIsEditable);
+            table->item(i,0)->setFlags(table->item(i,0)->flags()  ^ (Qt::ItemIsEditable | Qt::ItemIsSelectable));
         QVariantMap *map = n->getParams();
         QStringList keys = map->keys();
         for(int i = 0; i < keys.size(); i++){
             //create key item
             QString key = keys.value(i);
             QTableWidgetItem *key_item = new QTableWidgetItem(key);
-            key_item->setFlags(key_item->flags() ^ Qt::ItemIsEditable);
+            key_item->setFlags(key_item->flags() ^ (Qt::ItemIsEditable | Qt::ItemIsSelectable));
             table->setItem(3 + i,0,key_item);
 
             //create value item
@@ -153,7 +155,7 @@ void Mesh::setFocusMeshObject(int nodeID) {
     }
 
 
-  //qDebug() << "I GOT CKLICKED. MY ID: " << nodeID;
+    //qDebug() << "I GOT CKLICKED. MY ID: " << nodeID;
 }
 
 bool Mesh::deleteItem() {

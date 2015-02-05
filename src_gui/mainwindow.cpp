@@ -23,13 +23,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     initializeGUI();
     /*
-      // create the shortcut after the list widget has been created
+    // create the shortcut after the list widget has been created
 
-      // option A (pressing DEL anywhere in the main window activates the slot)
-      new QShortcut(QKeySequence(Qt::Key_Delete), this, SLOT(deleteItem()));
-  */
+    // option A (pressing DEL anywhere in the main window activates the slot)
+    new QShortcut(QKeySequence(Qt::Key_Delete), this, SLOT(deleteItem()));
+*/
     // option B (pressing DEL activates the slots only when list widget has focus)
-    //EDIT: works fine now =)
+    // EDIT: works fine now =)
     QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_Delete), this);
 
     qDebug() << "FOCUSWINDOW: " << QApplication::focusWidget();
@@ -51,16 +51,14 @@ void MainWindow::initializeGUI() {
     ui->Node_Catalog->setupViewport(ui->nodeCatalogContent);
     ui->mesh_edt_area->setupViewport(ui->meshField);
 
-    //hides the tab-widget
+    // hides the tab-widget
     ui->tabWidget->hide();
 
-    //prepare propertytable
+    // prepare propertytable
     ui->tableWidget->hide();
     ui->tableWidget->setColumnCount(2);
     // initialize all data content
     Data::instance()->initialize(this);
-
-
 }
 /*
 Ui::MainWindow MainWindow::getUi(){
@@ -110,18 +108,18 @@ void MainWindow::on_actionLoad_Catalog_triggered() {
 }
 
 void MainWindow::on_buttonBox_clicked(QAbstractButton *button) {
-    qDebug() << "hey man ich wurde aufgerufen:"<<button;
-
+    qDebug() << "hey man ich wurde aufgerufen:" << button;
 }
 
-void MainWindow::on_actionSave_triggered(){
-    Mesh* theMesh = Data::instance()->getMesh();
-    QString fileName = QFileDialog::getSaveFileName(this, "Save current project to...", "", "Mesh-Files (*.mesh *.json);;All Files(*)");
+void MainWindow::on_actionSave_triggered() {
+    Mesh *theMesh = Data::instance()->getMesh();
+    QString fileName =
+            QFileDialog::getSaveFileName(this, "Save current project to...", "",
+                                         "Mesh-Files (*.mesh *.json);;All Files(*)");
     QFile file(fileName);
 
-        file.open(QIODevice::WriteOnly);
-        //QByteArray data = *JsonFileHandler::meshToJson(theMesh);
-        file.write(JsonFileHandler::meshToJson(theMesh).toUtf8());
-        file.close();
+    file.open(QIODevice::WriteOnly);
+    // QByteArray data = *JsonFileHandler::meshToJson(theMesh);
+    file.write(JsonFileHandler::meshToJson(theMesh).toUtf8());
+    file.close();
 }
-
