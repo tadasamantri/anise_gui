@@ -6,6 +6,7 @@
 #include <QTableWidgetItem>
 #include <QSpinBox>
 #include <limits>
+#include <QCalendarWidget>
 
 Mesh::Mesh(QObject *parent) : QObject(parent) {
     this->nodesInMash = QMap<int, Node *>();
@@ -137,6 +138,13 @@ void Mesh::setFocusMeshObject(int nodeID) {
                 spinner = new QSpinBox(table);
                 spinner->setMaximum(std::numeric_limits<int>::max());
                 spinner->setMinimum(std::numeric_limits<int>::min());
+                spinner->setValue(value.toInt());
+                table->setCellWidget(3 + i, 1, spinner);
+                break;
+            case QVariant::UInt:
+                spinner = new QSpinBox(table);
+                spinner->setMaximum(std::numeric_limits<int>::max());
+                spinner->setMinimum(0);
                 spinner->setValue(value.toInt());
                 table->setCellWidget(3 + i, 1, spinner);
                 break;
