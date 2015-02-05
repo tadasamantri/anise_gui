@@ -71,7 +71,8 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
         QString type, descr;
         QList<Gate *> input_gates, output_gates;
 
-        QJsonObject localNode = var.toObject();
+        QJsonObject localNode = var.toObject(),
+                json_params;
         type = localNode["class"].toString();
         descr = localNode["description"].toString();
         QJsonArray inputs = localNode["input_gates"].toArray(),
@@ -102,6 +103,16 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
         node.setDescription(descr);
         node.addGates(input_gates.toVector(), true);
         node.addGates(output_gates.toVector(), false);
+
+        //initilize parameters
+        json_params = localNode["parameters"].toObject();
+        QVariantMap contents = localNode.toVariantMap()["parameters"].toMap();
+        foreach (QString key, contents.keys()) {
+            QVariant::Type type = static_cast<QVariant::Type> (contents[key].toInt());
+            node.addParam(key, QVariant(type));
+
+
+        }
         catalog->insert(node);
         qDebug() << "added node to Catalog:\n"
                  << "class: " << node.getType()
