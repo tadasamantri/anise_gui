@@ -7,6 +7,8 @@
 #include "mainwindow.h"
 #include "singletonrender.h"
 #include "ui_mainwindow.h"
+#include "connection.h"
+#include "node.h"
 
 /**
  *  @Author Frederik Lührs
@@ -44,13 +46,18 @@ public:
    */
     NodeCatalog *getNodeCatalog();
 
+    //add a node to the mesh
     int addNodeToMesh(Node *newNode);
+    int addConnectionToMesh(Connection *newConnection);
+
     void removeNodeFromMesh(int ID);
     void moveNodeInMesh(QPoint *Position, int numberOfNode);
 
     void newMeshProject();
 
     Mesh *getMesh();
+
+
 
     MainWindow *getMainWindow() const;
     void setMainWindow(MainWindow *value);

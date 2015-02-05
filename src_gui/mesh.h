@@ -30,8 +30,6 @@ public:
     // return the id of the new connection
     int addConnection(Connection *connection);
 
-    void addConnections(QList<Connection*> &list);
-
     void addNodes(QList<Node *> &list);
 
     void removeNode(int ID);

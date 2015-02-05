@@ -1,9 +1,24 @@
 #include "nodefactory.h"
 #include "data.h"
+#include "connection.h"
 
 // TODO friend Node, node should have a private konstruktor
 // Nodes should only be created in this factory!
 NodeFactory::NodeFactory() {}
+
+Connection *NodeFactory::createTestConnection(int i){
+    Connection *connection = new Connection();
+
+    //create some random waypoints
+    connection->waypoints.push_back(QPoint(0*i,0));
+    connection->waypoints.push_back(QPoint(10*i,0));
+    connection->waypoints.push_back(QPoint(0,10*i));
+    connection->waypoints.push_back(QPoint(20*i,20*i));
+    connection->waypoints.push_back(QPoint(30*i,30*i));
+
+    return connection;
+}
+
 
 Node NodeFactory::createNode() {
     Node node = Node();

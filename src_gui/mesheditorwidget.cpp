@@ -1,7 +1,6 @@
 #include "mesheditorwidget.h"
 #include "data.h"
 
-
 MeshEditorWidget::MeshEditorWidget(QWidget *parent) : QWidget(parent) {
     connect(this, SIGNAL(onWidgetClicked(int)), Data::instance()->getMesh(),
             SLOT(setFocusMeshObject(int)));
@@ -16,14 +15,6 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
         this->lineWayPoints.clear();
         return;
     }
-
-
-
-
-
-
-
-
 
     qDebug() << childAt(event->pos());
     // get child at mouse position
@@ -47,9 +38,8 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
 
     // IF IT IS STILL 0, THEN I CLICKED ON MESHFIELD NOT A NODE
     if (!child) {
-
-        //add a way point for the line to draw
-        this->lineWayPoints.push_back( event->pos());
+        // add a way point for the line to draw
+        this->lineWayPoints.push_back(event->pos());
 
         emit onWidgetClicked(-1);
         // return if no child at mouse position
@@ -58,7 +48,7 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
 
     // pressed on a child
 
-    emit onWidgetClicked(child->nodeID);
+    emit onWidgetClicked(child->ID);
     // set focus on it
 
     // relative point of mouse to child
@@ -66,7 +56,7 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     QByteArray arrayData;
     QDataStream dataStream(&arrayData, QIODevice::WriteOnly);
     // TODO correct use of node ID
-    dataStream << QPoint(hotSpot) << child->nodeID;
+    dataStream << QPoint(hotSpot) << child->ID;
 
     // qDebug() << "NODEID BEFORE DATASTREAM: " << child->nodeID;
     // something about mime data...
@@ -107,23 +97,22 @@ void MeshEditorWidget::dragEnterEvent(QDragEnterEvent *event) {
     }
 }
 
-void MeshEditorWidget::mouseMoveEvent(QMouseEvent *event){
-    //will draw a line from drawLineStartPosition to mouse
+void MeshEditorWidget::mouseMoveEvent(QMouseEvent *event) {
+    // will draw a line from drawLineStartPosition to mouse
     this->mousePosition = event->pos();
 
     this->drawLine = true;
 
     if (drawLine == true) {
-        //TODO optimize the drawing
-        //right now it redraws everything !
+        // TODO optimize the drawing
+        // right now it redraws everything !
         this->repaint();
     }
-
 }
 
 void MeshEditorWidget::dragMoveEvent(QDragMoveEvent *event) {
     // TODO track mouse for updating position
-    //autoscroll
+    // autoscroll
 }
 
 void MeshEditorWidget::dropEvent(QDropEvent *event) {
@@ -149,7 +138,8 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
         QString _class;
         dataStream >> _class;
         Node *newNode = Data::instance()->nodeFactory->createNode(_class);
-        newNode->setName("Node" + QString::number(Data::instance()->getMesh()->getCurrentID()));
+        newNode->setName(
+                    "Node" + QString::number(Data::instance()->getMesh()->getCurrentID()));
         newNode->setPosition(DropPoint.x(), DropPoint.y());
         qDebug() << "new node of tpye " << _class << " created at position ("
                  << DropPoint.x() << "|" << DropPoint.y() << ")";
@@ -166,9 +156,8 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
 }
 
 void MeshEditorWidget::paintEvent(QPaintEvent *event) {
-
-    if (this->drawLine == true) {
-        //this will draw the vector with points as a line
+    if (this->drawLine == true && !lineWayPoints.empty()) {
+        // this will draw the vector with points as a line
         SingletonRender::instance()->drawLines(&lineWayPoints, &mousePosition);
     }
 }
@@ -179,7 +168,7 @@ bool MeshEditorWidget::containsID(int objectID) {
 
         if (!castChild) continue;
 
-        if (castChild->nodeID == objectID) return true;
+        if (castChild->ID == objectID) return true;
     }
     return false;
 }

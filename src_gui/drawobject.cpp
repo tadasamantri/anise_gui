@@ -7,14 +7,15 @@
 #include <QVector>
 #include <QBitmap>
 #include <QSize>
+#include <QPushButton>
 
-DrawObject::DrawObject(int nodeID, QPoint position, int height,
+DrawObject::DrawObject(int id, QPoint position, int width, int height,
                        QWidget *parent = 0) {
-    this->nodeID = nodeID;
+    this->ID = id;
     this->setParent(parent);
 
     // We say the constructor which position he has
-    this->setGeometry(position.x(), position.y(), 100, height);
+    this->setGeometry(position.x(), position.y(), width, height);
 
     //initialize mainMask with complete Transparency
     mainMask = QBitmap(this->size());
@@ -22,7 +23,7 @@ DrawObject::DrawObject(int nodeID, QPoint position, int height,
 
     //initialize the over all picture
     this->overAllPicture = QPixmap (this->size());
-    overAllPicture.fill(QColor(127,127,127,0));
+    overAllPicture.fill(QColor(0,0,0,0)); //make it transparent
 }
 
 /**
@@ -46,6 +47,64 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position) {
     label->setGeometry(position.x(), position.y(), width, height);
     label->setPixmap(*pic);
     this->labelvector.append(label);
+    // Now set the masks to the widgets
+    label->setMask(pic->mask());
+
+    //modifies the mainMask inserting the mask of the pic
+    this->modifyMask(pic, position);
+
+    // update the over all picture
+    this->updateOverAllPicture(pic, position);
+
+
+
+}
+
+void DrawObject::addPicture(QPixmap *pic, QPoint position, QString typeName){
+
+    QPixmap newPic = pic->copy(pic->rect());
+
+    // tell the painter to draw on the QImage
+    QPainter* painter = new QPainter(&newPic);
+    painter->setPen(Qt::blue);
+    painter->setFont(QFont("Arial", 8));
+    // Write Typename onto picture
+    painter->drawText(newPic.rect(), Qt::AlignLeading, typeName);
+
+
+    //actually call addPicture with modified picture
+    this->addPicture(&newPic, position);
+
+}
+
+void DrawObject::addButton(QPixmap *pic, QPoint position) {
+
+    //safe dimensions
+    int height = pic->height();
+    int width = pic->width();
+
+    // Instanstiate the drawing to be shown
+    QPushButton *button = new QPushButton(this);
+    button->setGeometry(position.x(), position.y(), width, height);
+    button->setIcon(*pic);
+    this->buttonvector.append(button);
+    // Now set the masks to the widgets
+    button->setMask(pic->mask());
+
+    //modifies the mainMask inserting the mask of the pic
+    this->modifyMask(pic, position);
+
+    // update the over all picture
+    this->updateOverAllPicture(pic, position);
+
+
+
+}
+
+void DrawObject::modifyMask(QPixmap *pic, QPoint position){
+    //safe dimensions
+    int height = pic->height();
+    int width = pic->width();
 
     // Instanstiate the non-transparent mask with size of pic
     QBitmap picMask = pic->mask();  // This is used to get the mask automatically
@@ -65,31 +124,12 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position) {
     painter.setBrush(Qt::color1);
     painter.drawPixmap(position.x(), position.y(), width, height, picMask);
 
-    // Now set the masks to the widgets
-    label->setMask(pic->mask());
+    //Now set the mask of the widget
     this->setMask(mainMask);
 
-    // update the over all picture
-    // thats the one used for dragging etc.
-    this->updateOverAllPicture(pic, position);
-}
-
-void DrawObject::addPicture(QPixmap *pic, QPoint position, QString typeName){
-
-    QPixmap newPic = pic->copy(pic->rect());
-
-    // tell the painter to draw on the QImage
-    QPainter* painter = new QPainter(&newPic);
-    painter->setPen(Qt::blue);
-    painter->setFont(QFont("Arial", 8));
-    // Write Typename onto picture
-    painter->drawText(newPic.rect(), Qt::AlignLeading, typeName);
-
-
-    //actually call addPicture with modified picture
-    this->addPicture(&newPic, position);
 
 }
+
 
 void DrawObject::updateOverAllPicture(QPixmap *newPicture, QPoint position ){
 

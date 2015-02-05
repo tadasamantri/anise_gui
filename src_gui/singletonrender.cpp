@@ -1,8 +1,10 @@
+#include <QPushButton>
+#include <QIcon>
+
 #include <stddef.h>  // defines NULL
 #include "singletonrender.h"
 #include "testdrawobject.h"
 #include "nodetypelabel.h"
-
 
 // Global static pointer used to ensure a single instance of the class.
 SingletonRender *SingletonRender::m_pInstance = NULL;
@@ -10,7 +12,7 @@ SingletonRender *SingletonRender::m_pInstance = NULL;
 SingletonRender::SingletonRender() {
     // initialize all maps
     this->allDrawnNodes = QMap<int, DrawObject *>();
-    this->allDrawnLines = QMap<int, QLine *>();
+    this->allConnections = QMap<int, QVector<DrawObject *> >();
     this->allImages = QMap<QString, QPixmap *>();
 
     // load all images
@@ -32,64 +34,105 @@ SingletonRender *SingletonRender::instance() {
     return m_pInstance;
 }
 
+// will render a given connection
+void SingletonRender::renderConnection(Connection *conToRender, int ID) {
+    // will draw a line connecting all connection joints of a connection
+    this->drawLines(&conToRender->waypoints);
+
+    if (!allConnections.contains(ID)) {
+        // create a new Vector for all Joints
+        QVector<DrawObject *> jointVector;
+
+        // now draw all joints
+        foreach (QPoint joint, conToRender->waypoints) {
+            if (!allImages.contains("joint.png")) {
+                qDebug() << "joint.png missing! cant draw connections!";
+                return;
+            }
+
+            // calculate the middle of the Image
+            int posx = joint.x() + allImages.value("joint.png")->width() / 2;
+            int posy = joint.y() + allImages.value("joint.png")->height() / 2;
+
+            // create a new Drawobject and save some space for the image
+            DrawObject *ConnectionJointDrawObject = new DrawObject(
+                        ID, QPoint(posx, posy), allImages.value("joint.png")->width(),
+                        allImages.value("joint.png")->height(), this->ui->meshField);
+
+            // Add the picture to the draw object
+            ConnectionJointDrawObject->addPicture(allImages["joint.png"],
+                    QPoint(0, 0), "connectionJoint");
+
+            // add a tooltip
+            ConnectionJointDrawObject->setToolTip("click To Drag");
+
+            // add the DrawObject into the Vector
+            jointVector.push_back(ConnectionJointDrawObject);
+        }
+        // Add the vector into the map
+        allConnections.insert(ID, jointVector);
+    }
+
+    // move all joints to the correct position
+    for (int index = 0; index < allConnections[ID].size(); ++index) {
+        DrawObject *joint = allConnections[ID].at(index);
+        joint->move(conToRender->waypoints.at(index).x(),
+                    conToRender->waypoints.at(index).y());
+        joint->show();
+    }
+}
+
 // will have to be called from a paint event!
-void SingletonRender::drawLine(double start_x, double start_y, double end_x,double end_y) {
+void SingletonRender::drawLine(double start_x, double start_y, double end_x,
+                               double end_y) {
     // qDebug() << "drawline";
     QPainter painter(this->ui->meshField);
 
     QLineF line(start_x, start_y, end_x, end_y);
     painter.setPen(Qt::blue);
     painter.drawLine(line);
-    //painter.draw
-
+    // painter.draw
 }
 
-
-
+// will have to be called from a paint event!
 void SingletonRender::drawLine(QPoint start, QPoint end) {
     // qDebug() << "drawline";
     QPainter painter(this->ui->meshField);
 
-    QLineF line(start,end);
+    QLineF line(start, end);
     painter.setPen(Qt::blue);
     painter.drawLine(line);
-    //painter.draw
-
+    // painter.draw
 }
 
+// will have to be called from a paint event!
+void SingletonRender::drawLines(QVector<QPoint> *pointVector) {
+    if (pointVector->empty()) {
+        qDebug() << "tried to Draw an empty point Vector in SingleTon render!";
+        return;
+    }
 
-
-
-void SingletonRender::drawLines(QVector<QPoint> *pointVector){
-
-    //draws a line from point to point
+    // draws a line from point to point
     QPainter painter(this->ui->meshField);
     painter.setPen(Qt::red);
 
-    QVector<QPoint> copy(*pointVector) ;
+    QVector<QPoint> copy(*pointVector);
 
     copy.remove(0);
 
-
     painter.drawLines(*pointVector);
     painter.drawLines(copy);
-
-
 }
 
-void SingletonRender::drawLines(QVector<QPoint>* pointVector,QPoint* point){
-
+// will have to be called from a paint event!
+void SingletonRender::drawLines(QVector<QPoint> *pointVector, QPoint *point) {
     if (pointVector->empty()) {
         qDebug() << "tried to Draw an empty point Vector in SingleTon render!";
         return;
     }
     this->drawLines(pointVector);
     this->drawLine(pointVector->last(), *point);
-
 }
-
-
-
 
 // loads all images in the ../DataIimages folder.
 // saves them in the map "allImages"
@@ -131,8 +174,8 @@ bool SingletonRender::loadImages() {
                          << result;
             }
 
-            //set transparency to magic pink
-           temp->setMask(temp->createMaskFromColor(Qt::magenta));
+            // set transparency to magic pink
+            temp->setMask(temp->createMaskFromColor(Qt::magenta));
 
             allImages.insert(listOfFiles.at(i), temp);
         }
@@ -144,45 +187,30 @@ void SingletonRender::setUi(Ui::MainWindow *ui) { this->ui = ui; }
 
 void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
     if (!allDrawnNodes.contains(nodeID)) {
-
-
-        //some Variables needed often
+        // some Variables needed often
         int gateHeight = allImages["gate.png"]->height();
         int gateOffset = 10;
         QString typeName = nodeToRender->getType();
 
         // find out how high the node is depending on the number of gates
         int maxNumberGates = nodeToRender->getInputGates()->size();
-        if(maxNumberGates < nodeToRender->getOutputGates()->size())
+        if (maxNumberGates < nodeToRender->getOutputGates()->size())
             maxNumberGates = nodeToRender->getOutputGates()->size();
 
-        //Set height of DrawObject
-        int drawObjectHeight = maxNumberGates*(gateHeight + gateOffset);
-        if(drawObjectHeight < 50)
-            drawObjectHeight = 50;
+        // Set height of DrawObject
+        int drawObjectHeight = maxNumberGates * (gateHeight + gateOffset);
+        if (drawObjectHeight < 50) drawObjectHeight = 50;
 
         // create a Drawobject
         DrawObject *NodeDrawObject = new DrawObject(
                     nodeID,
-                    QPoint(int(nodeToRender->position_x), int(nodeToRender->position_y)), drawObjectHeight,
-                    this->ui->meshField);
-
-
-
-
-
-        /* if (allImages.contains("background.png")) {
-         // Draw the bg
-         NodeDrawObject->addPicture(allImages["background.png"], QPoint(10,10));
-             qDebug() << "background.png loaded";
-
-        } else {
-         qDebug() << "background.png did not load correctly!";
-        }*/
+                    QPoint(int(nodeToRender->position_x), int(nodeToRender->position_y)),
+                    100, drawObjectHeight, this->ui->meshField);
 
         if (allImages.contains("body.png")) {
             // Draw the body
-            NodeDrawObject->addPicture(allImages["body.png"], QPoint(15, 0), typeName);
+            NodeDrawObject->addPicture(allImages["body.png"], QPoint(15, 0),
+                    typeName);
 
             qDebug() << "body.png loaded";
 
@@ -193,41 +221,35 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
         if (allImages.contains("gate.png")) {
             // Draw the gates
 
-
             int numberInputGates = nodeToRender->getInputGates()->size();
             int numberOutputGates = nodeToRender->getOutputGates()->size();
 
-
-            for(int i = 0; i < numberInputGates; i++){
-
-                NodeDrawObject->addPicture(allImages["gate.png"], QPoint(0, i*(gateHeight + gateOffset) + 5));
-
-
+            for (int i = 0; i < numberInputGates; i++) {
+                NodeDrawObject->addButton(allImages["gate.png"],
+                        QPoint(0, i * (gateHeight + gateOffset) + 5));
             }
 
-            for(int i = 0; i < numberOutputGates; i++){
-
-                NodeDrawObject->addPicture(allImages["gate.png"], QPoint(75, i*(gateHeight + gateOffset) + 5));
-
-
+            for (int i = 0; i < numberOutputGates; i++) {
+                NodeDrawObject->addButton(
+                            allImages["gate.png"],
+                        QPoint(75, i * (gateHeight + gateOffset) + 5));
             }
 
             qDebug() << "gate.png loaded";
-
 
         } else {
             qDebug() << "body.png did not load correctly!";
         }
 
         /* if (allImages.contains("monster.png")) {
-         // Draw the mnster
+     // Draw the mnster
 
-         NodeDrawObject->addPicture(allImages["monster.png"], QPoint (10,0));
-         // Set the geometry to the right size
-         NodeDrawObject->setGeometry(0, 0, 50, 50);
-     } else {
-         qDebug() << "monster.png did not load correctly!";
-     }*/
+     NodeDrawObject->addPicture(allImages["monster.png"], QPoint (10,0));
+     // Set the geometry to the right size
+     NodeDrawObject->setGeometry(0, 0, 50, 50);
+ } else {
+     qDebug() << "monster.png did not load correctly!";
+ }*/
 
         NodeDrawObject->setToolTip(nodeToRender->getDescription());
         allDrawnNodes.insert(nodeID, NodeDrawObject);
@@ -250,6 +272,11 @@ void SingletonRender::renderMesh(Mesh *workMesh) {
         } else {
             qDebug() << "tried to render a node that doesnt exist!";
         }
+    }
+
+    // calls render method for each connection in the mesh
+    foreach (int ID, workMesh->connectionsInMash.keys()) {
+        renderConnection(workMesh->connectionsInMash.value(ID), ID);
     }
 }
 
@@ -302,7 +329,7 @@ void SingletonRender::clearAll(QWidget *parent) {
     // TODO NOT COOL THIS SOLUTION!
     if (parent == ui->meshField) {
         this->allDrawnNodes = QMap<int, DrawObject *>();
-        this->allDrawnLines = QMap<int, QLine *>();
+        this->allConnections = QMap<int, QVector<DrawObject *> >();
     }
 }
 
@@ -315,23 +342,6 @@ bool SingletonRender::deleteMeshDrawing(int objectID) {
     return !allDrawnNodes.contains(objectID);
 }
 
-/**
- * @brief SingletonRender::showTestWidget
- *
- * Here we show testwidgets if we click on a button.
- *
- */
-
-void SingletonRender::showTestWidget() {
-    DrawObject *dummy = new DrawObject(100, QPoint(20, 20), 100,  ui->meshField);
-
-    qDebug() << "dummy läuft";
-
-    dummy->addPicture(this->allImages.value("background.png"), QPoint(20, 20));
-    dummy->addPicture(this->allImages.value("background.png"), QPoint(40, 40));
-    qDebug() << "dummy läuft";
-}
-
 QVector<int> *SingletonRender::getChildrenIDs() {
     QVector<int> *ids = new QVector<int>();
     QObjectList children = this->ui->meshField->children();
@@ -339,7 +349,7 @@ QVector<int> *SingletonRender::getChildrenIDs() {
     foreach (QObject *child, children) {
         DrawObject *node = dynamic_cast<DrawObject *>(child);
 
-        if (node != NULL) ids->push_back(node->nodeID);
+        if (node != NULL) ids->push_back(node->ID);
     }
 
     return ids;
