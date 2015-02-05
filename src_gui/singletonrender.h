@@ -10,6 +10,7 @@
 #include <QList>
 #include <QPainter>
 #include <QPoint>
+#include <QLine>
 
 // our own classes
 #include "mesh.h"
@@ -64,6 +65,7 @@ public:
      */
     void renderConnection(Connection *conToRender,int ID);
 
+    void renderConnections();
 
 
     /*
@@ -88,6 +90,8 @@ public:
      *
      */
     void drawLine(double start_x, double start_y, double end_x ,double end_y);
+
+    void drawLine(QLine line);
 
     void drawLine(QPoint start, QPoint end);
 
@@ -127,6 +131,7 @@ private:
     //Different lists because we will need to work differently with them
     QMap<int, DrawObject *> allDrawnNodes;
     QMap<int, QVector<DrawObject *> > allConnections;
+    QMap<int, QVector<QLine> > allLines;
 
     // window of application
     Ui::MainWindow *ui;

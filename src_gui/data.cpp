@@ -105,12 +105,12 @@ void  Data::initialize(MainWindow *mainWindow){
 
 
         //create a test connection
-/*
+
         for (int i = 0; i < 2; ++i) {
             Connection *tempTestConnection = NodeFactory::createTestConnection(i);
             Data::instance()->addConnectionToMesh(tempTestConnection);
         }
-*/
+
 
 
 

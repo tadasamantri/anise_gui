@@ -11,10 +11,10 @@ Connection *NodeFactory::createTestConnection(int i){
 
     //create some random waypoints
     connection->waypoints.push_back(QPoint(0*i,0));
-    connection->waypoints.push_back(QPoint(10*i,0));
-    connection->waypoints.push_back(QPoint(0,10*i));
-    connection->waypoints.push_back(QPoint(20*i,20*i));
-    connection->waypoints.push_back(QPoint(30*i,30*i));
+    connection->waypoints.push_back(QPoint(100*i,0));
+    connection->waypoints.push_back(QPoint(0,100*i));
+    connection->waypoints.push_back(QPoint(200*i,200*i));
+    connection->waypoints.push_back(QPoint(300*i,300*i));
 
     return connection;
 }

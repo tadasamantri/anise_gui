@@ -42,7 +42,13 @@ SingletonRender *SingletonRender::instance() {
 
 
 
-
+void SingletonRender::renderConnections(){
+    foreach (QVector<QLine> lineVec, this->allLines) {
+        foreach (QLine line, lineVec) {
+            this->drawLine(line);
+        }
+    }
+}
 
 
 
@@ -51,9 +57,17 @@ SingletonRender *SingletonRender::instance() {
 void SingletonRender::renderConnection(Connection *conToRender, int ID){
 
     //will draw a line connecting all connection joints of a connection
-    this->drawLines(&conToRender->waypoints);
+    //this->drawLines(&conToRender->waypoints);
 
     if (!allConnections.contains(ID)) {
+
+        QVector <QLine> tempVec;
+        //create new Lines
+        for (int index = 0; index < conToRender->waypoints.size()-1; ++index) {
+            tempVec.push_back(QLine(conToRender->waypoints.at(index),conToRender->waypoints.at(index+1) ));
+
+        }
+        this->allLines.insert(ID, tempVec);
 
         //create a new Vector for all Joints
         QVector<DrawObject *> jointVector;
@@ -68,13 +82,13 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID){
 
 
             //calculate the middle of the Image
-            int posx = joint.x() + allImages.value("joint.png")->width()/2;
-            int posy = joint.y() + allImages.value("joint.png")->height()/2;
+            int posx = joint.x() - allImages.value("joint.png")->width()/2;
+            int posy = joint.y() - allImages.value("joint.png")->height()/2;
 
             //create a new Drawobject and save some space for the image
             DrawObject *ConnectionJointDrawObject = new DrawObject(
                         ID,
-                        QPoint(posx, posy), allImages.value("joint.png")->width(),allImages.value("joint.png")->height(),
+                        QPoint(posx,posy), allImages.value("joint.png")->width(),allImages.value("joint.png")->height(),
                         this->ui->meshField);
 
             //Add the picture to the draw object
@@ -89,16 +103,31 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID){
         //Add the vector into the map
         allConnections.insert(ID,jointVector);
 
+    }else{
+
+        //update the lines
+        QVector <QLine> tempVec;
+        this->allLines.clear();
+        //create new Lines
+        for (int index = 0; index < conToRender->waypoints.size()-1; ++index) {
+            tempVec.push_back(QLine(conToRender->waypoints.at(index),conToRender->waypoints.at(index+1) ));
+
+        }
+        this->allLines.insert(ID, tempVec);
+
+
+        //calculate the middle of the Image
+        int posxOffset =  - allImages.value("joint.png")->width()/2;
+        int posyOffset =  - allImages.value("joint.png")->height()/2;
+
+
+        //move all joints to the correct position
+        for (int index = 0; index < allConnections[ID].size(); ++index) {
+            DrawObject* joint = allConnections[ID].at(index);
+            joint->move(conToRender->waypoints.at(index).x()+posxOffset, conToRender->waypoints.at(index).y()+posyOffset);
+            joint->show();
+        }
     }
-
-    //move all joints to the correct position
-    for (int index = 0; index < allConnections[ID].size(); ++index) {
-        DrawObject* joint = allConnections[ID].at(index);
-        joint->move(conToRender->waypoints.at(index).x(), conToRender->waypoints.at(index).y());
-        joint->show();
-    }
-
-
 }
 
 
@@ -128,6 +157,18 @@ void SingletonRender::drawLine(double start_x, double start_y, double end_x,doub
     QPainter painter(this->ui->meshField);
 
     QLineF line(start_x, start_y, end_x, end_y);
+    painter.setPen(Qt::blue);
+    painter.drawLine(line);
+    //painter.draw
+
+}
+
+// will have to be called from a paint event!
+void SingletonRender::drawLine(QLine line) {
+    // qDebug() << "drawline";
+    QPainter painter(this->ui->meshField);
+
+    //QLineF line(start_x, start_y, end_x, end_y);
     painter.setPen(Qt::blue);
     painter.drawLine(line);
     //painter.draw

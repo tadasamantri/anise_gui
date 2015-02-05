@@ -108,6 +108,7 @@ void MeshEditorWidget::dragEnterEvent(QDragEnterEvent *event) {
 }
 
 void MeshEditorWidget::mouseMoveEvent(QMouseEvent *event){
+    /*
     //will draw a line from drawLineStartPosition to mouse
     this->mousePosition = event->pos();
 
@@ -118,7 +119,7 @@ void MeshEditorWidget::mouseMoveEvent(QMouseEvent *event){
         //right now it redraws everything !
         this->repaint();
     }
-
+*/
 }
 
 void MeshEditorWidget::dragMoveEvent(QDragMoveEvent *event) {
@@ -166,11 +167,18 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
 }
 
 void MeshEditorWidget::paintEvent(QPaintEvent *event) {
-
+    qDebug() << "paint event";
     if (this->drawLine == true && !lineWayPoints.empty()) {
         //this will draw the vector with points as a line
         SingletonRender::instance()->drawLines(&lineWayPoints, &mousePosition);
     }
+
+
+    //draw all connections:
+
+    SingletonRender::instance()->renderConnections();
+
+
 }
 
 bool MeshEditorWidget::containsID(int objectID) {
