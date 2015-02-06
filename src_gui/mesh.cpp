@@ -1,12 +1,9 @@
 #include "mesh.h"
-#include "QDebug"
-#include "singletonrender.h"
 #include "data.h"
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QSpinBox>
 #include <limits>
-#include <QCalendarWidget>
 
 Mesh::Mesh(QObject *parent) : QObject(parent) {
     this->nodesInMash = QMap<int, Node *>();

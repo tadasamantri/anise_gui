@@ -1,13 +1,6 @@
 #include "drawobject.h"
-#include <QPixmap>
-#include <QWidget>
-#include <QLabel>
 #include <QShortcut>
-#include <QDebug>
-#include <QVector>
-#include <QBitmap>
 #include <QSize>
-#include <QPushButton>
 
 DrawObject::DrawObject(int id, QPoint position, int width, int height,
                        QWidget *parent = 0) {

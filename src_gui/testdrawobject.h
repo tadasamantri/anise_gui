@@ -1,8 +1,6 @@
 #ifndef TESTDRAWOBJECT_H
 #define TESTDRAWOBJECT_H
-#include <QWidget>
-#include <QPixmap>
-#include <QPainter>
+
 #include <QLabel>
 
 

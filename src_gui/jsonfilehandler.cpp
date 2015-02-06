@@ -1,5 +1,8 @@
 ﻿#include "jsonfilehandler.h"
 #include "data.h"
+#include <QProcess>
+#include <QJsonObject>
+#include <QJsonArray>
 
 QString JsonFileHandler::loadFile(const QString &path) {
     // QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));

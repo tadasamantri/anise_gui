@@ -1,22 +1,10 @@
 #ifndef SINGLETONRENDER_H
 #define SINGLETONRENDER_H
 
-// Qt classes
-#include <QMap>
-#include <QPixmap>
-#include <QDebug>
-#include <QStringList>
-#include <QDir>
-#include <QList>
-#include <QPainter>
-#include <QPoint>
-#include <QLine>
-
-// our own classes
+#include "mainwindow.h"
 #include "mesh.h"
 #include "node.h"
 #include "drawobject.h"
-#include "ui_mainwindow.h"
 
 // The life of the singleton instantiation is for the duration of the
 // application.

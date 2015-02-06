@@ -1,5 +1,7 @@
 #include "mesheditorwidget.h"
 #include "data.h"
+#include <QMimeData>
+#include <QDrag>
 
 
 

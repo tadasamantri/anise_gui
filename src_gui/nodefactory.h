@@ -1,13 +1,13 @@
 #ifndef NODEFACTORY_H
 #define NODEFACTORY_H
+
 #include "node.h"
 #include <QVariantMap>
 #include <QDebug>
 #include "nodecatalog.h"
 #include "connection.h"
 
-
-class NodeFactory { //singleton
+class NodeFactory {
 public:
 
     static Node createNode();

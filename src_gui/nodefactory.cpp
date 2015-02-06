@@ -1,6 +1,5 @@
 #include "nodefactory.h"
 #include "data.h"
-#include "connection.h"
 
 // TODO friend Node, node should have a private konstruktor
 // Nodes should only be created in this factory!

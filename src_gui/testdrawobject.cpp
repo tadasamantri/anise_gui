@@ -1,10 +1,4 @@
 #include "testdrawobject.h"
-#include <QPixmap>
-#include <QWidget>
-#include <QLabel>
-#include <QShortcut>
-#include <qdebug.h>
-
 #include "data.h"
 
 TestDrawObject::TestDrawObject(int nodeID, QPoint position, QWidget *parent = 0) {

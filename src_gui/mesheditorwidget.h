@@ -2,8 +2,6 @@
 #define MESHEDITORWIDGET_H
 
 #include <QWidget>
-
-#include <QWidget>
 #include <QEvent>
 
 #include <QDragEnterEvent>
@@ -33,6 +31,7 @@ struct NewLine{
 
 
 };
+
 
 
 

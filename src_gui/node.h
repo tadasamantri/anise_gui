@@ -2,9 +2,7 @@
 #define NODE_H
 
 #include <QVector>
-#include <QString>
 #include <QVariantMap>
-#include <QStringBuilder>
 #include "gate.h"
 
 // Node konstruktor should be private
