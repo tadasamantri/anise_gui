@@ -325,6 +325,8 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
 void SingletonRender::renderMesh(Mesh *workMesh) {
     QMap<int, Node *> temp = workMesh->nodesInMash;
 
+
+
     // calls render method for every node in the mesh
     foreach (int ID, temp.keys()) {
         // Only do it if a Node with this ID exists in the mesh
@@ -339,6 +341,8 @@ void SingletonRender::renderMesh(Mesh *workMesh) {
     foreach (int ID, workMesh->connectionsInMash.keys()) {
         renderConnection(workMesh->connectionsInMash.value(ID), ID);
     }
+
+this->ui->mesh_edt_area->repaint();
 }
 
 void SingletonRender::clearMeshField() { clearAll(ui->meshField); }

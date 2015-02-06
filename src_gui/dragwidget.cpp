@@ -49,6 +49,7 @@ void DragWidget::mousePressEvent(QMouseEvent *event) {
     dataStream << child->getType();
 
 
+
     /**
       * Something about mime data
       */

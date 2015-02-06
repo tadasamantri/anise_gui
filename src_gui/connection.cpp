@@ -1,4 +1,5 @@
 #include "connection.h"
+#include <limits>
 
 Connection::Connection(Node *src_node, Gate *src_gate, Node *dest_node,
                        Gate *dest_gate) {
@@ -9,6 +10,37 @@ Connection::Connection(Node *src_node, Gate *src_gate, Node *dest_node,
 }
 
 Connection::Connection(){}
+
+//will return the closest joint to this point
+int Connection::getJoint(QPoint* point){
+
+    if(this->waypoints.isEmpty()){
+        qDebug() << "tried to get a joint from a connection without joints!";
+        return -1;
+    }
+
+    //uses manhatten length (x+y) instead of correct pytharorean calculations
+    int min = std::numeric_limits<int>::max();
+    int closestOne = -1;
+    for(int index = 0; index < this->waypoints.size(); ++index) {
+        QPoint tempPoint(point->x()-this->waypoints.at(index).x(),point->y()-this->waypoints.at(index).y() );
+        int manhattenLength = tempPoint.manhattanLength();
+        qDebug() << "manhatten length: " << manhattenLength << " min: " << min << " id: " << index;
+        if (manhattenLength < min) {
+            min = manhattenLength;
+            closestOne = index;
+        }
+    }
+    qDebug()<< "closestone " << closestOne;
+    return closestOne;
+}
+
+void Connection::setJoint(int index, QPoint *newPosition){
+
+    waypoints.removeAt(index);
+    waypoints.insert(index, *newPosition);
+
+}
 
 void Connection::setDestGate(Gate &dest) { dest_gate = &dest; }
 

@@ -103,15 +103,8 @@ void  Data::initialize(MainWindow *mainWindow){
 
 
 
-
-        //create a test connection
-
-        for (int i = 0; i < 2; ++i) {
-            Connection *tempTestConnection = NodeFactory::createTestConnection(i);
-            Data::instance()->addConnectionToMesh(tempTestConnection);
-        }
-
-
+    Connection *tempTestConnection = NodeFactory::createTestConnection(1);
+    Data::instance()->addConnectionToMesh(tempTestConnection);
 
 
 
@@ -136,10 +129,34 @@ void Data::removeNodeFromMesh(int ID)
     mesh->removeNode(ID);
 }
 
-void Data::moveNodeInMesh(QPoint *Position, int numberOfNode) {
-    this->mesh->getNodeByID(numberOfNode)
-            ->setPosition(Position->x(), Position->y());
-    SingletonRender::instance()->renderMesh(this->mesh);
+void Data::moveObjectInMesh(QPoint *start, QPoint *end, int ID){
+
+    if (this->mesh->nodesInMash.contains(ID)) {
+
+        this->moveObjectInMesh(end, ID);
+
+    }else if(this->mesh->connectionsInMash.contains(ID)){
+
+        int joint = this->mesh->getConnectionByID(ID)->getJoint(start);
+        this->mesh->getConnectionByID(ID)->setJoint(joint, end);
+
+        SingletonRender::instance()->renderMesh(this->mesh);
+    }
+}
+
+
+void Data::moveObjectInMesh(QPoint *Position, int ID){
+
+    if (this->mesh->nodesInMash.contains(ID)) {
+
+        this->mesh->getNodeByID(ID)->setPosition(Position->x(), Position->y());
+        SingletonRender::instance()->renderMesh(this->mesh);
+
+    }else if(this->mesh->connectionsInMash.contains(ID)){
+        qDebug()<< "cant move a connection joint with onle one QPoint";
+        return;
+    }
+
 }
 
 

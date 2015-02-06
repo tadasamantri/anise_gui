@@ -6,12 +6,17 @@
 
 #include <QVector>
 #include <QPoint>
+#include <QDebug>
 
 class Connection {
 
 public:
     Connection();
     Connection(Node *src_node, Gate *src_gate, Node *dest_node, Gate *dest_gate);
+
+    //returns the closest joint to the point
+    int getJoint(QPoint *point);
+    void setJoint(int idnex, QPoint *newPosition);
 
     Gate *getSrcGate();
     Gate *getDestGate();

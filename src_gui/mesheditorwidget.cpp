@@ -55,8 +55,10 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     QPoint hotSpot = event->pos() - child->pos();
     QByteArray arrayData;
     QDataStream dataStream(&arrayData, QIODevice::WriteOnly);
-    // TODO correct use of node ID
-    dataStream << QPoint(hotSpot) << child->ID;
+
+    // stream data into the datastream. these data can be restored later in the drop event
+    // data Stream
+    dataStream << QPoint(hotSpot) << child->ID << event->pos();
 
     // qDebug() << "NODEID BEFORE DATASTREAM: " << child->nodeID;
     // something about mime data...
@@ -129,8 +131,25 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
 
     QByteArray arrayData = event->mimeData()->data("application/customthingy");
     QDataStream dataStream(&arrayData, QIODevice::ReadOnly);
+
+
+
+
+
+
+
+
+    //get the offset out of the mime, the offset is the distance from the mouse to the 0,0 position of the label/widget
     dataStream >> offset;
+
+    //the id of the dragged object
     dataStream >> nodeID;
+
+
+
+
+
+
 
     DropPoint -= offset;
 
@@ -138,24 +157,36 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
     qDebug() << "DropPoint" << DropPoint;
 
     if (event->source()->objectName() == "nodeCatalogContent") {
+
         // should create the correct node type and not a "testnode"
         QString _class;
         dataStream >> _class;
+
         Node *newNode = Data::instance()->nodeFactory->createNode(_class);
-        newNode->setName(
-                    "Node" + QString::number(Data::instance()->getMesh()->getCurrentID()));
+
+        newNode->setName("Node" + QString::number(Data::instance()->getMesh()->getCurrentID()));
         newNode->setPosition(DropPoint.x(), DropPoint.y());
-        qDebug() << "new node of tpye " << _class << " created at position ("
-                 << DropPoint.x() << "|" << DropPoint.y() << ")";
+
+        qDebug() << "new node of tpye " << _class << " created at position ("<< DropPoint.x() << "|" << DropPoint.y() << ")";
+
+
         Data::instance()->addNodeToMesh(newNode);
     }
 
     if (event->source()->objectName() == "meshField") {
+
+
+        //get the start posisiotn of the drop from the mime
+        // TODO die start position wird jetzt nur aus dem datastream gelesen wenn wir innerhalb vom meshfield draggen. aber man sollte dafür das application/datathingy benutzen
+        QPoint dropstart ;
+        dataStream >> dropstart;
+        qDebug() << " dropstart " << dropstart.x() << " " << dropstart.y();
+
         // will move the correct node to the new position
         qDebug() << "event position" << event->pos();
         qDebug() << "mime:" << event->mimeData()->data("application/customthingy");
         qDebug() << "trying to move the node to the new position";
-        Data::instance()->moveNodeInMesh(&DropPoint, nodeID);
+        Data::instance()->moveObjectInMesh(&dropstart, &DropPoint, nodeID);
     }
 }
 
