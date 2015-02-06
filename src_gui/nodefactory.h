@@ -17,7 +17,7 @@ public:
     static Node *createTestNode();
 
     static Connection *createTestConnection(int i);
-
+    static Connection *createConnection(int srcNodeID, int srcGateID, int destNodeID, int destGateID, QVector<QPoint> wayPoints);
 
     NodeFactory();
 

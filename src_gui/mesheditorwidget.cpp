@@ -54,7 +54,7 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
 
         if(newLine.drawLine){
         // add a way point for the line to draw
-        this->lineWayPoints.push_back(event->pos());
+        this->newLine.wayPoints.push_back(event->pos());
         }
 
         else
@@ -240,6 +240,7 @@ void MeshEditorWidget::handleGateClick(int nodeID){
     qDebug() << "hey mein gateclick wurde erkannt!";
 
 
+    //That means we are currently constructing a line
     if(newLine.drawLine){
 
         //Ask for Correctness of Connection
@@ -248,12 +249,27 @@ void MeshEditorWidget::handleGateClick(int nodeID){
 
         //call Datastuff to create Connection
 
+        Data::instance()->addConnectionToMesh(NodeFactory::createConnection(newLine.sourceNodeID, 0, newLine.destinationNodeID, 0, newLine.wayPoints));
 
         this->clearNewLine();
 
 
     }
 
+
+    //That means we are just starting a new Line
+    if(!newLine.drawLine){
+
+        //Ask for Correctness of Connection
+
+        newLine.sourceNodeID = nodeID;
+
+
+
+        this->clearNewLine();
+
+
+    }
 
     //Do Everything that Changed when Clicking on a gate
     newLine.drawLine = !(newLine.drawLine);

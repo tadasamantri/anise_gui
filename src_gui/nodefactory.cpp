@@ -87,3 +87,12 @@ Node *NodeFactory::createTestNode() {
 
     return tempTestNode;
 }
+
+
+Connection *NodeFactory::createConnection(int srcNodeID, int srcGateID, int destNodeID, int destGateID, QVector<QPoint> wayPoints){
+
+    //return new Connection(srcNodeID, destGateID, destNodeID, destGateID, wayPoints);
+
+return new Connection();
+
+ }

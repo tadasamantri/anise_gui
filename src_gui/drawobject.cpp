@@ -24,6 +24,10 @@ DrawObject::DrawObject(int id, QPoint position, int width, int height,
     //initialize the over all picture
     this->overAllPicture = QPixmap (this->size());
     overAllPicture.fill(QColor(0,0,0,0)); //make it transparent
+
+
+    //connects
+     connect(this, SIGNAL(released(int)), this->parent(), SLOT(handleGateClick(int)));
 }
 
 /**
@@ -99,7 +103,7 @@ void DrawObject::addButton(QPixmap *pic, QPoint position) {
 
     // Connect button signal to appropriate slot
     connect(button, SIGNAL(released()), this, SLOT(releaseWithParam()));
-    connect(this, SIGNAL(released(int)), this->parent(), SLOT(handleGateClick(int)));
+
 
 
 
