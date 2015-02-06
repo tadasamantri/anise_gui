@@ -97,9 +97,16 @@ void DrawObject::addButton(QPixmap *pic, QPoint position) {
     // update the over all picture
     this->updateOverAllPicture(pic, position);
 
+    // Connect button signal to appropriate slot
+    connect(button, SIGNAL(released()), this, SLOT(releaseWithParam()));
+    connect(this, SIGNAL(released(int)), this->parent(), SLOT(handleGateClick(int)));
+
+
 
 
 }
+
+
 
 void DrawObject::modifyMask(QPixmap *pic, QPoint position){
     //safe dimensions
@@ -145,3 +152,9 @@ void DrawObject::updateOverAllPicture(QPixmap *newPicture, QPoint position ){
 }
 
 QPixmap DrawObject::getPicture() { return this->overAllPicture; }
+
+
+void DrawObject::releaseWithParam(){
+
+    emit released(this->ID);
+}

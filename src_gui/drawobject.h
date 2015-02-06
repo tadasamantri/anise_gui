@@ -13,7 +13,7 @@
 
 class DrawObject : public QWidget {
 
-  //  Q_OBJECT
+   Q_OBJECT
 
 public:
     int ID;
@@ -38,9 +38,19 @@ public:
 
     QPixmap getPicture ();
 
+signals:
+
+    void released(int ID);
+
+public slots:
+
+    void releaseWithParam();
+
 private:
 
 void updateOverAllPicture(QPixmap *newPicture, QPoint position);
+
+
 
 };
 

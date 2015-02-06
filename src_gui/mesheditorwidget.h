@@ -24,6 +24,18 @@
 
 #include "node.h"
 
+struct NewLine{
+
+    bool drawLine;
+    int sourceNodeID;
+    int destinationNodeID;
+    QVector<QPoint> wayPoints;
+
+
+};
+
+
+
 class MeshEditorWidget : public QWidget {
     Q_OBJECT
 public:
@@ -50,12 +62,23 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
 
 
+
 private:
+
+    NewLine newLine;
+
+    //Clears new Line which is/was in construction
+    void clearNewLine();
 
 
 signals:
 
     void onWidgetClicked(int nodeID);
+
+
+public slots:
+
+    void handleGateClick(int nodeID);
 
 };
 

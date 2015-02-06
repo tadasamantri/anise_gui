@@ -1,45 +1,63 @@
 #include "mesheditorwidget.h"
 #include "data.h"
 
+
+
 MeshEditorWidget::MeshEditorWidget(QWidget *parent) : QWidget(parent) {
     connect(this, SIGNAL(onWidgetClicked(int)), Data::instance()->getMesh(),
             SLOT(setFocusMeshObject(int)));
     this->setMinimumHeight(5000);
     this->setMinimumWidth(5000);
-    drawLine = false;
+    clearNewLine();
+}
+
+void MeshEditorWidget::clearNewLine(){
+
+    newLine = NewLine();
+    newLine.drawLine = false;
+    newLine.sourceNodeID = -1;
+    newLine.destinationNodeID = -1;
+    newLine.wayPoints = QVector<QPoint>();
+
 }
 
 void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
+
+    DrawObject *child;
+    QLabel *labelChild;
+    QPushButton *buttonChild;
+
+
     // ensure a left-mouse-click
     if (!(event->button() == Qt::LeftButton)) {
         this->lineWayPoints.clear();
         return;
     }
+/*
+    //---Button Check-----
+    // Did I click on a Button (Gate)?
+    buttonChild = dynamic_cast<QPushButton *>(childAt(event->pos()));
+    //If yes, buttonChild will not be 0
+    if(!buttonChild)
+       this->gateHandle();
+*/
+    //---Label Check----------
+    // check of clicking on label (picture)
+    labelChild = dynamic_cast<QLabel *>(childAt(event->pos()));
+    // if i clicked on a picture...
+    if (labelChild)
+        // ...then my parent will be drawobject hopefully
+        child = dynamic_cast<DrawObject *>(labelChild->parent());
 
-    qDebug() << childAt(event->pos());
-    // get child at mouse position
-    // TODO NOTLÖSUNG - HAS TO BE CHANGED
-    // PROPERLY------------------------------------------
-
-    DrawObject *child;
-
-    // CHECK OF CLICKING ON LABEL (PICTURE)
-    QLabel *grandChild = dynamic_cast<QLabel *>(childAt(event->pos()));
-
-    // IF I CLICKED ON PICTURE...
-    if (grandChild) {
-        // THEN MY PARENT WILL BE THE DRAWOBJECT (HOPEFULLY)
-        child = dynamic_cast<DrawObject *>(grandChild->parent());
-    } else
-        // IF NOT THEN MAYBE I CLICKED ON THE WIDGET (CAUSE THE PICTURES DONT FILL
-        // UP ALL THE SPACE OF THE WIDGET)
-        child = dynamic_cast<DrawObject *>(childAt(event->pos()));
-    //---------------------------------------------------------------------------------------
-
-    // IF IT IS STILL 0, THEN I CLICKED ON MESHFIELD NOT A NODE
+    //If it is still 0, i clicked on the meshfiel itself
     if (!child) {
+
+        if(newLine.drawLine){
         // add a way point for the line to draw
         this->lineWayPoints.push_back(event->pos());
+        }
+
+        else
 
         emit onWidgetClicked(-1);
         // return if no child at mouse position
@@ -100,13 +118,13 @@ void MeshEditorWidget::dragEnterEvent(QDragEnterEvent *event) {
 
 void MeshEditorWidget::mouseMoveEvent(QMouseEvent *event){
     /*
-    //will draw a line from drawLineStartPosition to mouse
+    //will draw a line from newLine.drawLineStartPosition to mouse
 
     this->mousePosition = event->pos();
 
-    this->drawLine = true;
+    this->newLine.drawLine = true;
 
-    if (drawLine == true) {
+    if (newLine.drawLine == true) {
         // TODO optimize the drawing
         // right now it redraws everything !
         this->repaint();
@@ -161,9 +179,9 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
 
 void MeshEditorWidget::paintEvent(QPaintEvent *event) {
 /*
-    if (this->drawLine == true && !lineWayPoints.empty()) {
+    if (this->newLine.drawLine == true && !lineWayPoints.empty()) {
         // this will draw the vector with points as a line
-        SingletonRender::instance()->drawLines(&lineWayPoints, &mousePosition);
+        SingletonRender::instance()->newLine.drawLines(&lineWayPoints, &mousePosition);
     }
 
 */
@@ -183,4 +201,34 @@ bool MeshEditorWidget::containsID(int objectID) {
         if (castChild->ID == objectID) return true;
     }
     return false;
+}
+
+void MeshEditorWidget::handleGateClick(int nodeID){
+
+
+    qDebug() << "hey mein gateclick wurde erkannt!";
+
+
+    if(newLine.drawLine){
+
+        //Ask for Correctness of Connection
+
+        newLine.destinationNodeID = nodeID;
+
+        //call Datastuff to create Connection
+
+
+        this->clearNewLine();
+
+
+    }
+
+
+    //Do Everything that Changed when Clicking on a gate
+    newLine.drawLine = !(newLine.drawLine);
+
+
+
+
+
 }

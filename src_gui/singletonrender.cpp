@@ -415,3 +415,4 @@ QVector<int> *SingletonRender::getChildrenIDs() {
 
     return ids;
 }
+
