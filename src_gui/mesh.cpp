@@ -66,6 +66,10 @@ Node *Mesh::getNodeByID(int ID) {
     return this->nodesInMash[ID];
 }
 
+Connection *Mesh::getConnectionByID(int ID){
+    return this->connectionsInMash[ID];
+}
+
 int Mesh::generateId() {
     // qDebug() << "new Node with ID " << iDCounter << " added";
     return this->iDCounter++;
@@ -73,7 +77,7 @@ int Mesh::generateId() {
 
 void Mesh::setFocusMeshObject(int nodeID) {
     this->focusObject = nodeID;
-    if (nodeID > -1) {
+    if (nodesInMash.contains(nodeID)) {
         Node *n = nodesInMash[nodeID];
         QTableWidget *table = Data::instance()->getMainWindow()->ui->tableWidget;
         table->setRowCount(n->getParams()->size() + 3);

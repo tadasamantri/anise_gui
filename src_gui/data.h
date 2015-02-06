@@ -51,7 +51,8 @@ public:
     int addConnectionToMesh(Connection *newConnection);
 
     void removeNodeFromMesh(int ID);
-    void moveNodeInMesh(QPoint *Position, int numberOfNode);
+    void moveObjectInMesh(QPoint *Position, int ID);
+    void moveObjectInMesh(QPoint *start, QPoint *end, int ID);
 
     void newMeshProject();
 
