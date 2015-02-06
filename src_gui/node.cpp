@@ -67,6 +67,15 @@ bool Node::addParam(QString _key, QVariant _value) {
     return true;
 }
 
+bool Node::setParam(QString key, QVariant _value)
+{
+    if(params.contains(key)){
+        params[key] = _value;
+        return true;
+    }
+    return false;
+}
+
 bool Node::removeParam(QString _key) {
     if (this->params.contains(_key))
         this->params.remove(_key);

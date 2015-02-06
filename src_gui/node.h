@@ -48,6 +48,8 @@ public:
 
     bool addParam(QString _key, QVariant _value);
 
+    bool setParam(QString key, QVariant _value);
+
     bool removeParam(QString _key);
 
     QString getParamByKey(const QString &_key);

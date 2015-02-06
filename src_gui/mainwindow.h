@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QMouseEvent>
 #include <QMainWindow>
+#include <QTableWidgetItem>
 #include "jsonfilehandler.h"
 
 namespace Ui {
