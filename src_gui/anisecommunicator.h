@@ -1,7 +1,6 @@
 #ifndef ANISECOMMUNICATOR_H
 #define ANISECOMMUNICATOR_H
 
-#include <QString>
 #include <QProcess>
 
 /**
