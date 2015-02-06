@@ -2,17 +2,7 @@
 #define DRAGWIDGET_H
 
 #include <QWidget>
-#include <QEvent>
-
-#include <QDragEnterEvent>
-#include <QDragMoveEvent>
-#include <QDropEvent>
 #include <QMouseEvent>
-#include <QPoint>
-#include <QDrag>
-#include <QDebug>
-#include <Qt>
-#include <QMimeData>
 
 class DragWidget : public QWidget {
     Q_OBJECT

@@ -1,8 +1,7 @@
 #ifndef GATE_H
 #define GATE_H
 
-#include <QString>
-#include <QList>
+#include <QStringList>
 
 class Gate {
 public:

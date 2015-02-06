@@ -3,7 +3,6 @@
 #include <QPixmap>
 #include <QShortcut>
 #include <QDebug>
-#include <QFormLayout>
 #include <QCheckBox>
 #include <QLabel>
 #include <QTextLine>

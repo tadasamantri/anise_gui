@@ -1,10 +1,8 @@
-#include <QPushButton>
-#include <QIcon>
-
-#include <stddef.h>  // defines NULL
+#include <QDir>
 #include "singletonrender.h"
 #include "testdrawobject.h"
 #include "nodetypelabel.h"
+#include "ui_mainwindow.h"
 
 // Global static pointer used to ensure a single instance of the class.
 SingletonRender *SingletonRender::m_pInstance = NULL;

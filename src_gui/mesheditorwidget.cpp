@@ -1,5 +1,7 @@
 #include "mesheditorwidget.h"
 #include "data.h"
+#include <QMimeData>
+#include <QDrag>
 
 MeshEditorWidget::MeshEditorWidget(QWidget *parent) : QWidget(parent) {
     connect(this, SIGNAL(onWidgetClicked(int)), Data::instance()->getMesh(),

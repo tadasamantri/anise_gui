@@ -1,11 +1,9 @@
 #include "data.h"
-#include "singletonrender.h"
-#include "ui_mainwindow.h"
 #include "settingshandler.h"
-#include "nodecatalog.h"
 #include "nodefactory.h"
 #include "anisecommunicator.h"
-#include "QFileDialog"
+#include <QFileDialog>
+#include <QMessageBox>
 
 // Global static pointer used to ensure a single instance of the class.
 Data *Data::data = NULL;

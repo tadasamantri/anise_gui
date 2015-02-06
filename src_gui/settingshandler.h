@@ -2,8 +2,6 @@
 #define SETTINGSHANDLER_H
 
 #include <QSettings>
-#include <QString>
-#include <QMap>
 
 class SettingsHandler {
 private:

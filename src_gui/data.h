@@ -9,6 +9,7 @@
 #include "ui_mainwindow.h"
 #include "connection.h"
 #include "node.h"
+#include "nodefactory.h"
 
 /**
  *  @Author Frederik Lührs

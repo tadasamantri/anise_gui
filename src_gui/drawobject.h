@@ -2,14 +2,11 @@
 #define DRAWOBJECT_H
 
 #include <QWidget>
-#include <QPixmap>
 #include <QPainter>
 #include <QLabel>
 #include <QVector>
 #include <QBitmap>
 #include <QPushButton>
-
-
 
 class DrawObject : public QWidget {
 

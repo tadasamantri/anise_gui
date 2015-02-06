@@ -1,21 +1,10 @@
 #ifndef MESHHANDLER_H
 #define MESHHANDLER_H
 
-#include <QVector>
-#include <QMap>
-#include <QString>
-#include <QList>
-#include <QObject>
-
-
 #include "connection.h"
-#include "node.h"
-
 
 class Mesh : public QObject {
     Q_OBJECT
-
-    friend class JsonFilehandler;
 
 public:
     // konstruktor

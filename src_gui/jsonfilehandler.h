@@ -13,26 +13,11 @@
  * 2.12.2014
  *
  */
-#include <QProcess>
-#include <QFile>
 #include <QString>
-#include <QVector>
-#include <QTextCodec>
-#include <QtDebug>
-#include <QJsonObject>
-#include <QTextStream>
+#include <QList>
 #include <QJsonDocument>
-#include <QJsonValue>
-#include <QJsonArray>
-#include <QJsonParseError>
-#include <QErrorMessage>
-#include <QJsonParseError>
-#include <QMessageBox>
-#include "gate.h"
 #include "node.h"
-#include "nodefactory.h"
 #include "mesh.h"
-#include "nodecatalog.h"
 
 
 class JsonFileHandler {

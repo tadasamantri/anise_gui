@@ -1,15 +1,11 @@
 #ifndef NODEFACTORY_H
 #define NODEFACTORY_H
+
 #include "node.h"
-#include <QVariantMap>
-#include <QDebug>
-#include "nodecatalog.h"
 #include "connection.h"
 
-
-class NodeFactory { //singleton
+class NodeFactory {
 public:
-
     static Node createNode();
     static Node *createNode(QString _class);
     static Node *createNode(QString _class, QString name);
@@ -18,9 +14,7 @@ public:
 
     static Connection *createTestConnection(int i);
 
-
     NodeFactory();
-
 };
 
 #endif  // NODEFACTORY_H

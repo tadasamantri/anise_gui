@@ -1,5 +1,5 @@
 #include "nodecatalog.h"
-
+#include <QDebug>
 
 NodeCatalog::NodeCatalog() {
     Content = QMap<QString, Node>();

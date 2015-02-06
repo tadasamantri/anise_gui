@@ -3,27 +3,6 @@
 
 #include <QWidget>
 
-#include <QWidget>
-#include <QEvent>
-
-#include <QDragEnterEvent>
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QMouseEvent>
-#include <QPoint>
-#include <QDrag>
-#include <QDebug>
-#include <Qt>
-#include <QMimeData>
-#include <QPainter>
-#include <QObject>
-#include <QVector>
-
-#include "drawobject.h"
-#include "nodefactory.h"
-
-#include "node.h"
-
 class MeshEditorWidget : public QWidget {
     Q_OBJECT
 public:

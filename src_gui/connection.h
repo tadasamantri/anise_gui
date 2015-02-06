@@ -4,7 +4,6 @@
 #include "node.h"
 #include "gate.h"
 
-#include <QVector>
 #include <QPoint>
 #include <QDebug>
 

@@ -1,15 +1,8 @@
 #include "dragwidget.h"
-#include <QMouseEvent>
-#include <QPoint>
+
 #include <QDrag>
-#include <QDebug>
-#include <Qt>
 #include <QMimeData>
-#include <QIODevice>
-#include <QPixmap>
-#include <QLabel>
 #include "drawobject.h"
-#include <QPainter>
 #include "nodefactory.h"
 #include "nodetypelabel.h"
 
