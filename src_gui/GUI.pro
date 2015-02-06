@@ -42,7 +42,6 @@ HEADERS  += mainwindow.h \
     settingshandler.h \
     anisecommunicator.h \
     qdebugstreamredirector.h \
-    anisecommunicator.h \
     nodefactory.h \
     nodecatalog.h \
     dragwidget.h \
