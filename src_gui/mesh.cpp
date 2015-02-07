@@ -89,6 +89,7 @@ bool Mesh::deleteItem() {
 
 bool Mesh::deleteNode() {
     nodesInMash.remove(focusObject);
+    Data::instance()->getMainWindow()->updatePropertyTable(-1);
     bool allRemoved = !nodesInMash.contains(focusObject) &&
             SingletonRender::instance()->deleteMeshDrawing(focusObject);
 

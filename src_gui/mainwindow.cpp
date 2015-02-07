@@ -229,6 +229,7 @@ void MainWindow::deleteTable() {
 }
 
 void MainWindow::displayTypeInfo(const QString &type) {
+    deleteTable();
     QTableWidget *table = ui->tableWidget;
     Node n = Data::instance()->getNodeCatalog()->getNodeOfType(type);
     int ins = 0, outs = 0;
