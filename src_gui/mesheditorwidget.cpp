@@ -6,11 +6,15 @@
 
 
 MeshEditorWidget::MeshEditorWidget(QWidget *parent) : QWidget(parent) {
-    connect(this, SIGNAL(onWidgetClicked(int)), Data::instance()->getMesh(),
-            SLOT(setFocusMeshObject(int)));
+    connectFocusSignal();
     this->setMinimumHeight(5000);
     this->setMinimumWidth(5000);
     clearNewLine();
+}
+
+void MeshEditorWidget::connectFocusSignal(){
+    connect(this, SIGNAL(onWidgetClicked(int)), Data::instance()->getMesh(),
+            SLOT(setFocusMeshObject(int)));
 }
 
 void MeshEditorWidget::clearNewLine(){
@@ -35,7 +39,7 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
         this->lineWayPoints.clear();
         return;
     }
-/*
+    /*
     //---Button Check-----
     // Did I click on a Button (Gate)?
     buttonChild = dynamic_cast<QPushButton *>(childAt(event->pos()));
@@ -55,13 +59,13 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     if (!child) {
 
         if(newLine.drawLine){
-        // add a way point for the line to draw
-        this->newLine.wayPoints.push_back(event->pos());
+            // add a way point for the line to draw
+            this->newLine.wayPoints.push_back(event->pos());
         }
 
         else
 
-        emit onWidgetClicked(-1);
+            emit onWidgetClicked(-1);
         // return if no child at mouse position
         return;
     }
@@ -86,8 +90,10 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     QMimeData *mimeData = new QMimeData;
     mimeData->setData("application/customthingy", arrayData);
 
+    /* causes segfault on monkey-test
     // hides the child so only the drag object at mouse position is shown
-    child->hide();
+    //child->hide();
+    */
 
     QDrag *drag = new QDrag(this);
     drag->setMimeData(mimeData);
@@ -97,12 +103,12 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) ==
             Qt::MoveAction)
         qDebug() << "never happens? IF it does check mesheditorwidget";
-    // child->close();
+    /*causes segfault on monkey testing
     else {
         // qDebug() << "drag end";
         child->show();
         // child->setPixmap(pixmap);
-    }
+    }*/
 }
 
 void MeshEditorWidget::dragEnterEvent(QDragEnterEvent *event) {
@@ -211,7 +217,7 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
 }
 
 void MeshEditorWidget::paintEvent(QPaintEvent *event) {
-/*
+    /*
     if (this->newLine.drawLine == true && !lineWayPoints.empty()) {
         // this will draw the vector with points as a line
         SingletonRender::instance()->newLine.drawLines(&lineWayPoints, &mousePosition);
@@ -250,9 +256,9 @@ void MeshEditorWidget::handleGateClick(int nodeID){
         newLine.destinationNodeID = nodeID;
 
         //call Datastuff to create Connection
-
+        /* do this if connection is established
         Data::instance()->addConnectionToMesh(NodeFactory::createConnection(newLine.sourceNodeID, 0, newLine.destinationNodeID, 0, newLine.wayPoints));
-
+        */
         this->clearNewLine();
 
 

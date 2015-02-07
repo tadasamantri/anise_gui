@@ -20,16 +20,19 @@ public:
     Gate *getSrcGate();
     Gate *getDestGate();
 
-    void setSrcGate(Gate &src);
-    void setDestGate(Gate &dest);
+    void setSrcGate(Gate *src);
+    void setDestGate(Gate *dest);
 
     Node *getSrcNode();
     Node *getDestNode();
 
-    void setSrcNode(Node &node);
-    void setDestNode(Node &node);
+    void setSrcNode(Node *node);
+    void setDestNode(Node *node);
 
     QVector<QPoint> waypoints;
+
+    QVector<QPoint> getWaypoints() const;
+    void setWaypoints(const QVector<QPoint> &value);
 
 private:
     Gate *src_gate, *dest_gate;

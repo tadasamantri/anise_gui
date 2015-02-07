@@ -58,7 +58,7 @@ private:
     // counter for ids.
     // prevents double id numbers
     int iDCounter;
-
+    bool tableExists;
     // generate an unique id key;
     int generateId();
 

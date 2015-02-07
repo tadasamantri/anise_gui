@@ -21,6 +21,7 @@ public:
     ~MainWindow();
     Ui::MainWindow *ui;
 
+    void updatePropertyTable(int nodeID);
 public slots:
 
 private slots:

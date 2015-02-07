@@ -108,13 +108,13 @@ QString Node::toString() {
 
 Gate *Node::getGateByName(const QString &name) {
     Gate *g = 0;
-    foreach (Gate *gate, this->inputGates)
+    foreach (Gate *gate, inputGates)
         if (gate->getName() == name) {
             g = gate;
             return g;
         }
 
-    foreach (Gate* gate, this->outputGates)
+    foreach (Gate* gate, outputGates)
         if (gate->getName() == name) {
             g = gate;
             break;
@@ -122,6 +122,14 @@ Gate *Node::getGateByName(const QString &name) {
 
     return g;
 }
+
+Gate *Node::getGateByID(int ID, bool in){
+    if((in && ID >= inputGates.size()) || (!in && ID >= outputGates.size()))
+        return 0;
+    if(in) return inputGates.value(ID);
+    else return outputGates.value(ID);
+}
+
 QString Node::getDescription()
 {
     return description;

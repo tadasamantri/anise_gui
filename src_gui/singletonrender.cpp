@@ -3,6 +3,7 @@
 #include "testdrawobject.h"
 #include "nodetypelabel.h"
 #include "ui_mainwindow.h"
+#include "data.h"
 
 // Global static pointer used to ensure a single instance of the class.
 SingletonRender *SingletonRender::m_pInstance = NULL;
@@ -343,7 +344,9 @@ void SingletonRender::renderMesh(Mesh *workMesh) {
 this->ui->mesh_edt_area->repaint();
 }
 
-void SingletonRender::clearMeshField() { clearAll(ui->meshField); }
+void SingletonRender::clearMeshField() {
+    clearAll(ui->meshField);
+}
 
 void SingletonRender::renderNodeType(Node *nodeToRender, QWidget *parent,
                                      int position) {

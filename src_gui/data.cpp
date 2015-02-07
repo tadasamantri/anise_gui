@@ -169,13 +169,14 @@ void Data::newMeshProject(){
     /**
       * Create new Mesh object
       */
+    delete mesh;
     mesh = new Mesh();
 
     /**
       * Clears a Meshfield
       */
     SingletonRender::instance()->clearMeshField();
-
+    mainWindow->ui->meshField->connectFocusSignal();
     /**
       * Render a NewMesh
       */

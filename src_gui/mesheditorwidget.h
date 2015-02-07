@@ -46,13 +46,13 @@ public:
     //
     bool containsID(int objectID);
 
+    void connectFocusSignal();
 protected:
 
     //variables for drawing a line to the mouse cursor
     bool drawLine;
     QPoint mousePosition;
     QVector<QPoint> lineWayPoints;
-
     void mousePressEvent(QMouseEvent *event);
     void dragEnterEvent(QDragEnterEvent *event);
     void dragMoveEvent(QDragMoveEvent *event);

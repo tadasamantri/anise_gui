@@ -89,9 +89,18 @@ Node *NodeFactory::createTestNode() {
 
 
 Connection *NodeFactory::createConnection(int srcNodeID, int srcGateID, int destNodeID, int destGateID, QVector<QPoint> wayPoints){
-
+/*
     //return new Connection(srcNodeID, destGateID, destNodeID, destGateID, wayPoints);
+    Connection *result = new Connection();
+    Node *src = Data::instance()->getMesh()->getNodeByID(srcNodeID),
+            *dst = Data::instance()->getMesh()->getNodeByID(destNodeID);
+    Gate *srcGate = src->getGateByID(srcGateID, false),
+            *destGate = dst->getGateByID(destGateID, true);
+    result->setSrcNode(src);
+    result->setDestNode(dst);
+    result->setDestGate(destGate);
+    result->setSrcGate(srcGate);
+    result->setWaypoints(wayPoints);*/
+    return new Connection();
 
-return new Connection();
-
- }
+}

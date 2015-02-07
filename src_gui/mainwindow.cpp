@@ -5,6 +5,8 @@
 #include <QVector>
 #include <QCursor>
 #include <QShortcut>
+#include <QSpinBox>
+#include <limits>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -122,4 +124,100 @@ void MainWindow::on_actionSave_triggered() {
     // QByteArray data = *JsonFileHandler::meshToJson(theMesh);
     file.write(JsonFileHandler::meshToJson(theMesh).toUtf8());
     file.close();
+}
+
+void MainWindow::updatePropertyTable(int nodeID){
+    QTableWidget *table = ui->tableWidget;
+
+    if (nodeID >= 0 && Data::instance()->getMesh()->nodesInMash.contains(nodeID)) {
+        Node *n = Data::instance()->getMesh()->getNodeByID(nodeID);
+        QVariantMap *map = n->getParams();
+        table->setRowCount(map->size() + 3);
+
+        // create the entries all nodes have
+        QTableWidgetItem *name = new QTableWidgetItem(),
+                *ID = new QTableWidgetItem(),
+                *type = new QTableWidgetItem();
+
+        // set the data
+        ID->setData(0, nodeID);
+        name->setData(0, n->getName());
+        type->setData(0, n->getType());
+
+        // asign to table
+        table->setItem(0, 0, new QTableWidgetItem("NodeID"));
+        table->setItem(0, 1, ID);
+        table->item(0, 0)->setFlags(table->item(0, 0)->flags() ^
+                                    (Qt::ItemIsEnabled | Qt::ItemIsSelectable));
+        table->setItem(1, 0, new QTableWidgetItem("Node Class"));
+        table->setItem(1, 1, type);
+        table->item(1, 0)->setFlags(table->item(1, 0)->flags() ^
+                                    (Qt::ItemIsEnabled | Qt::ItemIsSelectable));
+        table->setItem(2, 0, new QTableWidgetItem("Node Name"));
+        table->setItem(2, 1, name);
+
+        // make name editable
+        name->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable |
+                       Qt::ItemIsSelectable);
+
+        // avoid editing keys, and nodeID/type
+        ID->setFlags(ID->flags() ^ (Qt::ItemIsEditable | Qt::ItemIsSelectable |
+                                    Qt::ItemIsEnabled));
+        type->setFlags(type->flags() ^ (Qt::ItemIsEditable | Qt::ItemIsSelectable |
+                                        Qt::ItemIsEnabled));
+        for (int i = 0; i < 3; i++)
+            table->item(i, 0)->setFlags(table->item(i, 0)->flags() ^
+                                        (Qt::ItemIsEditable | Qt::ItemIsSelectable));
+        QStringList keys = map->keys();
+        for (int i = 0; i < keys.size(); i++) {
+            // create key item
+            QString key = keys.value(i);
+            QTableWidgetItem *key_item = new QTableWidgetItem(key);
+            key_item->setFlags(key_item->flags() ^
+                               (Qt::ItemIsEditable | Qt::ItemIsSelectable));
+            table->setItem(3 + i, 0, key_item);
+
+            // create value item
+            QVariant value = map->value(key);
+            QTableWidgetItem *value_item;
+            QSpinBox *spinner;
+            switch (value.userType()) {
+            case QVariant::Bool:
+                value_item = new QTableWidgetItem();
+                // value_item->setData(0, value);
+                value_item->setCheckState(value.toBool() ? Qt::Checked
+                                                         : Qt::Unchecked);
+                table->setItem(3 + i, 1, value_item);
+                break;
+            case QVariant::Int:
+                spinner = new QSpinBox(table);
+                spinner->setMaximum(std::numeric_limits<int>::max());
+                spinner->setMinimum(std::numeric_limits<int>::min());
+                spinner->setValue(value.toInt());
+                table->setCellWidget(3 + i, 1, spinner);
+                break;
+            case QVariant::UInt:
+                spinner = new QSpinBox(table);
+                spinner->setMaximum(std::numeric_limits<int>::max());
+                spinner->setMinimum(0);
+                spinner->setValue(value.toInt());
+                table->setCellWidget(3 + i, 1, spinner);
+                break;
+            default:
+                value_item = new QTableWidgetItem();
+                value_item->setData(0, value);
+                table->setItem(3 + i, 1, value_item);
+                break;
+            }
+        }
+        table->show();
+    } else if (table->isVisible()){
+        table->hide();
+        qDebug() << "table destroyed";
+        // delete all tableitems, because they aren't needed any more
+        for (int col = 0; col < table->columnCount(); col++)
+            for (int row = 0; row < table->rowCount(); row++)
+                delete table->item(row, col);
+        table->setRowCount(0);
+    }
 }

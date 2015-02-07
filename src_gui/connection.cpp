@@ -42,17 +42,27 @@ void Connection::setJoint(int index, QPoint *newPosition){
 
 }
 
-void Connection::setDestGate(Gate &dest) { dest_gate = &dest; }
+void Connection::setDestGate(Gate *dest) { dest_gate = dest; }
 
-void Connection::setSrcGate(Gate &src) { src_gate = &src; }
+void Connection::setSrcGate(Gate *src) { src_gate = src; }
 
 Gate *Connection::getDestGate() { return dest_gate; }
 
 Gate *Connection::getSrcGate() { return src_gate; }
 
-void Connection::setDestNode(Node &node) { dest_node = &node; }
+void Connection::setDestNode(Node *node) { dest_node = node; }
+QVector<QPoint> Connection::getWaypoints() const
+{
+    return waypoints;
+}
 
-void Connection::setSrcNode(Node &node) { src_node = &node; }
+void Connection::setWaypoints(const QVector<QPoint> &value)
+{
+    waypoints = value;
+}
+
+
+void Connection::setSrcNode(Node *node) { src_node = node; }
 
 Node *Connection::getSrcNode() { return src_node; }
 
