@@ -22,6 +22,7 @@ public:
     Ui::MainWindow *ui;
 
     void updatePropertyTable(int nodeID);
+    void displayTypeInfo(const QString &type);
 public slots:
 
 private slots:
@@ -41,6 +42,7 @@ private slots:
 
 private:
     void initializeGUI();
+    void deleteTable();
 };
 
 #endif  // MAINWINDOW_H

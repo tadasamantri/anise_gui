@@ -12,6 +12,7 @@ public:
     QString getType() const;
     void setType(const QString &value);
 
+    void mousePressEvent(QMouseEvent *ev);
 signals:
 
 public slots:

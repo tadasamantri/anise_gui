@@ -25,10 +25,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     initializeGUI();
     /*
-    // create the shortcut after the list widget has been created
+  // create the shortcut after the list widget has been created
 
-    // option A (pressing DEL anywhere in the main window activates the slot)
-    new QShortcut(QKeySequence(Qt::Key_Delete), this, SLOT(deleteItem()));
+  // option A (pressing DEL anywhere in the main window activates the slot)
+  new QShortcut(QKeySequence(Qt::Key_Delete), this, SLOT(deleteItem()));
 */
     // option B (pressing DEL activates the slots only when list widget has focus)
     // EDIT: works fine now =)
@@ -126,10 +126,11 @@ void MainWindow::on_actionSave_triggered() {
     file.close();
 }
 
-void MainWindow::updatePropertyTable(int nodeID){
+void MainWindow::updatePropertyTable(int nodeID) {
     QTableWidget *table = ui->tableWidget;
 
-    if (nodeID >= 0 && Data::instance()->getMesh()->nodesInMash.contains(nodeID)) {
+    if (nodeID >= 0 &&
+            Data::instance()->getMesh()->nodesInMash.contains(nodeID)) {
         Node *n = Data::instance()->getMesh()->getNodeByID(nodeID);
         QVariantMap *map = n->getParams();
         table->setRowCount(map->size() + 3);
@@ -211,13 +212,70 @@ void MainWindow::updatePropertyTable(int nodeID){
             }
         }
         table->show();
-    } else if (table->isVisible()){
-        table->hide();
-        qDebug() << "table destroyed";
-        // delete all tableitems, because they aren't needed any more
-        for (int col = 0; col < table->columnCount(); col++)
-            for (int row = 0; row < table->rowCount(); row++)
-                delete table->item(row, col);
-        table->setRowCount(0);
+    } else if (table->isVisible()) {
+        deleteTable();
     }
+}
+
+void MainWindow::deleteTable() {
+    QTableWidget *table = ui->tableWidget;
+    table->hide();
+    qDebug() << "table destroyed";
+    // delete all tableitems, because they aren't needed any more
+    for (int col = 0; col < table->columnCount(); col++)
+        for (int row = 0; row < table->rowCount(); row++)
+            delete table->item(row, col);
+    table->setRowCount(0);
+}
+
+void MainWindow::displayTypeInfo(const QString &type) {
+    QTableWidget *table = ui->tableWidget;
+    Node n = Data::instance()->getNodeCatalog()->getNodeOfType(type);
+    int ins = 0, outs = 0;
+    ins = n.getInputGates()->size();
+    outs = n.getOutputGates()->size();
+    const QVariantMap *params = n.getParams();
+    table->setRowCount(((params->size()) + 3));
+    table->setColumnCount(2);
+    table->setItem(0, 0, new QTableWidgetItem("Type"));
+    table->setItem(0, 1, new QTableWidgetItem(type));
+    table->setItem(1, 0, new QTableWidgetItem("Input Gates"));
+    table->setItem(1, 1, new QTableWidgetItem(QString::number(ins)));
+    table->setItem(2, 0, new QTableWidgetItem("Output Gates"));
+    table->setItem(2, 1, new QTableWidgetItem(QString::number(outs)));
+
+    QList<QString> keys = params->keys();
+    for (int i = 0; i < keys.size(); i++) {
+        table->setItem(i + 3, 0, new QTableWidgetItem(keys[i]));
+        QString value;
+        switch (params->value(keys[i]).userType()) {
+        case QVariant::Int:
+            value = "int";
+            break;
+        case QVariant::UInt:
+            value = "unsigned int";
+            break;
+        case QVariant::Bool:
+            value = "bool";
+            break;
+        case QVariant::Double:
+            value = "double";
+            break;
+        case QVariant::BitArray:
+            value = "BitArray";
+            break;
+        case QVariant::ByteArray:
+            value = "ByteArray";
+            break;
+        default:
+            value = "String";
+            break;
+        }
+        table->setItem(i + 3, 1, new QTableWidgetItem(value));
+    }
+
+    for (int col = 0; col < table->columnCount(); col++)
+        for (int row = 0; row < table->rowCount(); row++)
+            table->item(row, col)->setFlags(Qt::ItemIsEnabled);
+    table->show();
 }
