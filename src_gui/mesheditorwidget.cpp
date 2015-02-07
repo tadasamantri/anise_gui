@@ -29,7 +29,7 @@ void MeshEditorWidget::clearNewLine(){
 
 void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
 
-    DrawObject *child;
+    DrawObject *child = 0;
     QLabel *labelChild;
     QPushButton *buttonChild;
 
