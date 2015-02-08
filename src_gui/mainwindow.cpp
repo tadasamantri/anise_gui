@@ -62,11 +62,7 @@ void MainWindow::initializeGUI() {
     // initialize all data content
     Data::instance()->initialize(this);
 }
-/*
-Ui::MainWindow MainWindow::getUi(){
-    return this->ui;
 
-}*/
 
 MainWindow::~MainWindow() { delete ui; }
 
@@ -128,9 +124,9 @@ void MainWindow::on_actionSave_triggered() {
 
 void MainWindow::updatePropertyTable(int nodeID) {
     QTableWidget *table = ui->tableWidget;
-
     if (nodeID >= 0 &&
             Data::instance()->getMesh()->nodesInMash.contains(nodeID)) {
+        deleteTable();
         Node *n = Data::instance()->getMesh()->getNodeByID(nodeID);
         QVariantMap *map = n->getParams();
         table->setRowCount(map->size() + 3);
