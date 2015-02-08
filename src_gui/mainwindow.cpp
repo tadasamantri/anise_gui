@@ -50,7 +50,7 @@ void MainWindow::initializeGUI() {
     ui->mesh_edt_area->setAcceptDrops(true);
 
     // setup viewports
-    ui->Node_Catalog->setupViewport(ui->nodeCatalogContent);
+    ui->Node_Catalog->setupViewport(ui->nodeCatalogContent);                                         
     ui->mesh_edt_area->setupViewport(ui->meshField);
 
     // hides the tab-widget

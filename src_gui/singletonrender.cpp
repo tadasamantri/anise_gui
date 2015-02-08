@@ -369,7 +369,7 @@ void SingletonRender::renderNodeType(Node *nodeToRender, QWidget *parent,
         toolTip += "\n" + nodeToRender->getDescription();
     NodeDrawObject->setToolTip(toolTip);
     // TODO should use layouts instead of hardcoded position!
-    NodeDrawObject->move(5, 5 + position * 60);
+    NodeDrawObject->move(5 + position * 60, 5);
 
     NodeDrawObject->show();
 }
