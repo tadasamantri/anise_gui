@@ -56,9 +56,6 @@ void SingletonRender::renderConnections(){
 void SingletonRender::renderConnection(Connection *conToRender, int ID){    
 
     //will draw a line connecting all connection joints of a connection
-    //this->drawLines(&conToRender->waypoints);
-
-    qDebug() << "CONNECTIONID: " << ID;
 
     if (!allConnections.contains(ID)) {
 
@@ -137,7 +134,6 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID){
 // will have to be called from a paint event!
 void SingletonRender::drawLine(double start_x, double start_y, double end_x,
                                double end_y) {
-    // qDebug() << "drawline";
     QPainter painter(this->ui->meshField);
 
     QLineF line(start_x, start_y, end_x, end_y);
@@ -149,7 +145,7 @@ void SingletonRender::drawLine(double start_x, double start_y, double end_x,
 
 // will have to be called from a paint event!
 void SingletonRender::drawLine(QLine line) {
-    // qDebug() << "drawline";
+
     QPainter painter(this->ui->meshField);
 
     //QLineF line(start_x, start_y, end_x, end_y);
@@ -162,7 +158,7 @@ void SingletonRender::drawLine(QLine line) {
 
 // will have to be called from a paint event!
 void SingletonRender::drawLine(QPoint start, QPoint end) {
-    // qDebug() << "drawline";
+
     QPainter painter(this->ui->meshField);
 
     QLineF line(start, end);
@@ -278,8 +274,6 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
             NodeDrawObject->addPicture(allImages["body.png"], QPoint(15, 0),
                     typeName);
 
-            qDebug() << "body.png loaded";
-
         } else {
             qDebug() << "body.png did not load correctly!";
         }
@@ -303,21 +297,12 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
                         QPoint(75, i * (gateHeight + gateOffset) + 5), outputGates->at(i)->getName());
             }
 
-            qDebug() << "gate.png loaded";
+
 
         } else {
             qDebug() << "body.png did not load correctly!";
         }
 
-        /* if (allImages.contains("monster.png")) {
-     // Draw the mnster
-
-     NodeDrawObject->addPicture(allImages["monster.png"], QPoint (10,0));
-     // Set the geometry to the right size
-     NodeDrawObject->setGeometry(0, 0, 50, 50);
- } else {
-     qDebug() << "monster.png did not load correctly!";
- }*/
 
         NodeDrawObject->setToolTip(nodeToRender->getDescription());
         allDrawnNodes.insert(nodeID, NodeDrawObject);

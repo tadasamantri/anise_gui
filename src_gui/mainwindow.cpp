@@ -24,17 +24,10 @@ MainWindow::MainWindow(QWidget *parent)
     SingletonRender::instance()->setUi(this->ui);
 
     initializeGUI();
-    /*
-  // create the shortcut after the list widget has been created
 
-  // option A (pressing DEL anywhere in the main window activates the slot)
-  new QShortcut(QKeySequence(Qt::Key_Delete), this, SLOT(deleteItem()));
-*/
-    // option B (pressing DEL activates the slots only when list widget has focus)
-    // EDIT: works fine now =)
+    //activates deleteItem when deletebutton is pressed
+    //deleteItem handles itself whether object is focussed or not nothing is deleted
     QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_Delete), this);
-
-    qDebug() << "FOCUSWINDOW: " << QApplication::focusWidget();
     connect(shortcut, SIGNAL(activated()), Data::instance(), SLOT(deleteItem()));
 }
 
