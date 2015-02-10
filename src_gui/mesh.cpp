@@ -49,7 +49,7 @@ Node *Mesh::getNodeByName(QString name) {
     // TODO probably easy to optimize
     Node *node;
     foreach (Node *n, this->nodesInMash) {
-        if (n->name == name) {
+        if (n->getName() == name) {
             node = n;
             break;
         }
