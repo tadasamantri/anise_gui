@@ -265,7 +265,7 @@ void MeshEditorWidget::handleGateClick(int nodeID){
 
 
     //That means we are just starting a new Line
-    if(!newLine.drawLine){
+    else{
 
         //Ask for Correctness of Connection
 

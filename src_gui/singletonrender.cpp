@@ -53,7 +53,7 @@ void SingletonRender::renderConnections(){
 
 
 //will render a given connection
-void SingletonRender::renderConnection(Connection *conToRender, int ID){
+void SingletonRender::renderConnection(Connection *conToRender, int ID){    
 
     //will draw a line connecting all connection joints of a connection
     //this->drawLines(&conToRender->waypoints);
@@ -280,19 +280,21 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
 
         if (allImages.contains("gate.png")) {
             // Draw the gates
+            QVector<Gate*> *inputGates = nodeToRender->getInputGates();
+            QVector<Gate*> *outputGates = nodeToRender->getOutputGates();
+            int numberInputGates = inputGates->size();
+            int numberOutputGates = outputGates->size();
 
-            int numberInputGates = nodeToRender->getInputGates()->size();
-            int numberOutputGates = nodeToRender->getOutputGates()->size();
 
             for (int i = 0; i < numberInputGates; i++) {
-                NodeDrawObject->addButton(allImages["gate.png"],
-                        QPoint(0, i * (gateHeight + gateOffset) + 5));
+                NodeDrawObject->addGateButton(allImages["gate.png"],
+                        QPoint(0, i * (gateHeight + gateOffset) + 5), inputGates->at(i)->getName());
             }
 
             for (int i = 0; i < numberOutputGates; i++) {
-                NodeDrawObject->addButton(
+                NodeDrawObject->addGateButton(
                             allImages["gate.png"],
-                        QPoint(75, i * (gateHeight + gateOffset) + 5));
+                        QPoint(75, i * (gateHeight + gateOffset) + 5), outputGates->at(i)->getName());
             }
 
             qDebug() << "gate.png loaded";

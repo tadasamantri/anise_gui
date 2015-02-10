@@ -28,7 +28,7 @@ public:
 
     void addPicture (QPixmap *pic, QPoint position);
     void addPicture(QPixmap *pic, QPoint position, QString typeName);
-    void addButton(QPixmap *pic, QPoint position);
+    void addGateButton(QPixmap *pic, QPoint position, QString gateName);
 
     //Modify the mask of the drawobject inserting the mask of the pixmap at given position
     void modifyMask(QPixmap *pic, QPoint position);
@@ -37,11 +37,11 @@ public:
 
 signals:
 
-    void released(int ID);
+    void released(int nodeID, QString gateName);
 
 public slots:
 
-    void releaseWithParam();
+    void releasedOnGate(QString gateName);
 
 private:
 

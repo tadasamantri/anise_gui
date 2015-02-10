@@ -11,6 +11,7 @@ Mesh::Mesh(QObject *parent) : QObject(parent) {
     this->iDCounter = 0;
     this->focusObject = -1;
     tableExists = false;
+
 }
 
 int Mesh::addNode(Node *node) {

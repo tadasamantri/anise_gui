@@ -1,13 +1,26 @@
 #include "connection.h"
 #include <limits>
+#include "data.h"
 
 Connection::Connection(Node *src_node, Gate *src_gate, Node *dest_node,
-                       Gate *dest_gate) {
+                       Gate *dest_gate, QVector<QPoint> waypoints) {
     this->src_gate = src_gate;
     this->dest_gate = dest_gate;
     this->src_node = src_node;
     this->dest_node = dest_node;
+    this->waypoints = waypoints;
 }
+
+Connection::Connection(int srcNodeID, QString srcGateName, int destNodeID, QString destGateName, QVector<QPoint> waypoints)
+
+    : Connection(
+                    Data::instance()->getMesh()->getNodeByID(srcNodeID),
+                    Data::instance()->getMesh()->getNodeByID(srcNodeID)->getGateByName(srcGateName),
+                    Data::instance()->getMesh()->getNodeByID(destNodeID),
+                    Data::instance()->getMesh()->getNodeByID(destNodeID)->getGateByName(destGateName),
+                    waypoints
+    ){}
+
 
 Connection::Connection(){}
 

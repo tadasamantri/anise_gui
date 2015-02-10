@@ -11,11 +11,13 @@ class Connection {
 
 public:
     Connection();
-    Connection(Node *src_node, Gate *src_gate, Node *dest_node, Gate *dest_gate);
+    Connection(Node *src_node, Gate *src_gate, Node *dest_node, Gate *dest_gate, QVector<QPoint> waypoints);
+    Connection(int srcNodeID, QString srcGateName, int destNodeID, QString destGateName, QVector<QPoint> waypoints);
+
 
     //returns the closest joint to the point
     int getJoint(QPoint *point);
-    void setJoint(int idnex, QPoint *newPosition);
+    void setJoint(int index, QPoint *newPosition);
 
     Gate *getSrcGate();
     Gate *getDestGate();

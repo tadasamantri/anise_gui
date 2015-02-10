@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     singletonrender.cpp \
     testdrawobject.cpp \
     nodetypelabel.cpp \
-    parameterwindow.cpp
+    parameterwindow.cpp \
+    gatebutton.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -51,7 +52,8 @@ HEADERS  += mainwindow.h \
     singletonrender.h \
     testdrawobject.h \
     nodetypelabel.h \
-    parameterwindow.h
+    parameterwindow.h \
+    gatebutton.h
 
 FORMS    += mainwindow.ui
 

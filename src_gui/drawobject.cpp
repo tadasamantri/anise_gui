@@ -74,14 +74,14 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position, QString typeName){
 
 }
 
-void DrawObject::addButton(QPixmap *pic, QPoint position) {
+void DrawObject::addGateButton(QPixmap *pic, QPoint position, QString gateName) {
 
     //safe dimensions
     int height = pic->height();
     int width = pic->width();
 
     // Instanstiate the drawing to be shown
-    QPushButton *button = new QPushButton(this);
+    GateButton *button = new GateButton(gateName, this);
     button->setGeometry(position.x(), position.y(), width, height);
     button->setIcon(*pic);
     this->buttonvector.append(button);
@@ -95,7 +95,7 @@ void DrawObject::addButton(QPixmap *pic, QPoint position) {
     this->updateOverAllPicture(pic, position);
 
     // Connect button signal to appropriate slot
-    connect(button, SIGNAL(released()), this, SLOT(releaseWithParam()));
+    connect(button, SIGNAL(released(QString)), this, SLOT(releasedOnGate(QString)));
 
 
 
@@ -151,7 +151,7 @@ void DrawObject::updateOverAllPicture(QPixmap *newPicture, QPoint position ){
 QPixmap DrawObject::getPicture() { return this->overAllPicture; }
 
 
-void DrawObject::releaseWithParam(){
+void DrawObject::releasedOnGate(QString gateName){
 
-    emit released(this->ID);
+    emit released(this->ID, gateName);
 }
