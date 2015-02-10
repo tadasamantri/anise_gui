@@ -30,7 +30,7 @@ void MeshEditorWidget::clearNewLine(){
 void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
 
     DrawObject *child = 0;
-    QLabel *labelChild;
+    QLabel *labelChild = 0;
     QPushButton *buttonChild;
 
 
@@ -90,10 +90,9 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     QMimeData *mimeData = new QMimeData;
     mimeData->setData("application/customthingy", arrayData);
 
-    /* causes segfault on monkey-test
+
     // hides the child so only the drag object at mouse position is shown
-    //child->hide();
-    */
+    child->hide();
 
     QDrag *drag = new QDrag(this);
     drag->setMimeData(mimeData);
@@ -103,12 +102,12 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) ==
             Qt::MoveAction)
         qDebug() << "never happens? IF it does check mesheditorwidget";
-    /*causes segfault on monkey testing
+
     else {
         // qDebug() << "drag end";
         child->show();
         // child->setPixmap(pixmap);
-    }*/
+    }
 }
 
 void MeshEditorWidget::dragEnterEvent(QDragEnterEvent *event) {

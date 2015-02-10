@@ -50,7 +50,7 @@ void MainWindow::initializeGUI() {
     ui->mesh_edt_area->setAcceptDrops(true);
 
     // setup viewports
-    ui->Node_Catalog->setupViewport(ui->nodeCatalogContent);                                         
+    ui->Node_Catalog->setupViewport(ui->nodeCatalogContent);
     ui->mesh_edt_area->setupViewport(ui->meshField);
 
     // hides the tab-widget
@@ -228,7 +228,7 @@ void MainWindow::displayTypeInfo(const QString &type) {
     deleteTable();
     QTableWidget *table = ui->tableWidget;
     Node n = Data::instance()->getNodeCatalog()->getNodeOfType(type);
-    int ins = 0, outs = 0;
+    int ins = 0, outs = 0, tmpOffset = 3;
     ins = n.getInputGates()->size();
     outs = n.getOutputGates()->size();
     const QVariantMap *params = n.getParams();
@@ -240,10 +240,17 @@ void MainWindow::displayTypeInfo(const QString &type) {
     table->setItem(1, 1, new QTableWidgetItem(QString::number(ins)));
     table->setItem(2, 0, new QTableWidgetItem("Output Gates"));
     table->setItem(2, 1, new QTableWidgetItem(QString::number(outs)));
-
+    QString descr = n.getDescription();
+    if(descr != "")
+    {
+        table->setRowCount(table->rowCount() + 1);
+        table->setItem(tmpOffset, 0, new QTableWidgetItem("Description"));
+        table->setItem(tmpOffset++, 1, new QTableWidgetItem(descr));
+    }
+    const int offset = tmpOffset;
     QList<QString> keys = params->keys();
     for (int i = 0; i < keys.size(); i++) {
-        table->setItem(i + 3, 0, new QTableWidgetItem(keys[i]));
+        table->setItem(i + offset, 0, new QTableWidgetItem(keys[i]));
         QString value;
         switch (params->value(keys[i]).userType()) {
         case QVariant::Int:
@@ -268,7 +275,7 @@ void MainWindow::displayTypeInfo(const QString &type) {
             value = "String";
             break;
         }
-        table->setItem(i + 3, 1, new QTableWidgetItem(value));
+        table->setItem(i + offset, 1, new QTableWidgetItem(value));
     }
 
     for (int col = 0; col < table->columnCount(); col++)
