@@ -1,6 +1,6 @@
 #include "gatebutton.h"
 
-GateButton::GateButton(QString gateName, QObject *parent) :
+GateButton::GateButton(QString gateName, QWidget *parent) :
     QPushButton(parent)
 {
     this->gateName = gateName;
@@ -19,6 +19,6 @@ void GateButton::setGateName(const QString &value)
 void GateButton::mouseReleaseEvent(QMouseEvent *e)
 {
     QPushButton::mouseReleaseEvent(e);
-    emit released(this->gateName);
+    emit released(this->gateName, this->pos());
 }
 

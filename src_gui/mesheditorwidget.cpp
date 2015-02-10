@@ -1,9 +1,9 @@
-#include "mesheditorwidget.h"
-#include "data.h"
 #include <QMimeData>
 #include <QDrag>
 
-
+#include "mesheditorwidget.h"
+#include "data.h"
+#include "gatebutton.h"
 
 MeshEditorWidget::MeshEditorWidget(QWidget *parent) : QWidget(parent) {
     connectFocusSignal();
@@ -21,8 +21,10 @@ void MeshEditorWidget::clearNewLine(){
 
     newLine = NewLine();
     newLine.drawLine = false;
-    newLine.sourceNodeID = -1;
-    newLine.destinationNodeID = -1;
+    newLine.srcNodeID = -1;
+    newLine.srcGateName = "";
+    newLine.destNodeID = -1;
+    newLine.destGateName = "";
     newLine.wayPoints = QVector<QPoint>();
 
 }
@@ -31,7 +33,7 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
 
     DrawObject *child = 0;
     QLabel *labelChild = 0;
-    QPushButton *buttonChild;
+    GateButton *buttonChild = 0;
 
 
     // ensure a left-mouse-click
@@ -39,14 +41,16 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
         this->lineWayPoints.clear();
         return;
     }
-    /*
+
     //---Button Check-----
-    // Did I click on a Button (Gate)?
-    buttonChild = dynamic_cast<QPushButton *>(childAt(event->pos()));
+    //Did I click on a Button (Gate)?
+    buttonChild = dynamic_cast<GateButton *>(childAt(event->pos()));
+    qDebug() << buttonChild;
     //If yes, buttonChild will not be 0
-    if(!buttonChild)
-       this->gateHandle();
-*/
+    if(buttonChild){
+      qDebug() << "GatekLick via pressevent erkannt";
+      return;
+    }
     //---Label Check----------
     // check of clicking on label (picture)
     labelChild = dynamic_cast<QLabel *>(childAt(event->pos()));
@@ -55,7 +59,7 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
         // ...then my parent will be drawobject hopefully
         child = dynamic_cast<DrawObject *>(labelChild->parent());
 
-    //If it is still 0, i clicked on the meshfiel itself
+    //If it is still 0, i clicked on the meshfield itself
     if (!child) {
 
         if(newLine.drawLine){
@@ -241,10 +245,10 @@ bool MeshEditorWidget::containsID(int objectID) {
     return false;
 }
 
-void MeshEditorWidget::handleGateClick(int nodeID){
+void MeshEditorWidget::handleGateClick(int nodeID, QString gateName, QPoint position){
 
 
-    qDebug() << "hey mein gateclick wurde erkannt!";
+    qDebug() << "hey mein gateclick wurde erkannt!" << newLine.drawLine;
 
 
     //That means we are currently constructing a line
@@ -252,12 +256,16 @@ void MeshEditorWidget::handleGateClick(int nodeID){
 
         //Ask for Correctness of Connection
 
-        newLine.destinationNodeID = nodeID;
+        newLine.destNodeID = nodeID;
+        newLine.destGateName = gateName;
+        newLine.wayPoints.push_back(position);
 
         //call Datastuff to create Connection
-        /* do this if connection is established
-        Data::instance()->addConnectionToMesh(NodeFactory::createConnection(newLine.sourceNodeID, 0, newLine.destinationNodeID, 0, newLine.wayPoints));
-        */
+        // do this if connection is established
+        Data::instance()->addConnectionToMesh(
+                    NodeFactory::createConnection(newLine.srcNodeID, newLine.srcGateName, newLine.destNodeID, newLine.destGateName, newLine.wayPoints)
+                    );
+
         this->clearNewLine();
 
 
@@ -269,17 +277,18 @@ void MeshEditorWidget::handleGateClick(int nodeID){
 
         //Ask for Correctness of Connection
 
-        newLine.sourceNodeID = nodeID;
+        newLine.srcNodeID = nodeID;
+        newLine.srcGateName = gateName;
+        newLine.wayPoints.push_back(position);
 
+        //Do Everything that Changed when Clicking on a gate
+        newLine.drawLine = !(newLine.drawLine);
 
-
-        this->clearNewLine();
 
 
     }
 
-    //Do Everything that Changed when Clicking on a gate
-    newLine.drawLine = !(newLine.drawLine);
+
 
 
 

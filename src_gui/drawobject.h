@@ -37,11 +37,11 @@ public:
 
 signals:
 
-    void released(int nodeID, QString gateName);
+    void released(int nodeID, QString gateName, QPoint position);
 
 public slots:
 
-    void releasedOnGate(QString gateName);
+    void releasedOnGate(QString gateName, QPoint position);
 
 private:
 

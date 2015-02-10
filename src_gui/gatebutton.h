@@ -8,7 +8,7 @@ class GateButton : public QPushButton
 {
     Q_OBJECT
 public:
-    explicit GateButton(QString gateName, QObject *parent = 0);
+    explicit GateButton(QString gateName, QWidget *parent = 0);
 
     QString getGateName() const;
     void setGateName(const QString &value);
@@ -16,7 +16,7 @@ public:
 
 signals:
 
-    void released(QString gateName);
+    void released(QString gateName, QPoint position);
 
 public slots:
 

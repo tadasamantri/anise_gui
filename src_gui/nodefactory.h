@@ -16,8 +16,8 @@ public:
     static Node *createNode(QString _class, QString name, QVariantMap params);
     static Node *createTestNode();
 
-    static Connection *createTestConnection(int i);
-    static Connection *createConnection(int srcNodeID, int srcGateID, int destNodeID, int destGateID, QVector<QPoint> wayPoints);
+    //static Connection *createTestConnection(int i);
+    static Connection *createConnection(int srcNodeID, QString srcGateName, int destNodeID, QString destGateName, QVector<QPoint> wayPoints);
 
     NodeFactory();
 

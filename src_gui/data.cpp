@@ -99,12 +99,8 @@ void  Data::initialize(MainWindow *mainWindow){
       */
     SingletonRender::instance()->renderCatalogContent(Data::instance()->getNodeCatalog()->Content.values().toVector());
 
-
-
-    Connection *tempTestConnection = NodeFactory::createTestConnection(1);
-    Data::instance()->addConnectionToMesh(tempTestConnection);
-
-
+    //Connection *tempTestConnection = NodeFactory::createTestConnection(1);
+    //Data::instance()->addConnectionToMesh(tempTestConnection);
 
 }
 

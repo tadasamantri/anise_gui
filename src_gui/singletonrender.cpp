@@ -58,6 +58,8 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID){
     //will draw a line connecting all connection joints of a connection
     //this->drawLines(&conToRender->waypoints);
 
+    qDebug() << "CONNECTIONID: " << ID;
+
     if (!allConnections.contains(ID)) {
 
         QVector <QLine> tempVec;
@@ -105,7 +107,7 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID){
 
         //update the lines
         QVector <QLine> tempVec;
-        this->allLines.clear();
+        //this->allLines.clear();
         //create new Lines
         for (int index = 0; index < conToRender->waypoints.size()-1; ++index) {
             tempVec.push_back(QLine(conToRender->waypoints.at(index),conToRender->waypoints.at(index+1) ));
@@ -114,17 +116,21 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID){
         this->allLines.insert(ID, tempVec);
 
 
-        //calculate the middle of the Image
-        int posxOffset =  - allImages.value("joint.png")->width()/2;
-        int posyOffset =  - allImages.value("joint.png")->height()/2;
 
 
-        //move all joints to the correct position
-        for (int index = 0; index < allConnections[ID].size(); ++index) {
-            DrawObject* joint = allConnections[ID].at(index);
-            joint->move(conToRender->waypoints.at(index).x()+posxOffset, conToRender->waypoints.at(index).y()+posyOffset);
-            joint->show();
-        }
+
+
+    }
+
+    //calculate the middle of the Image
+    int posxOffset =  - allImages.value("joint.png")->width()/2;
+    int posyOffset =  - allImages.value("joint.png")->height()/2;
+
+    //move all joints to the correct position
+    for (int index = 0; index < allConnections[ID].size(); ++index) {
+        DrawObject* joint = allConnections[ID].at(index);
+        joint->move(conToRender->waypoints.at(index).x()+posxOffset, conToRender->waypoints.at(index).y()+posyOffset);
+        joint->show();
     }
 }
 

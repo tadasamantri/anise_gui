@@ -5,7 +5,7 @@
 // Nodes should only be created in this factory!
 NodeFactory::NodeFactory() {}
 
-Connection *NodeFactory::createTestConnection(int i){
+/*Connection *NodeFactory::createTestConnection(int i){
     Connection *connection = new Connection();
 
     //create some random waypoints
@@ -16,7 +16,7 @@ Connection *NodeFactory::createTestConnection(int i){
     connection->waypoints.push_back(QPoint(300*i,300*i));
 
     return connection;
-}
+}*/
 
 
 Node NodeFactory::createNode() {
@@ -88,10 +88,16 @@ Node *NodeFactory::createTestNode() {
 }
 
 
-Connection *NodeFactory::createConnection(int srcNodeID, int srcGateID, int destNodeID, int destGateID, QVector<QPoint> wayPoints){
-/*
-    //return new Connection(srcNodeID, destGateID, destNodeID, destGateID, wayPoints);
-    Connection *result = new Connection();
+Connection *NodeFactory::createConnection(int srcNodeID, QString srcGateName, int destNodeID, QString destGateName, QVector<QPoint> wayPoints){
+
+
+   // QPoint nodePosition = Data::instance()->getMesh()->getNodeByID(srcNodeID)->
+
+
+
+
+    return new Connection(srcNodeID, srcGateName, destNodeID, destGateName, wayPoints);
+    /*Connection *result = new Connection();
     Node *src = Data::instance()->getMesh()->getNodeByID(srcNodeID),
             *dst = Data::instance()->getMesh()->getNodeByID(destNodeID);
     Gate *srcGate = src->getGateByID(srcGateID, false),
@@ -101,6 +107,6 @@ Connection *NodeFactory::createConnection(int srcNodeID, int srcGateID, int dest
     result->setDestGate(destGate);
     result->setSrcGate(srcGate);
     result->setWaypoints(wayPoints);*/
-    return new Connection();
+    //return new Connection();
 
 }

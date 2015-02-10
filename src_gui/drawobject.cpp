@@ -21,7 +21,7 @@ DrawObject::DrawObject(int id, QPoint position, int width, int height,
 
 
     //connects
-     connect(this, SIGNAL(released(int)), this->parent(), SLOT(handleGateClick(int)));
+     connect(this, SIGNAL(released(int,QString, QPoint)), this->parent(), SLOT(handleGateClick(int, QString, QPoint)));
 }
 
 /**
@@ -96,7 +96,7 @@ void DrawObject::addGateButton(QPixmap *pic, QPoint position, QString gateName) 
     this->updateOverAllPicture(pic, position);
 
     // Connect button signal to appropriate slot
-    connect(button, SIGNAL(released(QString)), this, SLOT(releasedOnGate(QString)));
+    connect(button, SIGNAL(released(QString, QPoint)), this, SLOT(releasedOnGate(QString, QPoint)));
 
 
 
@@ -152,7 +152,9 @@ void DrawObject::updateOverAllPicture(QPixmap *newPicture, QPoint position ){
 QPixmap DrawObject::getPicture() { return this->overAllPicture; }
 
 
-void DrawObject::releasedOnGate(QString gateName){
+void DrawObject::releasedOnGate(QString gateName, QPoint position){
 
-    emit released(this->ID, gateName);
+
+
+    emit released(this->ID, gateName, this->pos() + position);
 }

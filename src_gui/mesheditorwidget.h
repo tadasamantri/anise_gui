@@ -25,8 +25,10 @@
 struct NewLine{
 
     bool drawLine;
-    int sourceNodeID;
-    int destinationNodeID;
+    int srcNodeID;
+    QString srcGateName;
+    int destNodeID;
+    QString destGateName;
     QVector<QPoint> wayPoints;
 
 
@@ -77,7 +79,7 @@ signals:
 
 public slots:
 
-    void handleGateClick(int nodeID);
+    void handleGateClick(int nodeID, QString gateName, QPoint position);
 
 };
 
