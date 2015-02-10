@@ -1,6 +1,7 @@
 #include "drawobject.h"
 #include <QShortcut>
 #include <QSize>
+#include "gatebutton.h"
 
 DrawObject::DrawObject(int id, QPoint position, int width, int height,
                        QWidget *parent = 0) {

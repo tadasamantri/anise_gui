@@ -16,7 +16,7 @@ public:
 
 signals:
 
-    released(QString gateName);
+    void released(QString gateName);
 
 public slots:
 
