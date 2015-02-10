@@ -61,8 +61,6 @@ public:
 
     QString getDescription();
     void setDescription(const QString &value);
-
-    Gate *getGateByID(int ID, bool in);
 private:
     QString description;
     QVector<Gate *> inputGates, outputGates;

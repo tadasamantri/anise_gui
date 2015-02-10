@@ -119,12 +119,6 @@ Gate *Node::getGateByName(const QString &name) {
     return 0;
 }
 
-Gate *Node::getGateByID(int ID, bool in){
-    if((in && ID >= inputGates.size()) || (!in && ID >= outputGates.size()))
-        return 0;
-    if(in) return inputGates.value(ID);
-    else return outputGates.value(ID);
-}
 
 QString Node::getDescription()
 {
