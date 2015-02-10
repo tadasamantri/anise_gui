@@ -57,18 +57,17 @@ public:
     Gate *getGateByName(const QString &name);
 
     // private:
+
+
+    QString getDescription();
+    void setDescription(const QString &value);
+private:
+    QString description;
     QVector<Gate *> inputGates, outputGates;
 
     QString type, name;
 
     QVariantMap params;  // maps <identifier, value>
-
-    QString getDescription();
-    void setDescription(const QString &value);
-
-    Gate *getGateByID(int ID, bool in);
-private:
-    QString description;
 };
 
 #endif  // NODE_H

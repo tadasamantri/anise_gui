@@ -71,7 +71,7 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position, QString typeName){
 
     //actually call addPicture with modified picture
     this->addPicture(&newPic, position);
-
+    delete painter;
 }
 
 void DrawObject::addGateButton(QPixmap *pic, QPoint position, QString gateName) {
