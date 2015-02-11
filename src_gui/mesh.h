@@ -49,6 +49,7 @@ public:
     bool validName(const QString &name);
 
     int getCurrentID();
+    QString getValidAlternativeForName(const QString name);
 public slots:
 
     void setFocusMeshObject(int nodeID);

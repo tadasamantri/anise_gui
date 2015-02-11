@@ -64,7 +64,6 @@ public:
 private:
     QString description;
     QVector<Gate *> inputGates, outputGates;
-
     QString type, name;
 
     QVariantMap params;  // maps <identifier, value>

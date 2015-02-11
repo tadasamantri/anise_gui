@@ -14,12 +14,9 @@ Mesh::Mesh(QObject *parent) : QObject(parent) {
 }
 
 int Mesh::addNode(Node *node) {
-    int id = -1;
-    if (validName(node->getName())) {
-        id = this->generateId();
-        this->nodesInMash.insert(id, node);
-    }
-
+    node->setName(getValidAlternativeForName(node->getName()));
+    int id = generateId();
+    this->nodesInMash.insert(id, node);
     this->focusObject =
             id;  // A new created Node is always focussed in the beginning
     return id;
@@ -59,7 +56,7 @@ Node *Mesh::getFocusedNode() {
 
 Node *Mesh::getNodeByName(QString name) {
     // TODO probably easy to optimize
-    Node *node;
+    Node *node = 0;
     foreach (Node *n, this->nodesInMash) {
         if (n->getName() == name) {
             node = n;
@@ -102,14 +99,10 @@ void Mesh::updateNode(QTableWidgetItem *item) {
     QTableWidgetItem *theItemID = table->item(row, 0);
     if (!theItemID) return;
     QString paramID = theItemID->text();
-    if (paramID == "Node Name") {
-        QString name = item->text();
-        if (validName(name))
+    if (paramID == "Node Name"){
+            QString name = getValidAlternativeForName(item->text());
             n->setName(name);
-        else
-            item->setText(n->getName());
     }
-
     else {
         QVariant _old = n->getParamByKey(paramID), _new;
         QVariant data = item->text();
@@ -131,6 +124,7 @@ void Mesh::updateNode(QTableWidgetItem *item) {
         item->setData(Qt::UserRole, _new);
         if (!_new.type() == QVariant::Bool) item->setText(_new.toString());
     }
+    Data::instance()->getMainWindow()->updatePropertyTable(focusObject);
 }
 
 bool Mesh::deleteItem() {
@@ -149,6 +143,16 @@ bool Mesh::validName(const QString &name) {
         if (n->getName() == name) return false;
 
     return true;
+}
+
+QString Mesh::getValidAlternativeForName(const QString name){
+    if(validName(name))
+        return name;
+    QString tmpName = name;
+    int i = 0;
+    while(!validName(tmpName))
+        tmpName = name + QString::number(i++);
+    return tmpName;
 }
 
 bool Mesh::deleteNode() {
