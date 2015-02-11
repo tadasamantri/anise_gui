@@ -122,7 +122,6 @@ void Mesh::updateNode(QTableWidgetItem *item) {
         }
         n->setParam(paramID, _new);
         item->setData(Qt::UserRole, _new);
-        if (!_new.type() == QVariant::Bool) item->setText(_new.toString());
     }
     Data::instance()->getMainWindow()->updatePropertyTable(focusObject);
 }
