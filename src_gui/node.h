@@ -50,7 +50,7 @@ public:
 
     bool removeParam(QString _key);
 
-    QString getParamByKey(const QString &_key);
+    QVariant getParamByKey(const QString &_key);
 
     QString toString();
 
