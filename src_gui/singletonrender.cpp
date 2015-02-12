@@ -124,7 +124,7 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID){
     int posyOffset =  - allImages.value("joint.png")->height()/2;
 
     //move all joints to the correct position
-    for (int index = 0; index < allConnections[ID].size(); ++index) {
+    for (int index = 1; index < allConnections[ID].size()-1; ++index) {
         DrawObject* joint = allConnections[ID].at(index);
         joint->move(conToRender->waypoints.at(index).x()+posxOffset, conToRender->waypoints.at(index).y()+posyOffset);
         joint->show();
@@ -241,6 +241,18 @@ bool SingletonRender::loadImages() {
 
             allImages.insert(listOfFiles.at(i), temp);
         }
+    }
+
+    //setDrawOffsets For Gates
+    if(allImages.contains("gate.png")){
+
+        QPixmap *pic = allImages.value("gate.png");
+        int width = pic->width();
+        int height = pic->height();
+
+        this->setInputGateDrawOffset(QPoint(0, height/2));
+        this->setOutputGateDrawOffset(QPoint(width, height/2));
+
     }
     return result;
 }
@@ -393,6 +405,26 @@ void SingletonRender::clearAll(QWidget *parent) {
 
 
 }
+QPoint SingletonRender::getInputGateDrawOffset() const
+{
+    return inputGateDrawOffset;
+}
+
+void SingletonRender::setInputGateDrawOffset(const QPoint &value)
+{
+    inputGateDrawOffset = value;
+}
+
+QPoint SingletonRender::getOutputGateDrawOffset() const
+{
+    return outPutGateDrawOffset;
+}
+
+void SingletonRender::setOutputGateDrawOffset(const QPoint &value)
+{
+    outPutGateDrawOffset = value;
+}
+
 
 bool SingletonRender::deleteMeshDrawing(int objectID) {
     DrawObject *childToDelete = allDrawnNodes.value(objectID);

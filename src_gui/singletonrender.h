@@ -92,6 +92,12 @@ public:
 
 
 
+    QPoint getOutputGateDrawOffset() const;
+    void setOutputGateDrawOffset(const QPoint &value);
+
+    QPoint getInputGateDrawOffset() const;
+    void setInputGateDrawOffset(const QPoint &value);
+
 private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
 
@@ -110,11 +116,8 @@ private:
     // QPixmap a .png image
     QMap<QString, QPixmap *> allImages;
 
-    // Maps containing everything that have been rendered
-    // int ID
-    // and the widget
-    //TODO WHY do we need This??
-
+    QPoint inputGateDrawOffset;
+    QPoint outPutGateDrawOffset;
 
     //Different lists because we will need to work differently with them
     QMap<int, DrawObject *> allDrawnNodes;

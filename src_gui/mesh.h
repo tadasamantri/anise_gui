@@ -67,6 +67,10 @@ private:
 
     int focusObject;
 
+    //update Connection start and ende
+    //void move
+
+
     //internal deletingfunctions
     bool deleteNode();
     bool deleteConnection();
