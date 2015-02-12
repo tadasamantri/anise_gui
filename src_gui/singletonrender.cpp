@@ -33,41 +33,26 @@ SingletonRender *SingletonRender::instance() {
     return m_pInstance;
 }
 
-
-
-
-
-
-
-
-
-void SingletonRender::renderConnections(){
+void SingletonRender::renderConnections() {
     foreach (QVector<QLine> lineVec, this->allLines) {
-        foreach (QLine line, lineVec) {
-            this->drawLine(line);
-        }
+        foreach (QLine line, lineVec) { this->drawLine(line); }
     }
 }
 
-
-
-
-//will render a given connection
-void SingletonRender::renderConnection(Connection *conToRender, int ID){    
-
-    //will draw a line connecting all connection joints of a connection
-
+// will render a given connection
+void SingletonRender::renderConnection(Connection *conToRender, int ID) {
+    // will draw a line connecting all connection joints of a connection
+    QPainter p(ui->meshField);
     if (!allConnections.contains(ID)) {
-
-        QVector <QLine> tempVec;
-        //create new Lines
-        for (int index = 0; index < conToRender->waypoints.size()-1; ++index) {
-            tempVec.push_back(QLine(conToRender->waypoints.at(index),conToRender->waypoints.at(index+1) ));
-
+        QVector<QLine> tempVec;
+        // create new Lines
+        for (int index = 0; index < conToRender->waypoints.size() - 1; ++index) {
+            tempVec.push_back(QLine(conToRender->waypoints.at(index),
+                                    conToRender->waypoints.at(index + 1)));
         }
         this->allLines.insert(ID, tempVec);
 
-        //create a new Vector for all Joints
+        // create a new Vector for all Joints
         QVector<DrawObject *> jointVector;
 
         // now draw all joints
@@ -77,15 +62,14 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID){
                 return;
             }
 
-            //calculate the middle of the Image
-            int posx = joint.x() - allImages.value("joint.png")->width()/2;
-            int posy = joint.y() - allImages.value("joint.png")->height()/2;
+            // calculate the middle of the Image
+            int posx = joint.x() - allImages.value("joint.png")->width() / 2;
+            int posy = joint.y() - allImages.value("joint.png")->height() / 2;
 
-            //create a new Drawobject and save some space for the image
+            // create a new Drawobject and save some space for the image
             DrawObject *ConnectionJointDrawObject = new DrawObject(
-                        ID,
-                        QPoint(posx,posy), allImages.value("joint.png")->width(),allImages.value("joint.png")->height(),
-                        this->ui->meshField);
+                        ID, QPoint(posx, posy), allImages.value("joint.png")->width(),
+                        allImages.value("joint.png")->height(), this->ui->meshField);
 
             // Add the picture to the draw object
             ConnectionJointDrawObject->addPicture(allImages["joint.png"],
@@ -97,36 +81,30 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID){
             // add the DrawObject into the Vector
             jointVector.push_back(ConnectionJointDrawObject);
         }
-        //Add the vector into the map
-        allConnections.insert(ID,jointVector);
+        // Add the vector into the map
+        allConnections.insert(ID, jointVector);
 
-    }else{
-
-        //update the lines
-        QVector <QLine> tempVec;
-        //this->allLines.clear();
-        //create new Lines
-        for (int index = 0; index < conToRender->waypoints.size()-1; ++index) {
-            tempVec.push_back(QLine(conToRender->waypoints.at(index),conToRender->waypoints.at(index+1) ));
-
+    } else {
+        // update the lines
+        QVector<QLine> tempVec;
+        // this->allLines.clear();
+        // create new Lines
+        for (int index = 0; index < conToRender->waypoints.size() - 1; ++index) {
+            tempVec.push_back(QLine(conToRender->waypoints.at(index),
+                                    conToRender->waypoints.at(index + 1)));
         }
         this->allLines.insert(ID, tempVec);
-
-
-
-
-
-
     }
 
-    //calculate the middle of the Image
-    int posxOffset =  - allImages.value("joint.png")->width()/2;
-    int posyOffset =  - allImages.value("joint.png")->height()/2;
+    // calculate the middle of the Image
+    int posxOffset = -allImages.value("joint.png")->width() / 2;
+    int posyOffset = -allImages.value("joint.png")->height() / 2;
 
-    //move all joints to the correct position
+    // move all joints to the correct position
     for (int index = 0; index < allConnections[ID].size(); ++index) {
-        DrawObject* joint = allConnections[ID].at(index);
-        joint->move(conToRender->waypoints.at(index).x()+posxOffset, conToRender->waypoints.at(index).y()+posyOffset);
+        DrawObject *joint = allConnections[ID].at(index);
+        joint->move(conToRender->waypoints.at(index).x() + posxOffset,
+                    conToRender->waypoints.at(index).y() + posyOffset);
         joint->show();
     }
 }
@@ -142,23 +120,18 @@ void SingletonRender::drawLine(double start_x, double start_y, double end_x,
     // painter.draw
 }
 
-
 // will have to be called from a paint event!
 void SingletonRender::drawLine(QLine line) {
-
     QPainter painter(this->ui->meshField);
 
-    //QLineF line(start_x, start_y, end_x, end_y);
+    // QLineF line(start_x, start_y, end_x, end_y);
     painter.setPen(Qt::blue);
     painter.drawLine(line);
-    //painter.draw
-
+    // painter.draw
 }
-
 
 // will have to be called from a paint event!
 void SingletonRender::drawLine(QPoint start, QPoint end) {
-
     QPainter painter(this->ui->meshField);
 
     QLineF line(start, end);
@@ -280,29 +253,27 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
 
         if (allImages.contains("gate.png")) {
             // Draw the gates
-            QVector<Gate*> *inputGates = nodeToRender->getInputGates();
-            QVector<Gate*> *outputGates = nodeToRender->getOutputGates();
+            QVector<Gate *> *inputGates = nodeToRender->getInputGates();
+            QVector<Gate *> *outputGates = nodeToRender->getOutputGates();
             int numberInputGates = inputGates->size();
             int numberOutputGates = outputGates->size();
 
-
             for (int i = 0; i < numberInputGates; i++) {
-                NodeDrawObject->addGateButton(allImages["gate.png"],
-                        QPoint(0, i * (gateHeight + gateOffset) + 5), inputGates->at(i)->getName());
+                NodeDrawObject->addGateButton(
+                            allImages["gate.png"], QPoint(0, i * (gateHeight + gateOffset) + 5),
+                        inputGates->at(i)->getName());
             }
 
             for (int i = 0; i < numberOutputGates; i++) {
                 NodeDrawObject->addGateButton(
                             allImages["gate.png"],
-                        QPoint(75, i * (gateHeight + gateOffset) + 5), outputGates->at(i)->getName());
+                        QPoint(75, i * (gateHeight + gateOffset) + 5),
+                        outputGates->at(i)->getName());
             }
-
-
 
         } else {
             qDebug() << "body.png did not load correctly!";
         }
-
 
         NodeDrawObject->setToolTip(nodeToRender->getDescription());
         allDrawnNodes.insert(nodeID, NodeDrawObject);
@@ -316,8 +287,6 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
 
 void SingletonRender::renderMesh(Mesh *workMesh) {
     QMap<int, Node *> temp = workMesh->nodesInMash;
-
-
 
     // calls render method for every node in the mesh
     foreach (int ID, temp.keys()) {
@@ -334,12 +303,10 @@ void SingletonRender::renderMesh(Mesh *workMesh) {
         renderConnection(workMesh->connectionsInMash.value(ID), ID);
     }
 
-this->ui->mesh_edt_area->repaint();
+    this->ui->mesh_edt_area->repaint();
 }
 
-void SingletonRender::clearMeshField() {
-    clearAll(ui->meshField);
-}
+void SingletonRender::clearMeshField() { clearAll(ui->meshField); }
 
 void SingletonRender::renderNodeType(Node *nodeToRender, QWidget *parent,
                                      int position) {
@@ -390,8 +357,6 @@ void SingletonRender::clearAll(QWidget *parent) {
         this->allDrawnNodes = QMap<int, DrawObject *>();
         this->allConnections = QMap<int, QVector<DrawObject *> >();
     }
-
-
 }
 
 bool SingletonRender::deleteMeshDrawing(int objectID) {
@@ -415,4 +380,3 @@ QVector<int> *SingletonRender::getChildrenIDs() {
 
     return ids;
 }
-
