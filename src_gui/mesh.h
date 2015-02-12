@@ -2,6 +2,7 @@
 #define MESHHANDLER_H
 
 #include "connection.h"
+#include<QTableWidgetItem>
 
 class Mesh : public QObject {
     Q_OBJECT
@@ -19,7 +20,7 @@ public:
     // return the id of the new connection
     int addConnection(Connection *connection);
 
-    void addNodes(QList<Node *> &list);
+    int addNodes(QList<Node *> &list);
 
     void removeNode(int ID);
 
@@ -42,15 +43,17 @@ public:
     QMap<int, Node *> nodesInMash;
     QMap<int, Connection *> connectionsInMash;
 
+    Node* getFocusedNode();
     //deletingfunctions
     bool deleteItem();
-
+    bool validName(const QString &name);
 
     int getCurrentID();
+    QString getValidAlternativeForName(const QString name);
 public slots:
 
     void setFocusMeshObject(int nodeID);
-
+    void updateNode(QTableWidgetItem *item);
 
 private:
 

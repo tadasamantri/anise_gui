@@ -59,8 +59,6 @@ public:
 
     Mesh *getMesh();
 
-
-
     MainWindow *getMainWindow() const;
     void setMainWindow(MainWindow *value);
 

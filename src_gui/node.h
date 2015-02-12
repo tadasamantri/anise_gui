@@ -50,7 +50,7 @@ public:
 
     bool removeParam(QString _key);
 
-    QString getParamByKey(const QString &_key);
+    QVariant getParamByKey(const QString &_key);
 
     QString toString();
 
@@ -64,7 +64,6 @@ public:
 private:
     QString description;
     QVector<Gate *> inputGates, outputGates;
-
     QString type, name;
 
     QVariantMap params;  // maps <identifier, value>

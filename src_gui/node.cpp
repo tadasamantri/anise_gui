@@ -84,9 +84,9 @@ bool Node::removeParam(QString _key) {
     return true;
 }
 
-QString Node::getParamByKey(const QString &_key) {
+QVariant Node::getParamByKey(const QString &_key) {
     if (!this->params.contains(_key)) return QString("@@invalid@@");
-    return params.find(_key).value().toString();
+    return params.find(_key).value();
 }
 
 QString Node::toString() {

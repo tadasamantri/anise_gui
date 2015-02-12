@@ -143,6 +143,7 @@ void MainWindow::updatePropertyTable(int nodeID) {
         table->setItem(1, 1, type);
         table->item(1, 0)->setFlags(table->item(1, 0)->flags() ^
                                     (Qt::ItemIsEnabled | Qt::ItemIsSelectable));
+
         table->setItem(2, 0, new QTableWidgetItem("Node Name"));
         table->setItem(2, 1, name);
 
@@ -170,7 +171,7 @@ void MainWindow::updatePropertyTable(int nodeID) {
             // create value item
             QVariant value = map->value(key);
             QTableWidgetItem *value_item;
-            QSpinBox *spinner;
+            //QSpinBox *spinner;
             switch (value.userType()) {
             case QVariant::Bool:
                 value_item = new QTableWidgetItem();
@@ -179,7 +180,7 @@ void MainWindow::updatePropertyTable(int nodeID) {
                                                          : Qt::Unchecked);
                 table->setItem(3 + i, 1, value_item);
                 break;
-            case QVariant::Int:
+            /*case QVariant::Int:
                 spinner = new QSpinBox(table);
                 spinner->setMaximum(std::numeric_limits<int>::max());
                 spinner->setMinimum(std::numeric_limits<int>::min());
@@ -192,14 +193,16 @@ void MainWindow::updatePropertyTable(int nodeID) {
                 spinner->setMinimum(0);
                 spinner->setValue(value.toInt());
                 table->setCellWidget(3 + i, 1, spinner);
-                break;
+                break;*/
             default:
                 value_item = new QTableWidgetItem();
-                value_item->setData(0, value);
+                value_item->setData(Qt::UserRole, value);
+                value_item->setText(value.toString());
                 table->setItem(3 + i, 1, value_item);
                 break;
             }
         }
+        connect(table, SIGNAL(itemChanged(QTableWidgetItem*)), Data::instance()->getMesh(), SLOT(updateNode(QTableWidgetItem*)));
         table->show();
     } else if (table->isVisible()) {
         deleteTable();
@@ -208,8 +211,8 @@ void MainWindow::updatePropertyTable(int nodeID) {
 
 void MainWindow::deleteTable() {
     QTableWidget *table = ui->tableWidget;
+    table->disconnect(table, SIGNAL(itemChanged(QTableWidgetItem*)), Data::instance()->getMesh(), SLOT(updateNode(QTableWidgetItem*)));
     table->hide();
-    qDebug() << "table destroyed";
     // delete all tableitems, because they aren't needed any more
     for (int col = 0; col < table->columnCount(); col++)
         for (int row = 0; row < table->rowCount(); row++)
@@ -274,5 +277,6 @@ void MainWindow::displayTypeInfo(const QString &type) {
     for (int col = 0; col < table->columnCount(); col++)
         for (int row = 0; row < table->rowCount(); row++)
             table->item(row, col)->setFlags(Qt::ItemIsEnabled);
+
     table->show();
 }

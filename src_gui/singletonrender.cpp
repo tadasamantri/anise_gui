@@ -390,6 +390,8 @@ void SingletonRender::clearAll(QWidget *parent) {
         this->allDrawnNodes = QMap<int, DrawObject *>();
         this->allConnections = QMap<int, QVector<DrawObject *> >();
     }
+
+
 }
 
 bool SingletonRender::deleteMeshDrawing(int objectID) {

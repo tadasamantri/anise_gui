@@ -172,13 +172,13 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
 
         Node *newNode = Data::instance()->nodeFactory->createNode(_class);
 
-        newNode->setName("Node" + QString::number(Data::instance()->getMesh()->getCurrentID()));
+        newNode->setName("Node");
         newNode->setPosition(DropPoint.x(), DropPoint.y());
 
         Data::instance()->addNodeToMesh(newNode);
     }
 
-    if (event->source()->objectName() == "meshField") {
+    else if (event->source()->objectName() == "meshField") {
 
 
         //get the start posisiotn of the drop from the mime
