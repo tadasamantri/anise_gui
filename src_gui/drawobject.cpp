@@ -44,7 +44,7 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position) {
     QLabel *label = new QLabel(this);
     label->setGeometry(position.x(), position.y(), width, height);
     label->setPixmap(*pic);
-    this->labelvector.append(label);
+    this->labelvector << label;
     // Now set the masks to the widgets
     label->setMask(pic->mask());
 
@@ -85,7 +85,7 @@ void DrawObject::addGateButton(QPixmap *pic, QPoint position, QString gateName) 
     GateButton *button = new GateButton(gateName, this);
     button->setGeometry(position.x(), position.y(), width, height);
     button->setIcon(*pic);
-    this->buttonvector.append(button);
+    this->buttonvector << button;
     // Now set the masks to the widgets
     button->setMask(pic->mask());
 

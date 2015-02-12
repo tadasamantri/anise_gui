@@ -56,11 +56,13 @@ public:
 
     Gate *getGateByName(const QString &name);
 
-    // private:
-
+    int x();
+    int y();
 
     QString getDescription();
     void setDescription(const QString &value);
+    void setX(const int &newX);
+    void setY(const int &newY);
 private:
     QString description;
     QVector<Gate *> inputGates, outputGates;

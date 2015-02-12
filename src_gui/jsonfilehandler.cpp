@@ -17,7 +17,7 @@ QString JsonFileHandler::loadFile(const QString &path) {
     // read each line of that file and append it to the String
     while (file.bytesAvailable()) {
         QByteArray line = file.readLine();
-        fileContent.append(line);
+        fileContent += line;
     }
 
     file.close();
@@ -269,9 +269,11 @@ QString JsonFileHandler::meshToJson(Mesh *mesh) {
         connections.push_back(theConnection);
     }
     QJsonObject obj;
-    obj["connections"] = connections;
-    obj["nodes"] = nodes;
+    obj.insert("nodes", nodes);
+    obj.insert("connections", connections);
+    //obj["connections"] = connections;
+    //obj["nodes"] = nodes;
     QJsonDocument doc;
     doc.setObject(obj);
-    return doc.toJson();
+    return doc.toJson(QJsonDocument::Indented);
 }

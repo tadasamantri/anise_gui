@@ -222,6 +222,9 @@
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
             <widget class="MeshEditorWidget" name="meshField" native="true">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
              <property name="mouseTracking">
               <bool>true</bool>
              </property>
