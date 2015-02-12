@@ -24,14 +24,6 @@ Connection::Connection(int srcNodeID, QString srcGateName, int destNodeID, QStri
 
 Connection::Connection(){}
 
-Connection::Connection(Node *src_node, Gate *src_gate, Node *dest_node, Gate *dest_gate)
-{
-    this->src_gate = src_gate;
-    this->dest_gate = dest_gate;
-    this->src_node = src_node;
-    this->dest_node = dest_node;
-}
-
 //will return the closest joint to this point
 int Connection::getJoint(QPoint* point){
 
