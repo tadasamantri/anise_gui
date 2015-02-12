@@ -68,7 +68,7 @@ private:
     int focusObject;
 
     //update Connection start and ende
-    //void move
+    void updateConnStartAndEnd();
 
 
     //internal deletingfunctions
