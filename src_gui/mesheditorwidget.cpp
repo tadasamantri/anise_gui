@@ -150,7 +150,7 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
 
     // get the offset out of the mime, the offset is the distance from the mouse
     // to the 0,0 position of the label/widget
-    dataStream >> offset;   table->verticalHeader()->adjustSize();
+    dataStream >> offset;
 
     // the id of the dragged object
     dataStream >> nodeID;

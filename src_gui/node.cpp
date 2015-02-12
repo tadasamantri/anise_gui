@@ -1,3 +1,4 @@
+#include "data.h"
 #include "node.h"
 
 Node::Node() {
@@ -29,7 +30,7 @@ void Node::setPosition(float x, float y) {
 
 void Node::setType(QString type) { this->type = type; }
 
-void Node::setName(QString name) { this->name = name; }
+void Node::setName(QString name) { this->name = Data::instance()->getMesh()->getValidAlternativeForName(name); }
 
 QVector<Gate *> *Node::getInputGates() { return &this->inputGates; }
 
