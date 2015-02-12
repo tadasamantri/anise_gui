@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     //deleteItem handles itself whether object is focussed or not nothing is deleted
     QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_Delete), this);
     connect(shortcut, SIGNAL(activated()), Data::instance(), SLOT(deleteItem()));
+    connect(ui->delete_button, SIGNAL(clicked()), Data::instance(), SLOT(deleteItem()));
 }
 
 void MainWindow::initializeGUI() {
@@ -96,10 +97,6 @@ void MainWindow::on_actionNew_triggered() {
 void MainWindow::on_actionLoad_Catalog_triggered() {
     QString out = AniseCommunicator::getAllNodeTypes();
     JsonFileHandler::parseNodeTypesFromAnise(out);
-}
-
-void MainWindow::on_buttonBox_clicked(QAbstractButton *button) {
-    qDebug() << "hey man ich wurde aufgerufen:" << button;
 }
 
 void MainWindow::on_actionSave_triggered() {
