@@ -48,7 +48,7 @@ public:
     //
     bool containsID(int objectID);
 
-    void connectFocusSignal();
+    void connectSignals();
 protected:
 
     //variables for drawing a line to the mouse cursor
@@ -75,12 +75,13 @@ private:
 signals:
 
     void onWidgetClicked(int nodeID);
-
+    void drawLineModeChanged();
 
 public slots:
 
     void handleGateClick(int nodeID, QString gateName, QPoint position);
-
+private slots:
+    void changeLineDrawMode();
 };
 
 #endif  // MESHEDITORWIDGET_H

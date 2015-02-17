@@ -1,20 +1,22 @@
 #include <QMimeData>
 #include <QDrag>
-
+#include <QToolTip>
 #include "mesheditorwidget.h"
 #include "data.h"
 #include "gatebutton.h"
 
 MeshEditorWidget::MeshEditorWidget(QWidget *parent) : QWidget(parent) {
-    connectFocusSignal();
+    connectSignals();
+    //connectDrawModeSingal();
     this->setMinimumHeight(5000);
     this->setMinimumWidth(5000);
     clearNewLine();
 }
 
-void MeshEditorWidget::connectFocusSignal() {
+void MeshEditorWidget::connectSignals() {
     connect(this, SIGNAL(onWidgetClicked(int)), Data::instance()->getMesh(),
             SLOT(setFocusMeshObject(int)));
+    connect(this,SIGNAL(drawLineModeChanged()), this, SLOT(changeLineDrawMode()));
 }
 
 void MeshEditorWidget::clearNewLine() {
@@ -25,6 +27,7 @@ void MeshEditorWidget::clearNewLine() {
     newLine.destNodeID = -1;
     newLine.destGateName = "";
     newLine.wayPoints = QVector<QPoint>();
+    emit drawLineModeChanged();
 }
 
 void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
@@ -166,7 +169,7 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
 
         newNode->setName(_class);
         newNode->setPosition(DropPoint.x(), DropPoint.y());
-
+        clearNewLine();
         Data::instance()->addNodeToMesh(newNode);
     }
 
@@ -238,5 +241,15 @@ void MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
 
         // Do Everything that Changed when Clicking on a gate
         newLine.drawLine = !(newLine.drawLine);
+        emit drawLineModeChanged();
     }
+}
+
+void MeshEditorWidget::changeLineDrawMode()
+{
+    if(newLine.drawLine){
+        setCursor(Qt::CrossCursor);
+        QToolTip::showText(QPoint(50,Data::instance()->getMainWindow()->ui->mesh_edt_area->height() - 10), QString("exit line draw mode with right click"), this);
+    }
+    else setCursor(Qt::ArrowCursor);
 }

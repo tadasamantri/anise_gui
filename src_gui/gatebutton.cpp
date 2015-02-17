@@ -1,4 +1,5 @@
 #include "gatebutton.h"
+#include <QMouseEvent>
 
 GateButton::GateButton(QString gateName, int nodeID, QWidget *parent) :
     QPushButton(parent)
@@ -21,7 +22,10 @@ void GateButton::setGateName(const QString &value)
 void GateButton::mouseReleaseEvent(QMouseEvent *e)
 {
     QPushButton::mouseReleaseEvent(e);
-    emit released(this->gateName, this->pos());
+
+    //ensure leftclick and no dragging!
+    if((e->button() == Qt::LeftButton) && this->rect().contains(e->pos()))
+        emit released(this->gateName, this->pos());
 }
 int GateButton::getNodeID() const
 {

@@ -127,7 +127,7 @@ void Data::moveObjectInMesh(QPoint *start, QPoint *end, int ID) {
 
 void Data::moveObjectInMesh(QPoint *Position, int ID) {
     if (this->mesh->nodesInMash.contains(ID)) {
-        QPoint offset = mesh->getNodeByID(ID)->getPosition() - *Position;
+        QPoint offset = *Position - mesh->getNodeByID(ID)->getPosition();
         this->mesh->getNodeByID(ID)->setPosition(Position->x(), Position->y());
         mesh->updateConnections(ID, offset);
         SingletonRender::instance()->renderMesh(this->mesh);
@@ -152,7 +152,7 @@ void Data::newMeshProject() {
     * Clears a Meshfield
     */
     SingletonRender::instance()->clearMeshField();
-    mainWindow->ui->meshField->connectFocusSignal();
+    mainWindow->ui->meshField->connectSignals();
     /**
     * Render a NewMesh
     */
