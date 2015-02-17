@@ -255,10 +255,14 @@ QString JsonFileHandler::meshToJson(Mesh *mesh) {
             QVariant var = map->value(key);
             param[key] = QJsonValue::fromVariant(var);
             // TODO gebuggt!
-            params.push_back(param);
+            params << param;
         }
         theNode["params"] = params;
-        nodes.push_back(theNode);
+        QJsonObject gui_params;
+        gui_params["x"] = n->getPosition().x();
+        gui_params["y"] = n->getPosition().y();
+        theNode["gui_params"] = gui_params;
+        nodes << theNode;
     }
     foreach (Connection *c, mesh->getAllConnections()) {
         QJsonObject theConnection;
@@ -266,13 +270,23 @@ QString JsonFileHandler::meshToJson(Mesh *mesh) {
         theConnection["src_gate"] = c->getSrcGate()->getName();
         theConnection["dest_node"] = c->getDestNode()->getName();
         theConnection["dest_gate"] = c->getDestGate()->getName();
-        connections.push_back(theConnection);
+        QJsonObject gui_params;
+        QJsonArray way;
+        QVector<QPoint> points = c->getWaypoints();
+        for(int i = 0; i < points.size(); i++){
+            QPoint p = c->getWaypoints().at(i);
+            QJsonObject point;
+            point["x"] = p.x();
+            point["y"] = p.y();
+            way << point;
+        }
+        gui_params["waypoints"] = way;
+        theConnection["gui_params"] = gui_params;
+        connections << theConnection;
     }
     QJsonObject obj;
     obj.insert("nodes", nodes);
     obj.insert("connections", connections);
-    //obj["connections"] = connections;
-    //obj["nodes"] = nodes;
     QJsonDocument doc;
     doc.setObject(obj);
     return doc.toJson(QJsonDocument::Indented);
