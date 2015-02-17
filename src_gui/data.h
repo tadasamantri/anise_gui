@@ -95,6 +95,7 @@ private:
     * (Unique list of node objects of all types)
     */
     NodeCatalog *nodeCatalog;
+    void updateConnections(int ID, QPoint offset);
 };
 
 #endif  // DATA_H

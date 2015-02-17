@@ -8,11 +8,14 @@ class GateButton : public QPushButton
 {
     Q_OBJECT
 public:
-    explicit GateButton(QString gateName, QWidget *parent = 0);
+    explicit GateButton(QString gateName,int nodeID, QWidget *parent = 0);
 
     QString getGateName() const;
     void setGateName(const QString &value);
     void mouseReleaseEvent(QMouseEvent *e);
+
+    int getNodeID() const;
+    void setNodeID(int value);
 
 signals:
 
@@ -23,6 +26,7 @@ public slots:
 private:
 
     QString gateName;
+    int nodeID;
 
 };
 

@@ -42,13 +42,13 @@ void SingletonRender::renderConnections() {
 // will render a given connection
 void SingletonRender::renderConnection(Connection *conToRender, int ID) {
     // will draw a line connecting all connection joints of a connection
-    QPainter p(ui->meshField);
+
     if (!allConnections.contains(ID)) {
         QVector<QLine> tempVec;
         // create new Lines
         for (int index = 0; index < conToRender->waypoints.size() - 1; ++index) {
-            tempVec.push_back(QLine(conToRender->waypoints.at(index),
-                                    conToRender->waypoints.at(index + 1)));
+            tempVec << QLine(conToRender->waypoints.at(index),
+                                    conToRender->waypoints.at(index + 1));
         }
         this->allLines.insert(ID, tempVec);
 
@@ -90,8 +90,8 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID) {
         // this->allLines.clear();
         // create new Lines
         for (int index = 0; index < conToRender->waypoints.size() - 1; ++index) {
-            tempVec.push_back(QLine(conToRender->waypoints.at(index),
-                                    conToRender->waypoints.at(index + 1)));
+            tempVec << QLine(conToRender->waypoints.at(index),
+                                    conToRender->waypoints.at(index + 1));
         }
         this->allLines.insert(ID, tempVec);
     }
@@ -310,10 +310,9 @@ void SingletonRender::renderMesh(Mesh *workMesh) {
     }
 
     // calls render method for each connection in the mesh
-    foreach (int ID, workMesh->connectionsInMash.keys()) {
-        renderConnection(workMesh->connectionsInMash.value(ID), ID);
+    foreach (int ID, workMesh->connectionsInMesh.keys()) {
+        renderConnection(workMesh->connectionsInMesh.value(ID), ID);
     }
-
     this->ui->mesh_edt_area->repaint();
 }
 
@@ -367,6 +366,7 @@ void SingletonRender::clearAll(QWidget *parent) {
     if (parent == ui->meshField) {
         this->allDrawnNodes = QMap<int, DrawObject *>();
         this->allConnections = QMap<int, QVector<DrawObject *> >();
+        this->allLines = QMap<int, QVector<QLine>>();
     }
 }
 QPoint SingletonRender::getInputGateDrawOffset() const

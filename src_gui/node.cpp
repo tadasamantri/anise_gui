@@ -117,6 +117,21 @@ int Node::y() { return position_y; }
 void Node::setX(const int &newX) { position_x = newX; }
 
 void Node::setY(const int &newY) { position_y = newY; }
+int Node::getID() const
+{
+    return ID;
+}
+
+void Node::setID(int value)
+{
+    ID = value;
+}
+
+QPoint Node::getPosition()
+{
+    return QPoint(this->position_x, this->position_y);
+}
+
 
 QString Node::getDescription() { return description; }
 

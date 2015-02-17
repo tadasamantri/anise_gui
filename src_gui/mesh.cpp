@@ -7,15 +7,31 @@
 
 Mesh::Mesh(QObject *parent) : QObject(parent) {
     this->nodesInMash = QMap<int, Node *>();
-    this->connectionsInMash = QMap<int, Connection *>();
+    this->connectionsInMesh = QMap<int, Connection *>();
     this->iDCounter = 0;
     this->focusObject = -1;
     tableExists = false;
+}
+QList<Connection*> Mesh::getConnectionsToNode(int nodeID){
+    QList<Connection*> list;
+    for(Connection *c : connectionsInMesh){
+        if(c->getSrcNode()->getID() == nodeID || c->getDestNode()->getID() == nodeID)
+            list << c;
+    }
+    return list;
+}
+void Mesh::updateConnections(int ID, QPoint offset){
+    for(Connection *c : getConnectionsToNode(ID)){
+        if(c->getSrcNode()->getID() == ID)
+            c->waypoints[0] -= offset;
+        else c->waypoints[c->waypoints.size() -1] -= offset;
+    }
 }
 
 int Mesh::addNode(Node *node) {
     node->setName(getValidAlternativeForName(node->getName()));
     int id = generateId();
+    node->setID(id);
     this->nodesInMash.insert(id, node);
     this->focusObject =
             id;  // A new created Node is always focussed in the beginning
@@ -38,14 +54,14 @@ void Mesh::removeNode(int ID) {
 
 int Mesh::addConnection(Connection *connection) {
     int id = this->generateId();
-    this->connectionsInMash.insert(id, connection);
+    this->connectionsInMesh.insert(id, connection);
     return id;
 }
 
 QList<Node *> Mesh::getAllNodes() { return this->nodesInMash.values(); }
 
 QList<Connection *> Mesh::getAllConnections() {
-    return this->connectionsInMash.values();
+    return this->connectionsInMesh.values();
 }
 
 Node *Mesh::getFocusedNode() {
@@ -74,7 +90,7 @@ Node *Mesh::getNodeByID(int ID) {
 }
 
 Connection *Mesh::getConnectionByID(int ID) {
-    return this->connectionsInMash[ID];
+    return this->connectionsInMesh[ID];
 }
 
 int Mesh::generateId() {
@@ -100,8 +116,8 @@ void Mesh::updateNode(QTableWidgetItem *item) {
     if (!theItemID) return;
     QString paramID = theItemID->text();
     if (paramID == "Node Name"){
-            QString name = getValidAlternativeForName(item->text());
-            n->setName(name);
+        QString name = getValidAlternativeForName(item->text());
+        n->setName(name);
     }
     else {
         QVariant _old = n->getParamByKey(paramID), _new;
@@ -130,7 +146,7 @@ bool Mesh::deleteItem() {
     if (this->focusObject == -1) return false;
 
     if (nodesInMash.contains(focusObject)) return this->deleteNode();
-    if (connectionsInMash.contains((focusObject)))
+    if (connectionsInMesh.contains((focusObject)))
         return this->deleteConnection();
     return false;
 }
@@ -166,8 +182,8 @@ bool Mesh::deleteNode() {
 }
 
 bool Mesh::deleteConnection() {
-    connectionsInMash.remove(focusObject);
-    bool allRemoved = connectionsInMash.contains(focusObject) &&
+    connectionsInMesh.remove(focusObject);
+    bool allRemoved = connectionsInMesh.contains(focusObject) &&
             SingletonRender::instance()->deleteMeshDrawing(focusObject);
 
     if (allRemoved) focusObject = -1;

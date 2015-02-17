@@ -82,7 +82,7 @@ void DrawObject::addGateButton(QPixmap *pic, QPoint position, QString gateName) 
     int width = pic->width();
 
     // Instanstiate the drawing to be shown
-    GateButton *button = new GateButton(gateName, this);
+    GateButton *button = new GateButton(gateName, ID, this);
     button->setGeometry(position.x(), position.y(), width, height);
     button->setIcon(*pic);
     this->buttonvector << button;

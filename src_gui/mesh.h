@@ -41,7 +41,7 @@ public:
 
     // Nodes and connections
     QMap<int, Node *> nodesInMash;
-    QMap<int, Connection *> connectionsInMash;
+    QMap<int, Connection *> connectionsInMesh;
 
     Node* getFocusedNode();
     //deletingfunctions
@@ -50,8 +50,9 @@ public:
 
     int getCurrentID();
     QString getValidAlternativeForName(const QString name);
-public slots:
 
+    void updateConnections(int ID, QPoint offset);
+public slots:
     void setFocusMeshObject(int nodeID);
     void updateNode(QTableWidgetItem *item);
 
@@ -70,10 +71,11 @@ private:
     //update Connection start and ende
     void updateConnStartAndEnd();
 
-
+QList<Connection *> getConnectionsToNode(int nodeID);
     //internal deletingfunctions
     bool deleteNode();
     bool deleteConnection();
+
 };
 
 #endif  // MESHHANDLER_H

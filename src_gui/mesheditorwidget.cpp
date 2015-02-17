@@ -50,7 +50,7 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     else {
         DrawObject *child = 0;
         QLabel *labelChild = 0;
-        GateButton *buttonChild = 0;
+        //GateButton *buttonChild = 0;
 
         //---Clicked on Node?----------
         // check of clicking on label (picture)
@@ -140,9 +140,7 @@ void MeshEditorWidget::dragMoveEvent(QDragMoveEvent *event) {
 }
 
 void MeshEditorWidget::dropEvent(QDropEvent *event) {
-    // qDebug() << "dropEvent";
 
-    // qDebug() << QString(event->mimeData()->data("application/customthingy"));
     QPoint DropPoint = event->pos();
     QPoint offset;
     int nodeID;
@@ -220,13 +218,11 @@ void MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
         newLine.destGateName = gateName;
         //this is the InputGate where Connection ends
         newLine.wayPoints.push_back(position + SingletonRender::instance()->getInputGateDrawOffset());
-
         // call Datastuff to create Connection
         // do this if connection is established
-        Data::instance()->addConnectionToMesh(NodeFactory::createConnection(
+        /*int ID = */Data::instance()->addConnectionToMesh(NodeFactory::createConnection(
                                                   newLine.srcNodeID, newLine.srcGateName, newLine.destNodeID,
                                                   newLine.destGateName, newLine.wayPoints));
-
         this->clearNewLine();
 
     }

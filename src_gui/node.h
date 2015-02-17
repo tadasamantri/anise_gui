@@ -63,11 +63,15 @@ public:
     void setDescription(const QString &value);
     void setX(const int &newX);
     void setY(const int &newY);
+    int getID() const;
+    void setID(int value);
+    QPoint getPosition();
 private:
+
     QString description;
     QVector<Gate *> inputGates, outputGates;
     QString type, name;
-
+    int ID = -2;
     QVariantMap params;  // maps <identifier, value>
 };
 

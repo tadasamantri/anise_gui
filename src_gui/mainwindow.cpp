@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Important to do first! SingletonRender is used in initialize GUI
     SingletonRender::instance()->setUi(this->ui);
 
+
     initializeGUI();
 
     //activates deleteItem when deletebutton is pressed
