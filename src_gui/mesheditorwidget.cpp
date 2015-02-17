@@ -37,10 +37,12 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     // drawLine Mode
     if (newLine.drawLine) {
         // Check if i clicked on a child
+        QObject *child = childAt(event->pos());
 
-        // add a way point for the line to draw
-        this->newLine.wayPoints.push_back(event->pos());
-
+        if(!child){
+            // add a way point for the line to draw
+            this->newLine.wayPoints.push_back(event->pos());
+        }
     }
 
     // Normal Mode (currently not drawing a Connection)
@@ -216,7 +218,8 @@ void MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
 
         newLine.destNodeID = nodeID;
         newLine.destGateName = gateName;
-        newLine.wayPoints.push_back(position);
+        //this is the InputGate where Connection ends
+        newLine.wayPoints.push_back(position + SingletonRender::instance()->getInputGateDrawOffset());
 
         // call Datastuff to create Connection
         // do this if connection is established
@@ -234,7 +237,8 @@ void MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
 
         newLine.srcNodeID = nodeID;
         newLine.srcGateName = gateName;
-        newLine.wayPoints.push_back(position);
+        //this is the OutputGatePosition where Connection starts
+        newLine.wayPoints.push_back(position + SingletonRender::instance()->getOutputGateDrawOffset());
 
         // Do Everything that Changed when Clicking on a gate
         newLine.drawLine = !(newLine.drawLine);

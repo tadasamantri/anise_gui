@@ -176,3 +176,11 @@ bool Mesh::deleteConnection() {
 }
 
 int Mesh::getCurrentID() { return iDCounter; }
+
+
+void Mesh::updateConnStartAndEnd(){
+
+
+
+
+}
