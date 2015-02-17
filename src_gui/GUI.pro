@@ -57,7 +57,7 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
-QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++14
 
 QMAKE_POST_LINK = cp -R ../Data $${DESTDIR}
 
