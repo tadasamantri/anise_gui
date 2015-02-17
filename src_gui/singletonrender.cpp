@@ -176,7 +176,6 @@ bool SingletonRender::loadImages() {
 
     // go into the right Directory using a Qdir object
     QDir directory;
-    directory.cdUp();
     directory.cd("Data/Images/");
 
     // fill the list of Files with all filenames insode this directory

@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = anise_GUI
 TEMPLATE = app
-
+DESTDIR = "../build"
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -59,5 +59,5 @@ FORMS    += mainwindow.ui
 
 QMAKE_CXXFLAGS += -std=c++11
 
-DESTDIR = "../build"
+QMAKE_POST_LINK = cp -R ../Data $${DESTDIR}
 
