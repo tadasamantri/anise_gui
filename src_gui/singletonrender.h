@@ -123,6 +123,7 @@ private:
     QMap<int, DrawObject *> allDrawnNodes;
     QMap<int, QVector<DrawObject *> > allConnections;
     QMap<int, QVector<QLine> > allLines;
+    QColor lineColor = QColor(30,30,35);
 
     // window of application
     Ui::MainWindow *ui;

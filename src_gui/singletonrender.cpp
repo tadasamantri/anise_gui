@@ -73,7 +73,7 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID) {
 
             // Add the picture to the draw object
             ConnectionJointDrawObject->addPicture(allImages["joint.png"],
-                    QPoint(0, 0), "connectionJoint");
+                    QPoint(0, 0));
 
             // add a tooltip
             ConnectionJointDrawObject->setToolTip("click To Drag");
@@ -114,7 +114,7 @@ void SingletonRender::drawLine(double start_x, double start_y, double end_x,
     QPainter painter(this->ui->meshField);
 
     QLineF line(start_x, start_y, end_x, end_y);
-    painter.setPen(Qt::blue);
+    painter.setPen(lineColor);
     painter.drawLine(line);
     // painter.draw
 }
@@ -124,7 +124,7 @@ void SingletonRender::drawLine(QLine line) {
     QPainter painter(this->ui->meshField);
 
     // QLineF line(start_x, start_y, end_x, end_y);
-    painter.setPen(Qt::blue);
+    painter.setPen(lineColor);
     painter.drawLine(line);
     // painter.draw
 }
@@ -134,7 +134,7 @@ void SingletonRender::drawLine(QPoint start, QPoint end) {
     QPainter painter(this->ui->meshField);
 
     QLineF line(start, end);
-    painter.setPen(Qt::blue);
+    painter.setPen(lineColor);
     painter.drawLine(line);
     // painter.draw
 }
