@@ -1,4 +1,5 @@
 #include <QDir>
+#include <limits>
 #include "singletonrender.h"
 #include "testdrawobject.h"
 #include "nodetypelabel.h"
@@ -321,11 +322,14 @@ void SingletonRender::renderNodeType(Node *nodeToRender, QWidget *parent,
                                      int position) {
     // TODO code dublication in renderNode and renderNodeType!
     NodeTypeLabel *NodeDrawObject = new NodeTypeLabel(parent);
-
+    renderNode(nodeToRender,std::numeric_limits<int>::max() -1);
+    DrawObject *o = allDrawnNodes.value(std::numeric_limits<int>::max() -1);
     // Zeichne den hintergrund:
-    NodeDrawObject->setPixmap(*allImages["background.png"]);
-    NodeDrawObject->setMask(allImages["background.png"]->mask());
+    NodeDrawObject->setPixmap(o->getPicture());
+    NodeDrawObject->setMask(o->mainMask);
+    deleteMeshDrawing(std::numeric_limits<int>::max() -1);
     NodeDrawObject->setGeometry(0, 0, 50, 50);
+    NodeDrawObject->adjustSize();
     // Generate a Tooltip
     QString type = nodeToRender->getType();
     NodeDrawObject->setType(type);
@@ -338,7 +342,7 @@ void SingletonRender::renderNodeType(Node *nodeToRender, QWidget *parent,
         toolTip += "\n" + nodeToRender->getDescription();
     NodeDrawObject->setToolTip(toolTip);
     // TODO should use layouts instead of hardcoded position!
-    NodeDrawObject->move(5 + position * 60, 5);
+    NodeDrawObject->move(5 + position * NodeDrawObject->width(), 5);
 
     NodeDrawObject->show();
 }
@@ -347,7 +351,7 @@ void SingletonRender::renderCatalogContent(QVector<Node> NodeVektor) {
     QWidget *CatalogParent = ui->nodeCatalogContent;
     int position = 0;
     // TODO scroll weite sollte nicht hard coded sein
-    CatalogParent->setMinimumHeight(NodeVektor.size() * 60 + 10);
+    //CatalogParent->setMinimumHeight(NodeVektor.size() * 60 + 10);
     foreach (Node nodeTyp, NodeVektor) {
         renderNodeType(&nodeTyp, CatalogParent, position);
         position++;
@@ -394,7 +398,6 @@ bool SingletonRender::deleteMeshDrawing(int objectID) {
 
     allDrawnNodes.remove(objectID);
     childToDelete->deleteLater();
-
     return !allDrawnNodes.contains(objectID);
 }
 

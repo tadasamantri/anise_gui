@@ -20,7 +20,7 @@ public:
     // Ui::MainWindow *getUi();
     ~MainWindow();
     Ui::MainWindow *ui;
-
+     void deleteTable();
     void updatePropertyTable(int nodeID);
     void displayTypeInfo(const QString &type);
 public slots:
@@ -40,7 +40,7 @@ private slots:
 
 private:
     void initializeGUI();
-    void deleteTable();
+
 };
 
 #endif  // MAINWINDOW_H
