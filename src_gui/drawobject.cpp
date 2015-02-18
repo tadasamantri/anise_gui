@@ -1,6 +1,7 @@
 #include "drawobject.h"
 #include <QShortcut>
 #include <QSize>
+#include <QDebug>
 #include "gatebutton.h"
 
 DrawObject::DrawObject(int id, QPoint position, int width, int height,
@@ -19,6 +20,13 @@ DrawObject::DrawObject(int id, QPoint position, int width, int height,
     this->overAllPicture = QPixmap (this->size());
     overAllPicture.fill(QColor(0,0,0,0)); //make it transparent
 
+    QPixmap *background = new QPixmap(width, height);
+    background->fill(Qt::yellow);
+    this->addPicture(background, QPoint(0,0));
+    mainMask.fill(Qt::color0);
+    this->setMask(mainMask);
+
+    mainMaskAsImage = mainMask.toImage();
 
     //connects
      connect(this, SIGNAL(released(int,QString, QPoint)), this->parent(), SLOT(handleGateClick(int, QString, QPoint)));
@@ -116,18 +124,27 @@ void DrawObject::modifyMask(QPixmap *pic, QPoint position){
     // from the picture but doesnt work all the
     // time
 
+    QBitmap highlightPicMask = QBitmap(width + 6, height + 6);
+
+    
     // If there is no nontransparency, create nontransparentmask manually (no
     // other option so far)
     if (picMask.size().isEmpty()) {
         picMask = QBitmap(width, height);
         picMask.fill(Qt::color1);
     }
+    
+    
 
     // Include the picture (non-transparent) to the main Mask to get the area of
     // the picture to be visible
     QPainter painter(&mainMask);
     painter.setBrush(Qt::color1);
     painter.drawPixmap(position.x(), position.y(), width, height, picMask);
+
+
+    //update changes to QImage
+    mainMaskAsImage = mainMask.toImage();
 
     //Now set the mask of the widget
     this->setMask(mainMask);
@@ -147,6 +164,7 @@ void DrawObject::updateOverAllPicture(QPixmap *newPicture, QPoint position ){
     painter.setBrush(Qt::black);
     painter.drawPixmap(position.x(), position.y(), width, height, *newPicture);
 
+    highlightMask();
 }
 
 QPixmap DrawObject::getPicture() { return this->overAllPicture; }
@@ -157,4 +175,68 @@ void DrawObject::releasedOnGate(QString gateName, QPoint position){
 
 
     emit released(this->ID, gateName, this->pos() + position);
+}
+
+void DrawObject::highlightMask(){
+
+   int width = this->width();
+   int height = this->height();
+
+   for(int i = 0; i < height; i++){
+
+       for(int j = 0; j < width; j++){
+
+           qDebug() << mainMask;
+       }
+
+   }
+
+
+
+
+}
+
+int DrawObject::getPixel(const QImage& img, const int x, const int y) const
+{
+
+
+    const uchar mask = 0x80 >> (x % 8);
+    int pixel = img.scanLine(y)[x / 8] & mask ? 1 : 0;
+    qDebug() << pixel << ",";
+    return pixel;
+
+}
+
+void DrawObject::printMask(){
+
+    int width =  this->width();
+    int height = this->height();
+    int pixel;
+    QString row ="";
+
+    for(int i=0; i<height; i++){
+        for(int j=0; j<width; j++){
+
+            pixel = getPixel(mainMaskAsImage, j, i);
+            row.append((char) pixel);
+
+        }
+        qDebug() << row;
+        row="";
+
+
+    }
+
+}
+
+
+
+
+void DrawObject::setPixel(QImage& img, const int x, const int y, const int pixel)
+{
+    const uchar mask = 0x80 >> (x % 8);
+    if (pixel)
+        img.scanLine(y)[x / 8] |= mask;
+    else
+        img.scanLine(y)[x / 8] &= ~mask;
 }

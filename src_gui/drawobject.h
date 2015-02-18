@@ -23,6 +23,7 @@ public:
 
 
     QBitmap  mainMask;
+    QImage mainMaskAsImage;
     QPainter painter;
     QPixmap overAllPicture;
 
@@ -35,6 +36,10 @@ public:
 
     QPixmap getPicture ();
 
+    void highlightMask();
+    int getPixel(const QImage &img, const int x, const int y) const;
+    void setPixel(QImage &img, const int x, const int y, const int pixel);
+    void printMask();
 signals:
 
     void released(int nodeID, QString gateName, QPoint position);

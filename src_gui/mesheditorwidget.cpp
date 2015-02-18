@@ -74,6 +74,9 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
         // set focus on it
         emit onWidgetClicked(child->ID);
 
+        child->printMask();
+
+
         // relative point of mouse to child
         QPoint hotSpot = event->pos() - child->pos();
         QByteArray arrayData;
