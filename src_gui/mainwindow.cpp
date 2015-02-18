@@ -73,6 +73,7 @@ void MainWindow::on_actionLoad_triggered() {
     if (fileName == "") return;
     QJsonObject *obj = JsonFileHandler::readFile(fileName);
     JsonFileHandler::extractNodesAndConnections(*obj);
+    SingletonRender::instance()->renderMesh(Data::instance()->getMesh());
 }
 
 void MainWindow::on_actionSet_framework_path_triggered() {
