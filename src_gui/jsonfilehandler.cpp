@@ -162,7 +162,6 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             qDebug() << "params:";
 
             // ok, parameters are quite more difficult
-            QVariantMap params;
             Node *createdNode = NodeFactory::createNode(type);
             createdNode->setName(name);
             // get parameters as array of objects
@@ -179,6 +178,14 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             j = 1;  // for debugging only
             qDebug() << "\n";
 
+            //parse the position and other gui_parameters
+            if(theNode.contains("gui_params")){
+                QVariantMap p_gui = theNode["gui_params"].toObject().toVariantMap();
+                createdNode->setPosition(p_gui["x"].toInt(), p_gui["y"].toInt());
+            }
+            //do some default stuff
+            //TODO!
+            else{}
             // node is complete, so let's insert it
 
             mesh->addNode(createdNode);
@@ -192,7 +199,8 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
     }
 
     foreach (QJsonValue var, obj["connections"].toArray()) {
-        QVariantMap theConnection = var.toObject().toVariantMap();
+        QJsonObject co = var.toObject();
+        QVariantMap theConnection = co.toVariantMap();
 
         Node *src_node = mesh->getNodeByName(theConnection["src_node"].toString()),
                 *dest_node =
@@ -202,6 +210,18 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
                 dest_node,
                 dest_node->getGateByName(theConnection["dest_gate"].toString()));
 
+        if(co.contains("gui_params")){
+            QJsonObject json_gui_params = co["gui_params"].toObject();
+            QJsonArray way = json_gui_params["waypoints"].toArray();
+            QVector<QPoint> waypoints;
+            for(QJsonValue v : way){
+                QJsonObject o = v.toObject();
+                if(o.contains("x") && o.contains("y"))
+                    waypoints << QPoint(o["x"].toInt(), o["y"].toInt());
+            }
+
+            connection->setWaypoints(waypoints);
+        }
         mesh->addConnection(connection);
     }
 }
