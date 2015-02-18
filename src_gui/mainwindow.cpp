@@ -119,7 +119,7 @@ void MainWindow::updatePropertyTable(int nodeID) {
             Data::instance()->getMesh()->nodesInMash.contains(nodeID)) {
         deleteTable();
         Node *n = Data::instance()->getMesh()->getNodeByID(nodeID);
-        QVariantMap *map = n->getParams();
+        QMap<QString, Node::parameter> *map = n->getParams();
         table->setRowCount(map->size() + 3);
 
         // create the entries all nodes have
@@ -161,18 +161,20 @@ void MainWindow::updatePropertyTable(int nodeID) {
         for (int i = 0; i < keys.size(); i++) {
             // create key item
             QString key = keys.value(i);
-            QTableWidgetItem *key_item = new QTableWidgetItem(key);
+            QTableWidgetItem *key_item = new QTableWidgetItem((*map)[key].name);
+            key_item->setData(Qt::UserRole,key);
             key_item->setFlags(key_item->flags() ^
                                (Qt::ItemIsEditable | Qt::ItemIsSelectable));
+            key_item->setToolTip((*map)[key].descr);
             table->setItem(3 + i, 0, key_item);
 
             // create value item
-            QVariant value = map->value(key);
-            QTableWidgetItem *value_item;
+            QVariant value = map->value(key).value;
+            QTableWidgetItem *value_item = new QTableWidgetItem();
+            value_item->setToolTip((*map)[key].descr);
             //QSpinBox *spinner;
             switch (value.userType()) {
-            case QVariant::Bool:
-                value_item = new QTableWidgetItem();
+            case QVariant::Bool:       
                 // value_item->setData(0, value);
                 value_item->setCheckState(value.toBool() ? Qt::Checked
                                                          : Qt::Unchecked);
@@ -193,7 +195,7 @@ void MainWindow::updatePropertyTable(int nodeID) {
                 table->setCellWidget(3 + i, 1, spinner);
                 break;*/
             default:
-                value_item = new QTableWidgetItem();
+
                 value_item->setData(Qt::UserRole, value);
                 value_item->setText(value.toString());
                 table->setItem(3 + i, 1, value_item);
@@ -201,6 +203,7 @@ void MainWindow::updatePropertyTable(int nodeID) {
             }
         }
         connect(table, SIGNAL(itemChanged(QTableWidgetItem*)), Data::instance()->getMesh(), SLOT(updateNode(QTableWidgetItem*)));
+        table->resizeColumnsToContents();
         table->show();
     } else if (table->isVisible()) {
         deleteTable();
@@ -222,10 +225,10 @@ void MainWindow::displayTypeInfo(const QString &type) {
     deleteTable();
     QTableWidget *table = ui->tableWidget;
     Node n = Data::instance()->getNodeCatalog()->getNodeOfType(type);
-    int ins = 0, outs = 0, tmpOffset = 3;
+    int ins = 0, outs = 0, offset = 3;
     ins = n.getInputGates()->size();
     outs = n.getOutputGates()->size();
-    const QVariantMap *params = n.getParams();
+    const QMap<QString, Node::parameter> *params = n.getParams();
     table->setRowCount(((params->size()) + 3));
     table->setColumnCount(2);
     table->setItem(0, 0, new QTableWidgetItem("Type"));
@@ -238,43 +241,19 @@ void MainWindow::displayTypeInfo(const QString &type) {
     if(descr != "")
     {
         table->setRowCount(table->rowCount() + 1);
-        table->setItem(tmpOffset, 0, new QTableWidgetItem("Description"));
-        table->setItem(tmpOffset++, 1, new QTableWidgetItem(descr));
+        table->setItem(offset, 0, new QTableWidgetItem("Description"));
+        table->setItem(offset++, 1, new QTableWidgetItem(descr));
     }
-    const int offset = tmpOffset;
     QList<QString> keys = params->keys();
     for (int i = 0; i < keys.size(); i++) {
-        table->setItem(i + offset, 0, new QTableWidgetItem(keys[i]));
-        QString value;
-        switch (params->value(keys[i]).userType()) {
-        case QVariant::Int:
-            value = "int";
-            break;
-        case QVariant::UInt:
-            value = "unsigned int";
-            break;
-        case QVariant::Bool:
-            value = "bool";
-            break;
-        case QVariant::Double:
-            value = "double";
-            break;
-        case QVariant::BitArray:
-            value = "BitArray";
-            break;
-        case QVariant::ByteArray:
-            value = "ByteArray";
-            break;
-        default:
-            value = "String";
-            break;
-        }
-        table->setItem(i + offset, 1, new QTableWidgetItem(value));
+        table->setItem(i + offset, 0, new QTableWidgetItem((*params)[keys[i]].name));
+        table->setItem(i + offset, 1, new QTableWidgetItem((*params)[keys[i]].type));
+        table->item(i + offset, 1)->setToolTip((*params)[keys[i]].descr);
     }
 
     for (int col = 0; col < table->columnCount(); col++)
         for (int row = 0; row < table->rowCount(); row++)
             table->item(row, col)->setFlags(Qt::ItemIsEnabled);
-
+    table->resizeColumnsToContents();
     table->show();
 }

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1000</width>
-    <height>708</height>
+    <height>738</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -82,7 +82,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>785</width>
+            <width>674</width>
             <height>63</height>
            </rect>
           </property>
@@ -215,7 +215,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>772</width>
+            <width>661</width>
             <height>285</height>
            </rect>
           </property>
@@ -231,7 +231,6 @@
              <property name="acceptDrops">
               <bool>true</bool>
              </property>
-             <zorder>pushButton</zorder>
             </widget>
            </item>
           </layout>
@@ -331,13 +330,13 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>100</width>
+        <width>350</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>200</width>
+        <width>400</width>
         <height>16777215</height>
        </size>
       </property>
@@ -375,7 +374,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>19</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

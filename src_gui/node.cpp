@@ -4,15 +4,15 @@
 Node::Node() {
   inputGates = QVector<Gate *>();
   outputGates = QVector<Gate *>();
-  params = QVariantMap();
+  params = QMap<QString, parameter>();
   type = QString();
   name = QString();
 }
 
-QVariantMap *Node::getParams() { return &this->params; }
+QMap<QString, Node::parameter> *Node::getParams() { return &this->params; }
 
 Node::Node(QVector<Gate *> &inputGates, QVector<Gate *> &outputGates,
-           QString &type, QString &name, QVariantMap &params) {
+           QString &type, QString &name, QMap<QString, parameter> &params) {
   this->inputGates = inputGates;
   this->outputGates = outputGates;
   this->type = type;
@@ -55,9 +55,11 @@ void Node::addGates(QVector<Gate *> gates, const bool &direction) {
     foreach (Gate *gate, gates) { outputGates << gate; }
 }
 
-bool Node::addParam(QString _key, QVariant _value) {
-  if (!this->params.contains(_key))
-    this->params.insert(_key, _value);
+bool Node::addParam(QString descr, QString _key, QString name, QString type, QVariant _value) {
+  if (!this->params.contains(_key)){
+      parameter p{descr, _key, name, type, _value};
+      this->params.insert(_key, p);
+  }
   else
     return false;
   return true;
@@ -65,7 +67,7 @@ bool Node::addParam(QString _key, QVariant _value) {
 
 bool Node::setParam(QString key, QVariant _value) {
   if (params.contains(key)) {
-    params[key] = _value;
+    params[key].value = _value;
     return true;
   }
   return false;
@@ -81,7 +83,7 @@ bool Node::removeParam(QString _key) {
 
 QVariant Node::getParamByKey(const QString &_key) {
   if (!this->params.contains(_key)) return QString("@@invalid@@");
-  return params[_key];
+  return params[_key].value;
 }
 
 QString Node::toString() {
@@ -89,8 +91,8 @@ QString Node::toString() {
   out += "class:" + type + "\nname:" + name + "\n\nparameters:\n";
   foreach (QString key, params.keys()) {
     out += "key:" + key + ", " + "value: " +
-           params[key].typeName() + " " +
-           params[key].toString() + "\n";
+           params[key].value.typeName() + " " +
+           params[key].value.toString() + "\n";
   }
   out += "position: (" + QString::number(position_x) + "|" +
          QString::number(position_y);
@@ -108,6 +110,11 @@ Gate *Node::getGateByName(const QString &name) {
       return gate;
     }
   return 0;
+}
+
+void Node::addParam(QString key, Node::parameter p)
+{
+    params[key] = p;
 }
 
 int Node::x() { return position_x; }

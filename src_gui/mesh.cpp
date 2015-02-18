@@ -121,6 +121,7 @@ void Mesh::updateNode(QTableWidgetItem *item) {
         n->setName(name);
     }
     else {
+        paramID = theItemID->data(Qt::UserRole).toString();
         QVariant _old = n->getParamByKey(paramID), _new;
         QVariant data = item->text();
 

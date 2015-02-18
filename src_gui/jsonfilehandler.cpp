@@ -74,8 +74,7 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
         QString type, descr;
         QList<Gate *> input_gates, output_gates;
 
-        QJsonObject localNode = var.toObject(),
-                json_params;
+        QJsonObject localNode = var.toObject(), json_params;
         type = localNode["class"].toString();
         descr = localNode["description"].toString();
         QJsonArray inputs = localNode["input_gates"].toArray(),
@@ -107,14 +106,15 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
         node.addGates(input_gates.toVector(), true);
         node.addGates(output_gates.toVector(), false);
 
-        //initilize parameters
+        // initilize parameters
         json_params = localNode["parameters"].toObject();
-        QVariantMap contents = localNode.toVariantMap()["parameters"].toMap();
-        foreach (QString key, contents.keys()) {
-            QVariant::Type type = static_cast<QVariant::Type> (contents[key].toInt());
-            node.addParam(key, QVariant(type));
-
-
+        QJsonArray contents = localNode["parameters"].toArray();
+        for (QJsonValue o : contents) {
+            QVariantMap parameters = o.toObject().toVariantMap();
+            node.addParam(parameters["description"].toString(),
+                    parameters["key"].toString(), parameters["name"].toString(),
+                    parameters["type"].toString(),
+                    QVariant(QVariant::nameToType(parameters["type"].toString().toUtf8())));
         }
         catalog->insert(node);
         qDebug() << "added node to Catalog:\n"
@@ -163,7 +163,8 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
 
             // ok, parameters are quite more difficult
             QVariantMap params;
-
+            Node *createdNode = NodeFactory::createNode(type);
+            createdNode->setName(name);
             // get parameters as array of objects
             foreach (QJsonValue local, theNode["params"].toArray()) {
                 // make every object a qvariantmap
@@ -171,15 +172,15 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
                 // insert all records into params map
 
                 foreach (QString key, map.keys()) {
-                    params[key] = map[key];
-                    qDebug() << j++ << ": " << key << " = " << params[key];
+                    createdNode->setParam(key, map[key]);
+                    qDebug() << j++ << ": " << key << " = " << map[key];
                 }
             }
             j = 1;  // for debugging only
             qDebug() << "\n";
 
             // node is complete, so let's insert it
-            Node *createdNode = NodeFactory::createNode(type, name, params);
+
             mesh->addNode(createdNode);
         }
     }
@@ -249,13 +250,12 @@ QString JsonFileHandler::meshToJson(Mesh *mesh) {
         theNode["class"] = n->getType();
         theNode["name"] = n->getName();
         QJsonArray params;
-        QVariantMap *map = n->getParams();
+        QMap<QString, Node::parameter> *map = n->getParams();
         foreach (QString key, map->keys()) {
             QJsonObject param;
-            QVariant var = map->value(key);
+            QVariant var = map->value(key).value;
             param[key] = QJsonValue::fromVariant(var);
-            // TODO gebuggt!
-            params.push_back(param);
+            params << param;
         }
         theNode["params"] = params;
         QJsonObject gui_params;
@@ -273,7 +273,7 @@ QString JsonFileHandler::meshToJson(Mesh *mesh) {
         QJsonObject gui_params;
         QJsonArray way;
         QVector<QPoint> points = c->getWaypoints();
-        for(int i = 0; i < points.size(); i++){
+        for (int i = 0; i < points.size(); i++) {
             QPoint p = c->getWaypoints().at(i);
             QJsonObject point;
             point["x"] = p.x();

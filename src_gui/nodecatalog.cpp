@@ -3,7 +3,7 @@
 
 NodeCatalog::NodeCatalog() {
     Content = QMap<QString, Node>();
-    Node blackbox;
+    /*Node blackbox;
     Gate *in = new Gate(true, "in"), *out = new Gate(false, "out");
     blackbox.addGate(in);
     blackbox.addGate(out);
@@ -13,7 +13,7 @@ NodeCatalog::NodeCatalog() {
     blackbox.addParam("boolean2" ,false);
     blackbox.addParam("integer", -5);
     blackbox.addParam("String", "Test String");
-    Content["blackbox"] = blackbox;
+    Content["blackbox"] = blackbox;*/
 }
 
 

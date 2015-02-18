@@ -35,56 +35,13 @@ Node *NodeFactory::createNode(QString _class, QString name) {
     return node;
 }
 
-Node *NodeFactory::createNode(QString _class, QString name, QVariantMap params) {
+Node *NodeFactory::createNode(QString _class, QString name, QMap<QString, Node::parameter> params) {
     Node *node = createNode(_class, name);
     foreach (QString key, params.keys()) {
 
         node->addParam(key, params[key]);
     }
     return node;
-}
-
-Node *NodeFactory::createTestNode() {
-    // ##### generate a node just for testing purpose
-    // later nodes should be created by reading from a json file
-
-    Node *tempTestNode = new Node();  // using standart construktor
-    // setting individual variables
-
-    // name and type
-    tempTestNode->setType("TestType");
-    tempTestNode->setName("Dieter");
-
-    // generate and add test gates:
-    // input
-    QList<QString> *tempTestGateInputTypes = new QList<QString>();
-    *tempTestGateInputTypes << ("type1");
-    *tempTestGateInputTypes << ("type2");
-    *tempTestGateInputTypes << ("type3");
-    // output
-    QList<QString> *tempTestGateOutputTypes = new QList<QString>();
-    *tempTestGateInputTypes << ("type4");
-    *tempTestGateInputTypes << ("type1");
-    *tempTestGateInputTypes << ("type5");
-
-    Gate *tempTestGateInput = new Gate(true, *tempTestGateInputTypes);
-    Gate *tempTestGateOutput = new Gate(false, *tempTestGateOutputTypes);
-    tempTestNode->addGate(tempTestGateInput);
-    tempTestNode->addGate(tempTestGateOutput);
-
-    // add parameter
-    tempTestNode->addParam("param1", 1);
-    tempTestNode->addParam("param2", false);
-    tempTestNode->addParam("param3", 19.4f);
-    tempTestNode->addParam("param4", 3.141);
-    tempTestNode->addParam("param5", "Wurst");
-
-    // set the position of the Node
-    tempTestNode->setPosition(1.0, 1.0);
-
-    // ##### end of generation of testing node
-
-    return tempTestNode;
 }
 
 

@@ -7,13 +7,27 @@
 
 // Node konstruktor should be private
 class Node {
+
+    friend class JsonFileHandler;
+    friend class NodeFactory;
+    friend class NodeCatalog;
+
+
 public:
+
+    struct parameter{
+        QString descr;
+        QString key;
+        QString name;
+        QString type;
+        QVariant value;
+    };
     Node();
     float position_x;
     float position_y;
-    QVariantMap* getParams();
+    QMap<QString, parameter>* getParams();
 
-    Node(QVector<Gate*> &inputGates, QVector<Gate*> &outputGates, QString &type, QString &name, QVariantMap &params);
+    Node(QVector<Gate*> &inputGates, QVector<Gate*> &outputGates, QString &type, QString &name, QMap<QString, parameter> &params);
 
     /*
    * TODO:
@@ -44,8 +58,6 @@ public:
 
     QVector<Gate*> *getOutputGates();
 
-    bool addParam(QString _key, QVariant _value);
-
     bool setParam(QString key, QVariant _value);
 
     bool removeParam(QString _key);
@@ -55,7 +67,7 @@ public:
     QString toString();
 
     Gate *getGateByName(const QString &name);
-
+    void addParam(QString key, parameter p);
     int x();
     int y();
 
@@ -67,12 +79,12 @@ public:
     void setID(int value);
     QPoint getPosition();
 private:
-
+    bool addParam(QString descr, QString _key, QString name, QString type, QVariant _value);
     QString description;
     QVector<Gate *> inputGates, outputGates;
     QString type, name;
     int ID = -2;
-    QVariantMap params;  // maps <identifier, value>
+    QMap<QString, parameter> params;  // maps <identifier, value>
 };
 
 #endif  // NODE_H
