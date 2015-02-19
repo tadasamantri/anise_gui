@@ -34,8 +34,7 @@ int Mesh::addNode(Node *node) {
     int id = generateId();
     node->setID(id);
     this->nodesInMash.insert(id, node);
-    this->focusObject =
-            id;  // A new created Node is always focussed in the beginning
+
     return id;
 }
 
