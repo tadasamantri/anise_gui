@@ -95,6 +95,7 @@ void Data::initialize(MainWindow *mainWindow) {
 int Data::addNodeToMesh(Node *newNode) {
     int id = this->mesh->addNode(newNode);
     SingletonRender::instance()->renderMesh(this->mesh);
+    mesh->setFocusMeshObject(id); // A new created Node is always focussed in the beginning
     return id;
 }
 
