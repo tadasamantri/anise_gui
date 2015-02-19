@@ -49,7 +49,7 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID) {
         // create new Lines
         for (int index = 0; index < conToRender->waypoints.size() - 1; ++index) {
             tempVec << QLine(conToRender->waypoints.at(index),
-                                    conToRender->waypoints.at(index + 1));
+                             conToRender->waypoints.at(index + 1));
         }
         this->allLines.insert(ID, tempVec);
 
@@ -92,7 +92,7 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID) {
         // create new Lines
         for (int index = 0; index < conToRender->waypoints.size() - 1; ++index) {
             tempVec << QLine(conToRender->waypoints.at(index),
-                                    conToRender->waypoints.at(index + 1));
+                             conToRender->waypoints.at(index + 1));
         }
         this->allLines.insert(ID, tempVec);
     }
@@ -394,11 +394,24 @@ void SingletonRender::setOutputGateDrawOffset(const QPoint &value)
 
 
 bool SingletonRender::deleteMeshDrawing(int objectID) {
-    DrawObject *childToDelete = allDrawnNodes.value(objectID);
-
-    allDrawnNodes.remove(objectID);
-    childToDelete->deleteLater();
-    return !allDrawnNodes.contains(objectID);
+    bool success = false;
+    if(allDrawnNodes.contains(objectID)){
+        DrawObject *childToDelete = allDrawnNodes[objectID];
+        allDrawnNodes.remove(objectID);
+        childToDelete->deleteLater();
+        success =  !allDrawnNodes.contains(objectID);
+    }
+    else if(allConnections.contains(objectID) && allLines.contains(objectID)){
+        QVector<DrawObject *> childrenToDelete = allConnections[objectID];
+        allLines.remove(objectID);
+        allConnections.remove(objectID);
+        for(DrawObject *o : childrenToDelete)
+            o->deleteLater();
+        success = !(allLines.contains(objectID) || allConnections.contains(objectID));
+    }
+    if(success)
+        ui->meshField->repaint();
+    return success;
 }
 
 QVector<int> *SingletonRender::getChildrenIDs() {

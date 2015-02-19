@@ -205,7 +205,8 @@ void MainWindow::updatePropertyTable(int nodeID) {
         }
         connect(table, SIGNAL(itemChanged(QTableWidgetItem*)), Data::instance()->getMesh(), SLOT(updateNode(QTableWidgetItem*)));
         table->resizeColumnsToContents();
-        table->show();
+        if(ui->details->checkState() == Qt::Checked)
+            table->show();
     } else if (table->isVisible()) {
         deleteTable();
     }
@@ -225,10 +226,11 @@ void MainWindow::deleteTable() {
 void MainWindow::displayTypeInfo(const QString &type) {
     deleteTable();
     QTableWidget *table = ui->tableWidget;
-    Node n = Data::instance()->getNodeCatalog()->getNodeOfType(type);
+    Node n = *Data::instance()->getNodeCatalog()->getPointerOfType(type);
     int ins = 0, outs = 0, offset = 3;
     ins = n.getInputGates()->size();
     outs = n.getOutputGates()->size();
+
     const QMap<QString, Node::parameter> *params = n.getParams();
     table->setRowCount(((params->size()) + 3));
     table->setColumnCount(2);
@@ -256,5 +258,14 @@ void MainWindow::displayTypeInfo(const QString &type) {
         for (int row = 0; row < table->rowCount(); row++)
             table->item(row, col)->setFlags(Qt::ItemIsEnabled);
     table->resizeColumnsToContents();
-    table->show();
+    if(ui->details->checkState() == Qt::Checked)
+        table->show();
+}
+
+void MainWindow::on_details_stateChanged(int arg1)
+{
+    if(arg1)
+        ui->tableWidget->show();
+    else
+        ui->tableWidget->hide();
 }

@@ -25,9 +25,15 @@ void NodeCatalog::insert(Node nodeToInsert) {
 Node NodeCatalog::getNodeOfType(const QString &type){
     Node node;
     QString _class = type;
-    if(!Content.contains(_class))
-        _class = "blackbox";
     node = Content[_class];
     qDebug() << "node of type " << _class <<" returned";
     return node;
+}
+
+const Node *NodeCatalog::getPointerOfType(const QString &type)
+{
+    Node *n = 0;
+    if(Content.contains(type))
+        n = &Content[type];
+    return n;
 }
