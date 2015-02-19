@@ -52,6 +52,7 @@ public:
     QString getValidAlternativeForName(const QString name);
 
     void updateConnections(int ID, QPoint offset);
+    ~Mesh();
 public slots:
     void setFocusMeshObject(int nodeID);
     void updateNode(QTableWidgetItem *item);

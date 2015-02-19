@@ -169,4 +169,10 @@ bool Data::deleteItem() {
     return deleted;
 }
 
+Data::~Data(){
+    delete data;
+    delete mesh;
+    delete nodeCatalog;
+}
+
 NodeCatalog *Data::getNodeCatalog() { return nodeCatalog; }

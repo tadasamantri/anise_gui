@@ -99,5 +99,10 @@ QString AniseCommunicator::getAllNodeTypes() {
 
 void AniseCommunicator::setFrameworkPath(QString newPath) {
 
-  AniseCommunicator::path = newPath;
+    AniseCommunicator::path = newPath;
+}
+
+AniseCommunicator::~AniseCommunicator()
+{
+    delete anise_process;
 }

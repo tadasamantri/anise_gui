@@ -202,8 +202,11 @@ int Mesh::getCurrentID() { return iDCounter; }
 
 
 void Mesh::updateConnStartAndEnd(){
+}
 
-
-
-
+Mesh::~Mesh(){
+    for(Connection *c : connectionsInMesh)
+        delete c;
+    for(Node *n : nodesInMash)
+        delete n;
 }

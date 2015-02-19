@@ -36,6 +36,7 @@ private:
 public:
     static QString getAllNodeTypes();
     static void setFrameworkPath(QString path);
+    ~AniseCommunicator();
 };
 
 #endif // ANISECOMMUNICATOR_H

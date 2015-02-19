@@ -37,7 +37,7 @@ DrawObject::DrawObject(int id, QPoint position, int width, int height,
     this->setMask(mainMaskUnhighlighted);
 
     mainMaskAsImage = mainMaskUnhighlighted.toImage();
-
+    delete background;
     //connects
      connect(this, SIGNAL(released(int,QString, QPoint)), this->parent(), SLOT(handleGateClick(int, QString, QPoint)));
 }

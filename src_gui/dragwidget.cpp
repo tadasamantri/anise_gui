@@ -78,4 +78,5 @@ void DragWidget::mousePressEvent(QMouseEvent *event) {
         child->show();
         // child->setPixmap(pixmap);
     }
+    drag->deleteLater();
 }

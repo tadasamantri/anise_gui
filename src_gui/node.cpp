@@ -143,3 +143,5 @@ QPoint Node::getPosition()
 QString Node::getDescription() { return description; }
 
 void Node::setDescription(const QString &value) { description = value; }
+
+

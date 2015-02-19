@@ -62,6 +62,7 @@ public:
     MainWindow *getMainWindow() const;
     void setMainWindow(MainWindow *value);
 
+    ~Data();
 public slots:
     bool deleteItem();
 
