@@ -38,6 +38,8 @@ private slots:
 
     void on_actionLoad_Catalog_triggered();
 
+    void on_details_stateChanged(int arg1);
+
 private:
     void initializeGUI();
 
