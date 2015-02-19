@@ -205,14 +205,21 @@ void DrawObject::releasedOnGate(QString gateName, QPoint position){
 
     emit released(this->ID, gateName, this->pos() + position);
 }
+int DrawObject::getHighlightWidth() const
+{
+    return highlightWidth;
+}
+
+
+
 
 void DrawObject::highlightMask(){
 
-   int width = this->width();
-   int height = this->height();
+    int width = this->width();
+    int height = this->height();
 
-   // this highlights left and right side
-   for(int y = 0; y < height; y++){
+    // this highlights left and right side
+    for(int y = 0; y < height; y++){
 
        for(int x = highlightWidth; x < width - highlightWidth; x++){
 

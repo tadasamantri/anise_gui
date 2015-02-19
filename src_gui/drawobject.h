@@ -43,6 +43,9 @@ public:
     void printMask();
 
     void paintEvent(QPaintEvent *);
+    int getHighlightWidth() const;
+
+
 signals:
 
     void released(int nodeID, QString gateName, QPoint position);
