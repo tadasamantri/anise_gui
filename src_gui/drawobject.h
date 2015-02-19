@@ -16,13 +16,14 @@ public:
     int ID;
     QVector<QLabel*> labelvector;
 
-    DrawObject(int id, QPoint position, int width , int height, QWidget *parent);
+    DrawObject(int id, QPoint position, int width , int height, QWidget *parent = 0, int highlightWidth = 3);
 
     QVector<QPushButton*> buttonvector;
 
 
 
-    QBitmap  mainMask;
+    QBitmap mainMaskUnhighlighted;
+    QBitmap mainMaskHighlighted;
     QImage mainMaskAsImage;
     QPainter painter;
     QPixmap overAllPicture;
@@ -36,10 +37,12 @@ public:
 
     QPixmap getPicture ();
 
-    void highlightMask();
-    int getPixel(const QImage &img, const int x, const int y) const;
-    void setPixel(QImage &img, const int x, const int y, const int pixel);
+
+    void dehighlight();
+    void highlight();
     void printMask();
+
+    void paintEvent(QPaintEvent *);
 signals:
 
     void released(int nodeID, QString gateName, QPoint position);
@@ -50,9 +53,12 @@ public slots:
 
 private:
 
+    int highlightWidth;
+
 void updateOverAllPicture(QPixmap *newPicture, QPoint position);
-
-
+int getPixel(const int x, const int y) const;
+void setPixel(const int x, const int y, const int pixel);
+void highlightMask();
 
 };
 

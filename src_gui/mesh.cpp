@@ -100,7 +100,13 @@ int Mesh::generateId() {
 }
 
 void Mesh::setFocusMeshObject(int nodeID) {
+
+    if(this->focusObject != -1)
+        SingletonRender::instance()->dehighlightObject(this->focusObject);
+
     this->focusObject = nodeID;
+    SingletonRender::instance()->highlightObject(this->focusObject);
+
     Data::instance()->getMainWindow()->updatePropertyTable(nodeID);
 }
 /**

@@ -98,6 +98,9 @@ public:
     QPoint getInputGateDrawOffset() const;
     void setInputGateDrawOffset(const QPoint &value);
 
+    void dehighlightObject(int ID);
+    void highlightObject(int ID);
+
 private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
 

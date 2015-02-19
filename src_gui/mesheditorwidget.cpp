@@ -74,8 +74,6 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
         // set focus on it
         emit onWidgetClicked(child->ID);
 
-        child->printMask();
-        child->highlightMask();
 
 
         // relative point of mouse to child
