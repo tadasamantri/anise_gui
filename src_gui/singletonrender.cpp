@@ -436,7 +436,10 @@ void SingletonRender::dehighlightObject(int ID){
 
 
 
-        //TODO DELETE HIGHLIGHTING OF CONNECTIONSSTUFF
+        foreach(DrawObject *joint , this->allConnections.value(ID)){
+
+            joint->dehighlight();
+        }
 
     }
 }
@@ -447,8 +450,13 @@ void SingletonRender::highlightObject(int ID){
 
         allDrawnNodes.value(ID)->highlight();
 
-    if(allConnections.contains(ID));
+    if(allConnections.contains(ID)){
 
-              //TODO HIGHLIGHTING OF CONNECTIONSSTUFF
+        foreach(DrawObject *joint , this->allConnections.value(ID)){
+
+            joint->highlight();
+        }
+    }
+
 
 }
