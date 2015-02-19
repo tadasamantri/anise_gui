@@ -236,6 +236,7 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
         // some Variables needed often
         int gateHeight = allImages["gate.png"]->height();
         int gateOffset = 10;
+        int highlightOffset = 10;
         QString typeName = nodeToRender->getType();
 
         // find out how high the node is depending on the number of gates
@@ -251,11 +252,11 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
         DrawObject *NodeDrawObject = new DrawObject(
                     nodeID,
                     QPoint(int(nodeToRender->position_x), int(nodeToRender->position_y)),
-                    100, drawObjectHeight, this->ui->meshField);
+                    100 + highlightOffset, drawObjectHeight + highlightOffset, this->ui->meshField);
 
         if (allImages.contains("body.png")) {
             // Draw the body
-            NodeDrawObject->addPicture(allImages["body.png"], QPoint(15, 0),
+            NodeDrawObject->addPicture(allImages["body.png"], QPoint(15 + highlightOffset/2, highlightOffset/2),
                     typeName);
 
         } else {
@@ -271,14 +272,14 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
 
             for (int i = 0; i < numberInputGates; i++) {
                 NodeDrawObject->addGateButton(
-                            allImages["gate.png"], QPoint(0, i * (gateHeight + gateOffset) + 5),
+                            allImages["gate.png"], QPoint(highlightOffset/2, i * (gateHeight + gateOffset) + 5 + highlightOffset/2),
                         inputGates->at(i)->getName());
             }
 
             for (int i = 0; i < numberOutputGates; i++) {
                 NodeDrawObject->addGateButton(
                             allImages["gate.png"],
-                        QPoint(75, i * (gateHeight + gateOffset) + 5),
+                        QPoint(highlightOffset/2 + 75, i * (gateHeight + gateOffset) + 5 + highlightOffset/2),
                         outputGates->at(i)->getName());
             }
 

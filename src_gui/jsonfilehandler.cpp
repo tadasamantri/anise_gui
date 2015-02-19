@@ -255,7 +255,7 @@ QString JsonFileHandler::meshToJson(Mesh *mesh) {
             QJsonObject param;
             QVariant var = map->value(key).value;
             param[key] = QJsonValue::fromVariant(var);
-            params << param;
+            params.push_back(param);
         }
         theNode["params"] = params;
         QJsonObject gui_params;

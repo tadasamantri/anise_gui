@@ -21,7 +21,7 @@ DrawObject::DrawObject(int id, QPoint position, int width, int height,
     overAllPicture.fill(QColor(0,0,0,0)); //make it transparent
 
     QPixmap *background = new QPixmap(width, height);
-    background->fill(Qt::yellow);
+    background->fill(Qt::red);
     this->addPicture(background, QPoint(0,0));
     mainMask.fill(Qt::color0);
     this->setMask(mainMask);
@@ -93,7 +93,7 @@ void DrawObject::addGateButton(QPixmap *pic, QPoint position, QString gateName) 
     GateButton *button = new GateButton(gateName, ID, this);
     button->setGeometry(position.x(), position.y(), width, height);
     button->setIcon(*pic);
-    this->buttonvector << button;
+    this->buttonvector << button;http://www.teamviewer.com/de/download/linux.aspx
     // Now set the masks to the widgets
     button->setMask(pic->mask());
 
@@ -144,7 +144,7 @@ void DrawObject::modifyMask(QPixmap *pic, QPoint position){
 
 
     //update changes to QImage
-    mainMaskAsImage = mainMask.toImage();
+    mainMaskAsImage = mainMask.toImage().convertToFormat(QImage::Format_Mono);
 
     //Now set the mask of the widget
     this->setMask(mainMask);
@@ -164,7 +164,7 @@ void DrawObject::updateOverAllPicture(QPixmap *newPicture, QPoint position ){
     painter.setBrush(Qt::black);
     painter.drawPixmap(position.x(), position.y(), width, height, *newPicture);
 
-    highlightMask();
+    //highlightMask();
 }
 
 QPixmap DrawObject::getPicture() { return this->overAllPicture; }
@@ -182,15 +182,68 @@ void DrawObject::highlightMask(){
    int width = this->width();
    int height = this->height();
 
-   for(int i = 0; i < height; i++){
+   // this highlights left and right side
+   for(int y = 0; y < height; y++){
 
-       for(int j = 0; j < width; j++){
+       for(int x = 3; x < width - 3; x++){
 
-           qDebug() << mainMask;
+           //left side highlight
+           if(getPixel(mainMaskAsImage, x, y) && !getPixel(mainMaskAsImage, x-1, y)){
+               //setPixel(mainMaskAsImage, x-5, y, 1);
+               //setPixel(mainMaskAsImage, x-4, y, 1);
+               setPixel(mainMaskAsImage, x-3, y, 1);
+               setPixel(mainMaskAsImage, x-2, y, 1);
+               setPixel(mainMaskAsImage, x-1, y, 1);
+           }
+
+           // the right side of drawobject to highlighting
+           if(getPixel(mainMaskAsImage, x, y) && !getPixel(mainMaskAsImage, x+1, y)){
+               setPixel(mainMaskAsImage, x+1, y, 1);
+               setPixel(mainMaskAsImage, x+2, y, 1);
+               setPixel(mainMaskAsImage, x+3, y, 1);
+               //setPixel(mainMaskAsImage, x+4, y, 1);
+               //setPixel(mainMaskAsImage, x+5, y, 1);
+               break;
+            }
+
+
        }
 
    }
 
+   // this highlight upside and downside
+   for(int x = 0; x < width; x++){
+
+       for(int y = 3; y < height - 3; y++){
+
+           //highlights the upside of drawobject
+           if(getPixel(mainMaskAsImage, x, y) && !getPixel(mainMaskAsImage, x, y-1)){
+               //setPixel(mainMaskAsImage, x, y-5, 1);
+               //setPixel(mainMaskAsImage, x, y-4, 1);
+               setPixel(mainMaskAsImage, x, y-3, 1);
+               setPixel(mainMaskAsImage, x, y-2, 1);
+               setPixel(mainMaskAsImage, x, y-1, 1);
+           }
+
+           //highlights the downside of drawobject
+           if(getPixel(mainMaskAsImage, x, y) && !getPixel(mainMaskAsImage, x, y+1)){
+               setPixel(mainMaskAsImage, x, y+1, 1);
+               setPixel(mainMaskAsImage, x, y+2, 1);
+               setPixel(mainMaskAsImage, x, y+3, 1);
+               //setPixel(mainMaskAsImage, x, y+4, 1);
+               //setPixel(mainMaskAsImage, x, y+5, 1);
+               break;
+            }
+
+
+       }
+
+   }
+
+   mainMask = QBitmap::fromImage(mainMaskAsImage);
+
+   this->setMask(mainMask);
+   // labelvector.first()->setMask(mainMask);
 
 
 
@@ -202,7 +255,7 @@ int DrawObject::getPixel(const QImage& img, const int x, const int y) const
 
     const uchar mask = 0x80 >> (x % 8);
     int pixel = img.scanLine(y)[x / 8] & mask ? 1 : 0;
-    qDebug() << pixel << ",";
+    //qDebug() << pixel << ",";
     return pixel;
 
 }
@@ -213,16 +266,18 @@ void DrawObject::printMask(){
     int height = this->height();
     int pixel;
     QString row ="";
+    QDebug deb = qDebug();
 
     for(int i=0; i<height; i++){
         for(int j=0; j<width; j++){
 
-            pixel = getPixel(mainMaskAsImage, j, i);
-            row.append((char) pixel);
+            deb.nospace() << getPixel(mainMaskAsImage, j, i);
+
 
         }
-        qDebug() << row;
+       // deb << row;
         row="";
+        deb = qDebug();
 
 
     }
