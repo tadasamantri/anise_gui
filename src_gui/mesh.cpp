@@ -185,7 +185,7 @@ bool Mesh::deleteNode() {
 
 bool Mesh::deleteConnection() {
     connectionsInMesh.remove(focusObject);
-    bool allRemoved = connectionsInMesh.contains(focusObject) &&
+    bool allRemoved = !connectionsInMesh.contains(focusObject) &&
             SingletonRender::instance()->deleteMeshDrawing(focusObject);
 
     if (allRemoved) focusObject = -1;
