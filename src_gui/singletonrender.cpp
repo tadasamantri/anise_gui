@@ -63,13 +63,9 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID) {
                 return;
             }
 
-            // calculate the middle of the Image
-            int posx = joint.x() - allImages.value("joint.png")->width() / 2;
-            int posy = joint.y() - allImages.value("joint.png")->height() / 2;
-
             // create a new Drawobject and save some space for the image
             DrawObject *ConnectionJointDrawObject = new DrawObject(
-                        ID, QPoint(posx, posy), allImages.value("joint.png")->width(),
+                        ID, QPoint(0, 0), allImages.value("joint.png")->width(),
                         allImages.value("joint.png")->height(), this->ui->meshField);
 
             // Add the picture to the draw object
@@ -313,6 +309,8 @@ void SingletonRender::renderMesh(Mesh *workMesh) {
     foreach (int ID, workMesh->connectionsInMesh.keys()) {
         renderConnection(workMesh->connectionsInMesh.value(ID), ID);
     }
+
+    //renderConnections(); //needs to be called in the paint event of mesheditor widget
     this->ui->mesh_edt_area->repaint();
 }
 

@@ -89,7 +89,7 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
         // something about mime data...
         // TODO correct mimedata
         QMimeData *mimeData = new QMimeData;
-        mimeData->setData("application/customthingy", arrayData);
+        mimeData->setData("ANISE-GUI/drawobject", arrayData);
 
         // hides the child so only the drag object at mouse position is shown
         child->hide();
@@ -110,7 +110,7 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
 }
 
 void MeshEditorWidget::dragEnterEvent(QDragEnterEvent *event) {
-    if (event->mimeData()->hasFormat("application/customthingy")) {
+    if (event->mimeData()->hasFormat("ANISE-GUI/drawobject")) {
         // qDebug() << "dragEnterEvent";
         if (event->source() == this) {
             event->setDropAction(Qt::MoveAction);
@@ -124,24 +124,18 @@ void MeshEditorWidget::dragEnterEvent(QDragEnterEvent *event) {
 }
 
 void MeshEditorWidget::mouseMoveEvent(QMouseEvent *event) {
-    /*
-  //will draw a line from newLine.drawLineStartPosition to mouse
 
-  this->mousePosition = event->pos();
+    //update mouse position
+    this->mousePosition = event->pos();
+    this->repaint();
 
-  this->newLine.drawLine = true;
-
-  if (newLine.drawLine == true) {
-      // TODO optimize the drawing
-      // right now it redraws everything !
-      this->repaint();
-  }
-  */
 }
 
 void MeshEditorWidget::dragMoveEvent(QDragMoveEvent *event) {
-    // TODO track mouse for updating position
-    // autoscroll
+    //update mouse position
+    this->mousePosition = event->pos();
+    this->repaint();
+
 }
 
 void MeshEditorWidget::dropEvent(QDropEvent *event) {
@@ -150,7 +144,7 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
     QPoint offset;
     int nodeID;
 
-    QByteArray arrayData = event->mimeData()->data("application/customthingy");
+    QByteArray arrayData = event->mimeData()->data("ANISE-GUI/drawobject");
     QDataStream dataStream(&arrayData, QIODevice::ReadOnly);
 
     // get the offset out of the mime, the offset is the distance from the mouse
@@ -189,14 +183,18 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
 }
 
 void MeshEditorWidget::paintEvent(QPaintEvent *event) {
-    /*
-  if (this->newLine.drawLine == true && !lineWayPoints.empty()) {
-      // this will draw the vector with points as a line
-      SingletonRender::instance()->newLine.drawLines(&lineWayPoints,
-  &mousePosition);
-  }
 
-*/
+
+
+    qDebug() << "maus posi: " << mousePosition;
+
+    if ( newLine.drawLine == true) {
+        qDebug() << "trying to draw a line to mouse";
+        // this will draw the vector with points as a line
+        SingletonRender::instance()->drawLines(&newLine.wayPoints,&mousePosition);
+    }
+
+
     // draw all connections:
 
     SingletonRender::instance()->renderConnections();
@@ -226,8 +224,8 @@ void MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
         // call Datastuff to create Connection
         // do this if connection is established
         /*int ID = */Data::instance()->addConnectionToMesh(NodeFactory::createConnection(
-                                                  newLine.srcNodeID, newLine.srcGateName, newLine.destNodeID,
-                                                  newLine.destGateName, newLine.wayPoints));
+                                                               newLine.srcNodeID, newLine.srcGateName, newLine.destNodeID,
+                                                               newLine.destGateName, newLine.wayPoints));
         this->clearNewLine();
 
     }
@@ -251,7 +249,7 @@ void MeshEditorWidget::changeLineDrawMode()
 {
     if(newLine.drawLine){
         setCursor(Qt::CrossCursor);
-        QToolTip::showText(QPoint(50,Data::instance()->getMainWindow()->ui->mesh_edt_area->height() - 10), QString("exit line draw mode with right click"), this);
+        QToolTip::showText(QPoint(Data::instance()->getMainWindow()->ui->mesh_edt_area->pos().x()+50,Data::instance()->getMainWindow()->ui->mesh_edt_area->height() - 10), QString("exit line draw mode with right click"), this);
     }
     else setCursor(Qt::ArrowCursor);
 }

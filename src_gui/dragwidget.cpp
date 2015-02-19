@@ -47,7 +47,7 @@ void DragWidget::mousePressEvent(QMouseEvent *event) {
       * Something about mime data
       */
     QMimeData *mimeData = new QMimeData;
-    mimeData->setData("application/customthingy", Data);
+    mimeData->setData("ANISE-GUI/drawobject", Data);
 
     QDrag *drag = new QDrag(this);
     drag->setMimeData(mimeData);
