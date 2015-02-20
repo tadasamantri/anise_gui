@@ -75,6 +75,16 @@ void Connection::setWaypoints(const QVector<QPoint> &value)
 {
     waypoints = value;
 }
+int Connection::getID() const
+{
+    return ID;
+}
+
+void Connection::setID(int value)
+{
+    ID = value;
+}
+
 
 
 void Connection::setSrcNode(Node *node) { src_node = node; }

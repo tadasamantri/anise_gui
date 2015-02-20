@@ -36,9 +36,14 @@ public:
     QVector<QPoint> getWaypoints() const;
     void setWaypoints(const QVector<QPoint> &value);
 
+    int getID() const;
+    void setID(int value);
+
 private:
     Gate *src_gate, *dest_gate;
     Node *src_node, *dest_node;
+
+    int ID;
 };
 
 #endif  // CONNECTION_H

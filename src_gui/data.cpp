@@ -106,14 +106,14 @@ int Data::addConnectionToMesh(Connection *newConnection) {
 }
 
 void Data::removeNodeFromMesh(int ID) {
-    if (!mesh->nodesInMash.contains(ID)) return;
+    if (!mesh->nodesInMesh.contains(ID)) return;
     mesh->removeNode(ID);
 }
 
 
 void Data::moveObjectInMesh(QPoint *start, QPoint *end, int ID) {
     //is object a node?
-    if (this->mesh->nodesInMash.contains(ID)) {
+    if (this->mesh->nodesInMesh.contains(ID)) {
         this->moveObjectInMesh(end, ID);
 
     }
@@ -127,7 +127,7 @@ void Data::moveObjectInMesh(QPoint *start, QPoint *end, int ID) {
 }
 
 void Data::moveObjectInMesh(QPoint *Position, int ID) {
-    if (this->mesh->nodesInMash.contains(ID)) {
+    if (this->mesh->nodesInMesh.contains(ID)) {
         QPoint offset = *Position - mesh->getNodeByID(ID)->getPosition();
         this->mesh->getNodeByID(ID)->setPosition(Position->x(), Position->y());
         mesh->updateConnections(ID, offset);

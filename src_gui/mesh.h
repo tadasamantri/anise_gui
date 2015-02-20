@@ -40,7 +40,7 @@ public:
     QList<Connection *> getAllConnections();
 
     // Nodes and connections
-    QMap<int, Node *> nodesInMash;
+    QMap<int, Node *> nodesInMesh;
     QMap<int, Connection *> connectionsInMesh;
 
     Node* getFocusedNode();
@@ -73,10 +73,16 @@ private:
     void updateConnStartAndEnd();
 
 QList<Connection *> getConnectionsToNode(int nodeID);
-    //internal deletingfunctions
-    bool deleteNode();
-    bool deleteConnection();
 
+
+    //internal deletingfunctions
+    //if no parameters given ID is taken from focusObject!!
+    bool deleteNode();
+
+
+    bool deleteConnection();
+    bool deleteConnection(int conToDeleteID);
+    bool deleteConnection(Connection *c);
 };
 
 #endif  // MESHHANDLER_H

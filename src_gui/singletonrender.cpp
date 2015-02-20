@@ -293,7 +293,7 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
 }
 
 void SingletonRender::renderMesh(Mesh *workMesh) {
-    QMap<int, Node *> temp = workMesh->nodesInMash;
+    QMap<int, Node *> temp = workMesh->nodesInMesh;
 
     // calls render method for every node in the mesh
     foreach (int ID, temp.keys()) {

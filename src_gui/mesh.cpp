@@ -6,7 +6,7 @@
 #include <limits>
 
 Mesh::Mesh(QObject *parent) : QObject(parent) {
-    this->nodesInMash = QMap<int, Node *>();
+    this->nodesInMesh = QMap<int, Node *>();
     this->connectionsInMesh = QMap<int, Connection *>();
     this->iDCounter = 0;
     this->focusObject = -1;
@@ -33,7 +33,7 @@ int Mesh::addNode(Node *node) {
     node->setName(getValidAlternativeForName(node->getName()));
     int id = generateId();
     node->setID(id);
-    this->nodesInMash.insert(id, node);
+    this->nodesInMesh.insert(id, node);
 
     return id;
 }
@@ -46,19 +46,20 @@ int Mesh::addNodes(QList<Node *> &list) {
 }
 
 void Mesh::removeNode(int ID) {
-    if (!nodesInMash.contains(ID)) return;
-    Node *n = nodesInMash[ID];
-    nodesInMash.remove(ID);
+    if (!nodesInMesh.contains(ID)) return;
+    Node *n = nodesInMesh[ID];
+    nodesInMesh.remove(ID);
     delete n;
 }
 
 int Mesh::addConnection(Connection *connection) {
     int id = this->generateId();
+    connection->setID(id);
     this->connectionsInMesh.insert(id, connection);
     return id;
 }
 
-QList<Node *> Mesh::getAllNodes() { return this->nodesInMash.values(); }
+QList<Node *> Mesh::getAllNodes() { return this->nodesInMesh.values(); }
 
 QList<Connection *> Mesh::getAllConnections() {
     return this->connectionsInMesh.values();
@@ -73,7 +74,7 @@ Node *Mesh::getFocusedNode() {
 Node *Mesh::getNodeByName(QString name) {
     // TODO probably easy to optimize
     Node *node = 0;
-    foreach (Node *n, this->nodesInMash) {
+    foreach (Node *n, this->nodesInMesh) {
         if (n->getName() == name) {
             node = n;
             break;
@@ -86,7 +87,7 @@ Node *Mesh::getNodeByID(int ID) {
     // qDebug() << "getNodeByID returned Node with ID " << ID <<"\nName of Node is
     // "
     //<< nodesInMash[ID]->getName();
-    return this->nodesInMash[ID];
+    return this->nodesInMesh[ID];
 }
 
 Connection *Mesh::getConnectionByID(int ID) {
@@ -152,7 +153,8 @@ void Mesh::updateNode(QTableWidgetItem *item) {
 bool Mesh::deleteItem() {
     if (this->focusObject == -1) return false;
 
-    if (nodesInMash.contains(focusObject)) return this->deleteNode();
+    if (nodesInMesh.contains(focusObject))
+        return this->deleteNode();
     if (connectionsInMesh.contains((focusObject)))
         return this->deleteConnection();
     return false;
@@ -161,7 +163,7 @@ bool Mesh::deleteItem() {
 bool Mesh::validName(const QString &name) {
     if (name == "") return false;
 
-    foreach (Node *n, nodesInMash.values())
+    foreach (Node *n, nodesInMesh.values())
         if (n->getName() == name) return false;
 
     return true;
@@ -178,24 +180,66 @@ QString Mesh::getValidAlternativeForName(const QString name){
 }
 
 bool Mesh::deleteNode() {
-    nodesInMash.remove(focusObject);
-    Data::instance()->getMainWindow()->updatePropertyTable(-1);
-    bool allRemoved = !nodesInMash.contains(focusObject) &&
+
+    //Get Pointer for deletingprocess later
+    Node *nodeToDelete = nodesInMesh.value(focusObject);
+    //remove Node from our Map
+    nodesInMesh.remove(focusObject);
+
+    //delete drawing and check that everything ist deleted
+    bool allRemoved = !nodesInMesh.contains(focusObject) &&
             SingletonRender::instance()->deleteMeshDrawing(focusObject);
 
-    if (allRemoved) focusObject = -1;
+    //If Node was deleted correctly...
+    if (allRemoved){
+
+        //... all connections attached should be deleted too
+        foreach(Connection *c , connectionsInMesh){
+
+            if(c->getSrcNode()->getID() == focusObject || c->getDestNode()->getID() == focusObject){
+                this->deleteConnection(c);
+            }
+        }
+
+        //...and nothing is highlighted anymore
+        this->setFocusMeshObject(-1);
+
+        //...and Node has to get deleted too
+        delete nodeToDelete;
+    }
+
+    //Update Property Table
+    Data::instance()->getMainWindow()->updatePropertyTable(-1);
 
     return allRemoved;
 }
 
-bool Mesh::deleteConnection() {
-    connectionsInMesh.remove(focusObject);
-    bool allRemoved = !connectionsInMesh.contains(focusObject) &&
-            SingletonRender::instance()->deleteMeshDrawing(focusObject);
+bool Mesh::deleteConnection(Connection *c){
 
-    if (allRemoved) focusObject = -1;
+    return deleteConnection(c->getID());
+
+}
+
+bool Mesh::deleteConnection(int conToDeleteID){
+
+    connectionsInMesh.remove(conToDeleteID);
+    bool allRemoved = !connectionsInMesh.contains(conToDeleteID) &&
+            SingletonRender::instance()->deleteMeshDrawing(conToDeleteID);
+
+    if(this->focusObject == conToDeleteID)
+        this->setFocusMeshObject(-1);
 
     return allRemoved;
+
+}
+
+bool Mesh::deleteConnection() {
+
+    if (deleteConnection(focusObject)) {
+        this->setFocusMeshObject(-1);
+        return true;
+    }
+    return false;
 }
 
 int Mesh::getCurrentID() { return iDCounter; }
@@ -207,6 +251,6 @@ void Mesh::updateConnStartAndEnd(){
 Mesh::~Mesh(){
     for(Connection *c : connectionsInMesh)
         delete c;
-    for(Node *n : nodesInMash)
+    for(Node *n : nodesInMesh)
         delete n;
 }

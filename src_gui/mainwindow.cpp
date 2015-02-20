@@ -117,7 +117,7 @@ void MainWindow::on_actionSave_triggered() {
 void MainWindow::updatePropertyTable(int nodeID) {
     QTableWidget *table = ui->tableWidget;
     if (nodeID >= 0 &&
-            Data::instance()->getMesh()->nodesInMash.contains(nodeID)) {
+            Data::instance()->getMesh()->nodesInMesh.contains(nodeID)) {
         deleteTable();
         Node *n = Data::instance()->getMesh()->getNodeByID(nodeID);
         QMap<QString, Node::parameter> *map = n->getParams();
