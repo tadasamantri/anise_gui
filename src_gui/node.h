@@ -28,7 +28,7 @@ public:
     QMap<QString, parameter>* getParams();
 
     Node(QVector<Gate*> &inputGates, QVector<Gate*> &outputGates, QString &type, QString &name, QMap<QString, parameter> &params);
-
+    
     /*
    * TODO:
    * add gate ist sehr umständlich, am besten übergeben wir nur noch einen
@@ -38,6 +38,9 @@ public:
    */
     void addGate(Gate *gate);
     void addGates(QVector<Gate*> gates, const bool &direction);
+    
+    bool isInputGate(QString gateName);
+    bool isOutputGate(QString gateName);
 
     /*
    * Set the position of the Node

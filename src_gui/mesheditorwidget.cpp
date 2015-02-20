@@ -211,12 +211,18 @@ bool MeshEditorWidget::containsID(int objectID) {
     return false;
 }
 
-void MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
+bool MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
                                        QPoint position) {
+
+    //Do nothing if you clicked on wrong Gate
+    if(!correctGate(nodeID, gateName))
+        return false;
+
+
     // That means we are currently constructing a line
     if (newLine.drawLine) {
         // Ask for Correctness of Connection
-
+    
         newLine.destNodeID = nodeID;
         newLine.destGateName = gateName;
         //this is the InputGate where Connection ends
@@ -243,7 +249,10 @@ void MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
         newLine.drawLine = !(newLine.drawLine);
         emit drawLineModeChanged();
     }
+    return true;
 }
+
+
 
 void MeshEditorWidget::changeLineDrawMode()
 {
@@ -252,4 +261,31 @@ void MeshEditorWidget::changeLineDrawMode()
         QToolTip::showText(QPoint(Data::instance()->getMainWindow()->ui->mesh_edt_area->pos().x()+50,Data::instance()->getMainWindow()->ui->mesh_edt_area->height() - 10), QString("exit line draw mode with right click"), this);
     }
     else setCursor(Qt::ArrowCursor);
+}
+
+bool MeshEditorWidget::correctGate(int nodeID, QString gateName){
+    
+    Node *node = Data::instance()->getMesh()->getNodeByID(nodeID);
+    Gate *endGate;
+
+
+    if(!node)
+        return false;
+
+    endGate = node->getGateByName(gateName);
+
+    if(!endGate)
+        return false;
+
+    if(newLine.drawLine){
+
+        Gate *srcGate = Data::instance()->getMesh()->getNodeByID(newLine.srcNodeID)->getGateByName(newLine.srcGateName);
+
+        return endGate->getDirection() && srcGate->getType() == endGate->getType() && newLine.srcNodeID != nodeID;
+        
+    }
+
+    else{
+        return !endGate->getDirection();
+    }
 }

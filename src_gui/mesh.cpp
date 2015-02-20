@@ -87,7 +87,7 @@ Node *Mesh::getNodeByID(int ID) {
     // qDebug() << "getNodeByID returned Node with ID " << ID <<"\nName of Node is
     // "
     //<< nodesInMash[ID]->getName();
-    return this->nodesInMesh[ID];
+    return this->nodesInMesh.value(ID, 0);
 }
 
 Connection *Mesh::getConnectionByID(int ID) {

@@ -123,11 +123,11 @@ void Data::moveObjectInMesh(QPoint *start, QPoint *end, int ID) {
         //QPoint offset = *start - mesh->getNodeByID(ID)->getPosition();
         //QPoint *realEnd = end; realEnd->operator +=(QPoint(6, 6)); // this is just a temp. solution!
         this->mesh->getConnectionByID(ID)->setJoint(joint, end);
-        //delete realEnd;
+       
 
         SingletonRender::instance()->renderMesh(this->mesh);
     }
-    //delete end;
+   
 }
 
 void Data::moveObjectInMesh(QPoint *Position, int ID) {

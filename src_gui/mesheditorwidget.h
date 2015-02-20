@@ -72,6 +72,7 @@ private:
     void clearNewLine();
 
 
+    bool correctGate(int nodeID, QString gateName);
 signals:
 
     void onWidgetClicked(int nodeID);
@@ -79,7 +80,7 @@ signals:
 
 public slots:
 
-    void handleGateClick(int nodeID, QString gateName, QPoint position);
+    bool handleGateClick(int nodeID, QString gateName, QPoint position);
 private slots:
     void changeLineDrawMode();
 };

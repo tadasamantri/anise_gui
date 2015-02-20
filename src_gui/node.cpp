@@ -52,7 +52,33 @@ void Node::addGates(QVector<Gate *> gates, const bool &direction) {
       inputGates << gate;
     }
   else
-    foreach (Gate *gate, gates) { outputGates << gate; }
+      foreach (Gate *gate, gates) { outputGates << gate; }
+}
+
+bool Node::isInputGate(QString gateName)
+{
+   foreach(Gate *gate , *this->getInputGates()){
+        
+        if(gate->getName() == gateName)
+            return gate->getDirection();
+        
+    }
+
+    return false;
+}
+
+bool Node::isOutputGate(QString gateName)
+{
+    foreach(Gate *gate , *this->getOutputGates()){
+
+        if(gate->getName() == gateName)
+            return !gate->getDirection();
+
+    }
+
+    return false;
+
+
 }
 
 bool Node::addParam(QString descr, QString _key, QString name, QString type, QVariant _value) {

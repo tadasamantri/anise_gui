@@ -67,6 +67,7 @@ private:
     // generate an unique id key;
     int generateId();
 
+    //it is very important only chinging focusObject by using setFocusMeshObject!!
     int focusObject;
 
     //update Connection start and ende
