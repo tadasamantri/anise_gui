@@ -93,13 +93,18 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID) {
         this->allLines.insert(ID, tempVec);
     }
 
-    // calculate the middle of the Image
-    int posxOffset = -allImages.value("joint.png")->width() / 2;
-    int posyOffset = -allImages.value("joint.png")->height() / 2;
+
 
     //move all joints to the correct position
     for (int index = 1; index < allConnections[ID].size()-1; ++index) {
+
+
         DrawObject* joint = allConnections[ID].at(index);
+
+        // calculate the middle of the Image
+        int posxOffset = -joint->width() / 2;
+        int posyOffset = -joint->height() / 2;
+
         joint->move(conToRender->waypoints.at(index).x()+posxOffset, conToRender->waypoints.at(index).y()+posyOffset);
         joint->show();
     }

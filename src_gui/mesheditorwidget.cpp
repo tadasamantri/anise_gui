@@ -186,7 +186,7 @@ void MeshEditorWidget::paintEvent(QPaintEvent *event) {
 
 
 
-    qDebug() << "maus posi: " << mousePosition;
+    //qDebug() << "maus posi: " << mousePosition;
 
     if ( newLine.drawLine == true) {
         qDebug() << "trying to draw a line to mouse";
