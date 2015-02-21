@@ -189,7 +189,7 @@ void MeshEditorWidget::paintEvent(QPaintEvent *event) {
     //qDebug() << "maus posi: " << mousePosition;
 
     if ( newLine.drawLine == true) {
-        qDebug() << "trying to draw a line to mouse";
+        //qDebug() << "trying to draw a line to mouse";
         // this will draw the vector with points as a line
         SingletonRender::instance()->drawLines(&newLine.wayPoints,&mousePosition);
     }
