@@ -106,12 +106,8 @@ void MainWindow::on_actionSave_triggered() {
     QString fileName =
             QFileDialog::getSaveFileName(this, "Save current project to...", "",
                                          "Mesh-Files (*.mesh *.json);;All Files(*)");
-    QFile file(fileName);
+    JsonFileHandler::saveMesh(fileName, theMesh);
 
-    file.open(QIODevice::WriteOnly);
-    // QByteArray data = *JsonFileHandler::meshToJson(theMesh);
-    file.write(JsonFileHandler::meshToJson(theMesh).toUtf8());
-    file.close();
 }
 
 void MainWindow::updatePropertyTable(int nodeID) {
