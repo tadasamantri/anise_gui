@@ -33,6 +33,7 @@ int Mesh::addNode(Node *node) {
     node->setName(getValidAlternativeForName(node->getName()));
     int id = generateId();
     node->setID(id);
+
     this->nodesInMesh.insert(id, node);
 
     return id;

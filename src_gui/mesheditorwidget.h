@@ -54,6 +54,9 @@ protected:
     //variables for drawing a line to the mouse cursor
     bool drawLine;
     QPoint mousePosition;
+    QPoint mousePositionOld;
+    int mouseMoveDistance;
+
     QVector<QPoint> lineWayPoints;
     void mousePressEvent(QMouseEvent *event);
     void dragEnterEvent(QDragEnterEvent *event);
@@ -70,7 +73,7 @@ private:
 
     //Clears new Line which is/was in construction
     void clearNewLine();
-
+    void restToEditMode();
 
     bool correctGate(int nodeID, QString gateName);
 signals:

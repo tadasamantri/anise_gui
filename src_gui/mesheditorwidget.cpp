@@ -4,6 +4,7 @@
 #include "mesheditorwidget.h"
 #include "data.h"
 #include "gatebutton.h"
+#include "math.h"
 
 MeshEditorWidget::MeshEditorWidget(QWidget *parent) : QWidget(parent) {
     connectSignals();
@@ -30,10 +31,17 @@ void MeshEditorWidget::clearNewLine() {
     emit drawLineModeChanged();
 }
 
+void MeshEditorWidget::restToEditMode()
+{
+    this->clearNewLine();
+    Data::instance()->setEditMode();
+}
+
 void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
+    this->mouseMoveDistance += 100;
     // ensure a left-mouse-click
     if (!(event->button() == Qt::LeftButton)) {
-        this->clearNewLine();
+        this->restToEditMode();
         return;
     }
 
@@ -126,16 +134,26 @@ void MeshEditorWidget::dragEnterEvent(QDragEnterEvent *event) {
 void MeshEditorWidget::mouseMoveEvent(QMouseEvent *event) {
 
     //update mouse position
+    this->mousePositionOld = this->mousePosition;
     this->mousePosition = event->pos();
-    this->repaint();
 
+    //calculate how far the mouse moved
+    mouseMoveDistance +=  abs( (mousePosition.x()-mousePositionOld.x())^2 + (mousePosition.y()-mousePositionOld.y())^2);
+
+
+    if(newLine.drawLine && mouseMoveDistance >= 10){
+        //qDebug() << "distance: " << mouseMoveDistance;
+        mouseMoveDistance = 0 ;
+        this->repaint();
+    }
 }
 
 void MeshEditorWidget::dragMoveEvent(QDragMoveEvent *event) {
     //update mouse position
     this->mousePosition = event->pos();
-    this->repaint();
-
+    if(newLine.drawLine){
+        this->repaint();
+    }
 }
 
 void MeshEditorWidget::dropEvent(QDropEvent *event) {
@@ -184,8 +202,6 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
 
 void MeshEditorWidget::paintEvent(QPaintEvent *event) {
 
-
-
     //qDebug() << "maus posi: " << mousePosition;
 
     if ( newLine.drawLine == true) {
@@ -193,11 +209,9 @@ void MeshEditorWidget::paintEvent(QPaintEvent *event) {
         // this will draw the vector with points as a line
         SingletonRender::instance()->drawLines(&newLine.wayPoints,&mousePosition);
     }
-
-
     // draw all connections:
-
     SingletonRender::instance()->renderConnections();
+
 }
 
 bool MeshEditorWidget::containsID(int objectID) {
@@ -219,10 +233,12 @@ bool MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
         return false;
 
 
+
+
     // That means we are currently constructing a line
     if (newLine.drawLine) {
-        // Ask for Correctness of Connection
-    
+
+
         newLine.destNodeID = nodeID;
         newLine.destGateName = gateName;
         //this is the InputGate where Connection ends
@@ -232,13 +248,26 @@ bool MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
         /*int ID = */Data::instance()->addConnectionToMesh(NodeFactory::createConnection(
                                                                newLine.srcNodeID, newLine.srcGateName, newLine.destNodeID,
                                                                newLine.destGateName, newLine.wayPoints));
-        this->clearNewLine();
+
+        this->restToEditMode();
 
     }
 
     // That means we are just starting a new Line
     else {
-        // Ask for Correctness of Connection
+
+        Node *node = Data::instance()->getMesh()->getNodeByID(nodeID);
+        Gate *srcGate;
+
+
+        if(!node)
+            return false;
+
+        srcGate = node->getGateByName(gateName);
+
+        if(!srcGate)
+            return false;
+
 
         newLine.srcNodeID = nodeID;
         newLine.srcGateName = gateName;
@@ -247,7 +276,13 @@ bool MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
 
         // Do Everything that Changed when Clicking on a gate
         newLine.drawLine = !(newLine.drawLine);
+
+
+        Data::instance()->setDrawLineMode(srcGate->getType());
+
         emit drawLineModeChanged();
+
+
     }
     return true;
 }
@@ -258,7 +293,7 @@ void MeshEditorWidget::changeLineDrawMode()
 {
     if(newLine.drawLine){
         setCursor(Qt::CrossCursor);
-        QToolTip::showText(QPoint(Data::instance()->getMainWindow()->ui->mesh_edt_area->pos().x()+50,Data::instance()->getMainWindow()->ui->mesh_edt_area->height() - 10), QString("exit line draw mode with right click"), this);
+        QToolTip::showText(cursor().pos(), QString("exit line draw mode with right click"), this, Data::instance()->getMainWindow()->ui->mesh_edt_area->rect(),4000);
     }
     else setCursor(Qt::ArrowCursor);
 }
@@ -280,7 +315,6 @@ bool MeshEditorWidget::correctGate(int nodeID, QString gateName){
     if(newLine.drawLine){
 
         Gate *srcGate = Data::instance()->getMesh()->getNodeByID(newLine.srcNodeID)->getGateByName(newLine.srcGateName);
-
         return endGate->getDirection() && srcGate->getType() == endGate->getType() && newLine.srcNodeID != nodeID;
         
     }

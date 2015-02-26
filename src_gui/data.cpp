@@ -105,8 +105,9 @@ void Data::initialize(MainWindow *mainWindow) {
 int Data::addNodeToMesh(Node *newNode) {
     int id = this->mesh->addNode(newNode);
     // A new created Node is always focussed in the beginning
-    mesh->setFocusMeshObject(id);
+
     if(id >= 0)SingletonRender::instance()->renderMesh(this->mesh);
+    mesh->setFocusMeshObject(id);
 
     return id;
 }
@@ -204,3 +205,15 @@ Data::~Data() {
 }
 
 NodeCatalog *Data::getNodeCatalog() { return nodeCatalog; }
+
+void Data::setDrawLineMode(QString gateType){
+
+    this->mesh->setFocusMeshObject(-1);
+    SingletonRender::instance()->highlightGates(gateType);
+}
+
+void Data::setEditMode(){
+
+    SingletonRender::instance()->dehighlightGates();
+}
+
