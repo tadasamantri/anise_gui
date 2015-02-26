@@ -258,7 +258,7 @@ void MeshEditorWidget::changeLineDrawMode()
 {
     if(newLine.drawLine){
         setCursor(Qt::CrossCursor);
-        QToolTip::showText(QPoint(Data::instance()->getMainWindow()->ui->mesh_edt_area->pos().x()+50,Data::instance()->getMainWindow()->ui->mesh_edt_area->height() - 10), QString("exit line draw mode with right click"), this);
+        QToolTip::showText(cursor().pos(), QString("exit line draw mode with right click"), this, Data::instance()->getMainWindow()->ui->mesh_edt_area->rect(),4000);
     }
     else setCursor(Qt::ArrowCursor);
 }

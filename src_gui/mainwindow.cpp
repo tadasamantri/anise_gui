@@ -242,6 +242,7 @@ void MainWindow::displayTypeInfo(const QString &type) {
         table->setRowCount(table->rowCount() + 1);
         table->setItem(offset, 0, new QTableWidgetItem("Description"));
         table->setItem(offset++, 1, new QTableWidgetItem(descr));
+        table->item(offset -1,1)->setToolTip(descr);
     }
     QList<QString> keys = params->keys();
     for (int i = 0; i < keys.size(); i++) {
