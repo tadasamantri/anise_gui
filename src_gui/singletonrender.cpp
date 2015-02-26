@@ -347,6 +347,13 @@ void SingletonRender::renderNodeType(Node *nodeToRender, QWidget *parent,
     // TODO should use layouts instead of hardcoded position!
     NodeDrawObject->move(5 + position * NodeDrawObject->width(), 5);
 
+
+    QLabel *typeLabel = new QLabel();
+    typeLabel->setText(type);
+    typeLabel->setGeometry(5 + position * NodeDrawObject->width(), NodeDrawObject->height() + 10, NodeDrawObject->width(), 20);
+    typeLabel->show();
+
+
     NodeDrawObject->show();
 }
 
