@@ -140,8 +140,9 @@ void MeshEditorWidget::mouseMoveEvent(QMouseEvent *event) {
     //calculate how far the mouse moved
     mouseMoveDistance +=  abs( (mousePosition.x()-mousePositionOld.x())^2 + (mousePosition.y()-mousePositionOld.y())^2);
 
-    qDebug() << "distance: " << mouseMoveDistance;
-    if(newLine.drawLine && mouseMoveDistance >= 20){
+
+    if(newLine.drawLine && mouseMoveDistance >= 10){
+        //qDebug() << "distance: " << mouseMoveDistance;
         mouseMoveDistance = 0 ;
         this->repaint();
     }
