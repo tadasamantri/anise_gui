@@ -8,7 +8,6 @@ QString JsonFileHandler::loadFile(const QString &path) {
     // QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 
     QString fileContent = "";
-
     // open a file
     qDebug() << "trying to open: \n" << path << "\n";
     QFile file(path);
@@ -111,10 +110,11 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
         QJsonArray contents = localNode["parameters"].toArray();
         for (QJsonValue o : contents) {
             QVariantMap parameters = o.toObject().toVariantMap();
-            node.addParam(parameters["description"].toString(),
-                    parameters["key"].toString(), parameters["name"].toString(),
-                    parameters["type"].toString(),
-                    QVariant(QVariant::nameToType(parameters["type"].toString().toUtf8())));
+            node.addParam(
+                        parameters["description"].toString(), parameters["key"].toString(),
+                    parameters["name"].toString(), parameters["type"].toString(),
+                    QVariant(
+                        QVariant::nameToType(parameters["type"].toString().toUtf8())));
         }
         catalog->insert(node);
         qDebug() << "added node to Catalog:\n"
@@ -178,14 +178,15 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             j = 1;  // for debugging only
             qDebug() << "\n";
 
-            //parse the position and other gui_parameters
-            if(theNode.contains("gui_params")){
+            // parse the position and other gui_parameters
+            if (theNode.contains("gui_params")) {
                 QVariantMap p_gui = theNode["gui_params"].toObject().toVariantMap();
                 createdNode->setPosition(p_gui["x"].toInt(), p_gui["y"].toInt());
             }
-            //do some default stuff
-            //TODO!
-            else{}
+            // do some default stuff
+            // TODO!
+            else {
+            }
             // node is complete, so let's insert it
 
             mesh->addNode(createdNode);
@@ -210,13 +211,13 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
                 dest_node,
                 dest_node->getGateByName(theConnection["dest_gate"].toString()));
 
-        if(co.contains("gui_params")){
+        if (co.contains("gui_params")) {
             QJsonObject json_gui_params = co["gui_params"].toObject();
             QJsonArray way = json_gui_params["waypoints"].toArray();
             QVector<QPoint> waypoints;
-            for(QJsonValue v : way){
+            for (QJsonValue v : way) {
                 QJsonObject o = v.toObject();
-                if(o.contains("x") && o.contains("y"))
+                if (o.contains("x") && o.contains("y"))
                     waypoints << QPoint(o["x"].toInt(), o["y"].toInt());
             }
 
@@ -227,39 +228,16 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
 }
 
 /**
- * @brief JsonFileHandler::findNodeByName searches Node with special name in
- * given list
- * @param nodes
- * @param name
- * @return node if found, NULL else
- */
-Node *JsonFileHandler::findNodeByName(const QList<Node *> *nodes,
-                                      const QString &name) {
-    Node *node;
-    for (int i = 0; i < nodes->size(); i++) {
-        node = nodes->at(i);
-        if (node->getName() == name) return node;
-    }
-    return 0;
-}
-
-/**
  * @brief JsonFileHandler::writeFile writes a string into a given file
  * @param path path to file
  * @param fileContent the content written to the specified file
  */
-void JsonFileHandler::writeFile(const QString &path,
-                                const QString &fileContent) {
-    QString command = "touch";
-    QProcess touch;
-    QStringList arg;
-    arg << path;
-    touch.start(command, arg);
-    touch.waitForFinished(3000);
+void JsonFileHandler::saveMesh(const QString &path,Mesh *theMesh) {
     QFile file(path);
-    file.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream out(&file);
-    out << fileContent;
+
+    file.open(QIODevice::WriteOnly);
+    // QByteArray data = *JsonFileHandler::meshToJson(theMesh);
+    file.write(meshToJson(theMesh).toUtf8());
     file.close();
 }
 

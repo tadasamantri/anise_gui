@@ -22,13 +22,11 @@ void DragWidget::mousePressEvent(QMouseEvent *event) {
 
     NodeTypeLabel *child = static_cast<NodeTypeLabel *>(childAt(event->pos()));
     if (!child) {
-        /**
-          * If no child at this position - return
-          */
+        //if there is no child at this position - return
         return;
     }
 
-    /**
+     /*
       * User pressed on a child
       * Mouse position relative to child top left corner
       */
@@ -43,9 +41,7 @@ void DragWidget::mousePressEvent(QMouseEvent *event) {
 
 
 
-    /**
-      * Something about mime data
-      */
+    //set the mime data for the drag
     QMimeData *mimeData = new QMimeData;
     mimeData->setData("ANISE-GUI/drawobject", Data);
 
@@ -54,29 +50,13 @@ void DragWidget::mousePressEvent(QMouseEvent *event) {
     drag->setPixmap(*child->pixmap());
     drag->setHotSpot(hotSpot);
     this->setWindowOpacity(0.0);
-    /*
-   *
-   * //TODO in die render klasse damit!
-     // This will change the color of the drag icon; could also be used to
-     //generate new images
-        QPixmap *tempPixmap = *(child->pixmap());
-        QPainter painter;
-        painter.begin(tempPixmap);
-        painter.fillRect(pixmap.rect(), QColor(127, 127, 127, 127));
-        painter.end();
 
-    // child->setPixmap(tempPixmap);
-  */
-
-    // TODO rausinfdne was das hier macht und der gruppe erklären
+    //determine the drag operation
     if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) ==
-            Qt::MoveAction)
-        qDebug() << "never happens?";
-    // child->close();
+            Qt::MoveAction);
     else {
-        // qDebug() << "drag end";
+        // end of drag
         child->show();
-        // child->setPixmap(pixmap);
     }
     drag->deleteLater();
 }

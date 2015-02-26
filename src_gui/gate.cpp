@@ -14,33 +14,26 @@ Gate::Gate(bool in, QString name) {
 
 bool Gate::getDirection() { return this->in; }
 
-bool Gate::hasType(const QString &type)
-{
-    return types.contains(type);
+bool Gate::hasType(const QString &type) { return types.contains(type); }
+
+void Gate::addType(QString &type) {
+    if (!hasType(type)) types << type;
 }
 
-void Gate::addType(QString &type)
-{
-    if(!hasType(type))
-        types << type;
-}
-
-bool Gate::removeType(const QString &type)
-{
-    if(hasType(type))
+bool Gate::removeType(const QString &type) {
+    if (hasType(type))
         types.removeAll(type);
-    else return false;
+    else
+        return false;
     return true;
 }
 
-void Gate::setName(QString name){
-    this->name = name;
-}
+void Gate::setName(QString name) { this->name = name; }
 
 void Gate::setDirection(bool in) { this->in = in; }
 
 QList<QString> Gate::getTypes() { return types; }
 
-QString Gate::getType(){ return types.first(); }
+QString Gate::getType() { return types.first(); }
 
 QString Gate::getName() { return name; }

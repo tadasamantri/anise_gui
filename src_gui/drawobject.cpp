@@ -11,38 +11,29 @@ DrawObject::DrawObject(int id, QPoint position, int width, int height,
     this->setParent(parent);
     this->highlightWidth = highlightOffset;
     // We say the constructor which position he has
-    this->setGeometry(position.x(), position.y(), width + 2*highlightOffset, height + 2*highlightOffset);
+    this->setGeometry(position.x(), position.y(), width + 2 * highlightOffset,
+                      height + 2 * highlightOffset);
 
-    //initialize mainMask with complete Transparency
+    // initialize mainMask with complete Transparency
     mainMaskUnhighlighted = QBitmap(this->size());
     mainMaskUnhighlighted.fill(Qt::color0);
 
-    //initialize the over all picture
-    this->overAllPicture = QPixmap (this->size());
-    overAllPicture.fill(QColor(0,0,0,0)); //make it transparent
-/*
-    QPalette Pal(this->palette());
-    // set black background
-    Pal.setColor(QPalette::Background, Qt::yellow);
-    this->setPalette(Pal);
-    this->setAutoFillBackground(true);
-*/
+    // initialize the over all picture
+    this->overAllPicture = QPixmap(this->size());
 
+    // make it transparent
+    overAllPicture.fill(QColor(0, 0, 0, 0));
+    // set backgroundcolor
     this->setStyleSheet("background-color:yellow;");
-    //this->setBackgroundRole();
-    QPixmap *background = new QPixmap(width, height);
-    background->fill(Qt::yellow);
-    //this->addPicture(background, QPoint(0,0));
+
     mainMaskUnhighlighted.fill(Qt::color0);
     this->setMask(mainMaskUnhighlighted);
 
     mainMaskAsImage = mainMaskUnhighlighted.toImage();
-    delete background;
-    //connects
-     connect(this, SIGNAL(released(int,QString, QPoint)), this->parent(), SLOT(handleGateClick(int, QString, QPoint)));
+    //connect release event
+    connect(this, SIGNAL(released(int, QString, QPoint)), this->parent(),
+            SLOT(handleGateClick(int, QString, QPoint)));
 }
-
-//void DrawObject::setBack
 
 /**
  * Has two parameter for the widget.
@@ -55,12 +46,11 @@ DrawObject::DrawObject(int id, QPoint position, int width, int height,
  * @param position  position relativ to top left corner
  */
 void DrawObject::addPicture(QPixmap *pic, QPoint position) {
-
-    //safe dimensions
+    // safe dimensions
     int height = pic->height();
     int width = pic->width();
 
-    //take respect to highlightWidth
+    // take respect to highlightWidth
     position += QPoint(highlightWidth, highlightWidth);
 
     // Instanstiate the drawing to be shown
@@ -71,40 +61,35 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position) {
     // Now set the masks to the widgets
     label->setMask(pic->mask());
 
-    //modifies the mainMask inserting the mask of the pic
+    // modifies the mainMask inserting the mask of the pic
     this->modifyMask(pic, position);
 
     // update the over all picture
     this->updateOverAllPicture(pic, position);
-
-
-
 }
 
-void DrawObject::addPicture(QPixmap *pic, QPoint position, QString typeName){
-
+void DrawObject::addPicture(QPixmap *pic, QPoint position, QString typeName) {
     QPixmap newPic = pic->copy(pic->rect());
 
     // tell the painter to draw on the QImage
-    QPainter* painter = new QPainter(&newPic);
+    QPainter *painter = new QPainter(&newPic);
     painter->setPen(Qt::blue);
     painter->setFont(QFont("Arial", 8));
     // Write Typename onto picture
     painter->drawText(newPic.rect(), Qt::AlignLeading, typeName);
 
-
-    //actually call addPicture with modified picture
+    // actually call addPicture with modified picture
     this->addPicture(&newPic, position);
     delete painter;
 }
 
-void DrawObject::addGateButton(QPixmap *pic, QPoint position, QString gateName) {
-
-    //safe dimensions
+void DrawObject::addGateButton(QPixmap *pic, QPoint position,
+                               QString gateName) {
+    // safe dimensions
     int height = pic->height();
     int width = pic->width();
 
-    //take respect to highlightWidth
+    // take respect to highlightWidth
     position += QPoint(highlightWidth, highlightWidth);
 
     // Instanstiate the drawing to be shown
@@ -115,25 +100,19 @@ void DrawObject::addGateButton(QPixmap *pic, QPoint position, QString gateName) 
     // Now set the masks to the widgets
     button->setMask(pic->mask());
 
-    //modifies the mainMask inserting the mask of the pic
+    // modifies the mainMask inserting the mask of the pic
     this->modifyMask(pic, position);
 
     // update the over all picture
     this->updateOverAllPicture(pic, position);
 
     // Connect button signal to appropriate slot
-    connect(button, SIGNAL(released(QString, QPoint)), this, SLOT(releasedOnGate(QString, QPoint)));
-
-
-
-
-
+    connect(button, SIGNAL(released(QString, QPoint)), this,
+            SLOT(releasedOnGate(QString, QPoint)));
 }
 
-
-
-void DrawObject::modifyMask(QPixmap *pic, QPoint position){
-    //safe dimensions
+void DrawObject::modifyMask(QPixmap *pic, QPoint position) {
+    // safe dimensions
     int height = pic->height();
     int width = pic->width();
 
@@ -144,15 +123,12 @@ void DrawObject::modifyMask(QPixmap *pic, QPoint position){
 
     QBitmap highlightPicMask = QBitmap(width + 6, height + 6);
 
-    
     // If there is no nontransparency, create nontransparentmask manually (no
     // other option so far)
     if (picMask.size().isEmpty()) {
         picMask = QBitmap(width, height);
         picMask.fill(Qt::color1);
     }
-    
-    
 
     // Include the picture (non-transparent) to the main Mask to get the area of
     // the picture to be visible
@@ -160,21 +136,17 @@ void DrawObject::modifyMask(QPixmap *pic, QPoint position){
     painter.setBrush(Qt::color1);
     painter.drawPixmap(position.x(), position.y(), width, height, picMask);
 
-
-    //update changes to QImage
-    mainMaskAsImage = mainMaskUnhighlighted.toImage().convertToFormat(QImage::Format_Mono);
+    // update changes to QImage
+    mainMaskAsImage =
+            mainMaskUnhighlighted.toImage().convertToFormat(QImage::Format_Mono);
     highlightMask();
 
-    //Now set the mask of the widget
+    // Now set the mask of the widget
     this->setMask(mainMaskUnhighlighted);
-
-
 }
 
-
-void DrawObject::updateOverAllPicture(QPixmap *newPicture, QPoint position ){
-
-    //save the dimension of the new picture
+void DrawObject::updateOverAllPicture(QPixmap *newPicture, QPoint position) {
+    // save the dimension of the new picture
     int height = newPicture->height();
     int width = newPicture->width();
 
@@ -182,128 +154,87 @@ void DrawObject::updateOverAllPicture(QPixmap *newPicture, QPoint position ){
     QPainter painter(&(this->overAllPicture));
     painter.setBrush(Qt::black);
     painter.drawPixmap(position.x(), position.y(), width, height, *newPicture);
-
-    //highlightMask();
 }
 
 QPixmap DrawObject::getPicture() { return this->overAllPicture; }
 
-void DrawObject::dehighlight()
-{
-    this->setMask(mainMaskUnhighlighted);
-}
+void DrawObject::dehighlight() { this->setMask(mainMaskUnhighlighted); }
 
-void DrawObject::highlight()
-{
-    this->setMask(mainMaskHighlighted);
-}
+void DrawObject::highlight() { this->setMask(mainMaskHighlighted); }
 
-
-void DrawObject::releasedOnGate(QString gateName, QPoint position){
-
-
-
+void DrawObject::releasedOnGate(QString gateName, QPoint position) {
     emit released(this->ID, gateName, this->pos() + position);
 }
-int DrawObject::getHighlightWidth() const
-{
-    return highlightWidth;
-}
+int DrawObject::getHighlightWidth() const { return highlightWidth; }
 
-
-
-
-void DrawObject::highlightMask(){
-
+void DrawObject::highlightMask() {
     int width = this->width();
     int height = this->height();
 
     // this highlights left and right side
-    for(int y = 0; y < height; y++){
-
-       for(int x = highlightWidth; x < width - highlightWidth; x++){
-
-           //left side highlight
-           if(getPixel(x, y) && !getPixel(x-1, y)){
-                for(int highlightOffset = 0; highlightOffset < highlightWidth; highlightOffset++)
-                    setPixel(x-highlightOffset-1, y, 1);
-           }
-
-           // the right side of drawobject to highlighting
-           if(getPixel(x, y) && !getPixel(x+1, y)){
-
-               for(int highlightOffset = 0; highlightOffset < highlightWidth; highlightOffset++)
-                    setPixel(x+highlightOffset+1, y, 1);
-               x +=4;
+    for (int y = 0; y < height; y++) {
+        for (int x = highlightWidth; x < width - highlightWidth; x++) {
+            // left side highlight
+            if (getPixel(x, y) && !getPixel(x - 1, y)) {
+                for (int highlightOffset = 0; highlightOffset < highlightWidth;
+                     highlightOffset++)
+                    setPixel(x - highlightOffset - 1, y, 1);
             }
 
+            // the right side of drawobject to highlighting
+            if (getPixel(x, y) && !getPixel(x + 1, y)) {
+                for (int highlightOffset = 0; highlightOffset < highlightWidth;
+                     highlightOffset++)
+                    setPixel(x + highlightOffset + 1, y, 1);
+                x += 4;
+            }
+        }
+    }
 
-       }
-
-   }
-
-   // this highlight upside and downside
-   for(int x = 0; x < width; x++){
-
-       for(int y = highlightWidth; y < height - highlightWidth; y++){
-
-           //highlights the upside of drawobject
-           if(getPixel(x, y) && !getPixel(x, y-1)){
-               for(int highlightOffset = 0; highlightOffset < highlightWidth; highlightOffset++)
-                    setPixel(x, y-highlightOffset-1, 1);
-
-           }
-
-           //highlights the downside of drawobject
-           if(getPixel(x, y) && !getPixel(x, y+1)){
-
-               for(int highlightOffset = 0; highlightOffset < highlightWidth; highlightOffset++)
-                    setPixel(x, y+highlightOffset+1, 1);
-
-               y+=4;
+    // this highlight upside and downside
+    for (int x = 0; x < width; x++) {
+        for (int y = highlightWidth; y < height - highlightWidth; y++) {
+            // highlights the upside of drawobject
+            if (getPixel(x, y) && !getPixel(x, y - 1)) {
+                for (int highlightOffset = 0; highlightOffset < highlightWidth;
+                     highlightOffset++)
+                    setPixel(x, y - highlightOffset - 1, 1);
             }
 
+            // highlights the downside of drawobject
+            if (getPixel(x, y) && !getPixel(x, y + 1)) {
+                for (int highlightOffset = 0; highlightOffset < highlightWidth;
+                     highlightOffset++)
+                    setPixel(x, y + highlightOffset + 1, 1);
 
-       }
+                y += 4;
+            }
+        }
+    }
 
-   }
-
-   mainMaskHighlighted = QBitmap::fromImage(mainMaskAsImage);
-
+    mainMaskHighlighted = QBitmap::fromImage(mainMaskAsImage);
 }
 
-int DrawObject::getPixel(const int x, const int y) const
-{
-
-
-
+int DrawObject::getPixel(const int x, const int y) const {
     const uchar mask = 0x80 >> (x % 8);
     int pixel = mainMaskAsImage.scanLine(y)[x / 8] & mask ? 1 : 0;
 
     return pixel;
-
 }
 
-void DrawObject::printMask(){
-
-    int width =  this->width();
+void DrawObject::printMask() {
+    int width = this->width();
     int height = this->height();
     QDebug deb = qDebug();
 
-    for(int i=0; i<height; i++){
-        for(int j=0; j<width; j++)
-            deb.nospace() << getPixel(j, i);
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) deb.nospace() << getPixel(j, i);
 
         deb = qDebug();
     }
-
 }
 
-
-
-
-void DrawObject::setPixel(const int x, const int y, const int pixel)
-{
+void DrawObject::setPixel(const int x, const int y, const int pixel) {
     const uchar mask = 0x80 >> (x % 8);
     if (pixel)
         mainMaskAsImage.scanLine(y)[x / 8] |= mask;
@@ -311,11 +242,9 @@ void DrawObject::setPixel(const int x, const int y, const int pixel)
         mainMaskAsImage.scanLine(y)[x / 8] &= ~mask;
 }
 
-
-void DrawObject::paintEvent(QPaintEvent *)
- {
-     QStyleOption opt;
-     opt.init(this);
-     QPainter p(this);
-     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
- }
+void DrawObject::paintEvent(QPaintEvent *) {
+    QStyleOption opt;
+    opt.init(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+}

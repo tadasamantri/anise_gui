@@ -106,12 +106,8 @@ void MainWindow::on_actionSave_triggered() {
     QString fileName =
             QFileDialog::getSaveFileName(this, "Save current project to...", "",
                                          "Mesh-Files (*.mesh *.json);;All Files(*)");
-    QFile file(fileName);
+    JsonFileHandler::saveMesh(fileName, theMesh);
 
-    file.open(QIODevice::WriteOnly);
-    // QByteArray data = *JsonFileHandler::meshToJson(theMesh);
-    file.write(JsonFileHandler::meshToJson(theMesh).toUtf8());
-    file.close();
 }
 
 void MainWindow::updatePropertyTable(int nodeID) {
@@ -246,6 +242,7 @@ void MainWindow::displayTypeInfo(const QString &type) {
         table->setRowCount(table->rowCount() + 1);
         table->setItem(offset, 0, new QTableWidgetItem("Description"));
         table->setItem(offset++, 1, new QTableWidgetItem(descr));
+        table->item(offset -1,1)->setToolTip(descr);
     }
     QList<QString> keys = params->keys();
     for (int i = 0; i < keys.size(); i++) {

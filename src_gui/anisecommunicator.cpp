@@ -18,6 +18,11 @@ void AniseCommunicator::read() {
   readOutput = QString(ba);
 }
 
+/**
+ * @brief AniseCommunicator::validPath
+ * @param path
+ * @return true if path leads to anise executable
+ */
 bool AniseCommunicator::validPath(const QString &path) {
   QProcess checker;
   QStringList arg;

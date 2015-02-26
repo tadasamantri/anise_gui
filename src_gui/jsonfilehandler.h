@@ -36,7 +36,7 @@ public:
      * will write the file to diskQString
      */
 
-    static void writeFile(const QString &path, const QString &fileContent);
+    static void saveMesh(const QString &path, Mesh *theMesh);
 
     /*
      * Print the File
@@ -58,8 +58,6 @@ public:
      * extracts all nodes given in QJsonObject and pushes them into the given list
      */
     static void extractNodesAndConnections(const QJsonObject &obj);
-private:
-    static Node *findNodeByName(const QList<Node *> *nodes, const QString &name);
 };
 
 #endif  // FILEHANDLER_H

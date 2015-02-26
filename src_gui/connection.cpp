@@ -4,57 +4,62 @@
 
 Connection::Connection(Node *src_node, Gate *src_gate, Node *dest_node,
                        Gate *dest_gate, QVector<QPoint> waypoints) {
-    this->src_gate = src_gate;
-    this->dest_gate = dest_gate;
-    this->src_node = src_node;
-    this->dest_node = dest_node;
-    this->waypoints = waypoints;
+  this->src_gate = src_gate;
+  this->dest_gate = dest_gate;
+  this->src_node = src_node;
+  this->dest_node = dest_node;
+  this->waypoints = waypoints;
 }
 
-Connection::Connection(int srcNodeID, QString srcGateName, int destNodeID, QString destGateName, QVector<QPoint> waypoints)
+Connection::Connection(int srcNodeID, QString srcGateName, int destNodeID,
+                       QString destGateName, QVector<QPoint> waypoints)
 
     : Connection(
-                    Data::instance()->getMesh()->getNodeByID(srcNodeID),
-                    Data::instance()->getMesh()->getNodeByID(srcNodeID)->getGateByName(srcGateName),
-                    Data::instance()->getMesh()->getNodeByID(destNodeID),
-                    Data::instance()->getMesh()->getNodeByID(destNodeID)->getGateByName(destGateName),
-                    waypoints
-    ){}
+          Data::instance()->getMesh()->getNodeByID(srcNodeID),
+          Data::instance()->getMesh()->getNodeByID(srcNodeID)->getGateByName(
+              srcGateName),
+          Data::instance()->getMesh()->getNodeByID(destNodeID),
+          Data::instance()->getMesh()->getNodeByID(destNodeID)->getGateByName(
+              destGateName),
+          waypoints) {}
 
+Connection::Connection() {}
 
-Connection::Connection(){}
+/**
+ * @brief Connection::getJoint
+ * @param point
+ * @return ID of closest joint to given point
+ */
+int Connection::getJoint(QPoint *point) {
+  if (this->waypoints.isEmpty()) {
+    qDebug() << "tried to get a joint from a connection without joints!";
+    return -1;
+  }
 
-
-
-//will return the closest joint to this point
-int Connection::getJoint(QPoint* point){
-
-    if(this->waypoints.isEmpty()){
-        qDebug() << "tried to get a joint from a connection without joints!";
-        return -1;
+  // uses manhatten length (x+y) instead of correct pytharorean calculations
+  int min = std::numeric_limits<int>::max();
+  int closestOne = -1;
+  for (int index = 0; index < this->waypoints.size(); ++index) {
+    QPoint tempPoint(point->x() - this->waypoints.at(index).x(),
+                     point->y() - this->waypoints.at(index).y());
+    int manhattenLength = tempPoint.manhattanLength();
+    qDebug() << "manhatten length: " << manhattenLength << " min: " << min
+             << " id: " << index;
+    if (manhattenLength < min) {
+      min = manhattenLength;
+      closestOne = index;
     }
-
-    //uses manhatten length (x+y) instead of correct pytharorean calculations
-    int min = std::numeric_limits<int>::max();
-    int closestOne = -1;
-    for(int index = 0; index < this->waypoints.size(); ++index) {
-        QPoint tempPoint(point->x()-this->waypoints.at(index).x(),point->y()-this->waypoints.at(index).y() );
-        int manhattenLength = tempPoint.manhattanLength();
-        qDebug() << "manhatten length: " << manhattenLength << " min: " << min << " id: " << index;
-        if (manhattenLength < min) {
-            min = manhattenLength;
-            closestOne = index;
-        }
-    }
-    qDebug()<< "closestone " << closestOne;
-    return closestOne;
+  }
+  return closestOne;
 }
-
-void Connection::setJoint(int index, QPoint *newPosition){
-
-    waypoints.removeAt(index);
-    waypoints.insert(index, *newPosition);
-
+/**
+ * @brief Connection::setJoint
+ * @param index index of joint
+ * @param newPosition position to move the joint to
+ */
+void Connection::setJoint(int index, QPoint *newPosition) {
+  waypoints.removeAt(index);
+  waypoints.insert(index, *newPosition);
 }
 
 void Connection::setDestGate(Gate *dest) { dest_gate = dest; }
@@ -66,26 +71,14 @@ Gate *Connection::getDestGate() { return dest_gate; }
 Gate *Connection::getSrcGate() { return src_gate; }
 
 void Connection::setDestNode(Node *node) { dest_node = node; }
-QVector<QPoint> Connection::getWaypoints() const
-{
-    return waypoints;
-}
 
-void Connection::setWaypoints(const QVector<QPoint> &value)
-{
-    waypoints = value;
-}
-int Connection::getID() const
-{
-    return ID;
-}
+QVector<QPoint> Connection::getWaypoints() const { return waypoints; }
 
-void Connection::setID(int value)
-{
-    ID = value;
-}
+void Connection::setWaypoints(const QVector<QPoint> &value) {  waypoints = value; }
 
+int Connection::getID() const { return ID; }
 
+void Connection::setID(int value) { ID = value; }
 
 void Connection::setSrcNode(Node *node) { src_node = node; }
 
