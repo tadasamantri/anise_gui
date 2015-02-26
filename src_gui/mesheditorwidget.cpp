@@ -184,8 +184,6 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
 
 void MeshEditorWidget::paintEvent(QPaintEvent *event) {
 
-
-
     //qDebug() << "maus posi: " << mousePosition;
 
     if ( newLine.drawLine == true) {
