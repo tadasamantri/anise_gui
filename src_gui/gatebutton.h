@@ -20,6 +20,7 @@ public:
     void enable();
     void disable();
 
+    void changeMask();
 signals:
 
     void released(QString gateName, QPoint position);

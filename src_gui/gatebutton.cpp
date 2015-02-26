@@ -8,6 +8,9 @@ GateButton::GateButton(QString gateName, int nodeID, QWidget *parent)
     this->nodeID = nodeID;
     this->enableClick = true;
 
+    // set backgroundcolor
+    this->setStyleSheet("background-color:green;");
+
     Node *node = Data::instance()->getMesh()->getNodeByID(nodeID);
     // has to ask this, cause gatebutton is used in Nodecatalog also
     // in this case node isn't in mesh respectively = 0
@@ -22,8 +25,12 @@ void GateButton::mouseReleaseEvent(QMouseEvent *e) {
     QPushButton::mouseReleaseEvent(e);
 
     // ensure leftclick and no dragging!
-    if ((e->button() == Qt::LeftButton) && this->rect().contains(e->pos()))
+    if ((e->button() == Qt::LeftButton) && this->rect().contains(e->pos())){
+
+        changeMask();
         emit released(this->gateName, this->pos());
+
+    }
 }
 int GateButton::getNodeID() const { return nodeID; }
 
@@ -43,4 +50,12 @@ bool GateButton::event(QEvent *e) {
         }
     }
     return true;
+}
+
+
+void GateButton::changeMask(){
+
+    QBitmap nontransparent(this->width(), this->height());
+    nontransparent.fill(Qt::color1);
+    this->setMask(nontransparent);
 }
