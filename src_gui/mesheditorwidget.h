@@ -54,6 +54,9 @@ protected:
     //variables for drawing a line to the mouse cursor
     bool drawLine;
     QPoint mousePosition;
+    QPoint mousePositionOld;
+    int mouseMoveDistance;
+
     QVector<QPoint> lineWayPoints;
     void mousePressEvent(QMouseEvent *event);
     void dragEnterEvent(QDragEnterEvent *event);
