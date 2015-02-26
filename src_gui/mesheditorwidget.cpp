@@ -30,10 +30,16 @@ void MeshEditorWidget::clearNewLine() {
     emit drawLineModeChanged();
 }
 
+void MeshEditorWidget::restToEditMode()
+{
+    this->clearNewLine();
+    Data::instance()->setEditMode();
+}
+
 void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     // ensure a left-mouse-click
     if (!(event->button() == Qt::LeftButton)) {
-        this->clearNewLine();
+        this->restToEditMode();
         return;
     }
 
@@ -126,14 +132,16 @@ void MeshEditorWidget::dragEnterEvent(QDragEnterEvent *event) {
 void MeshEditorWidget::mouseMoveEvent(QMouseEvent *event) {
 
     //update mouse position
-    this->mousePosition = event->pos();
-    this->repaint();
 
+    this->mousePosition = event->pos();
+    if(newLine.drawLine)
+    this->repaint();
 }
 
 void MeshEditorWidget::dragMoveEvent(QDragMoveEvent *event) {
     //update mouse position
     this->mousePosition = event->pos();
+    if(newLine.drawLine)
     this->repaint();
 
 }
@@ -217,10 +225,12 @@ bool MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
         return false;
 
 
+
+
     // That means we are currently constructing a line
     if (newLine.drawLine) {
-        // Ask for Correctness of Connection
-    
+
+
         newLine.destNodeID = nodeID;
         newLine.destGateName = gateName;
         //this is the InputGate where Connection ends
@@ -230,13 +240,26 @@ bool MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
         /*int ID = */Data::instance()->addConnectionToMesh(NodeFactory::createConnection(
                                                                newLine.srcNodeID, newLine.srcGateName, newLine.destNodeID,
                                                                newLine.destGateName, newLine.wayPoints));
-        this->clearNewLine();
+
+        this->restToEditMode();
 
     }
 
     // That means we are just starting a new Line
     else {
-        // Ask for Correctness of Connection
+
+        Node *node = Data::instance()->getMesh()->getNodeByID(nodeID);
+        Gate *srcGate;
+
+
+        if(!node)
+            return false;
+
+        srcGate = node->getGateByName(gateName);
+
+        if(!srcGate)
+            return false;
+
 
         newLine.srcNodeID = nodeID;
         newLine.srcGateName = gateName;
@@ -245,7 +268,13 @@ bool MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
 
         // Do Everything that Changed when Clicking on a gate
         newLine.drawLine = !(newLine.drawLine);
+
+
+        Data::instance()->setDrawLineMode(srcGate->getType());
+
         emit drawLineModeChanged();
+
+
     }
     return true;
 }
@@ -278,7 +307,6 @@ bool MeshEditorWidget::correctGate(int nodeID, QString gateName){
     if(newLine.drawLine){
 
         Gate *srcGate = Data::instance()->getMesh()->getNodeByID(newLine.srcNodeID)->getGateByName(newLine.srcGateName);
-
         return endGate->getDirection() && srcGate->getType() == endGate->getType() && newLine.srcNodeID != nodeID;
         
     }

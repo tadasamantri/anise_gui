@@ -205,3 +205,15 @@ Data::~Data() {
 }
 
 NodeCatalog *Data::getNodeCatalog() { return nodeCatalog; }
+
+void Data::setDrawLineMode(QString gateType){
+
+    this->mesh->setFocusMeshObject(-1);
+    SingletonRender::instance()->highlightGates(gateType);
+}
+
+void Data::setEditMode(){
+
+    SingletonRender::instance()->dehighlightGates();
+}
+

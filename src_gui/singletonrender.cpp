@@ -273,14 +273,14 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
             for (int i = 0; i < numberInputGates; i++) {
                 NodeDrawObject->addGateButton(
                             allImages["gate.png"], QPoint(0, i * (gateHeight + gateOffset) + 5),
-                        inputGates->at(i)->getName());
+                        inputGates->at(i)->getName(), inputGates->at(i)->getType(), true);
             }
 
             for (int i = 0; i < numberOutputGates; i++) {
                 NodeDrawObject->addGateButton(
                             allImages["gate.png"],
                         QPoint(75, i * (gateHeight + gateOffset) + 5),
-                        outputGates->at(i)->getName());
+                        outputGates->at(i)->getName(), outputGates->at(i)->getType(),false);
             }
 
         } else {
@@ -462,6 +462,36 @@ void SingletonRender::highlightObject(int ID){
             joint->highlight();
         }
     }
+}
+
+
+void SingletonRender::highlightGates(QString gateType){
+
+    foreach(DrawObject *node, allDrawnNodes){
+
+        node->highlightGates(gateType);
+    }
 
 
 }
+
+void SingletonRender::dehighlightGates(){
+
+    foreach(DrawObject *node, allDrawnNodes){
+
+        node->dehighlightGates();
+    }
+
+}
+
+
+QPixmap *SingletonRender::getImage(QString name){
+
+    if(allImages.contains(name))
+        return allImages.value(name);
+    return new QPixmap();
+
+}
+
+
+

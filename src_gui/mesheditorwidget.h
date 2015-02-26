@@ -70,7 +70,7 @@ private:
 
     //Clears new Line which is/was in construction
     void clearNewLine();
-
+    void restToEditMode();
 
     bool correctGate(int nodeID, QString gateName);
 signals:
