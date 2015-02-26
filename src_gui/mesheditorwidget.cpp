@@ -4,6 +4,7 @@
 #include "mesheditorwidget.h"
 #include "data.h"
 #include "gatebutton.h"
+#include "math.h"
 
 MeshEditorWidget::MeshEditorWidget(QWidget *parent) : QWidget(parent) {
     connectSignals();
@@ -37,6 +38,7 @@ void MeshEditorWidget::restToEditMode()
 }
 
 void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
+    this->mouseMoveDistance += 100;
     // ensure a left-mouse-click
     if (!(event->button() == Qt::LeftButton)) {
         this->restToEditMode();
@@ -132,18 +134,25 @@ void MeshEditorWidget::dragEnterEvent(QDragEnterEvent *event) {
 void MeshEditorWidget::mouseMoveEvent(QMouseEvent *event) {
 
     //update mouse position
-
+    this->mousePositionOld = this->mousePosition;
     this->mousePosition = event->pos();
-    if(newLine.drawLine)
-    this->repaint();
+
+    //calculate how far the mouse moved
+    mouseMoveDistance +=  abs( (mousePosition.x()-mousePositionOld.x())^2 + (mousePosition.y()-mousePositionOld.y())^2);
+
+    qDebug() << "distance: " << mouseMoveDistance;
+    if(newLine.drawLine && mouseMoveDistance >= 20){
+        mouseMoveDistance = 0 ;
+        this->repaint();
+    }
 }
 
 void MeshEditorWidget::dragMoveEvent(QDragMoveEvent *event) {
     //update mouse position
     this->mousePosition = event->pos();
-    if(newLine.drawLine)
-    this->repaint();
-
+    if(newLine.drawLine){
+        this->repaint();
+    }
 }
 
 void MeshEditorWidget::dropEvent(QDropEvent *event) {
@@ -199,11 +208,9 @@ void MeshEditorWidget::paintEvent(QPaintEvent *event) {
         // this will draw the vector with points as a line
         SingletonRender::instance()->drawLines(&newLine.wayPoints,&mousePosition);
     }
-
-
     // draw all connections:
-
     SingletonRender::instance()->renderConnections();
+
 }
 
 bool MeshEditorWidget::containsID(int objectID) {
