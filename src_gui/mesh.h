@@ -5,8 +5,8 @@
 #include<QTableWidgetItem>
 
 class Mesh : public QObject {
+    friend class Data;
     Q_OBJECT
-
 public:
     // konstruktor
     explicit Mesh(QObject *parent = 0);

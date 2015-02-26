@@ -1,5 +1,6 @@
 #include <QDir>
 #include <limits>
+#include <QSpacerItem>
 #include "singletonrender.h"
 #include "testdrawobject.h"
 #include "nodetypelabel.h"
@@ -345,27 +346,32 @@ void SingletonRender::renderNodeType(Node *nodeToRender, QWidget *parent,
         toolTip += "\n" + nodeToRender->getDescription();
     NodeDrawObject->setToolTip(toolTip);
     // TODO should use layouts instead of hardcoded position!
-    NodeDrawObject->move(5 + position * NodeDrawObject->width(), 5);
-
-
-    QLabel *typeLabel = new QLabel();
+    //NodeDrawObject->move(5 + position * NodeDrawObject->width(), 5);
+    QGridLayout *layout = dynamic_cast<QGridLayout *>(parent->layout());
+    layout->addWidget(NodeDrawObject,0,position, Qt::AlignCenter);
+    QLabel *typeLabel = new QLabel(parent);
     typeLabel->setText(type);
-    typeLabel->setGeometry(5 + position * NodeDrawObject->width(), NodeDrawObject->height() + 10, NodeDrawObject->width(), 20);
+    //typeLabel->setGeometry(5 + position * NodeDrawObject->width(), NodeDrawObject->height() + 10, NodeDrawObject->width(), 20);
+    layout->addWidget(typeLabel,1,position, Qt::AlignCenter);
     typeLabel->show();
-
-
     NodeDrawObject->show();
 }
 
 void SingletonRender::renderCatalogContent(QVector<Node> NodeVektor) {
     QWidget *CatalogParent = ui->nodeCatalogContent;
     int position = 0;
+    CatalogParent->layout()->setSpacing(5);
+    qDebug() << CatalogParent->layout();
     // TODO scroll weite sollte nicht hard coded sein
     //CatalogParent->setMinimumHeight(NodeVektor.size() * 60 + 10);
     foreach (Node nodeTyp, NodeVektor) {
         renderNodeType(&nodeTyp, CatalogParent, position);
         position++;
     }
+    //adding spacer to layout
+    QSpacerItem *spacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    ((QGridLayout*)CatalogParent->layout())->addItem(spacer,0,position);
+    CatalogParent->repaint();
 }
 
 void SingletonRender::clearAll(QWidget *parent) {

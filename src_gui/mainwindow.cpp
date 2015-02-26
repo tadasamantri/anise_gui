@@ -335,7 +335,7 @@ void MainWindow::displayTypeInfo(const QString &type) {
 
 void MainWindow::on_details_stateChanged(int arg1)
 {
-    if(arg1)
+    if(arg1 && Data::instance()->getFocusedID() != -1)
         ui->tableWidget->show();
     else
         ui->tableWidget->hide();

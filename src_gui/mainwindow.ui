@@ -95,7 +95,7 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+          <layout class="QGridLayout" name="CatalogLayout"/>
          </widget>
         </widget>
        </item>
