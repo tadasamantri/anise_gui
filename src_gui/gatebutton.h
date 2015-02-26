@@ -28,6 +28,9 @@ public:
     QString getGateType() const;
     void setGateType(const QString &value);
 
+    bool getDirection() const;
+    void setDirection(bool value);
+
 signals:
 
     void released(QString gateName, QPoint position);
