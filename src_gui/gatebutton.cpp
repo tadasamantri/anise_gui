@@ -2,19 +2,18 @@
 #include <QMouseEvent>
 #include "data.h"
 
-GateButton::GateButton(QString gateName, int nodeID, QWidget *parent)
+GateButton::GateButton(QString gateName, QString gateType, int nodeID, bool direction, QWidget *parent)
     : QPushButton(parent) {
+
+    this->gateType = gateType;
     this->gateName = gateName;
     this->nodeID = nodeID;
     this->enableClick = true;
+    this->direction= direction;
 
-    // set backgroundcolor
-    this->setStyleSheet("background-color:green;");
+    this->setToolTip(gateType);
 
-    Node *node = Data::instance()->getMesh()->getNodeByID(nodeID);
-    // has to ask this, cause gatebutton is used in Nodecatalog also
-    // in this case node isn't in mesh respectively = 0
-    if (node) this->setToolTip(node->getGateByName(gateName)->getType());
+
 }
 
 QString GateButton::getGateName() const { return gateName; }
@@ -27,7 +26,6 @@ void GateButton::mouseReleaseEvent(QMouseEvent *e) {
     // ensure leftclick and no dragging!
     if ((e->button() == Qt::LeftButton) && this->rect().contains(e->pos())){
 
-        changeMask();
         emit released(this->gateName, this->pos());
 
     }
@@ -51,11 +49,40 @@ bool GateButton::event(QEvent *e) {
     }
     return true;
 }
+QString GateButton::getGateType() const
+{
+    return gateType;
+}
+
+void GateButton::setGateType(const QString &value)
+{
+    gateType = value;
+}
 
 
-void GateButton::changeMask(){
 
-    QBitmap nontransparent(this->width(), this->height());
-    nontransparent.fill(Qt::color1);
-    this->setMask(nontransparent);
+void GateButton::setHighlightMode(bool valid){
+
+    if(valid)
+        this->setIcon(*SingletonRender::instance()->getImage("gate-green.png"));
+    else
+        this->setIcon(*SingletonRender::instance()->getImage("gate-red.png"));
+
+}
+
+void GateButton::resetPicture(){
+
+    this->setIcon(*SingletonRender::instance()->getImage("gate.png"));
+
+}
+
+
+bool GateButton::isInput()
+{
+ return direction;
+}
+
+bool GateButton::isOutput(){
+
+    return !direction;
 }

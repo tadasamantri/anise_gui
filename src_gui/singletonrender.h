@@ -101,6 +101,9 @@ public:
     void dehighlightObject(int ID);
     void highlightObject(int ID);
 
+    QPixmap *getImage(QString name);
+    void highlightGates(QString gateType);
+    void dehighlightGates();
 private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
 

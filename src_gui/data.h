@@ -63,6 +63,9 @@ public:
     void setMainWindow(MainWindow *value);
 
     ~Data();
+    void setEditMode();
+    void setDrawLineMode(QString gateType);
+
 public slots:
     bool deleteItem();
 
