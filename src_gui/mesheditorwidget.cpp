@@ -138,7 +138,7 @@ void MeshEditorWidget::mouseMoveEvent(QMouseEvent *event) {
     this->mousePosition = event->pos();
 
     //calculate how far the mouse moved
-    mouseMoveDistance +=  abs( (mousePosition.x()-mousePositionOld.x())^2 + (mousePosition.y()-mousePositionOld.y())^2);
+    mouseMoveDistance +=  abs( ((mousePosition.x()-mousePositionOld.x())^2) + ((mousePosition.y()-mousePositionOld.y())^2));
 
 
     if(newLine.drawLine && mouseMoveDistance >= 10){

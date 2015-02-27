@@ -170,6 +170,161 @@ void SingletonRender::drawLines(QVector<QPoint> *pointVector, QPoint *point) {
     this->drawLine(pointVector->last(), *point);
 }
 
+bool SingletonRender::createTilesFromImage(QPixmap *Sprite){
+    if(Sprite == NULL){
+        return false;
+    }
+
+    int size = 16; //we want to load 16*16 pictures
+    int top;
+    int bottom;
+    int left;
+    int right;
+
+    QRect cropRect;
+
+    /*
+     * 0|1|2
+     * 3|4|5
+     * 6|7|8
+     */
+
+
+    for (int index = 0; index < 9; ++index) {
+        top = int(index/3)*size;
+        bottom = top + size;
+        left = (index % 3)*size;
+        right = left + size;
+
+        cropRect = QRect(left,top,right-left, bottom-top);
+        //qDebug() << "trying to make a sprite";
+        //qDebug() << "index " << index << ";top " << top  << ";bottom" << bottom << ";left" << left<< ";right" << right;
+        //qDebug() << "rect: " << cropRect;
+        this->nodeTiles[index] = QPixmap(Sprite->copy(cropRect));
+        if (this->nodeTiles[index].isNull()) {
+            qDebug()<<"tile is emtpy!";
+        }
+
+    }
+    return true;
+
+}
+
+QPixmap* SingletonRender::createTiledPixmap(int x, int y){
+
+    //calculate how many tiles will fill this area
+    int dimX = x/16;
+    int dimY = y/16;
+
+    if(x%16>0){dimX++;}
+    if(y%16>0){dimY++;}
+
+    if (dimX < 3) {
+        dimX = 3;
+    }
+
+    if (dimY < 3) {
+        dimY = 3;
+    }
+
+    //resize the QPixmap
+    QPixmap *result = new QPixmap(dimX*16, dimY*16);
+
+
+    // create a painter
+    QPainter painter(result);
+    painter.setBrush(Qt::black);
+
+    bool isTop = false;
+    bool isBottom= false;
+    bool isLeft= false;
+    bool isRight= false;
+
+    QPixmap *temp;
+    int indexOfTile ;
+
+    //iterate over all x
+    for (int rowX = 0; rowX < dimX; ++rowX) {
+        //check if we are at the left side
+        if(rowX == 0){
+            isLeft = true;
+        }else{
+            isLeft = false;
+        }
+        //check if we are at the right side
+        if(rowX == dimX-1){
+            isRight = true;
+        }else{
+            isRight = false;
+        }
+
+        //iterate over all y
+        for (int rowY = 0; rowY < dimY; ++rowY) {
+
+            //check if we are at the Top
+            if(rowY == 0){
+                isTop = true;
+            }else{
+                isTop = false;
+            }
+
+            //check if we are at the bottom
+            if(rowY == dimY-1){
+                isBottom = true;
+            }else{
+                isBottom = false;
+            }
+
+            //choose an image depending on position
+            if(isLeft == true){
+                if(isTop == true){
+                    //top left corner
+                    indexOfTile = 0;
+                }else if(isBottom == true){
+                    //bottom left corner
+                    indexOfTile = 6;
+                }else{
+                    //normal left side
+                    indexOfTile = 3;
+                }
+            }else if(isRight == true){
+                if(isTop == true){
+                    //top right corner
+                    indexOfTile = 2;
+                }else if(isBottom == true){
+                    //bottom right corner
+                    indexOfTile = 8;
+                }else{
+                    //normal right side
+                    indexOfTile = 5;
+                }
+            }else{
+
+                if(isTop == true){
+                    //normal top
+                    indexOfTile = 1;
+                }else if(isBottom == true){
+                    //normal bottom
+                    indexOfTile = 7;
+                }else{
+                    //middle
+                    indexOfTile = 4;
+                }
+            }
+
+
+            //add the image to our QPixmap
+            temp = &(this->nodeTiles[indexOfTile]);
+            //qDebug() << "rowX " << rowX << "|" << dimX << "rowY " << rowY <<"|" << dimY << "tileId" << indexOfTile;
+
+
+            painter.drawPixmap(rowX*16, rowY*16, 16, 16, *temp);
+        }
+    }
+
+    return result;
+}
+
 // loads all images in the ../DataIimages folder.
 // saves them in the map "allImages"
 bool SingletonRender::loadImages() {
@@ -202,6 +357,9 @@ bool SingletonRender::loadImages() {
             result =
                     temp->load(directory.absolutePath().append("/" + listOfFiles.at(i)));
 
+
+
+
             // if failed print a debug message
             if (result == false) {
                 qDebug() << "loaded image: "
@@ -227,6 +385,13 @@ bool SingletonRender::loadImages() {
         this->setOutputGateDrawOffset(QPoint(width, height/2));
 
     }
+
+    //create tiles from loaded image
+    if (allImages.contains("body.png")) {
+        qDebug() << "creating tiles";
+        this->createTilesFromImage(allImages.value("body.png"));
+    }
+
     return result;
 }
 
@@ -236,6 +401,7 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
     if (!allDrawnNodes.contains(nodeID)) {
         // some Variables needed often
         int gateHeight = allImages["gate.png"]->height();
+        int gateWidth  = allImages["gate.png"]->width();
         int gateOffset = 10;
         QString typeName = nodeToRender->getType();
 
@@ -244,19 +410,38 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
         if (maxNumberGates < nodeToRender->getOutputGates()->size())
             maxNumberGates = nodeToRender->getOutputGates()->size();
 
-        // Set height of DrawObject
-        int drawObjectHeight = maxNumberGates * (gateHeight + gateOffset);
-        if (drawObjectHeight < 50) drawObjectHeight = 50;
+        // calculate size of Drawobject
+        int amountTilesY = 3;//minimum size to not get cut off
+        int amountTilesX = 3;
+
+        //how much offset do the gates create for the main body
+        int gateSpaceY = maxNumberGates * (gateHeight + gateOffset);
+        int gateSpaceX = gateWidth;
+
+        //add tiles when the gates require more space
+        while(amountTilesY*16 <= gateSpaceY){
+            amountTilesY++;
+        }
+
+        //calculate the real space
+        int drawObjectHeight = amountTilesY*16;
+        int drawObjectWidth = amountTilesX*16+2*gateWidth;
+
+
+        if (drawObjectHeight < 3*16) drawObjectHeight = 3*16;
+        //if (drawObjectWidth < 4*16) drawObjectWidth = 4*16;
+        //drawObjectHeight += 16-drawObjectHeight%16;
+        //drawObjectWidth += 16-drawObjectWidth%16;
 
         // create a Drawobject
         DrawObject *NodeDrawObject = new DrawObject(
                     nodeID,
                     QPoint(int(nodeToRender->position_x), int(nodeToRender->position_y)),
-                    100, drawObjectHeight, this->ui->meshField);
+                    drawObjectWidth, drawObjectHeight, this->ui->meshField);
 
         if (allImages.contains("body.png")) {
             // Draw the body
-            NodeDrawObject->addPicture(allImages["body.png"], QPoint(15, 0),
+            NodeDrawObject->addPicture(this->createTiledPixmap(amountTilesX*16,amountTilesY*16), QPoint(gateSpaceX, 0),
                     typeName);
 
         } else {
@@ -279,7 +464,7 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
             for (int i = 0; i < numberOutputGates; i++) {
                 NodeDrawObject->addGateButton(
                             allImages["gate.png"],
-                        QPoint(75, i * (gateHeight + gateOffset) + 5),
+                        QPoint(drawObjectWidth-gateWidth, i * (gateHeight + gateOffset) + 5),
                         outputGates->at(i)->getName(), outputGates->at(i)->getType(),false);
             }
 
