@@ -81,6 +81,15 @@ bool Node::isOutputGate(QString gateName)
 
 }
 
+/**
+ * @brief Node::addParam add a new Parameter to the Node
+ * @param descr description
+ * @param _key internal key
+ * @param name displayed name
+ * @param type data type
+ * @param _value value to be stored
+ * @return true if the parameter was added, false elsewise
+ */
 bool Node::addParam(QString descr, QString _key, QString name, QString type, QVariant _value) {
   if (!this->params.contains(_key)){
       parameter p{descr, _key, name, type, _value};
@@ -91,6 +100,12 @@ bool Node::addParam(QString descr, QString _key, QString name, QString type, QVa
   return true;
 }
 
+/**
+ * @brief Node::setParam
+ * @param key key of parameter to be changed
+ * @param _value new value
+ * @return true on success, false elsewise
+ */
 bool Node::setParam(QString key, QVariant _value) {
   if (params.contains(key)) {
     params[key].value = _value;
@@ -99,12 +114,23 @@ bool Node::setParam(QString key, QVariant _value) {
   return false;
 }
 
+/**
+ * @brief Node::removeParam
+ * @param _key key of parameter to remove
+ * @return true on success
+ */
 bool Node::removeParam(QString _key) {
   if (this->params.contains(_key))
     this->params.remove(_key);
   else
     return false;
   return true;
+}
+
+Node::parameter Node::getParamStructByKey(const QString &key){
+    if(params.contains(key))
+        return params[key];
+    else return parameter{QString(),QString(),QString(),QString(),QVariant()};
 }
 
 QVariant Node::getParamByKey(const QString &_key) {

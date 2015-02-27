@@ -74,6 +74,9 @@
          <property name="horizontalScrollBarPolicy">
           <enum>Qt::ScrollBarAlwaysOn</enum>
          </property>
+         <property name="sizeAdjustPolicy">
+          <enum>QAbstractScrollArea::AdjustToContents</enum>
+         </property>
          <property name="widgetResizable">
           <bool>true</bool>
          </property>
@@ -86,7 +89,13 @@
             <height>63</height>
            </rect>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QGridLayout" name="CatalogLayout"/>
          </widget>
         </widget>
        </item>
@@ -127,7 +136,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>delete node</string>
+            <string>delete item</string>
            </property>
           </widget>
          </item>

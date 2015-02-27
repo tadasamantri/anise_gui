@@ -50,7 +50,7 @@ public:
     //add a node to the mesh
     int addNodeToMesh(Node *newNode);
     int addConnectionToMesh(Connection *newConnection);
-
+    int getFocusedID();
     void removeNodeFromMesh(int ID);
     void moveObjectInMesh(QPoint *Position, int ID);
     void moveObjectInMesh(QPoint *start, QPoint *end, int ID);

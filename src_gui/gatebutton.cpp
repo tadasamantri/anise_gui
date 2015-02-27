@@ -49,6 +49,16 @@ bool GateButton::event(QEvent *e) {
     }
     return true;
 }
+bool GateButton::getDirection() const
+{
+    return direction;
+}
+
+void GateButton::setDirection(bool value)
+{
+    direction = value;
+}
+
 QString GateButton::getGateType() const
 {
     return gateType;

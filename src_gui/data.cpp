@@ -124,6 +124,11 @@ int Data::addConnectionToMesh(Connection *newConnection) {
     return id;
 }
 
+int Data::getFocusedID()
+{
+    return mesh->focusObject;
+}
+
 /**
  * @brief Data::removeNodeFromMesh removes node with given ID from mesh
  * @param ID

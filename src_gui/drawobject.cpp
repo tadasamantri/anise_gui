@@ -252,13 +252,13 @@ void DrawObject::paintEvent(QPaintEvent *) {
 void DrawObject::highlightGates(QString gateType){
 
     foreach(GateButton *gate, gateVector){
-        if(gate->isInput()){
+        //if(gate->isInput()){
 
-            if(gate->getGateType() == gateType)
+            if(gate->getDirection() && gate->getGateType() == gateType)
                 gate->setHighlightMode(true);
             else
                 gate->setHighlightMode(false);
-        }
+        //}
     }
 }
 
@@ -266,7 +266,7 @@ void DrawObject::dehighlightGates(){
 
     foreach(GateButton *gate, gateVector){
 
-        if(gate->isInput())
+        //if(gate->isInput())
             gate->resetPicture();
     }
 
