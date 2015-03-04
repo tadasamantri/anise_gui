@@ -35,6 +35,7 @@ void MeshEditorWidget::restToEditMode()
 {
     this->clearNewLine();
     Data::instance()->setEditMode();
+    repaint();
 }
 
 void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
@@ -49,7 +50,6 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     if (newLine.drawLine) {
         // Check if i clicked on a child
         QObject *child = childAt(event->pos());
-
         if(!child){
             // add a way point for the line to draw
             this->newLine.wayPoints.push_back(event->pos());
@@ -293,6 +293,7 @@ void MeshEditorWidget::changeLineDrawMode()
 {
     if(newLine.drawLine){
         setCursor(Qt::CrossCursor);
+        Data::instance()->getMainWindow()->ui->statusBar->showMessage("exit line draw mode with right click", 5e3);
         QToolTip::showText(cursor().pos(), QString("exit line draw mode with right click"), this, Data::instance()->getMainWindow()->ui->mesh_edt_area->rect(),4000);
     }
     else setCursor(Qt::ArrowCursor);
