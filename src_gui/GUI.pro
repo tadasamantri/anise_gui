@@ -28,7 +28,6 @@ SOURCES += main.cpp\
     mesheditorwidget.cpp \
     data.cpp \
     singletonrender.cpp \
-    testdrawobject.cpp \
     nodetypelabel.cpp \
     gatebutton.cpp
 

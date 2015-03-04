@@ -81,6 +81,7 @@ public:
     int getID() const;
     void setID(int value);
     QPoint getPosition();
+    QPoint getGatePosition(QString gateName);
     Node::parameter getParamStructByKey(const QString &key);
 private:
     bool addParam(QString descr, QString _key, QString name, QString type, QVariant _value);

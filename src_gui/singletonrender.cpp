@@ -2,7 +2,6 @@
 #include <limits>
 #include <QSpacerItem>
 #include "singletonrender.h"
-#include "testdrawobject.h"
 #include "nodetypelabel.h"
 #include "ui_mainwindow.h"
 #include "data.h"

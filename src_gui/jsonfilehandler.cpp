@@ -139,7 +139,7 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
         return;
     }
 
-    qDebug() << "File contains nodes, so let's parse them";
+    qDebug() << "File contains " << obj["nodes"].toArray().size() << " nodes, so let's parse them ";
     Mesh *mesh = Data::instance()->getMesh();
 
     // for every node (represented as jsonvalue)...
@@ -184,8 +184,10 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
                 createdNode->setPosition(p_gui["x"].toInt(), p_gui["y"].toInt());
             }
             // do some default stuff
-            // TODO!
+
             else {
+                // TODO! bessere positions schätzung!
+                createdNode->setPosition(10+(qrand()%400),10+(qrand()%300));
             }
             // node is complete, so let's insert it
 
@@ -197,19 +199,26 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
     if (!obj["connections"].isArray()) {
         qDebug() << "no connections found";
         return;
+    }else{
+        qDebug() << obj["connections"].toArray().size() <<" connections found";
     }
 
     foreach (QJsonValue var, obj["connections"].toArray()) {
         QJsonObject co = var.toObject();
         QVariantMap theConnection = co.toVariantMap();
 
-        Node *src_node = mesh->getNodeByName(theConnection["src_node"].toString()),
-                *dest_node =
-                mesh->getNodeByName(theConnection["dest_node"].toString());
+
+        Node *src_node = mesh->getNodeByName(theConnection["src_node"].toString());
+        Node *dest_node = mesh->getNodeByName(theConnection["dest_node"].toString());
         Connection *connection = new Connection(
                     src_node, src_node->getGateByName(theConnection["src_gate"].toString()),
                 dest_node,
                 dest_node->getGateByName(theConnection["dest_gate"].toString()));
+
+
+
+
+
 
         if (co.contains("gui_params")) {
             QJsonObject json_gui_params = co["gui_params"].toObject();
@@ -220,9 +229,26 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
                 if (o.contains("x") && o.contains("y"))
                     waypoints << QPoint(o["x"].toInt(), o["y"].toInt());
             }
+            connection->setWaypoints(waypoints);
+        }else{
+            //if no gui params are found
+            QVector<QPoint> waypoints;
+
+            //start position of the connection
+            waypoints<< src_node->getGatePosition(theConnection["src_gate"].toString());
+
+            //end position of the connections
+            waypoints<<  dest_node->getGatePosition(theConnection["dest_gate"].toString());
+
+
+            //waypoints<< source << destination;
+
 
             connection->setWaypoints(waypoints);
+
         }
+
+        qDebug() << "adding connection to Mesh";
         mesh->addConnection(connection);
     }
 }
