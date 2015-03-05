@@ -168,6 +168,9 @@ private:
 
     // pointer to this instance
     static SingletonRender *m_pInstance;
+
+
+    void moveJointsOnWaypoints(Connection *conToRender, int ID);
 };
 
 #endif  // SINGLETONRENDER_H

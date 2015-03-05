@@ -108,21 +108,33 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID) {
 
     }
 
+    this->moveJointsOnWaypoints(conToRender, ID);
+
+
+}
+
+
+void SingletonRender::moveJointsOnWaypoints(Connection * conToRender, int ID){
+    DrawObject* joint;
+    int posxOffset;
+    int posyOffset;
 
 
     //move all joints to the correct position
     for (int index = 0; index < allConnections[ID].size(); index++) {
 
 
-        DrawObject* joint = allConnections[ID].at(index);
+        joint = allConnections[ID].at(index);
 
         // calculate the middle of the Image
-        int posxOffset = -joint->width() / 2;
-        int posyOffset = -joint->height() / 2;
+        posxOffset = -joint->width() / 2;
+        posyOffset = -joint->height() / 2;
 
         joint->move(conToRender->waypoints.at(index).x()+posxOffset, conToRender->waypoints.at(index).y()+posyOffset);
         joint->show();
     }
+
+
 }
 
 // will have to be called from a paint event!
@@ -248,7 +260,7 @@ QPixmap* SingletonRender::createTiledPixmap(int x, int y){
 
     // create a painter
     QPainter painter(result);
-    painter.setBrush(Qt::black);
+    //painter.setBrush(Qt::black);
 
     bool isTop = false;
     bool isBottom= false;
