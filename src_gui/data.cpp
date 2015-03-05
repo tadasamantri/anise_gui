@@ -172,7 +172,6 @@ void Data::moveObjectInMesh(QPoint *Position, int ID) {
     if (this->mesh->nodesInMesh.contains(ID)) {
         QPoint offset = *Position - mesh->getNodeByID(ID)->getPosition();
         this->mesh->getNodeByID(ID)->setPosition(Position->x(), Position->y());
-        mesh->updateConnections(ID, offset);
         SingletonRender::instance()->renderMesh(this->mesh);
 
     } else if (this->mesh->connectionsInMesh.contains(ID)) {

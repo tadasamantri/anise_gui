@@ -8,6 +8,8 @@
 
 // Global static pointer used to ensure a single instance of the class.
 SingletonRender *SingletonRender::m_pInstance = NULL;
+int numOfNodeTypes = 0;
+
 
 SingletonRender::SingletonRender() {
     // initialize all maps
@@ -44,18 +46,31 @@ void SingletonRender::renderConnections() {
 void SingletonRender::renderConnection(Connection *conToRender, int ID) {
     // will draw a line connecting all connection joints of a connection
 
+    QVector<QLine> tempVec;
+    QPoint srcGatePosition, destGatePosition;
+    DrawObject *src = allDrawnNodes.value(conToRender->getSrcNode()->getID()),
+            *dest = allDrawnNodes.value(conToRender->getDestNode()->getID());
+    if(!(src && dest))
+        return;
+    srcGatePosition = src->getGatePosition(conToRender->getSrcGate()->getName()) + outPutGateDrawOffset + src->pos();
+    destGatePosition = dest->getGatePosition(conToRender->getDestGate()->getName()) + inputGateDrawOffset + dest->pos() ;
+
+    // create new Lines
+    for (int index = 0; index < conToRender->waypoints.size() - 1; index++) {
+        tempVec << QLine(conToRender->waypoints.at(index),
+                         conToRender->waypoints.at(index + 1));
+    }
+    if(conToRender->waypoints.isEmpty())
+        tempVec << QLine(srcGatePosition, destGatePosition);
+    else{
+        tempVec.push_front(QLine(srcGatePosition, conToRender->waypoints.first()));
+        tempVec << QLine(conToRender->waypoints.last(), destGatePosition);
+    }
+    this->allLines.insert(ID, tempVec);
+
+    // create a new Vector for all Joints
+    QVector<DrawObject *> jointVector;
     if (!allConnections.contains(ID)) {
-        QVector<QLine> tempVec;
-        // create new Lines
-        for (int index = 0; index < conToRender->waypoints.size() - 1; ++index) {
-            tempVec << QLine(conToRender->waypoints.at(index),
-                             conToRender->waypoints.at(index + 1));
-        }
-        this->allLines.insert(ID, tempVec);
-
-        // create a new Vector for all Joints
-        QVector<DrawObject *> jointVector;
-
         // now draw all joints
         foreach (QPoint joint, conToRender->waypoints) {
             if (!allImages.contains("joint.png")) {
@@ -81,22 +96,12 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID) {
         // Add the vector into the map
         allConnections.insert(ID, jointVector);
 
-    } else {
-        // update the lines
-        QVector<QLine> tempVec;
-        // this->allLines.clear();
-        // create new Lines
-        for (int index = 0; index < conToRender->waypoints.size() - 1; ++index) {
-            tempVec << QLine(conToRender->waypoints.at(index),
-                             conToRender->waypoints.at(index + 1));
-        }
-        this->allLines.insert(ID, tempVec);
     }
 
 
 
     //move all joints to the correct position
-    for (int index = 1; index < allConnections[ID].size()-1; ++index) {
+    for (int index = 0; index < allConnections[ID].size(); index++) {
 
 
         DrawObject* joint = allConnections[ID].at(index);
@@ -508,6 +513,8 @@ void SingletonRender::clearMeshField() { clearAll(ui->meshField); }
 
 void SingletonRender::renderNodeType(Node *nodeToRender, QWidget *parent,
                                      int position) {
+    
+    numOfNodeTypes++;
     // TODO code dublication in renderNode and renderNodeType!
     NodeTypeLabel *NodeDrawObject = new NodeTypeLabel(parent);
     renderNode(nodeToRender,std::numeric_limits<int>::max() -1);

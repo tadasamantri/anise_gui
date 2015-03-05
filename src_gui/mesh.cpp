@@ -20,14 +20,6 @@ QList<Connection*> Mesh::getConnectionsToNode(int nodeID){
     }
     return list;
 }
-void Mesh::updateConnections(int ID, QPoint offset){
-    for(Connection *c : getConnectionsToNode(ID)){
-        if(c->getSrcNode()->getID() == ID)
-            c->waypoints[0] += offset;
-        if(c->getDestNode()->getID() == ID)
-            c->waypoints[c->waypoints.size() - 1] += offset;
-    }
-}
 
 int Mesh::addNode(Node *node) {
     node->setName(getValidAlternativeForName(node->getName()));

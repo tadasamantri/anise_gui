@@ -33,6 +33,8 @@ public:
     void addPicture(QPixmap *pic, QPoint position, QString typeName);
     void addGateButton(QPixmap *pic, QPoint position, QString gateName, QString gateType, bool direction);
 
+    QPoint getGatePosition(QString gateName);
+
     //Modify the mask of the drawobject inserting the mask of the pixmap at given position
     void modifyMask(QPixmap *pic, QPoint position);
 

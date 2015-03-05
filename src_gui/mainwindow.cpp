@@ -62,6 +62,9 @@ void MainWindow::initializeGUI() {
 MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::on_actionLoad_triggered() {
+
+    this->on_actionNew_triggered();
+
     qDebug() << "Trying to open FileDialog";
     QString fileName = QFileDialog::getOpenFileName(
                 this, "Load previously saved mesh", "",
@@ -97,6 +100,8 @@ void MainWindow::on_actionNew_triggered() {
 }
 
 void MainWindow::on_actionLoad_Catalog_triggered() {
+
+
     QString out = AniseCommunicator::getAllNodeTypes();
     JsonFileHandler::parseNodeTypesFromAnise(out);
 }
@@ -278,7 +283,13 @@ void MainWindow::displayTypeInfo(const QString &type) {
 
     //print the Node Type
     table->setItem(i, 0, new QTableWidgetItem("Type"));
-    table->setItem(i++, 1, new QTableWidgetItem(type));
+    table->setItem(i, 1, new QTableWidgetItem(type));
+    QFont f1 = table->item(i,1)->font(), f2 = table->item(i,0)->font();
+    f1.setBold(true);
+    f2.setBold(true);
+    table->item(i,0)->setFont(f2);
+    table->item(i++,1)->setFont(f1);
+
 
     //print input gates
     QVector<Gate*> *gates = n.getInputGates();
@@ -328,7 +339,11 @@ void MainWindow::displayTypeInfo(const QString &type) {
         for (int row = 0; row < table->rowCount(); row++)
             if(table->item(row,col))
                 table->item(row, col)->setFlags(Qt::ItemIsEnabled);
-    table->resizeColumnsToContents();
+    table->resizeColumnToContents(0);
+    table->resizeColumnToContents(1);
+    for(int col = 0; col < table->columnCount();col++)
+        for(int row = 0;row < table->rowCount();row++)
+            table->item(row,col)->setToolTip(table->item(row,col)->text());
     if(ui->details->checkState() == Qt::Checked)
         table->show();
 }

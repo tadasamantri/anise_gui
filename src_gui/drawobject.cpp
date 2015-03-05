@@ -111,6 +111,22 @@ void DrawObject::addGateButton(QPixmap *pic, QPoint position,
             SLOT(releasedOnGate(QString, QPoint)));
 }
 
+QPoint DrawObject::getGatePosition(QString gateName)
+{
+
+    QPoint gatePosition(-1,-1);
+
+    foreach(GateButton * gate, gateVector){
+
+        if(gate->getGateName() == gateName){
+            gatePosition = gate->pos();
+            break;
+        }
+    }
+
+    return gatePosition;
+}
+
 void DrawObject::modifyMask(QPixmap *pic, QPoint position) {
     // safe dimensions
     int height = pic->height();

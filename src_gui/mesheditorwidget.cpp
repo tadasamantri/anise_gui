@@ -241,8 +241,8 @@ bool MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
 
         newLine.destNodeID = nodeID;
         newLine.destGateName = gateName;
-        //this is the InputGate where Connection ends
-        newLine.wayPoints.push_back(position + SingletonRender::instance()->getInputGateDrawOffset());
+        //delete first wayPoint -> later on it is always calculated when connection is going to be drawn
+        newLine.wayPoints.pop_front();
         // call Datastuff to create Connection
         // do this if connection is established
         /*int ID = */Data::instance()->addConnectionToMesh(NodeFactory::createConnection(
@@ -272,7 +272,7 @@ bool MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
         newLine.srcNodeID = nodeID;
         newLine.srcGateName = gateName;
         //this is the OutputGatePosition where Connection starts
-        newLine.wayPoints.push_back(position + SingletonRender::instance()->getOutputGateDrawOffset());
+        newLine.wayPoints << (position + SingletonRender::instance()->getOutputGateDrawOffset());
 
         // Do Everything that Changed when Clicking on a gate
         newLine.drawLine = !(newLine.drawLine);
