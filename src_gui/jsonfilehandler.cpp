@@ -235,10 +235,10 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             QVector<QPoint> waypoints;
 
             //start position of the connection
-            waypoints<< src_node->getGatePosition(theConnection["src_gate"].toString());
+            //waypoints<< src_node->getGatePosition(theConnection["src_gate"].toString());
 
             //end position of the connections
-            waypoints<<  dest_node->getGatePosition(theConnection["dest_gate"].toString());
+            //waypoints<<  dest_node->getGatePosition(theConnection["dest_gate"].toString());
 
 
             //waypoints<< source << destination;

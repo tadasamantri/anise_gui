@@ -47,32 +47,42 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID) {
     // will draw a line connecting all connection joints of a connection
 
     QVector<QLine> tempVec;
+
+    //gate positions are not included in waypoints, thus we have to get begin end endposition of connection
     QPoint srcGatePosition, destGatePosition;
     DrawObject *src = allDrawnNodes.value(conToRender->getSrcNode()->getID()),
             *dest = allDrawnNodes.value(conToRender->getDestNode()->getID());
-    if(!(src && dest))
+    if(!(src && dest))  //just for safety reasons
         return;
     srcGatePosition = src->getGatePosition(conToRender->getSrcGate()->getName()) + outPutGateDrawOffset + src->pos();
     destGatePosition = dest->getGatePosition(conToRender->getDestGate()->getName()) + inputGateDrawOffset + dest->pos() ;
 
     // create new Lines
+    // if no waypoints are given, that means no joints are in connection, than create on in the middle of the line
+    if(conToRender->waypoints.isEmpty())
+        conToRender->waypoints << 0.5 * (srcGatePosition + destGatePosition);
+
+    //draw lines of a connection
     for (int index = 0; index < conToRender->waypoints.size() - 1; index++) {
         tempVec << QLine(conToRender->waypoints.at(index),
                          conToRender->waypoints.at(index + 1));
     }
-    if(conToRender->waypoints.isEmpty())
-        tempVec << QLine(srcGatePosition, destGatePosition);
-    else{
-        tempVec.push_front(QLine(srcGatePosition, conToRender->waypoints.first()));
-        tempVec << QLine(conToRender->waypoints.last(), destGatePosition);
-    }
+
+        tempVec.push_front(QLine(srcGatePosition, conToRender->waypoints.first())); // first line
+        tempVec << QLine(conToRender->waypoints.last(), destGatePosition); //last line
+
     this->allLines.insert(ID, tempVec);
 
-    // create a new Vector for all Joints
-    QVector<DrawObject *> jointVector;
+        // create a new Vector for all Joints
+        QVector<DrawObject *> jointVector;
+
+    // if it is a new connection, we need to create joints
     if (!allConnections.contains(ID)) {
+
+
+
         // now draw all joints
-        foreach (QPoint joint, conToRender->waypoints) {
+        for(int i = 0; i < conToRender->waypoints.size(); i++) {
             if (!allImages.contains("joint.png")) {
                 qDebug() << "joint.png missing! cant draw connections!";
                 return;
