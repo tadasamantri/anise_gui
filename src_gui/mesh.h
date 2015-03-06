@@ -50,6 +50,8 @@ public:
 
     int getCurrentID();
     QString getValidAlternativeForName(const QString name);
+
+    void sort();
     ~Mesh();
 public slots:
     void setFocusMeshObject(int nodeID);

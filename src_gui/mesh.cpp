@@ -1,5 +1,6 @@
 #include "mesh.h"
 #include "data.h"
+#include "math.h"
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QSpinBox>
@@ -239,6 +240,42 @@ int Mesh::getCurrentID() { return iDCounter; }
 
 
 void Mesh::updateConnStartAndEnd(){
+}
+
+void Mesh::sort(){
+
+    //this will sort any mesh depending on the connections
+
+    //first remove all waypoints of each connection, later the renderclass will add new waypoints if none are found
+    foreach (Connection *c, this->getAllConnections()) {
+        c->waypoints.clear();
+    }
+
+    //now sort all nodes in a circle
+    int numberOfNodes = this->getAllNodes().size();
+
+    double degreeDistance = 2.0*M_PI/float(numberOfNodes);
+
+    double nodeDistance = 80; //distance to the next node; higher value make the circle bigger
+
+    double radius = (nodeDistance * numberOfNodes)/(2.0*M_PI); //M_PI = pi
+
+    double angle = 0;
+
+    int posx, posy;
+
+    foreach (Node *n, this->getAllNodes()) {
+
+
+        posx = int(radius * cos(angle) + radius);
+        qDebug() << "cos " << cos(angle) << " sin " << sin(angle) << " degree: " << angle;
+        posy = int(radius * sin(angle) + radius);
+
+        n->setPosition(posx, posy);
+        angle += degreeDistance;
+    }
+
+
 }
 
 Mesh::~Mesh(){

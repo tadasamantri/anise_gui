@@ -132,6 +132,10 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
  * @param connectionlist List in which the connections will be written
  */
 void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
+
+    bool hasPositionData = true;
+
+
     // check if there are any nodes
     int i = 1, j = 1;  // for debug only
     if (!obj["nodes"].isArray()) {
@@ -187,30 +191,7 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             // do some default stuff
 
             else {
-                //Positions schätzung
-                counter++;
-
-                int offset = 100;
-
-                int posx = 0;
-                int posy = 0;
-
-                //nodes with only outputs should be set left
-                if(createdNode->getInputGates()->size() == 0){
-                    posy += counter * offset;
-                }else if(createdNode->getOutputGates()->size() == 0){
-                    posx += offset * 12;
-                    posy += counter * offset;
-                }
-                else{
-                    posy += counter * offset;
-                    posx += offset *(counter + createdNode->getOutputGates()->size() + createdNode->getInputGates()->size());
-                }
-
-
-
-
-                createdNode->setPosition(posx+20,posy+20);
+                hasPositionData = false;
             }
             // node is complete, so let's insert it
 
@@ -273,6 +254,12 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
 
         qDebug() << "adding connection to Mesh";
         mesh->addConnection(connection);
+    }
+    qDebug() << "all connections added";
+
+    if (hasPositionData == false) {
+        qDebug()<< "position data missing";
+        mesh->sort();
     }
 }
 
