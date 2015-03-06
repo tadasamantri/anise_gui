@@ -143,6 +143,7 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
     Mesh *mesh = Data::instance()->getMesh();
 
     // for every node (represented as jsonvalue)...
+    int counter = 0;
     foreach (QJsonValue var, obj["nodes"].toArray()) {
         //...convert it to json object...
         QJsonObject theNode = var.toObject();
@@ -186,8 +187,30 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             // do some default stuff
 
             else {
-                // TODO! bessere positions schätzung!
-                createdNode->setPosition(10+(qrand()%400),10+(qrand()%300));
+                //Positions schätzung
+                counter++;
+
+                int offset = 100;
+
+                int posx = 0;
+                int posy = 0;
+
+                //nodes with only outputs should be set left
+                if(createdNode->getInputGates()->size() == 0){
+                    posy += counter * offset;
+                }else if(createdNode->getOutputGates()->size() == 0){
+                    posx += offset * 12;
+                    posy += counter * offset;
+                }
+                else{
+                    posy += counter * offset;
+                    posx += offset *(counter + createdNode->getOutputGates()->size() + createdNode->getInputGates()->size());
+                }
+
+
+
+
+                createdNode->setPosition(posx+20,posy+20);
             }
             // node is complete, so let's insert it
 
