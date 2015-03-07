@@ -252,14 +252,14 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
 
         }
 
-        qDebug() << "adding connection to Mesh";
+
         mesh->addConnection(connection);
     }
-    qDebug() << "all connections added";
+    //all connections added"
 
     if (hasPositionData == false) {
         qDebug()<< "position data missing";
-        mesh->sort();
+        mesh->sortForce();
     }
 }
 

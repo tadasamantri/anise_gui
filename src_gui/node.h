@@ -71,8 +71,8 @@ public:
 
     Gate *getGateByName(const QString &name);
     void addParam(QString key, parameter p);
-    int x();
-    int y();
+    float x();
+    float y();
 
     QString getDescription();
     void setDescription(const QString &value);

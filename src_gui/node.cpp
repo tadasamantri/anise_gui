@@ -170,9 +170,9 @@ void Node::addParam(QString key, Node::parameter p)
     params[key] = p;
 }
 
-int Node::x() { return position_x; }
+float Node::x() { return position_x; }
 
-int Node::y() { return position_y; }
+float Node::y() { return position_y; }
 
 void Node::setX(const int &newX) { position_x = newX; }
 
