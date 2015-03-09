@@ -63,7 +63,7 @@ MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::on_actionLoad_triggered() {
 
-    this->on_actionNew_triggered();
+
 
     qDebug() << "Trying to open FileDialog";
     QString fileName = QFileDialog::getOpenFileName(
@@ -74,6 +74,7 @@ void MainWindow::on_actionLoad_triggered() {
              << "\nnow let's load it to the FileHandler!";
 
     if (fileName == "") return;
+    this->on_actionNew_triggered();
     QJsonObject *obj = JsonFileHandler::readFile(fileName);
     JsonFileHandler::extractNodesAndConnections(*obj);
     SingletonRender::instance()->renderMesh(Data::instance()->getMesh());
@@ -101,15 +102,19 @@ void MainWindow::on_actionNew_triggered() {
 
 void MainWindow::on_actionLoad_Catalog_triggered() {
 
+    //the old ndoes should be deleted!
 
     QString out = AniseCommunicator::getAllNodeTypes();
+    //Data::instance()->getNodeCatalog()->Content.clear();
     JsonFileHandler::parseNodeTypesFromAnise(out);
+    //SingletonRender::instance()->renderCatalogContent(Data::instance()->getNodeCatalog()->Content.values().toVector());
+
+
 }
 
 void MainWindow::on_actionSave_triggered() {
     Mesh *theMesh = Data::instance()->getMesh();
-    QString fileName =
-            QFileDialog::getSaveFileName(this, "Save current project to...", "",
+    QString fileName = QFileDialog::getSaveFileName(this, "Save current project to...", "",
                                          "Mesh-Files (*.mesh *.json);;All Files(*)");
     if(!(fileName.endsWith(".json",Qt::CaseInsensitive) || fileName.endsWith(".mesh", Qt::CaseInsensitive)))
         fileName += ".mesh";
