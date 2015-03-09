@@ -13,6 +13,20 @@ Mesh::Mesh(QObject *parent) : QObject(parent) {
     this->focusObject = -1;
     tableExists = false;
 }
+
+bool Mesh::checkConnection(int srcNodeID, QString srcGate, int destNodeID, QString destGate){
+    Node *srcN = nodesInMesh[srcNodeID], *destN = nodesInMesh[destNodeID];
+    if(!(srcN && destN))
+        return false;
+    Gate *srcG = srcN->getGateByName(srcGate), *destG = destN->getGateByName(destGate);
+    if(!(srcG && destG))
+        return false;
+    for(QString t : srcG->getTypes())
+        if(destG->hasType(t))
+            return true;
+    return false;
+}
+
 QList<Connection*> Mesh::getConnectionsToNode(int nodeID){
     QList<Connection*> list;
     for(Connection *c : connectionsInMesh){

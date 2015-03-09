@@ -153,15 +153,10 @@ QString Node::toString() {
 
 Gate *Node::getGateByName(const QString &name) {
 
-    foreach (Gate *gate, inputGates)
-        if (gate->getName() == name) {
+    foreach (Gate *gate, inputGates + outputGates)
+        if (gate->getName() == name)
             return gate;
-        }
 
-    foreach (Gate *gate, outputGates)
-        if (gate->getName() == name) {
-            return gate;
-        }
     return 0;
 }
 

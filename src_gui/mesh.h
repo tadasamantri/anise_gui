@@ -56,6 +56,7 @@ public:
     void sortForce();
 
     ~Mesh();
+    bool checkConnection(int srcNodeID, QString srcGate, int destNodeID, QString destGate);
 public slots:
     void setFocusMeshObject(int nodeID);
     void updateNode(QTableWidgetItem *item);
