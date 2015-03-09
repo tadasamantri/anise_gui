@@ -62,6 +62,9 @@ void MainWindow::initializeGUI() {
 MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::on_actionLoad_triggered() {
+
+    this->on_actionNew_triggered();
+
     qDebug() << "Trying to open FileDialog";
     QString fileName = QFileDialog::getOpenFileName(
                 this, "Load previously saved mesh", "",
@@ -97,6 +100,8 @@ void MainWindow::on_actionNew_triggered() {
 }
 
 void MainWindow::on_actionLoad_Catalog_triggered() {
+
+
     QString out = AniseCommunicator::getAllNodeTypes();
     JsonFileHandler::parseNodeTypesFromAnise(out);
 }
@@ -106,6 +111,8 @@ void MainWindow::on_actionSave_triggered() {
     QString fileName =
             QFileDialog::getSaveFileName(this, "Save current project to...", "",
                                          "Mesh-Files (*.mesh *.json);;All Files(*)");
+    if(!(fileName.endsWith(".json",Qt::CaseInsensitive) || fileName.endsWith(".mesh", Qt::CaseInsensitive)))
+        fileName += ".mesh";
     JsonFileHandler::saveMesh(fileName, theMesh);
 
 }
@@ -117,8 +124,8 @@ void MainWindow::updatePropertyTable(int nodeID) {
         deleteTable();
         Node *n = Data::instance()->getMesh()->getNodeByID(nodeID);
         QMap<QString, Node::parameter> *map = n->getParams();
-        table->setRowCount(map->size() + 3);
-
+        table->setRowCount(map->size() + 5);
+        int i = 0;
         // create the entries all nodes have
         QTableWidgetItem *name = new QTableWidgetItem(),
                 *ID = new QTableWidgetItem(),
@@ -129,18 +136,59 @@ void MainWindow::updatePropertyTable(int nodeID) {
         name->setData(0, n->getName());
         type->setData(0, n->getType());
 
-        // asign to table
-        table->setItem(0, 0, new QTableWidgetItem("NodeID"));
-        table->setItem(0, 1, ID);
-        table->item(0, 0)->setFlags(table->item(0, 0)->flags() ^
-                                    (Qt::ItemIsEnabled | Qt::ItemIsSelectable));
-        table->setItem(1, 0, new QTableWidgetItem("Node Class"));
-        table->setItem(1, 1, type);
-        table->item(1, 0)->setFlags(table->item(1, 0)->flags() ^
-                                    (Qt::ItemIsEnabled | Qt::ItemIsSelectable));
+        // asign to table:
 
-        table->setItem(2, 0, new QTableWidgetItem("Node Name"));
-        table->setItem(2, 1, name);
+        //NodeID
+        table->setItem(i, 0, new QTableWidgetItem("NodeID"));
+        table->setItem(i, 1, ID);
+        table->item(i, 0)->setFlags(table->item(0, 0)->flags() ^
+                                    (Qt::ItemIsEnabled | Qt::ItemIsSelectable));
+        i++;
+
+        //Node Class
+        table->setItem(i, 0, new QTableWidgetItem("Node Class"));
+        table->setItem(i, 1, type);
+        table->item(i, 0)->setFlags(table->item(i, 0)->flags() ^
+                                    (Qt::ItemIsEnabled | Qt::ItemIsSelectable));
+        i++;
+
+        //input Gates
+
+        bool moreThanOne = n->getInputGates()->size()>1;
+        if(!n->getInputGates()->isEmpty()){
+            QString types;
+            for(Gate *g : *n->getInputGates())
+                for(QString s : g->getTypes())
+                    types += s + ", ";
+            types.chop(2);
+            QTableWidgetItem *in = new QTableWidgetItem();
+            in->setText(types);
+            in->setFlags(in->flags() ^ (Qt::ItemIsEditable | Qt::ItemIsSelectable));
+            table->setItem(i,0, new QTableWidgetItem("Input" + QString((moreThanOne?"s":""))));
+            table->setItem(i,1,in);
+            table->item(i,1)->setToolTip(types);
+            i++;
+        }
+
+        //output gates
+        moreThanOne = n->getOutputGates()->size()>1;
+        if(!n->getInputGates()->isEmpty()){
+            QString types;
+            for(Gate *g : *n->getOutputGates())
+                for(QString s : g->getTypes())
+                    types += s + ", ";
+            types.chop(2);
+            QTableWidgetItem *out = new QTableWidgetItem;
+            out->setText(types);
+            out->setFlags(out->flags() ^ (Qt::ItemIsEditable | Qt::ItemIsSelectable));
+            table->setItem(i,0, new QTableWidgetItem("Output" + QString((moreThanOne?"s":""))));
+            table->setItem(i,1,out);
+            table->item(i,1)->setToolTip(types);
+            i++;
+        }
+        table->setItem(i, 0, new QTableWidgetItem("Node Name"));
+        table->setItem(i, 1, name);
+        i++;
 
         // make name editable
         name->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable |
@@ -151,19 +199,22 @@ void MainWindow::updatePropertyTable(int nodeID) {
                                     Qt::ItemIsEnabled));
         type->setFlags(type->flags() ^ (Qt::ItemIsEditable | Qt::ItemIsSelectable |
                                         Qt::ItemIsEnabled));
-        for (int i = 0; i < 3; i++)
-            table->item(i, 0)->setFlags(table->item(i, 0)->flags() ^
+
+        for (int j = 0; j < i; j++)
+            table->item(j, 0)->setFlags(table->item(j, 0)->flags() ^
                                         (Qt::ItemIsEditable | Qt::ItemIsSelectable));
         QStringList keys = map->keys();
-        for (int i = 0; i < keys.size(); i++) {
+        int count = i;
+        for (int j = 0; j < keys.size(); j++) {
+            count++;
             // create key item
-            QString key = keys.value(i);
+            QString key = keys.value(j);
             QTableWidgetItem *key_item = new QTableWidgetItem((*map)[key].name);
             key_item->setData(Qt::UserRole,key);
             key_item->setFlags(key_item->flags() ^
                                (Qt::ItemIsEditable | Qt::ItemIsSelectable));
             key_item->setToolTip((*map)[key].descr);
-            table->setItem(3 + i, 0, key_item);
+            table->setItem(i + j, 0, key_item);
 
             // create value item
             QVariant value = map->value(key).value;
@@ -175,7 +226,7 @@ void MainWindow::updatePropertyTable(int nodeID) {
                 // value_item->setData(0, value);
                 value_item->setCheckState(value.toBool() ? Qt::Checked
                                                          : Qt::Unchecked);
-                table->setItem(3 + i, 1, value_item);
+                table->setItem(i + j, 1, value_item);
                 break;
             /*case QVariant::Int:
                 spinner = new QSpinBox(table);
@@ -195,10 +246,11 @@ void MainWindow::updatePropertyTable(int nodeID) {
 
                 value_item->setData(Qt::UserRole, value);
                 value_item->setText(value.toString());
-                table->setItem(3 + i, 1, value_item);
+                table->setItem(i + j, 1, value_item);
                 break;
             }
         }
+        table->setRowCount(count);
         connect(table, SIGNAL(itemChanged(QTableWidgetItem*)), Data::instance()->getMesh(), SLOT(updateNode(QTableWidgetItem*)));
         table->resizeColumnsToContents();
         if(ui->details->checkState() == Qt::Checked)
@@ -223,45 +275,84 @@ void MainWindow::displayTypeInfo(const QString &type) {
     deleteTable();
     QTableWidget *table = ui->tableWidget;
     Node n = *Data::instance()->getNodeCatalog()->getPointerOfType(type);
-    int ins = 0, outs = 0, offset = 3;
-    ins = n.getInputGates()->size();
-    outs = n.getOutputGates()->size();
-
+    //i is to count the rows set up
+    int i = 0;
     const QMap<QString, Node::parameter> *params = n.getParams();
-    table->setRowCount(((params->size()) + 3));
+
+    //init the table
+    table->setRowCount(((params->size()) + 4));
     table->setColumnCount(2);
-    table->setItem(0, 0, new QTableWidgetItem("Type"));
-    table->setItem(0, 1, new QTableWidgetItem(type));
-    table->setItem(1, 0, new QTableWidgetItem("Input Gates"));
-    table->setItem(1, 1, new QTableWidgetItem(QString::number(ins)));
-    table->setItem(2, 0, new QTableWidgetItem("Output Gates"));
-    table->setItem(2, 1, new QTableWidgetItem(QString::number(outs)));
+
+    //print the Node Type
+    table->setItem(i, 0, new QTableWidgetItem("Type"));
+    table->setItem(i, 1, new QTableWidgetItem(type));
+    QFont f1 = table->item(i,1)->font(), f2 = table->item(i,0)->font();
+    f1.setBold(true);
+    f2.setBold(true);
+    table->item(i,0)->setFont(f2);
+    table->item(i++,1)->setFont(f1);
+
+
+    //print input gates
+    QVector<Gate*> *gates = n.getInputGates();
+    bool moreThanOneGate = gates->size()>1;
+    QString gateTypes;
+    //if there are inputs, print them
+    if(!gates->isEmpty()) {
+        table->setItem(i, 0, new QTableWidgetItem("Input" + QString((moreThanOneGate?"s":""))));
+        for(Gate *g : *gates)
+            for(QString s : g->getTypes())
+                gateTypes += s + ", ";
+        gateTypes.chop(2);
+        table->setItem(i++, 1, new QTableWidgetItem(gateTypes));
+    }
+
+
+    //print outputs
+    gateTypes = "";
+    gates = n.getOutputGates();
+    moreThanOneGate = gates->size()>1;
+    if(!gates->isEmpty()){
+        for(Gate *g : *gates)
+            for(QString s : g->getTypes())
+                gateTypes += s + ", ";
+        gateTypes.chop(2);
+        table->setItem(i, 0, new QTableWidgetItem("Output" + QString((moreThanOneGate?"s":""))));
+        table->setItem(i++, 1, new QTableWidgetItem(gateTypes));
+    }
+
     QString descr = n.getDescription();
     if(descr != "")
     {
         table->setRowCount(table->rowCount() + 1);
-        table->setItem(offset, 0, new QTableWidgetItem("Description"));
-        table->setItem(offset++, 1, new QTableWidgetItem(descr));
-        table->item(offset -1,1)->setToolTip(descr);
+        table->setItem(i, 0, new QTableWidgetItem("Description"));
+        table->setItem(i, 1, new QTableWidgetItem(descr));
+        table->item(i++,1)->setToolTip(descr);
     }
     QList<QString> keys = params->keys();
-    for (int i = 0; i < keys.size(); i++) {
-        table->setItem(i + offset, 0, new QTableWidgetItem((*params)[keys[i]].name));
-        table->setItem(i + offset, 1, new QTableWidgetItem((*params)[keys[i]].type));
-        table->item(i + offset, 1)->setToolTip((*params)[keys[i]].descr);
+    for (int j = 0; j < keys.size(); j++) {
+        table->setItem(i, 0, new QTableWidgetItem((*params)[keys[j]].name));
+        table->setItem(i, 1, new QTableWidgetItem((*params)[keys[j]].type));
+        table->item(i, 1)->setToolTip((*params)[keys[j]].descr);
+        i++;
     }
-
+    table->setRowCount(i);
     for (int col = 0; col < table->columnCount(); col++)
         for (int row = 0; row < table->rowCount(); row++)
-            table->item(row, col)->setFlags(Qt::ItemIsEnabled);
-    table->resizeColumnsToContents();
+            if(table->item(row,col))
+                table->item(row, col)->setFlags(Qt::ItemIsEnabled);
+    table->resizeColumnToContents(0);
+    table->resizeColumnToContents(1);
+    for(int col = 0; col < table->columnCount();col++)
+        for(int row = 0;row < table->rowCount();row++)
+            table->item(row,col)->setToolTip(table->item(row,col)->text());
     if(ui->details->checkState() == Qt::Checked)
         table->show();
 }
 
 void MainWindow::on_details_stateChanged(int arg1)
 {
-    if(arg1)
+    if(arg1 && Data::instance()->getFocusedID() != -1)
         ui->tableWidget->show();
     else
         ui->tableWidget->hide();

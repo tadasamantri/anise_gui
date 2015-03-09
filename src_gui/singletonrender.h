@@ -18,6 +18,18 @@ public:
     // will load all images in ../Data/Images/ into the allImages Map
     bool loadImages();
 
+    //16 by 16 Tile images for the node
+    /*
+     * 0|1|2
+     * 3|4|5
+     * 6|7|8
+     */
+    QPixmap nodeTiles[9];
+
+    bool createTilesFromImage(QPixmap *Sprite);
+
+    QPixmap* createTiledPixmap(int x, int y);
+
     void setUi(Ui::MainWindow *ui);
 
     /*
@@ -101,6 +113,9 @@ public:
     void dehighlightObject(int ID);
     void highlightObject(int ID);
 
+    QPixmap *getImage(QString name);
+    void highlightGates(QString gateType);
+    void dehighlightGates();
 private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
 
@@ -153,6 +168,9 @@ private:
 
     // pointer to this instance
     static SingletonRender *m_pInstance;
+
+
+    void moveJointsOnWaypoints(Connection *conToRender, int ID);
 };
 
 #endif  // SINGLETONRENDER_H

@@ -20,7 +20,7 @@ void DragWidget::mousePressEvent(QMouseEvent *event) {
         return;
     }
 
-    NodeTypeLabel *child = static_cast<NodeTypeLabel *>(childAt(event->pos()));
+    NodeTypeLabel *child = dynamic_cast<NodeTypeLabel *>(childAt(event->pos()));
     if (!child) {
         //if there is no child at this position - return
         return;
@@ -38,6 +38,8 @@ void DragWidget::mousePressEvent(QMouseEvent *event) {
     int id = 0;
     dataStream << id;
     dataStream << child->getType();
+
+
 
 
 

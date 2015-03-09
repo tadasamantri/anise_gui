@@ -5,8 +5,8 @@
 #include<QTableWidgetItem>
 
 class Mesh : public QObject {
+    friend class Data;
     Q_OBJECT
-
 public:
     // konstruktor
     explicit Mesh(QObject *parent = 0);
@@ -51,7 +51,10 @@ public:
     int getCurrentID();
     QString getValidAlternativeForName(const QString name);
 
-    void updateConnections(int ID, QPoint offset);
+    void sortCircle();
+    void sortRow();
+    void sortForce();
+
     ~Mesh();
 public slots:
     void setFocusMeshObject(int nodeID);

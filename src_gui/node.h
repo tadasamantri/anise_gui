@@ -71,8 +71,8 @@ public:
 
     Gate *getGateByName(const QString &name);
     void addParam(QString key, parameter p);
-    int x();
-    int y();
+    float x();
+    float y();
 
     QString getDescription();
     void setDescription(const QString &value);
@@ -81,6 +81,8 @@ public:
     int getID() const;
     void setID(int value);
     QPoint getPosition();
+    QPoint getGatePosition(QString gateName);
+    Node::parameter getParamStructByKey(const QString &key);
 private:
     bool addParam(QString descr, QString _key, QString name, QString type, QVariant _value);
     QString description;

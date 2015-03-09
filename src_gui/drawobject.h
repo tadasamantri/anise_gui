@@ -7,6 +7,7 @@
 #include <QVector>
 #include <QBitmap>
 #include <QPushButton>
+#include "gatebutton.h"
 
 class DrawObject : public QWidget {
 
@@ -18,7 +19,7 @@ public:
 
     DrawObject(int id, QPoint position, int width , int height, QWidget *parent = 0, int highlightWidth = 3);
 
-    QVector<QPushButton*> buttonvector;
+    QVector<GateButton*> gateVector;
 
 
 
@@ -30,7 +31,9 @@ public:
 
     void addPicture (QPixmap *pic, QPoint position);
     void addPicture(QPixmap *pic, QPoint position, QString typeName);
-    void addGateButton(QPixmap *pic, QPoint position, QString gateName);
+    void addGateButton(QPixmap *pic, QPoint position, QString gateName, QString gateType, bool direction);
+
+    QPoint getGatePosition(QString gateName);
 
     //Modify the mask of the drawobject inserting the mask of the pixmap at given position
     void modifyMask(QPixmap *pic, QPoint position);
@@ -45,6 +48,9 @@ public:
     void paintEvent(QPaintEvent *);
     int getHighlightWidth() const;
 
+
+    void dehighlightGates();
+    void highlightGates(QString gateType);
 
 signals:
 

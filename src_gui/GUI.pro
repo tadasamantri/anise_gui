@@ -28,7 +28,6 @@ SOURCES += main.cpp\
     mesheditorwidget.cpp \
     data.cpp \
     singletonrender.cpp \
-    testdrawobject.cpp \
     nodetypelabel.cpp \
     gatebutton.cpp
 
@@ -57,6 +56,7 @@ FORMS    += mainwindow.ui
 
 QMAKE_CXXFLAGS += -std=c++14
 
+#use O3 flag for optimisation
 QMAKE_CXXFLAGS_RELEASE += -O3
 
 QMAKE_POST_LINK = cp -R ../Data $${DESTDIR}

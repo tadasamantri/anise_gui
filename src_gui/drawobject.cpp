@@ -84,7 +84,7 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position, QString typeName) {
 }
 
 void DrawObject::addGateButton(QPixmap *pic, QPoint position,
-                               QString gateName) {
+                               QString gateName, QString gateType, bool direction) {
     // safe dimensions
     int height = pic->height();
     int width = pic->width();
@@ -93,10 +93,10 @@ void DrawObject::addGateButton(QPixmap *pic, QPoint position,
     position += QPoint(highlightWidth, highlightWidth);
 
     // Instanstiate the drawing to be shown
-    GateButton *button = new GateButton(gateName, ID, this);
+    GateButton *button = new GateButton(gateName, gateType, ID, direction, this);
     button->setGeometry(position.x(), position.y(), width, height);
     button->setIcon(*pic);
-    this->buttonvector << button;
+    this->gateVector << button;
     // Now set the masks to the widgets
     button->setMask(pic->mask());
 
@@ -109,6 +109,22 @@ void DrawObject::addGateButton(QPixmap *pic, QPoint position,
     // Connect button signal to appropriate slot
     connect(button, SIGNAL(released(QString, QPoint)), this,
             SLOT(releasedOnGate(QString, QPoint)));
+}
+
+QPoint DrawObject::getGatePosition(QString gateName)
+{
+
+    QPoint gatePosition(-1,-1);
+
+    foreach(GateButton * gate, gateVector){
+
+        if(gate->getGateName() == gateName){
+            gatePosition = gate->pos();
+            break;
+        }
+    }
+
+    return gatePosition;
 }
 
 void DrawObject::modifyMask(QPixmap *pic, QPoint position) {
@@ -247,4 +263,27 @@ void DrawObject::paintEvent(QPaintEvent *) {
     opt.init(this);
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+}
+
+void DrawObject::highlightGates(QString gateType){
+
+    foreach(GateButton *gate, gateVector){
+        //if(gate->isInput()){
+
+            if(gate->getDirection() && gate->getGateType() == gateType)
+                gate->setHighlightMode(true);
+            else
+                gate->setHighlightMode(false);
+        //}
+    }
+}
+
+void DrawObject::dehighlightGates(){
+
+    foreach(GateButton *gate, gateVector){
+
+        //if(gate->isInput())
+            gate->resetPicture();
+    }
+
 }

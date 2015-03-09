@@ -105,8 +105,9 @@ void Data::initialize(MainWindow *mainWindow) {
 int Data::addNodeToMesh(Node *newNode) {
     int id = this->mesh->addNode(newNode);
     // A new created Node is always focussed in the beginning
-    mesh->setFocusMeshObject(id);
+
     if(id >= 0)SingletonRender::instance()->renderMesh(this->mesh);
+    mesh->setFocusMeshObject(id);
 
     return id;
 }
@@ -121,6 +122,11 @@ int Data::addConnectionToMesh(Connection *newConnection) {
     int id = this->mesh->addConnection(newConnection);
     SingletonRender::instance()->renderMesh(this->mesh);
     return id;
+}
+
+int Data::getFocusedID()
+{
+    return mesh->focusObject;
 }
 
 /**
@@ -166,7 +172,6 @@ void Data::moveObjectInMesh(QPoint *Position, int ID) {
     if (this->mesh->nodesInMesh.contains(ID)) {
         QPoint offset = *Position - mesh->getNodeByID(ID)->getPosition();
         this->mesh->getNodeByID(ID)->setPosition(Position->x(), Position->y());
-        mesh->updateConnections(ID, offset);
         SingletonRender::instance()->renderMesh(this->mesh);
 
     } else if (this->mesh->connectionsInMesh.contains(ID)) {
@@ -204,3 +209,15 @@ Data::~Data() {
 }
 
 NodeCatalog *Data::getNodeCatalog() { return nodeCatalog; }
+
+void Data::setDrawLineMode(QString gateType){
+
+    this->mesh->setFocusMeshObject(-1);
+    SingletonRender::instance()->highlightGates(gateType);
+}
+
+void Data::setEditMode(){
+
+    SingletonRender::instance()->dehighlightGates();
+}
+
