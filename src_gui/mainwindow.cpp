@@ -116,6 +116,7 @@ void MainWindow::on_actionSave_triggered() {
     Mesh *theMesh = Data::instance()->getMesh();
     QString fileName = QFileDialog::getSaveFileName(this, "Save current project to...", "",
                                          "Mesh-Files (*.mesh *.json);;All Files(*)");
+
     if(!(fileName.endsWith(".json",Qt::CaseInsensitive) || fileName.endsWith(".mesh", Qt::CaseInsensitive)))
         fileName += ".mesh";
     JsonFileHandler::saveMesh(fileName, theMesh);

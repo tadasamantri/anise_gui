@@ -76,6 +76,7 @@ private:
     void restToEditMode();
 
     bool correctGate(int nodeID, QString gateName);
+
 signals:
 
     void onWidgetClicked(int nodeID);

@@ -40,6 +40,8 @@ void MeshEditorWidget::restToEditMode()
 
 void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     this->mouseMoveDistance += 100;
+
+
     // ensure a left-mouse-click
     if (!(event->button() == Qt::LeftButton)) {
         this->restToEditMode();
@@ -48,11 +50,28 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
 
     // drawLine Mode
     if (newLine.drawLine) {
+
         // Check if i clicked on a child
         QObject *child = childAt(event->pos());
+
         if(!child){
             // add a way point for the line to draw
             this->newLine.wayPoints.push_back(event->pos());
+
+        }else if(dynamic_cast<QLabel*>(child)){
+            //clicked object is a label
+
+            QLabel *label = dynamic_cast<QLabel*>(child);
+            if(dynamic_cast<DrawObject *>(label->parent())){
+                //clicked object is part of a drawobject
+
+                DrawObject *draObj = dynamic_cast<DrawObject *>(label->parent());
+
+                //drawobject has an id and can be compared to source node
+                if (draObj->ID == newLine.srcNodeID) {
+                    this->restToEditMode();
+                }
+            }
         }
     }
 
@@ -225,19 +244,23 @@ bool MeshEditorWidget::containsID(int objectID) {
     return false;
 }
 
-bool MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
-                                       QPoint position) {
+bool MeshEditorWidget::handleGateClick(int nodeID, QString gateName, QPoint position) {
+
+    //stop connection creation when clicked on an outgate of the source node
+    if (nodeID == newLine.srcNodeID && gateName == newLine.srcGateName) {
+        this->restToEditMode();
+        return false;
+    }
 
     //Do nothing if you clicked on wrong Gate
-    if(!correctGate(nodeID, gateName))
+    else if(!correctGate(nodeID, gateName)){
         return false;
-
+    }
 
 
 
     // That means we are currently constructing a line
     if (newLine.drawLine) {
-
 
         newLine.destNodeID = nodeID;
         newLine.destGateName = gateName;
@@ -298,6 +321,8 @@ void MeshEditorWidget::changeLineDrawMode()
     }
     else setCursor(Qt::ArrowCursor);
 }
+
+
 
 bool MeshEditorWidget::correctGate(int nodeID, QString gateName){
     
