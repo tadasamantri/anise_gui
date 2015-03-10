@@ -137,8 +137,7 @@ void MainWindow::on_actionLoad_Catalog_triggered() {
 }
 
 QString MainWindow::saveDialog(){
-    QString fileName;
-    QFileDialog::getSaveFileName(this, "Save current project to...", "",
+    QString fileName = QFileDialog::getSaveFileName(this, "Save current project to...", "",
                                  "Mesh-Files (*.mesh *.json);;All Files(*)");
 
     if(!(fileName.endsWith(".json",Qt::CaseInsensitive) || fileName.endsWith(".mesh", Qt::CaseInsensitive)))
