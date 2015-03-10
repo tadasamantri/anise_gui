@@ -23,6 +23,7 @@ public:
      void deleteTable();
     void updatePropertyTable(int nodeID);
     void displayTypeInfo(const QString &type);
+    static int const EXIT_CODE_REBOOT;
 public slots:
 
 private slots:
@@ -42,7 +43,7 @@ private slots:
 
 private:
     void initializeGUI();
-
+    bool pathChanged = false;
 };
 
 #endif  // MAINWINDOW_H

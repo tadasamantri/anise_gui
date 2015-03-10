@@ -6,12 +6,12 @@
 #include "singletonrender.h"
 
 int main(int argc, char *argv[]) {
-    QApplication application(argc, argv);
-
-    // SingletonRender::instance();
-
-    MainWindow window;
-    window.show();
-
-    return application.exec();
+    int exitCode = 0;
+    do{
+        QApplication application(argc, argv);
+        MainWindow window;
+        window.show();
+        exitCode = application.exec();
+    }while(exitCode == MainWindow::EXIT_CODE_REBOOT);
+    return exitCode;
 }

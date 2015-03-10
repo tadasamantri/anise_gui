@@ -92,7 +92,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>624</width>
+            <width>621</width>
             <height>63</height>
            </rect>
           </property>
@@ -230,8 +230,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>611</width>
-            <height>285</height>
+            <width>608</width>
+            <height>292</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -339,6 +339,13 @@
      </widget>
     </item>
     <item>
+     <widget class="Line" name="line_3">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QTableWidget" name="tableWidget">
       <property name="enabled">
        <bool>true</bool>
@@ -362,7 +369,7 @@
        </size>
       </property>
       <property name="columnCount">
-       <number>4</number>
+       <number>2</number>
       </property>
       <attribute name="horizontalHeaderCascadingSectionResizes">
        <bool>true</bool>
@@ -383,8 +390,6 @@
         <string>Value</string>
        </property>
       </column>
-      <column/>
-      <column/>
      </widget>
     </item>
    </layout>
@@ -395,7 +400,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>25</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -405,9 +410,9 @@
     <addaction name="actionNew"/>
     <addaction name="actionSave"/>
     <addaction name="actionLoad"/>
-    <addaction name="actionLoad_Catalog"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
+    <addaction name="actionLoad_Catalog"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -509,7 +514,7 @@
   </action>
   <action name="actionLoad_Catalog">
    <property name="text">
-    <string>Load Catalog</string>
+    <string>Restart</string>
    </property>
   </action>
  </widget>
