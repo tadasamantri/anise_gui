@@ -404,6 +404,5 @@ void DrawObject::deleteLater(){
 
 void DrawObject::deleteItemText(QListWidgetItem * item){
 
-    //item->setBackgroundColor(Qt::white);
     nameLabel->setStyleSheet("QListWidget::item:selected{background: transparent}");
 }
