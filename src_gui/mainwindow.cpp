@@ -142,6 +142,8 @@ void MainWindow::updatePropertyTable(int nodeID) {
         name->setData(0, n->getName());
         type->setData(0, n->getType());
 
+
+
         // asign to table:
 
         //NodeID
