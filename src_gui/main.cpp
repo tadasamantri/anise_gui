@@ -7,11 +7,11 @@
 
 int main(int argc, char *argv[]) {
     int exitCode = 0;
-    do{
-        QApplication application(argc, argv);
+    QApplication application(argc, argv);
+    do {
         MainWindow window;
         window.show();
         exitCode = application.exec();
-    }while(exitCode == MainWindow::EXIT_CODE_REBOOT);
+    } while (exitCode == MainWindow::EXIT_CODE_REBOOT);
     return exitCode;
 }

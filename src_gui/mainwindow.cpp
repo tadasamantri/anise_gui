@@ -93,7 +93,7 @@ void MainWindow::on_actionSet_framework_path_triggered() {
         pathChanged = true;
         int choice = QMessageBox::warning(this,"Path to Framework changed", "You changed the Path to the ANISE-Framework. To apply the changes a restart is required.\nDo you want to restart now?", QMessageBox::Yes, QMessageBox::Cancel);
         if(choice == QMessageBox::Yes)
-            on_actionLoad_Catalog_triggered();
+            emit ui->actionLoad_Catalog->triggered();
     }
 }
 
