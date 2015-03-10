@@ -18,12 +18,12 @@
 #include "nodecatalog.h"
 #include "data.h"
 
+int const MainWindow::EXIT_CODE_REBOOT = -123456789;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
     // Important to do first! SingletonRender is used in initialize GUI
     SingletonRender::instance()->setUi(this->ui);
-
-
     initializeGUI();
 
     //activates deleteItem when deletebutton is pressed
@@ -58,6 +58,26 @@ void MainWindow::initializeGUI() {
     Data::instance()->initialize(this);
 }
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    int choice = QMessageBox::question(this,"Save old project?","You attemted creating a new project.\n Do you want to save your current project?",(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel),QMessageBox::Yes);
+    bool ok = false;
+    if(choice == QMessageBox::Yes){
+        QString path = saveDialog();
+        ok = path != ".mesh";
+        if(ok)
+            saveFile(path);
+    }
+    else if(choice == QMessageBox::No)
+        ok = true;
+    if(ok)
+        event->accept();
+    else event->ignore();
+}
+
+void MainWindow::saveFile(QString &path){
+    JsonFileHandler::saveMesh(path, Data::instance()->getMesh());
+}
 
 MainWindow::~MainWindow() { delete ui; }
 
@@ -81,46 +101,54 @@ void MainWindow::on_actionLoad_triggered() {
 }
 
 void MainWindow::on_actionSet_framework_path_triggered() {
-    qDebug() << "Try to open Folder Chooser";
-    QFileDialog dialog(this);
-
+    QString old = SettingsHandler::loadSetting("frameworkpath");
     QString fileName =
             QFileDialog::getOpenFileName(this, "Set your framework path", "", "");
 
     SettingsHandler::storeSetting("frameworkpath", fileName);
     AniseCommunicator::setFrameworkPath(fileName);
+    if(old != fileName){
+        pathChanged = true;
+        int choice = QMessageBox::warning(this,"Path to Framework changed", "You changed the Path to the ANISE-Framework. To apply the changes a restart is required.\nDo you want to restart now?", QMessageBox::Yes, QMessageBox::Cancel);
+        if(choice == QMessageBox::Yes)
+            emit ui->actionLoad_Catalog->triggered();
+    }
 }
 
 void MainWindow::on_actionNew_triggered() {
-    // TODO ask if old is wished to thrown away if not saved
-    // qDebug() << "Mesh before NEW:\t Nodes: " <<
-    // Data::instance()->mesh->getAllNodes().size();
-    Data::instance()->newMeshProject();
-    // qDebug() << "Mesh after NEW:\t Nodes: " <<
-    // Data::instance()->mesh->getAllNodes().size();
+    int choice = QMessageBox::question(this,"Save old project?","You attemted creating a new project.\n Do you want to save your current project?",(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel),QMessageBox::Yes);
+    bool ok = false;
+    if(choice == QMessageBox::Yes){
+        QString path = saveDialog();
+        ok = path != ".mesh";
+        if(ok)
+            saveFile(path);
+    }
+    else if(choice == QMessageBox::No)
+        ok = true;
+    if(ok)
+        Data::instance()->newMeshProject();
 }
 
 void MainWindow::on_actionLoad_Catalog_triggered() {
 
-    //the old ndoes should be deleted!
-
-    QString out = AniseCommunicator::getAllNodeTypes();
-    //Data::instance()->getNodeCatalog()->Content.clear();
-    JsonFileHandler::parseNodeTypesFromAnise(out);
-    //SingletonRender::instance()->renderCatalogContent(Data::instance()->getNodeCatalog()->Content.values().toVector());
-
-
+    qDebug() << "perfoming reboot...";
+    qApp->exit(EXIT_CODE_REBOOT);
 }
 
-void MainWindow::on_actionSave_triggered() {
-    Mesh *theMesh = Data::instance()->getMesh();
-    QString fileName = QFileDialog::getSaveFileName(this, "Save current project to...", "",
-                                         "Mesh-Files (*.mesh *.json);;All Files(*)");
+QString MainWindow::saveDialog(){
+    QString fileName;
+    QFileDialog::getSaveFileName(this, "Save current project to...", "",
+                                 "Mesh-Files (*.mesh *.json);;All Files(*)");
 
     if(!(fileName.endsWith(".json",Qt::CaseInsensitive) || fileName.endsWith(".mesh", Qt::CaseInsensitive)))
         fileName += ".mesh";
-    JsonFileHandler::saveMesh(fileName, theMesh);
+    return fileName;
+}
 
+void MainWindow::on_actionSave_triggered() {
+    QString fileName = saveDialog();
+    saveFile(fileName);
 }
 
 void MainWindow::updatePropertyTable(int nodeID) {
@@ -230,13 +258,13 @@ void MainWindow::updatePropertyTable(int nodeID) {
             value_item->setToolTip((*map)[key].descr);
             //QSpinBox *spinner;
             switch (value.userType()) {
-            case QVariant::Bool:       
+            case QVariant::Bool:
                 // value_item->setData(0, value);
                 value_item->setCheckState(value.toBool() ? Qt::Checked
                                                          : Qt::Unchecked);
                 table->setItem(i + j, 1, value_item);
                 break;
-            /*case QVariant::Int:
+                /*case QVariant::Int:
                 spinner = new QSpinBox(table);
                 spinner->setMaximum(std::numeric_limits<int>::max());
                 spinner->setMinimum(std::numeric_limits<int>::min());

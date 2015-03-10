@@ -19,11 +19,14 @@ Data *Data::instance() {
   * Allows only one instance of class to be generated.
   */
     if (!data) data = new Data;
-
     return data;
 }
 
-Data::Data(QObject *parent) : QObject(parent) { mesh = new Mesh(); }
+Data::Data(QObject *parent) : QObject(parent) {
+    mesh = new Mesh();
+    nodeCatalog = 0;
+    nodeFactory = 0;
+}
 MainWindow *Data::getMainWindow() const { return mainWindow; }
 
 void Data::setMainWindow(MainWindow *value) { mainWindow = value; }
@@ -37,6 +40,8 @@ void Data::initialize(MainWindow *mainWindow) {
     /**
   * Create the Nodecatalog
   */
+    if(nodeCatalog)
+        delete nodeCatalog;
     nodeCatalog = new NodeCatalog();
     /**
   * Create the render object
@@ -45,6 +50,8 @@ void Data::initialize(MainWindow *mainWindow) {
     /**
   * Create the NodeFactory
   */
+    if(nodeFactory)
+        delete nodeFactory;
     this->nodeFactory = new NodeFactory();
 
     /**
@@ -85,14 +92,13 @@ void Data::initialize(MainWindow *mainWindow) {
   * Load all available NodeTypes
   */
     QString out = AniseCommunicator::getAllNodeTypes();
-    qDebug() << "outputANISE: " << out;
     JsonFileHandler::parseNodeTypesFromAnise(out);
 
     /**
   * Render the Nodecatalog filled with test nodes
   */
     SingletonRender::instance()->renderCatalogContent(
-                Data::instance()->getNodeCatalog()->Content.values().toVector());
+                Data::instance()->getNodeCatalog()->getContentVector());
 
     // Connection *tempTestConnection = NodeFactory::createTestConnection(1);
     // Data::instance()->addConnectionToMesh(tempTestConnection);

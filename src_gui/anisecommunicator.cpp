@@ -103,7 +103,6 @@ QString AniseCommunicator::getAllNodeTypes() {
 }
 
 void AniseCommunicator::setFrameworkPath(QString newPath) {
-
     AniseCommunicator::path = newPath;
 }
 
