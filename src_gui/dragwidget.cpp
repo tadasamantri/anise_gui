@@ -40,9 +40,6 @@ void DragWidget::mousePressEvent(QMouseEvent *event) {
     dataStream << child->getType();
 
 
-
-
-
     //set the mime data for the drag
     QMimeData *mimeData = new QMimeData;
     mimeData->setData("ANISE-GUI/drawobject", Data);

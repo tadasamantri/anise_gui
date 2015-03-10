@@ -109,7 +109,6 @@ void MainWindow::on_actionLoad_Catalog_triggered() {
     JsonFileHandler::parseNodeTypesFromAnise(out);
     //SingletonRender::instance()->renderCatalogContent(Data::instance()->getNodeCatalog()->Content.values().toVector());
 
-
 }
 
 void MainWindow::on_actionSave_triggered() {
