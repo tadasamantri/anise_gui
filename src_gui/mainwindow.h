@@ -44,6 +44,10 @@ private slots:
 private:
     void initializeGUI();
     bool pathChanged = false;
+    QString saveDialog();
+    void saveFile(QString &path);
+protected:
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif  // MAINWINDOW_H
