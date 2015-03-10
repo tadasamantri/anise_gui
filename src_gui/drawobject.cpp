@@ -102,6 +102,8 @@ void DrawObject::nodeNameChanged(QListWidgetItem * itemChanged){
     if(node->getName() != itemChanged->text())
         node->setName(itemChanged->text());
 
+      nameLabel->setStyleSheet("background: transparent;");
+
 }
 
 
@@ -133,7 +135,7 @@ void DrawObject::setNodeName(QString nodeName){
     nameLabel->setFrameStyle(QFrame::NoFrame);
     //,QListWidget::item:selected{background: transparent}, QListWidget::item:hover, QListWidget::item:disabled:hover,QListWidget::item:hover:!active;} QMenu::item:selected {background-color: #432fecd3},
     nameLabel->setStyleSheet("background: transparent;");
-    nameLabel->setStyleSheet("QListWidgetItem {background: transparent}; background: transparent");
+    nameLabel->setStyleSheet("background: transparent;");
 
     item->setText(nodeName);
     nameLabel->insertItem(0, item);
@@ -143,6 +145,7 @@ void DrawObject::setNodeName(QString nodeName){
     nameLabel->setGeometry(posX, posY, this->width()*2, 20);
         connect(nameLabel, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(nodeNameChanged(QListWidgetItem*)));
         connect(nameLabel, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(restrictOneClickOneItem(QListWidgetItem*)));
+        connect(nameLabel, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(deleteItemText(QListWidgetItem*)));
     }
 
 
@@ -397,4 +400,10 @@ void DrawObject::deleteLater(){
 
     QObject::deleteLater();
     nameLabel->deleteLater();
+}
+
+void DrawObject::deleteItemText(QListWidgetItem * item){
+
+    //item->setBackgroundColor(Qt::white);
+    nameLabel->setStyleSheet("QListWidget::item:selected{background: transparent}");
 }

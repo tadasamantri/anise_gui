@@ -73,6 +73,7 @@ public slots:
 
 private slots:
     void restrictOneClickOneItem(QListWidgetItem *itemClicked);
+    void deleteItemText(QListWidgetItem *item);
 private:
 
     int highlightWidth;
