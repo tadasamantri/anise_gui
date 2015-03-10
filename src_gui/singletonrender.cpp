@@ -629,6 +629,11 @@ void SingletonRender::clearAll(QWidget *parent) {
         delete w;
     }
 
+    while(QListWidget * w = parent->findChild<QListWidget *>()){
+        w->deleteLater();
+        delete w;
+    }
+
     // TODO NOT COOL THIS SOLUTION!
     if (parent == ui->meshField) {
         this->allDrawnNodes = QMap<int, DrawObject *>();
