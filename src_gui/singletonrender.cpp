@@ -1,6 +1,8 @@
 #include <QDir>
 #include <limits>
 #include <QSpacerItem>
+#include <QRgb>
+#include <QColor>
 #include "singletonrender.h"
 #include "nodetypelabel.h"
 #include "ui_mainwindow.h"
@@ -9,6 +11,7 @@
 // Global static pointer used to ensure a single instance of the class.
 SingletonRender *SingletonRender::m_pInstance = NULL;
 int numOfNodeTypes = 0;
+bool boolean = true;
 
 
 SingletonRender::SingletonRender() {
@@ -228,6 +231,8 @@ bool SingletonRender::createTilesFromImage(QPixmap *Sprite){
         //qDebug() << "index " << index << ";top " << top  << ";bottom" << bottom << ";left" << left<< ";right" << right;
         //qDebug() << "rect: " << cropRect;
         this->nodeTiles[index] = QPixmap(Sprite->copy(cropRect));
+
+
         if (this->nodeTiles[index].isNull()) {
             qDebug()<<"tile is emtpy!";
         }
@@ -260,7 +265,7 @@ QPixmap* SingletonRender::createTiledPixmap(int x, int y){
 
     // create a painter
     QPainter painter(result);
-    //painter.setBrush(Qt::black);
+    painter.setBrush(Qt::green);
 
     bool isTop = false;
     bool isBottom= false;
@@ -343,12 +348,40 @@ QPixmap* SingletonRender::createTiledPixmap(int x, int y){
             //add the image to our QPixmap
             temp = &(this->nodeTiles[indexOfTile]);
             //qDebug() << "rowX " << rowX << "|" << dimX << "rowY " << rowY <<"|" << dimY << "tileId" << indexOfTile;
+            if(indexOfTile == 0){
 
+                QString hexadecimal;
+                QImage testImage = temp->toImage();
+                uint decimal = testImage.pixel(0,0);
+                hexadecimal.setNum(decimal, 16);
+                qDebug() << "temp: " << hexadecimal;
+
+            }
 
             painter.drawPixmap(rowX*16, rowY*16, 16, 16, *temp);
+
+            if(boolean){
+            QLabel *test = new QLabel(this->ui->meshField);
+            test->setPixmap(nodeTiles[0]);
+            test->adjustSize();
+            test->show();
+            boolean = false;
+
+            QString hexadecimal;
+            QImage testImage = temp->toImage();
+            uint decimal = testImage.pixel(14,0);
+            hexadecimal.setNum(decimal, 16);
+            qDebug() << "loadedpicture: " << hexadecimal;
+
+            }
         }
     }
 
+    QString hexadecimal;
+    QImage testImage = result->toImage();
+    uint decimal = testImage.pixel(0,0);
+    hexadecimal.setNum(decimal, 16);
+    qDebug() << "result: " << hexadecimal;
     return result;
 }
 
@@ -430,7 +463,7 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
         int gateHeight = allImages["gate.png"]->height();
         int gateWidth  = allImages["gate.png"]->width();
         int gateOffset = 10;
-        QString typeName = nodeToRender->getType();
+        QString name = nodeToRender->getName();
 
         // find out how high the node is depending on the number of gates
         int maxNumberGates = nodeToRender->getInputGates()->size();
@@ -468,8 +501,7 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
 
         if (allImages.contains("body.png")) {
             // Draw the body
-            NodeDrawObject->addPicture(this->createTiledPixmap(amountTilesX*16,amountTilesY*16), QPoint(gateSpaceX, 0),
-                    typeName);
+            NodeDrawObject->addPicture(this->createTiledPixmap(amountTilesX*16,amountTilesY*16), QPoint(gateSpaceX, 0));
 
         } else {
             qDebug() << "body.png did not load correctly!";
@@ -498,6 +530,9 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
         } else {
             qDebug() << "body.png did not load correctly!";
         }
+
+        NodeDrawObject->setNodeName(name);
+
 
         NodeDrawObject->setToolTip(nodeToRender->getDescription());
         allDrawnNodes.insert(nodeID, NodeDrawObject);
@@ -707,6 +742,16 @@ void SingletonRender::dehighlightGates(){
 
         node->dehighlightGates();
     }
+
+}
+
+void SingletonRender::setNodeName(int nodeID, QString nodeName)
+{
+    if(!allDrawnNodes.contains(nodeID))
+        return;
+    allDrawnNodes.value(nodeID)->setNodeName(nodeName);
+
+    Data::instance()->getMainWindow()->updatePropertyTable(nodeID);
 
 }
 
