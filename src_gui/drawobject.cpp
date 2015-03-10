@@ -376,6 +376,9 @@ void DrawObject::move(int x, int y){
 
     QWidget::move(x, y);
 
+
+    if(!nameLabel)
+        return;
     int nodeNameX = this->pos().x()+this->width()/2-nameLabel->width()/2;
     int nodeNameY = this->pos().y()+this->height();
 
@@ -387,19 +390,29 @@ void DrawObject::move(int x, int y){
 void DrawObject::hide(){
 
     QWidget::hide();
+
+    if(!nameLabel)
+        return;
+
     nameLabel->hide();
 }
 
 void DrawObject::show(){
 
     QWidget::show();
-    nameLabel->show();
+
+    if(!nameLabel)
+            return;
+        nameLabel->show();
 }
 
 void DrawObject::deleteLater(){
 
     QObject::deleteLater();
-    nameLabel->deleteLater();
+
+            if(!nameLabel)
+            return;
+            nameLabel->deleteLater();
 }
 
 void DrawObject::deleteItemText(QListWidgetItem * item){

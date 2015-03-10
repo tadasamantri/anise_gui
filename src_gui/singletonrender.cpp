@@ -360,7 +360,7 @@ QPixmap* SingletonRender::createTiledPixmap(int x, int y){
 
             painter.drawPixmap(rowX*16, rowY*16, 16, 16, *temp);
 
-            if(boolean){
+           /* if(boolean){
             QLabel *test = new QLabel(this->ui->meshField);
             test->setPixmap(nodeTiles[0]);
             test->adjustSize();
@@ -373,7 +373,7 @@ QPixmap* SingletonRender::createTiledPixmap(int x, int y){
             hexadecimal.setNum(decimal, 16);
             qDebug() << "loadedpicture: " << hexadecimal;
 
-            }
+            }*/
         }
     }
 
