@@ -6,8 +6,11 @@
 
 class Mesh : public QObject {
     friend class Data;
+    friend class SingletonRender;
+    friend class JSonFileHandler;
+
     Q_OBJECT
-public:
+private:
     // konstruktor
     explicit Mesh(QObject *parent = 0);
 

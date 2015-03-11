@@ -143,7 +143,7 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
 
     qDebug() << "File contains " << obj["nodes"].toArray().size()
              << " nodes, so let's parse them ";
-    Mesh *mesh = Data::instance()->getMesh();
+    //Mesh *mesh = Data::instance()->getMesh();
 
     // for every node (represented as jsonvalue)...
     foreach (QJsonValue var, obj["nodes"].toArray()) {
@@ -196,7 +196,7 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             }
             // node is complete, so let's insert it
 
-            mesh->addNode(createdNode);
+            Data::instance()->addNode(createdNode);
         }
     }
 
@@ -212,11 +212,11 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
         QJsonObject co = var.toObject();
         QVariantMap theConnection = co.toVariantMap();
 
-        Node *src_node = mesh->getNodeByName(theConnection["src_node"].toString());
+        Node *src_node = Data::instance()->getNodeByName(theConnection["src_node"].toString());
         Node *dest_node =
-                mesh->getNodeByName(theConnection["dest_node"].toString());
+                Data::instance()->getNodeByName(theConnection["dest_node"].toString());
         //if connection is invalid, skip
-        if (!(src_node && dest_node) || !Data::instance()->getMesh()->checkConnection(src_node->getID(), theConnection["src_gate"].toString(),dest_node->getID(), theConnection["dest_gate"].toString()))
+        if (!(src_node && dest_node) || !Data::instance()->checkConnection(src_node->getID(), theConnection["src_gate"].toString(),dest_node->getID(), theConnection["dest_gate"].toString()))
             continue;
 
         Connection *connection = new Connection(
@@ -251,13 +251,13 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             connection->setWaypoints(waypoints);
         }
 
-        mesh->addConnection(connection);
+        Data::instance()->addConnection(connection);
     }
     // all connections added"
 
     if (hasPositionData == false) {
         qDebug() << "position data missing";
-        mesh->sortForce();
+        Data::instance()->sortForce();
     }
 }
 
@@ -277,7 +277,7 @@ void JsonFileHandler::saveMesh(const QString &path, Mesh *theMesh) {
 
 QString JsonFileHandler::meshToJson(Mesh *mesh) {
     QJsonArray nodes, connections;
-    foreach (Node *n, mesh->getAllNodes()) {
+    foreach (Node *n, Data::instance()->getAllNodes()) {
         QJsonObject theNode;
         theNode["class"] = n->getType();
         theNode["name"] = n->getName();
@@ -296,7 +296,7 @@ QString JsonFileHandler::meshToJson(Mesh *mesh) {
         theNode["gui_params"] = gui_params;
         nodes.push_back(theNode);
     }
-    foreach (Connection *c, mesh->getAllConnections()) {
+    foreach (Connection *c, Data::instance()->getAllConnections()) {
         QJsonObject theConnection;
         theConnection["src_node"] = c->getSrcNode()->getName();
         theConnection["src_gate"] = c->getSrcGate()->getName();

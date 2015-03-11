@@ -48,15 +48,15 @@ Node *NodeFactory::createNode(QString _class, QString name, QMap<QString, Node::
 Connection *NodeFactory::createConnection(int srcNodeID, QString srcGateName, int destNodeID, QString destGateName, QVector<QPoint> wayPoints){
 
 
-   // QPoint nodePosition = Data::instance()->getMesh()->getNodeByID(srcNodeID)->
+   // QPoint nodePosition = Data::instance()->getNodeByID(srcNodeID)->
 
 
 
 
     return new Connection(srcNodeID, srcGateName, destNodeID, destGateName, wayPoints);
     /*Connection *result = new Connection();
-    Node *src = Data::instance()->getMesh()->getNodeByID(srcNodeID),
-            *dst = Data::instance()->getMesh()->getNodeByID(destNodeID);
+    Node *src = Data::instance()->getNodeByID(srcNodeID),
+            *dst = Data::instance()->getNodeByID(destNodeID);
     Gate *srcGate = src->getGateByID(srcGateID, false),
             *destGate = dst->getGateByID(destGateID, true);
     result->setSrcNode(src);

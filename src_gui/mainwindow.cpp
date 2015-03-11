@@ -13,7 +13,6 @@
 #include "anisecommunicator.h"
 #include "settingshandler.h"
 #include "qdebugstreamredirector.h"
-#include "mesh.h"
 #include "singletonrender.h"
 #include "nodecatalog.h"
 #include "data.h"
@@ -153,9 +152,9 @@ void MainWindow::on_actionSave_triggered() {
 void MainWindow::updatePropertyTable(int nodeID) {
     QTableWidget *table = ui->tableWidget;
     if (nodeID >= 0 &&
-            Data::instance()->getMesh()->nodesInMesh.contains(nodeID)) {
+            Data::instance()->nodesInMesh()->contains(nodeID)) {
         deleteTable();
-        Node *n = Data::instance()->getMesh()->getNodeByID(nodeID);
+        Node *n = Data::instance()->getNodeByID(nodeID);
         QMap<QString, Node::parameter> *map = n->getParams();
         table->setRowCount(map->size() + 5);
         int i = 0;
@@ -286,7 +285,7 @@ void MainWindow::updatePropertyTable(int nodeID) {
             }
         }
         table->setRowCount(count);
-        connect(table, SIGNAL(itemChanged(QTableWidgetItem*)), Data::instance()->getMesh(), SLOT(updateNode(QTableWidgetItem*)));
+        connect(table, SIGNAL(itemChanged(QTableWidgetItem*)), Data::instance(), SLOT(updateNode(QTableWidgetItem*)));
         table->resizeColumnsToContents();
         if(ui->details->checkState() == Qt::Checked)
             table->show();
@@ -297,7 +296,7 @@ void MainWindow::updatePropertyTable(int nodeID) {
 
 void MainWindow::deleteTable() {
     QTableWidget *table = ui->tableWidget;
-    table->disconnect(table, SIGNAL(itemChanged(QTableWidgetItem*)), Data::instance()->getMesh(), SLOT(updateNode(QTableWidgetItem*)));
+    table->disconnect(table, SIGNAL(itemChanged(QTableWidgetItem*)), Data::instance(), SLOT(updateNode(QTableWidgetItem*)));
     table->hide();
     // delete all tableitems, because they aren't needed any more
     for (int col = 0; col < table->columnCount(); col++)

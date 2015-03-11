@@ -49,9 +49,21 @@ public:
 
     //add a node to the mesh
     int addNodeToMesh(Node *newNode);
+    int addNode(Node *node);
     int addConnectionToMesh(Connection *newConnection);
+    int addConnection(Connection *newConnection);
+    void sortCircle();
+    void sortRow();
+    void sortForce();
     int getFocusedID();
     void removeNodeFromMesh(int ID);
+    bool checkConnection(int srcNodeID, QString srcGate, int destNodeID, QString destGate);
+    Node *getNodeByName(QString name);
+    Node *getNodeByID(int ID);
+    QList<Node *> getAllNodes();
+    QList<Connection *> getAllConnections();
+    QMap<int, Node *> *nodesInMesh();
+    QString getValidAlternativeForName(QString &name);
     void moveObjectInMesh(QPoint *Position, int ID);
     void moveObjectInMesh(QPoint *start, QPoint *end, int ID);
 

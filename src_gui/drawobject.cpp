@@ -97,7 +97,7 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position, QString nodeName) {
 void DrawObject::nodeNameChanged(QListWidgetItem * itemChanged){
 
     itemChanged->setSelected(false);
-    Node *node = Data::instance()->getMesh()->getNodeByID(this->ID);
+    Node *node = Data::instance()->getNodeByID(this->ID);
 
     if(node->getName() != itemChanged->text())
         node->setName(itemChanged->text());

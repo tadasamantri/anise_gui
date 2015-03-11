@@ -15,7 +15,7 @@ MeshEditorWidget::MeshEditorWidget(QWidget *parent) : QWidget(parent) {
 }
 
 void MeshEditorWidget::connectSignals() {
-    connect(this, SIGNAL(onWidgetClicked(int)), Data::instance()->getMesh(),
+    connect(this, SIGNAL(onWidgetClicked(int)), Data::instance(),
             SLOT(setFocusMeshObject(int)));
     connect(this,SIGNAL(drawLineModeChanged()), this, SLOT(changeLineDrawMode()));
 }
@@ -279,7 +279,7 @@ bool MeshEditorWidget::handleGateClick(int nodeID, QString gateName, QPoint posi
     // That means we are just starting a new Line
     else {
 
-        Node *node = Data::instance()->getMesh()->getNodeByID(nodeID);
+        Node *node = Data::instance()->getNodeByID(nodeID);
         Gate *srcGate;
 
 
@@ -326,7 +326,7 @@ void MeshEditorWidget::changeLineDrawMode()
 
 bool MeshEditorWidget::correctGate(int nodeID, QString gateName){
     
-    Node *node = Data::instance()->getMesh()->getNodeByID(nodeID);
+    Node *node = Data::instance()->getNodeByID(nodeID);
     Gate *endGate;
 
 
@@ -340,7 +340,7 @@ bool MeshEditorWidget::correctGate(int nodeID, QString gateName){
 
     if(newLine.drawLine){
 
-        Gate *srcGate = Data::instance()->getMesh()->getNodeByID(newLine.srcNodeID)->getGateByName(newLine.srcGateName);
+        Gate *srcGate = Data::instance()->getNodeByID(newLine.srcNodeID)->getGateByName(newLine.srcGateName);
         return endGate->getDirection() && srcGate->getType() == endGate->getType() && newLine.srcNodeID != nodeID;
         
     }

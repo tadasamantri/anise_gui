@@ -28,7 +28,7 @@ void Node::setPosition(float x, float y) {
 void Node::setType(QString type) { this->type = type; }
 
 void Node::setName(QString name) {
-    this->name = Data::instance()->getMesh()->getValidAlternativeForName(name);
+    this->name = Data::instance()->getValidAlternativeForName(name);
 SingletonRender::instance()->setNodeName(ID, this->name);
 
 }

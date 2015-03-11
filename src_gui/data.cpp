@@ -118,6 +118,11 @@ int Data::addNodeToMesh(Node *newNode) {
     return id;
 }
 
+int Data::addNode(Node *node)
+{
+    return addNodeToMesh(node);
+}
+
 /**
  * @brief Data::addConnectionToMesh inserts new Connection to mesh
  * @param newConnection
@@ -128,6 +133,29 @@ int Data::addConnectionToMesh(Connection *newConnection) {
     int id = this->mesh->addConnection(newConnection);
     SingletonRender::instance()->renderMesh(this->mesh);
     return id;
+}
+
+int Data::addConnection(Connection *newConnection)
+{
+    return addConnectionToMesh(newConnection);
+}
+
+void Data::sortCircle()
+{
+    if(mesh)
+        mesh->sortCircle();
+}
+
+void Data::sortRow()
+{
+    if(mesh)
+        mesh->sortRow();
+}
+
+void Data::sortForce()
+{
+    if(mesh)
+        mesh->sortForce();
 }
 
 int Data::getFocusedID()
@@ -142,6 +170,58 @@ int Data::getFocusedID()
 void Data::removeNodeFromMesh(int ID) {
     if (!mesh->nodesInMesh.contains(ID)) return;
     mesh->removeNode(ID);
+}
+
+bool Data::checkConnection(int srcNodeID, QString srcGate, int destNodeID, QString destGate)
+{
+    if(mesh)
+        return mesh->checkConnection(srcNodeID, srcGate, destNodeID, destGate);
+    else return false;
+}
+
+Node *Data::getNodeByName(QString name)
+{
+    if(mesh)
+        return mesh->getNodeByName(name);
+    return 0;
+}
+
+Node *Data::getNodeByID(int ID)
+{
+    if(mesh)
+        return mesh->getNodeByID(ID);
+    return 0;
+}
+
+QList<Node *> Data::getAllNodes()
+{
+    QList<Node *> result;
+    if(mesh)
+        result = mesh->getAllNodes();
+    return result;
+}
+
+QList<Connection *> Data::getAllConnections()
+{
+    QList<Connection *> result;
+    if(mesh)
+        result = mesh->getAllConnections();
+    return result;
+}
+
+QMap<int, Node *> *Data::nodesInMesh()
+{
+    if(mesh)
+        return &mesh->nodesInMesh;
+    return 0;
+}
+
+QString Data::getValidAlternativeForName(QString &name)
+{
+    QString result;
+    if(mesh)
+        result = mesh->getValidAlternativeForName(name);
+    return result;
 }
 
 /**
