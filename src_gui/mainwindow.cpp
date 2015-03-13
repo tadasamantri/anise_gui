@@ -59,16 +59,19 @@ void MainWindow::initializeGUI() {
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    int choice = QMessageBox::question(this,"Save old project?","You attemted creating a new project.\n Do you want to save your current project?",(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel),QMessageBox::Yes);
     bool ok = false;
-    if(choice == QMessageBox::Yes){
-        QString path = saveDialog();
-        ok = path != ".mesh";
-        if(ok)
-            saveFile(path);
+    if(Data::instance()->hasChanged()){
+        int choice = QMessageBox::question(this,"Save old project?","You attemted creating a new project.\n Do you want to save your current project?",(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel),QMessageBox::Yes);
+        if(choice == QMessageBox::Yes){
+            QString path = saveDialog();
+            ok = path != ".mesh";
+            if(ok)
+                saveFile(path);
+        }
+        else if(choice == QMessageBox::No)
+            ok = true;
     }
-    else if(choice == QMessageBox::No)
-        ok = true;
+    else ok = true;
     if(ok)
         event->accept();
     else event->ignore();
@@ -76,14 +79,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::saveFile(QString &path){
     JsonFileHandler::saveMesh(path, Data::instance()->getMesh());
+    Data::instance()->unsetChanged();
 }
 
 MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::on_actionLoad_triggered() {
-
-
-
     qDebug() << "Trying to open FileDialog";
     QString fileName = QFileDialog::getOpenFileName(
                 this, "Load previously saved mesh", "",
@@ -96,6 +97,7 @@ void MainWindow::on_actionLoad_triggered() {
     this->on_actionNew_triggered();
     QJsonObject *obj = JsonFileHandler::readFile(fileName);
     JsonFileHandler::extractNodesAndConnections(*obj);
+    Data::instance()->unsetChanged();
     SingletonRender::instance()->renderMesh(Data::instance()->getMesh());
 }
 
@@ -115,18 +117,23 @@ void MainWindow::on_actionSet_framework_path_triggered() {
 }
 
 void MainWindow::on_actionNew_triggered() {
-    int choice = QMessageBox::question(this,"Save old project?","You attemted creating a new project.\n Do you want to save your current project?",(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel),QMessageBox::Yes);
     bool ok = false;
-    if(choice == QMessageBox::Yes){
-        QString path = saveDialog();
-        ok = path != ".mesh";
-        if(ok)
-            saveFile(path);
-    }
-    else if(choice == QMessageBox::No)
+    if (Data::instance()->hasChanged()) {
+        int choice = QMessageBox::question(
+                    this, "Save old project?",
+                    "You attemted creating a new project.\n Do you want to save your "
+                    "current project?",
+                    (QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel),
+                    QMessageBox::Yes);
+        if (choice == QMessageBox::Yes) {
+            QString path = saveDialog();
+            ok = path != ".mesh";
+            if (ok) saveFile(path);
+        } else if (choice == QMessageBox::No)
+            ok = true;
+    } else
         ok = true;
-    if(ok)
-        Data::instance()->newMeshProject();
+    if (ok) Data::instance()->newMeshProject();
 }
 
 void MainWindow::on_actionLoad_Catalog_triggered() {

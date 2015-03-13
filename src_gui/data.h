@@ -58,6 +58,8 @@ public:
     int getFocusedID();
     void removeNodeFromMesh(int ID);
     bool checkConnection(int srcNodeID, QString srcGate, int destNodeID, QString destGate);
+    bool hasChanged();
+    void unsetChanged();
     Node *getNodeByName(QString name);
     Node *getNodeByID(int ID);
     QList<Node *> getAllNodes();
@@ -112,6 +114,7 @@ private:
     */
     NodeCatalog *nodeCatalog;
     void updateConnections(int ID, QPoint offset);
+    bool changed = false;
 };
 
 #endif  // DATA_H

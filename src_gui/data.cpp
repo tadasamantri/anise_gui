@@ -112,7 +112,10 @@ int Data::addNodeToMesh(Node *newNode) {
     int id = this->mesh->addNode(newNode);
     // A new created Node is always focussed in the beginning
 
-    if(id >= 0)SingletonRender::instance()->renderMesh(this->mesh);
+    if(id >= 0){
+        SingletonRender::instance()->renderMesh(this->mesh);
+        changed = true;
+    }
     mesh->setFocusMeshObject(id);
 
     return id;
@@ -131,7 +134,10 @@ int Data::addNode(Node *node)
  */
 int Data::addConnectionToMesh(Connection *newConnection) {
     int id = this->mesh->addConnection(newConnection);
-    SingletonRender::instance()->renderMesh(this->mesh);
+    if(id >= 0){
+        SingletonRender::instance()->renderMesh(this->mesh);
+        changed = true;
+    }
     return id;
 }
 
@@ -142,20 +148,26 @@ int Data::addConnection(Connection *newConnection)
 
 void Data::sortCircle()
 {
-    if(mesh)
+    if(mesh){
         mesh->sortCircle();
+        changed = true;
+    }
 }
 
 void Data::sortRow()
 {
-    if(mesh)
+    if(mesh){
         mesh->sortRow();
+        changed = true;
+    }
 }
 
 void Data::sortForce()
 {
-    if(mesh)
+    if(mesh){
         mesh->sortForce();
+        changed = true;
+    }
 }
 
 int Data::getFocusedID()
@@ -170,6 +182,7 @@ int Data::getFocusedID()
 void Data::removeNodeFromMesh(int ID) {
     if (!mesh->nodesInMesh.contains(ID)) return;
     mesh->removeNode(ID);
+    changed = true;
 }
 
 bool Data::checkConnection(int srcNodeID, QString srcGate, int destNodeID, QString destGate)
@@ -177,6 +190,16 @@ bool Data::checkConnection(int srcNodeID, QString srcGate, int destNodeID, QStri
     if(mesh)
         return mesh->checkConnection(srcNodeID, srcGate, destNodeID, destGate);
     else return false;
+}
+
+bool Data::hasChanged()
+{
+    return changed;
+}
+
+void Data::unsetChanged()
+{
+    changed = false;
 }
 
 Node *Data::getNodeByName(QString name)
@@ -234,7 +257,7 @@ void Data::moveObjectInMesh(QPoint *start, QPoint *end, int ID) {
     // is object a node?
     if (this->mesh->nodesInMesh.contains(ID)) {
         this->moveObjectInMesh(end, ID);
-
+        changed = true;
     }
     // is it a connection?
     else if (this->mesh->connectionsInMesh.contains(ID)) {
@@ -243,7 +266,7 @@ void Data::moveObjectInMesh(QPoint *start, QPoint *end, int ID) {
         // QPoint *realEnd = end; realEnd->operator +=(QPoint(6, 6)); // this is
         // just a temp. solution!
         this->mesh->getConnectionByID(ID)->setJoint(joint, end);
-
+        changed = true;
         SingletonRender::instance()->renderMesh(this->mesh);
     }
 }
@@ -259,6 +282,7 @@ void Data::moveObjectInMesh(QPoint *Position, int ID) {
         QPoint offset = *Position - mesh->getNodeByID(ID)->getPosition();
         this->mesh->getNodeByID(ID)->setPosition(Position->x(), Position->y());
         SingletonRender::instance()->renderMesh(this->mesh);
+        changed = true;
 
     } else if (this->mesh->connectionsInMesh.contains(ID)) {
         qDebug() << "cant move a connection joint with onle one QPoint";
@@ -282,6 +306,8 @@ void Data::newMeshProject() {
 
 bool Data::deleteItem() {
     bool deleted = this->mesh->deleteItem();
+    if(deleted)
+        changed = true;
     return deleted;
 }
 
