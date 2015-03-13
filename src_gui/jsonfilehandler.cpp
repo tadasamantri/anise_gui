@@ -1,8 +1,10 @@
 ﻿#include "jsonfilehandler.h"
 #include "data.h"
+#include <bitset>
 #include <QProcess>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QMessageBox>
 
 QString JsonFileHandler::loadFile(const QString &path) {
     // QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
@@ -133,12 +135,18 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
  */
 void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
     bool hasPositionData = true;
-
+    //error flags: c|nc|n|nn
+    //c: error in connection
+    //nc: no connections
+    //n: error in node
+    //nn: no nodes
+    std::bitset<4> flags = 0;
     // check if there are any nodes
     int i = 1, j = 1;  // for debug only
     if (!obj["nodes"].isArray()) {
         qWarning() << "no nodes in JSON-Object";
-        return;
+        flags |= 0b0001;
+        goto end;
     }
 
     qDebug() << "File contains " << obj["nodes"].toArray().size()
@@ -152,9 +160,10 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
 
         // check if nodes are declared correctly
         if (!(theNode["class"].isString() && theNode["name"].isString() &&
-              theNode["params"].isArray()))
+              theNode["params"].isArray())){
             qWarning() << "Error while extracting node:\n" << theNode;
-
+        flags |= 0b0010;
+        }
         // node is welldefined:
         else {
             // get name and class(type) of node
@@ -167,8 +176,10 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             // ok, parameters are quite more difficult
             Node *createdNode = NodeFactory::createNode(type);
             //if node type not in catalog, skip
-            if(createdNode->getType() == "")
+            if(createdNode->getType() == ""){
+                flags |= 0b0010;
                 continue;
+            }
             createdNode->setName(name);
             // get parameters as array of objects
             foreach (QJsonValue local, theNode["params"].toArray()) {
@@ -203,7 +214,8 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
     // nodes parsed
     if (!obj["connections"].isArray()) {
         qDebug() << "no connections found";
-        return;
+        flags |= 0b0100;
+        goto end;
     } else {
         qDebug() << obj["connections"].toArray().size() << " connections found";
     }
@@ -216,8 +228,10 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
         Node *dest_node =
                 Data::instance()->getNodeByName(theConnection["dest_node"].toString());
         //if connection is invalid, skip
-        if (!(src_node && dest_node) || !Data::instance()->checkConnection(src_node->getID(), theConnection["src_gate"].toString(),dest_node->getID(), theConnection["dest_gate"].toString()))
+        if (!(src_node && dest_node) || !Data::instance()->checkConnection(src_node->getID(), theConnection["src_gate"].toString(),dest_node->getID(), theConnection["dest_gate"].toString())){
+            flags |= 0b1000;
             continue;
+        }
 
         Connection *connection = new Connection(
                     src_node, src_node->getGateByName(theConnection["src_gate"].toString()),
@@ -258,6 +272,20 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
     if (hasPositionData == false) {
         qDebug() << "position data missing";
         Data::instance()->sortForce();
+    }
+    end:  ;
+    if(flags.any()){
+        QString msg;
+        msg += "Parser encountered Problems. File may be corrupt.\n\n \tIssues:\n";
+        if(flags[0])
+            msg += "\t- No Nodes were found\n";
+        if(flags[1])
+            msg += "\t- Error while parsing Node\n";
+        if(flags[2])
+            msg += "\t- No Connections founds\n";
+        if(flags[3])
+            msg += "\t- Error while parsing Connection";
+        QMessageBox::warning(Data::instance()->getMainWindow(),"Errors while parsing!", msg);
     }
 }
 
