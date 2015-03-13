@@ -60,6 +60,7 @@ public:
     bool checkConnection(int srcNodeID, QString srcGate, int destNodeID, QString destGate);
     bool hasChanged();
     void unsetChanged();
+    void setChanged();
     Node *getNodeByName(QString name);
     Node *getNodeByID(int ID);
     QList<Node *> getAllNodes();

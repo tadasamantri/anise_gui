@@ -112,11 +112,12 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
         QJsonArray contents = localNode["parameters"].toArray();
         for (QJsonValue o : contents) {
             QVariantMap parameters = o.toObject().toVariantMap();
+            QVariant value(QVariant::nameToType(parameters["type"].toString().toUtf8()));
+            value = parameters["default"];
             node.addParam(
                         parameters["description"].toString(), parameters["key"].toString(),
-                    parameters["name"].toString(), parameters["type"].toString(),
-                    QVariant(
-                        QVariant::nameToType(parameters["type"].toString().toUtf8())));
+                    parameters["name"].toString(), parameters["type"].toString(),value);
+            node.setParam(parameters["name"].toString(),parameters["default"]);
         }
         catalog->insert(node);
         qDebug() << "added node to Catalog:\n"

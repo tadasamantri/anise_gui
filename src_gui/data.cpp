@@ -202,6 +202,11 @@ void Data::unsetChanged()
     changed = false;
 }
 
+void Data::setChanged()
+{
+    changed = true;
+}
+
 Node *Data::getNodeByName(QString name)
 {
     if(mesh)
