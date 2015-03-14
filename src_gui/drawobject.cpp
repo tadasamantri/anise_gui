@@ -3,13 +3,19 @@
 #include <QSize>
 #include <QDebug>
 #include <QStyleOption>
+#include <QListWidget>
+#include <QObject>
+#include <QRegion>
 #include "gatebutton.h"
+#include "mesheditorwidget.h"
+#include "data.h"
 
 DrawObject::DrawObject(int id, QPoint position, int width, int height,
                        QWidget *parent, int highlightOffset) {
     this->ID = id;
     this->setParent(parent);
     this->highlightWidth = highlightOffset;
+    this->nameLabel = 0;
     // We say the constructor which position he has
     this->setGeometry(position.x(), position.y(), width + 2 * highlightOffset,
                       height + 2 * highlightOffset);
@@ -68,7 +74,7 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position) {
     this->updateOverAllPicture(pic, position);
 }
 
-void DrawObject::addPicture(QPixmap *pic, QPoint position, QString typeName) {
+void DrawObject::addPicture(QPixmap *pic, QPoint position, QString nodeName) {
     QPixmap newPic = pic->copy(pic->rect());
 
     // tell the painter to draw on the QImage
@@ -76,11 +82,86 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position, QString typeName) {
     painter->setPen(Qt::blue);
     painter->setFont(QFont("Arial", 8));
     // Write Typename onto picture
-    painter->drawText(newPic.rect(), Qt::AlignLeading, typeName);
+    //painter->drawText(newPic.rect(), Qt::AlignLeading, nodeName);
+
+
+
 
     // actually call addPicture with modified picture
     this->addPicture(&newPic, position);
+
     delete painter;
+}
+
+
+void DrawObject::nodeNameChanged(QListWidgetItem * itemChanged){
+
+    itemChanged->setSelected(false);
+    Node *node = Data::instance()->getNodeByID(this->ID);
+
+    if(node->getName() != itemChanged->text())
+        node->setName(itemChanged->text());
+
+      nameLabel->setStyleSheet("background: transparent;");
+
+}
+
+
+void DrawObject::setNodeName(QString nodeName){
+
+/*
+    if(!nameLabel)
+        nameLabel = new QLabel(dynamic_cast<MeshEditorWidget *> (this->parent()));
+
+    nameLabel->setAlignment(Qt::AlignCenter);
+    nameLabel->setText(nodeName);
+    nameLabel->setStyleSheet("background-color: rgba(255, 255, 255, 0);");
+    nameLabel->adjustSize();
+
+    int posX = this->pos().x()+this->width()/2-nameLabel->width()/2;
+    int posY = this->pos().y()+this->height();
+    nameLabel->setGeometry(posX, posY, nameLabel->width(), nameLabel->height());
+    nameLabel->show();*/
+
+
+     //----------Masterlösung mit editierbarem Fenster, aber noch verbuggt
+    if(!nameLabel){
+        nameLabel = new QListWidget(dynamic_cast<MeshEditorWidget *> (this->parent()));
+    QListWidgetItem *item = new QListWidgetItem(nameLabel);
+
+
+    item->setTextAlignment(Qt::AlignCenter);
+    item->setFlags(item->flags() | Qt::ItemIsEditable);
+    nameLabel->setFrameStyle(QFrame::NoFrame);
+    //,QListWidget::item:selected{background: transparent}, QListWidget::item:hover, QListWidget::item:disabled:hover,QListWidget::item:hover:!active;} QMenu::item:selected {background-color: #432fecd3},
+    nameLabel->setStyleSheet("background: transparent;");
+    nameLabel->setStyleSheet("background: transparent;");
+
+    item->setText(nodeName);
+    nameLabel->insertItem(0, item);
+
+    int posX = this->pos().x()+this->width()/2-nameLabel->width()/2;
+    int posY = this->pos().y()+this->height();
+    nameLabel->setGeometry(posX, posY, this->width()*2, 20);
+        connect(nameLabel, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(nodeNameChanged(QListWidgetItem*)));
+        connect(nameLabel, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(restrictOneClickOneItem(QListWidgetItem*)));
+        connect(nameLabel, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(deleteItemText(QListWidgetItem*)));
+    }
+
+
+    nameLabel->itemAt(1,1)->setText(nodeName);
+    nameLabel->show();
+
+
+
+    //this->labelvector.append(nameOfNode);
+   // modifyMask(new QPixmap(this->width(),20), QPoint(0, this->height()-20), false);
+
+}
+
+void DrawObject::restrictOneClickOneItem(QListWidgetItem *itemClicked){
+
+    itemClicked->setSelected(false);
 }
 
 void DrawObject::addGateButton(QPixmap *pic, QPoint position,
@@ -127,7 +208,7 @@ QPoint DrawObject::getGatePosition(QString gateName)
     return gatePosition;
 }
 
-void DrawObject::modifyMask(QPixmap *pic, QPoint position) {
+void DrawObject::modifyMask(QPixmap *pic, QPoint position, bool updateMask) {
     // safe dimensions
     int height = pic->height();
     int width = pic->width();
@@ -155,7 +236,9 @@ void DrawObject::modifyMask(QPixmap *pic, QPoint position) {
     // update changes to QImage
     mainMaskAsImage =
             mainMaskUnhighlighted.toImage().convertToFormat(QImage::Format_Mono);
-    highlightMask();
+
+    if(updateMask)
+        highlightMask();
 
     // Now set the mask of the widget
     this->setMask(mainMaskUnhighlighted);
@@ -268,14 +351,13 @@ void DrawObject::paintEvent(QPaintEvent *) {
 void DrawObject::highlightGates(QString gateType){
 
     foreach(GateButton *gate, gateVector){
-        //if(gate->isInput()){
+
 
             if(gate->getDirection() && gate->getGateType() == gateType)
                 gate->setHighlightMode(true);
             else
                 gate->setHighlightMode(false);
-        //}
-    }
+     }
 }
 
 void DrawObject::dehighlightGates(){
@@ -286,4 +368,54 @@ void DrawObject::dehighlightGates(){
             gate->resetPicture();
     }
 
+}
+
+
+
+void DrawObject::move(int x, int y){
+
+    QWidget::move(x, y);
+
+
+    if(!nameLabel)
+        return;
+    int nodeNameX = this->pos().x()+this->width()/2-nameLabel->width()/2;
+    int nodeNameY = this->pos().y()+this->height();
+
+    if(nameLabel)
+        nameLabel->move(nodeNameX,nodeNameY);
+
+}
+
+void DrawObject::hide(){
+
+    QWidget::hide();
+
+    if(!nameLabel)
+        return;
+
+    nameLabel->hide();
+}
+
+void DrawObject::show(){
+
+    QWidget::show();
+
+    if(!nameLabel)
+            return;
+        nameLabel->show();
+}
+
+void DrawObject::deleteLater(){
+
+    QObject::deleteLater();
+
+            if(!nameLabel)
+            return;
+            nameLabel->deleteLater();
+}
+
+void DrawObject::deleteItemText(QListWidgetItem * item){
+
+    nameLabel->setStyleSheet("QListWidget::item:selected{background: transparent}");
 }

@@ -16,6 +16,26 @@ NodeCatalog::NodeCatalog() {
     Content["blackbox"] = blackbox;*/
 }
 
+void NodeCatalog::clearContent()
+{
+    Content.clear();
+}
+
+QMap<QString, Node> NodeCatalog::getContent()
+{
+    return Content;
+}
+
+QVector<Node> NodeCatalog::getContentVector()
+{
+    return Content.values().toVector();
+}
+
+QList<Node> NodeCatalog::getContentList()
+{
+    return Content.values();
+}
+
 
 void NodeCatalog::insert(Node nodeToInsert) {
     QString type = nodeToInsert.getType();

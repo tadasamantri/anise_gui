@@ -19,7 +19,6 @@
 #include "node.h"
 #include "mesh.h"
 
-
 class JsonFileHandler {
 public:
     /*

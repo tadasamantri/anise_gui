@@ -23,6 +23,7 @@ public:
      void deleteTable();
     void updatePropertyTable(int nodeID);
     void displayTypeInfo(const QString &type);
+    static int const EXIT_CODE_REBOOT;
 public slots:
 
 private slots:
@@ -31,6 +32,8 @@ private slots:
     void on_actionLoad_triggered();
 
     void on_actionSave_triggered();
+
+    void on_actionSort_Mesh_triggered();
 
     void on_actionSet_framework_path_triggered();
 
@@ -42,7 +45,11 @@ private slots:
 
 private:
     void initializeGUI();
-
+    bool pathChanged = false;
+    QString saveDialog();
+    void saveFile(QString &path);
+protected:
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif  // MAINWINDOW_H

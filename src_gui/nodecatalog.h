@@ -8,11 +8,16 @@
  */
 class NodeCatalog {
 public:
-    QMap<QString, Node> Content;
     void insert(Node nodeToInsert);
     Node getNodeOfType(const QString &type);
     const Node *getPointerOfType(const QString &type);
     NodeCatalog();
+    void clearContent();
+    QMap<QString, Node> getContent();
+    QVector<Node> getContentVector();
+    QList<Node> getContentList();
+private:
+    QMap<QString, Node> Content;
 };
 
 #endif  // NODECATALOG_H

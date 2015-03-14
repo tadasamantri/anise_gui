@@ -15,11 +15,11 @@ Connection::Connection(int srcNodeID, QString srcGateName, int destNodeID,
                        QString destGateName, QVector<QPoint> waypoints)
 
     : Connection(
-          Data::instance()->getMesh()->getNodeByID(srcNodeID),
-          Data::instance()->getMesh()->getNodeByID(srcNodeID)->getGateByName(
+          Data::instance()->getNodeByID(srcNodeID),
+          Data::instance()->getNodeByID(srcNodeID)->getGateByName(
               srcGateName),
-          Data::instance()->getMesh()->getNodeByID(destNodeID),
-          Data::instance()->getMesh()->getNodeByID(destNodeID)->getGateByName(
+          Data::instance()->getNodeByID(destNodeID),
+          Data::instance()->getNodeByID(destNodeID)->getGateByName(
               destGateName),
           waypoints) {}
 

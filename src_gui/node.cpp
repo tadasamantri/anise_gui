@@ -23,12 +23,15 @@ Node::Node(QVector<Gate *> &inputGates, QVector<Gate *> &outputGates,
 void Node::setPosition(float x, float y) {
     this->position_x = x;
     this->position_y = y;
+    Data::instance()->setChanged();
 }
 
 void Node::setType(QString type) { this->type = type; }
 
 void Node::setName(QString name) {
-    this->name = Data::instance()->getMesh()->getValidAlternativeForName(name);
+    this->name = Data::instance()->getValidAlternativeForName(name);
+    Data::instance()->setChanged();
+    SingletonRender::instance()->setNodeName(ID, this->name);
 }
 
 QVector<Gate *> *Node::getInputGates() { return &this->inputGates; }
@@ -109,6 +112,7 @@ bool Node::addParam(QString descr, QString _key, QString name, QString type, QVa
 bool Node::setParam(QString key, QVariant _value) {
     if (params.contains(key)) {
         params[key].value = _value;
+        Data::instance()->setChanged();
         return true;
     }
     return false;

@@ -2,7 +2,6 @@
 #define SINGLETONRENDER_H
 
 #include "mainwindow.h"
-#include "mesh.h"
 #include "node.h"
 #include "drawobject.h"
 
@@ -35,7 +34,7 @@ public:
     /*
    * Renders the whole mesh
    */
-    void renderMesh(Mesh *workMesh);
+    void renderMesh();
 
     /*
      * Clears the MeshField
@@ -116,6 +115,9 @@ public:
     QPixmap *getImage(QString name);
     void highlightGates(QString gateType);
     void dehighlightGates();
+
+    void setNodeName(int nodeID, QString nodeName);
+
 private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
 
