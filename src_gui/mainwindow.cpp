@@ -13,7 +13,7 @@
 #include "anisecommunicator.h"
 #include "settingshandler.h"
 #include "qdebugstreamredirector.h"
-#include "singletonrender.h"
+#include "Render/singletonrender.h"
 #include "nodecatalog.h"
 #include "data.h"
 

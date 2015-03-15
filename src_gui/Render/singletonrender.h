@@ -5,14 +5,37 @@
 #include "node.h"
 #include "drawobject.h"
 
+
+/**
+  * SingletonRender handles all graphical output.
+  *
+  *
+  */
+
 // The life of the singleton instantiation is for the duration of the
 // application.
 
 class SingletonRender {
 public:
-    // The instance function returns a pointer to a static variable and thus is
-    // declared static.
+
+    /**
+     * @brief Will return a pointer to the Singleton Instance.
+     *
+     * Will return a pointer to the existing SingletonRender Instance, if no Instance exists
+     * a new instance will be constructed.
+     *
+     * @return pointer to Instance of Singleton Class
+     */
     static SingletonRender *instance();
+
+    /**
+      * @brief loads all images in ../Data/Images/ eding in *png
+      *
+      * @return TRUE if no prolems accured while loading the images.
+      *         FALSE if loading a file failed.
+      *
+      *
+      */
 
     // will load all images in ../Data/Images/ into the allImages Map
     bool loadImages();
@@ -25,41 +48,77 @@ public:
      */
     QPixmap nodeTiles[9];
 
+    /**
+     *
+     * Creates 9 Images from a Sprite and stores them in the array "this.nodeTiles".
+     * One Tile is (16x16) pixel
+     *
+     *
+     *
+     * @brief creates 9 Tiles from a Sprite.
+     *
+     * @param Sprite, QPixmap that will be divided into 9 Tiles.
+     * @return FALSE if Sprite==NULL
+     *          TRUE else
+     */
+
     bool createTilesFromImage(QPixmap *Sprite);
 
+
+    /**
+     *
+     * Will Contruct an Image made out of Tiles. Tiles are stored in "this.nodeTiles".
+     * Minimum size it will return is 3x3 Tiles.
+     *
+     *
+     * @brief createTiledPixmap will retur a Pixmap made out of Tiles
+     * @param x number of tiles in x dimension
+     * @param y number of tiles in y dimension
+     * @return Contructed QPixma from Tiles
+     */
     QPixmap* createTiledPixmap(int x, int y);
 
+
+    /**
+     *
+     *
+     * @brief setUi
+     * @param ui
+     */
     void setUi(Ui::MainWindow *ui);
 
-    /*
-   * Renders the whole mesh
-   */
+    /**
+     *
+     * @brief renderMesh, Will re-Render the whole Mesh.
+     */
     void renderMesh();
 
-    /*
-     * Clears the MeshField
+    /**
+     * @brief clearMeshField, will clear the meshfield
      */
     void clearMeshField();
 
+    /**
+     *
+     *
+     * @brief deleteMeshDrawing, delete a drawobject savely
+     * @param objectID that will be removed
+     * @return true if removed successful
+     */
+
     bool deleteMeshDrawing(int objectID);
 
-    /*
-     *Testfunction of Deleting
-     * Returns all ID's of given widget
+    /**
+     * @brief getChildrenIDs Gets all DrawObject ids of Mesh field.
+     * @return Vector filled with Ids
      */
     QVector<int> *getChildrenIDs();
 
 
 
 
-
-
-
-
     /**
-      recieves a connection and will render it on the mesheditor widget
-
-     * @brief renderConnection
+     * @brief renderConnection reders a conection into the meshfield
      * @param conToRender the connection that will be rendered
      */
     void renderConnection(Connection *conToRender,int ID);
@@ -67,43 +126,77 @@ public:
     void renderConnections();
 
 
-    /*
-   * Renders a node.
-   *
-   */
+    /**
+     *
+     * Creates a DrawOject if this node is hasnt been rendered yet.
+     * Redraws the node if node already has been created.
+     *
+     * @brief renderNode reders a node into the meshfield
+     * @param nodeToRender node that will be redered
+     * @param nodeID Unique Id of the Node
+     */
     void renderNode(Node *nodeToRender, int nodeID);
 
-    /*
-   * Render one Node Type in the Catalog
-   *
-   */
+    /**
+     * @brief renderNodeType reders one node type in the catalog
+     * @param nodeToRender node that will be rendered
+     * @param parent parent for the rendered node
+     * @param position at which position
+     */
     void renderNodeType(Node *nodeToRender, QWidget *parent, int position);
 
-    /*
-   * This will Render all Nodes in the Type Catalog.
-   */
+    /**
+     * @brief renderCatalogContent renderes all nodes in the catalog
+     * @param NodeVektor nodes that will be rendered
+     */
     void renderCatalogContent(QVector<Node> NodeVektor);
-
-    /*
-     * Draws a line from start x y to end x y
-     *
+    /**
+     * @brief drawLine draws a line from start to end
+     * @param start_x
+     * @param start_y
+     * @param end_x
+     * @param end_y
      */
     void drawLine(double start_x, double start_y, double end_x ,double end_y);
 
+
+    /**
+     * @brief drawLine draws a Line
+     * @param line as a QLine instance
+     */
     void drawLine(QLine line);
 
+
+    /**
+     * @brief drawLine draws a line
+     * @param start QPoint origin of the line
+     * @param end QPoint end of the line
+     */
     void drawLine(QPoint start, QPoint end);
 
+    /**
+     * @brief drawLines draws a line conecting all Points in the vector
+     * @param pointVector a vector filled with QPoints
+     */
     void drawLines(QVector<QPoint> *pointVector);
 
+    /**
+     * @brief drawLines draws a line conecting all Points in the vector ending in the point
+     * @param pointVector a vector with points
+     * @param point the point that will be conected last
+     */
     void drawLines(QVector<QPoint> *pointVector, QPoint *point);
 
-
-
-
-
-
+    /**
+     * @brief getOutputGateDrawOffset
+     * @return Offset of the gate
+     */
     QPoint getOutputGateDrawOffset() const;
+
+    /**
+     * @brief setOutputGateDrawOffset, setter
+     * @param value will be the new offset
+     */
     void setOutputGateDrawOffset(const QPoint &value);
 
     QPoint getInputGateDrawOffset() const;

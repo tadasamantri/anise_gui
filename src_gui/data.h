@@ -5,7 +5,7 @@
 #include "mesh.h"
 #include "nodecatalog.h"
 #include "mainwindow.h"
-#include "singletonrender.h"
+#include "Render/singletonrender.h"
 #include "ui_mainwindow.h"
 #include "connection.h"
 #include "node.h"

@@ -538,8 +538,7 @@ void SingletonRender::renderNode(Node *nodeToRender, int nodeID) {
         allDrawnNodes.insert(nodeID, NodeDrawObject);
     }
     // TODO should use layouts instead of hardcoded position!
-    allDrawnNodes.value(nodeID)
-            ->move(nodeToRender->position_x, nodeToRender->position_y);
+    allDrawnNodes.value(nodeID)->move(nodeToRender->position_x, nodeToRender->position_y);
 
     allDrawnNodes.value(nodeID)->show();
 }
