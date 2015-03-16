@@ -84,7 +84,8 @@ public:
     QList<Connection *> getConnections(int nodeID);
 public slots:
     bool deleteItem();
-
+    void setFocusMeshObject(int nodeID);
+    void updateNode(QTableWidgetItem *item);
 private:
     explicit Data(QObject *parent = 0);
 

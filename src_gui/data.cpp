@@ -331,6 +331,18 @@ void Data::setDrawLineMode(QString gateType){
     SingletonRender::instance()->highlightGates(gateType);
 }
 
+void Data::setFocusMeshObject(int nodeID)
+{
+    if(mesh)
+        mesh->setFocusMeshObject(nodeID);
+}
+
+void Data::updateNode(QTableWidgetItem *item)
+{
+    if(mesh)
+        mesh->updateNode(item);
+}
+
 void Data::setEditMode(){
     SingletonRender::instance()->dehighlightGates();
 }
