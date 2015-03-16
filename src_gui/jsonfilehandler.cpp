@@ -290,6 +290,11 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
     }
 }
 
+void JsonFileHandler::parseProgress(const QString &textline)
+{
+
+}
+
 /**
  * @brief JsonFileHandler::writeFile writes a string into a given file
  * @param path path to file

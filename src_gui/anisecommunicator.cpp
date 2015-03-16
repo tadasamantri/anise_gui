@@ -1,4 +1,5 @@
 #include "anisecommunicator.h"
+#include "jsonfilehandler.h"
 #include <QDebug>
 
 QProcess *AniseCommunicator::anise_process = new QProcess();
@@ -33,6 +34,16 @@ bool AniseCommunicator::validPath(const QString &path) {
     result = result.remove("\n").remove(" ");
     return result == "anise-framework";
 }
+bool AniseCommunicator::getOnProgress() const
+{
+    return onProgress;
+}
+
+void AniseCommunicator::setOnProgress(bool value)
+{
+    onProgress = value;
+}
+
 
 /**
   * AniseCommunicator read all available bytes from given Process Channel
@@ -105,4 +116,12 @@ void AniseCommunicator::setFrameworkPath(QString newPath) {
 AniseCommunicator::~AniseCommunicator()
 {
     delete anise_process;
+}
+
+void AniseCommunicator::readProgress()
+{
+    if(!onProgress)
+        return;
+    QString line = anise_process->readLine();
+    JsonFileHandler::parseProgress(line);
 }

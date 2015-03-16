@@ -82,12 +82,15 @@ public:
     ~Data();
     void setEditMode();
     void setDrawLineMode(QString gateType);
-
+    bool isSimulating();
     QList<Connection *> getConnections(int nodeID);
+
 public slots:
     bool deleteItem();
     void setFocusMeshObject(int nodeID);
     void updateNode(QTableWidgetItem *item);
+    void startSimulation();
+    void stopSimulation();
 private:
     explicit Data(QObject *parent = 0);
 
@@ -121,6 +124,7 @@ private:
     void updateConnections(int ID, QPoint offset);
     bool changed = false;
     bool repaint = false;
+    bool onSimulation;
 };
 
 #endif  // DATA_H

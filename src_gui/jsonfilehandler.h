@@ -59,6 +59,7 @@ public:
      * @param obj JSON-Object containing all Information about the Mesh to be loaded
      */
     static void extractNodesAndConnections(const QJsonObject &obj);
+    static void parseProgress(const QString &textline);
 };
 
 #endif  // FILEHANDLER_H

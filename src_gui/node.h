@@ -83,6 +83,9 @@ public:
     QPoint getPosition();
     QPoint getGatePosition(QString gateName);
     Node::parameter getParamStructByKey(const QString &key);
+    float getProgress() const;
+    void setProgress(float value);
+
 private:
     bool addParam(QString descr, QString _key, QString name, QString type, QVariant _value);
     QString description;
@@ -90,6 +93,7 @@ private:
     QString type, name;
     int ID = -2;
     QMap<QString, parameter> params;  // maps <identifier, value>
+    float progress;
 };
 
 #endif  // NODE_H
