@@ -199,7 +199,7 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             // parse the position and other gui_parameters
             if (theNode.contains("gui_params")) {
                 QVariantMap p_gui = theNode["gui_params"].toObject().toVariantMap();
-                createdNode->setPosition(p_gui["x"].toInt(), p_gui["y"].toInt());
+                createdNode->moveTo(p_gui["x"].toInt(), p_gui["y"].toInt());
             }
             // do some default stuff
 

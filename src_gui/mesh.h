@@ -36,7 +36,7 @@ private:
      * @brief removeNode
      * @param ID the ID of the Node to be removed
      */
-    void removeNode(int ID);
+    void deleteNode(int ID);
 
     /**
      * @brief getNodeByName search a Node by its unique Name

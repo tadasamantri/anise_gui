@@ -201,7 +201,7 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
         Node *newNode = Data::instance()->nodeFactory->createNode(_class);
 
         newNode->setName(_class);
-        newNode->setPosition(DropPoint.x(), DropPoint.y());
+        newNode->moveTo(DropPoint.x(), DropPoint.y());
         clearNewLine();
         Data::instance()->addNodeToMesh(newNode);
     }

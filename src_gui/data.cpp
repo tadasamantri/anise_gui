@@ -181,7 +181,7 @@ int Data::getFocusedID()
  */
 void Data::removeNodeFromMesh(int ID) {
     if (!mesh->nodesInMesh.contains(ID)) return;
-    mesh->removeNode(ID);
+    mesh->deleteNode(ID);
     changed = true;
 }
 
@@ -284,11 +284,9 @@ void Data::moveObjectInMesh(QPoint *start, QPoint *end, int ID) {
  */
 void Data::moveObjectInMesh(QPoint *Position, int ID) {
     if (this->mesh->nodesInMesh.contains(ID)) {
-        QPoint offset = *Position - mesh->getNodeByID(ID)->getPosition();
-        this->mesh->getNodeByID(ID)->setPosition(Position->x(), Position->y());
-        SingletonRender::instance()->renderMesh();
+        this->mesh->getNodeByID(ID)->moveTo(Position->x(), Position->y());
         changed = true;
-
+        SingletonRender::instance()->renderMesh();
     } else if (this->mesh->connectionsInMesh.contains(ID)) {
         qDebug() << "cant move a connection joint with onle one QPoint";
         return;
@@ -334,7 +332,13 @@ void Data::setDrawLineMode(QString gateType){
 }
 
 void Data::setEditMode(){
-
     SingletonRender::instance()->dehighlightGates();
 }
 
+QList<Connection *> Data::getConnections(int nodeID){
+    QList<Connection *> result;
+    for(Connection *c : mesh->connectionsInMesh.values())
+        if(c->getSrcNode()->getID() == nodeID || c->getDestNode()->getID() == nodeID)
+            result << c;
+    return result;
+}

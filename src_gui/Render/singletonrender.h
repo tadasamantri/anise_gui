@@ -196,6 +196,7 @@ public:
    */
     void setOutputGateDrawOffset(const QPoint &value);
 
+    void updateConnections(int nodeID, QPoint offset);
     QPoint getInputGateDrawOffset() const;
     void setInputGateDrawOffset(const QPoint &value);
 

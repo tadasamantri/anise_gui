@@ -47,7 +47,7 @@ public:
    * @param x new position_x
    * @param y new position_y
    */
-    void setPosition(float x, float y);
+    void moveTo(float x, float y);
 
     void setType(QString type);
 

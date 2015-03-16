@@ -20,10 +20,12 @@ Node::Node(QVector<Gate *> &inputGates, QVector<Gate *> &outputGates,
     this->name = name;
 }
 
-void Node::setPosition(float x, float y) {
+void Node::moveTo(float x, float y) {
+    QPoint offset = QPoint(x,y) - QPoint(position_x, position_y);
     this->position_x = x;
     this->position_y = y;
     Data::instance()->setChanged();
+    SingletonRender::instance()->updateConnections(ID, offset);
 }
 
 void Node::setType(QString type) { this->type = type; }
@@ -58,30 +60,20 @@ void Node::addGates(QVector<Gate *> gates, const bool &direction) {
         foreach (Gate *gate, gates) { outputGates << gate; }
 }
 
-bool Node::isInputGate(QString gateName)
-{
-    foreach(Gate *gate , *this->getInputGates()){
-        
-        if(gate->getName() == gateName)
-            return gate->getDirection();
-        
+bool Node::isInputGate(QString gateName) {
+    foreach (Gate *gate, *this->getInputGates()) {
+        if (gate->getName() == gateName) return gate->getDirection();
     }
 
     return false;
 }
 
-bool Node::isOutputGate(QString gateName)
-{
-    foreach(Gate *gate , *this->getOutputGates()){
-
-        if(gate->getName() == gateName)
-            return !gate->getDirection();
-
+bool Node::isOutputGate(QString gateName) {
+    foreach (Gate *gate, *this->getOutputGates()) {
+        if (gate->getName() == gateName) return !gate->getDirection();
     }
 
     return false;
-
-
 }
 
 /**
@@ -93,12 +85,12 @@ bool Node::isOutputGate(QString gateName)
  * @param _value value to be stored
  * @return true if the parameter was added, false elsewise
  */
-bool Node::addParam(QString descr, QString _key, QString name, QString type, QVariant _value) {
-    if (!this->params.contains(_key)){
+bool Node::addParam(QString descr, QString _key, QString name, QString type,
+                    QVariant _value) {
+    if (!this->params.contains(_key)) {
         parameter p{descr, _key, name, type, _value};
         this->params.insert(_key, p);
-    }
-    else
+    } else
         return false;
     return true;
 }
@@ -131,10 +123,11 @@ bool Node::removeParam(QString _key) {
     return true;
 }
 
-Node::parameter Node::getParamStructByKey(const QString &key){
-    if(params.contains(key))
+Node::parameter Node::getParamStructByKey(const QString &key) {
+    if (params.contains(key))
         return params[key];
-    else return parameter{QString(),QString(),QString(),QString(),QVariant()};
+    else
+        return parameter{QString(), QString(), QString(), QString(), QVariant()};
 }
 
 QVariant Node::getParamByKey(const QString &_key) {
@@ -146,9 +139,8 @@ QString Node::toString() {
     QString out = "";
     out += "class:" + type + "\nname:" + name + "\n\nparameters:\n";
     foreach (QString key, params.keys()) {
-        out += "key:" + key + ", " + "value: " +
-                params[key].value.typeName() + " " +
-                params[key].value.toString() + "\n";
+        out += "key:" + key + ", " + "value: " + params[key].value.typeName() +
+                " " + params[key].value.toString() + "\n";
     }
     out += "position: (" + QString::number(position_x) + "|" +
             QString::number(position_y);
@@ -156,18 +148,13 @@ QString Node::toString() {
 }
 
 Gate *Node::getGateByName(const QString &name) {
-
     foreach (Gate *gate, inputGates + outputGates)
-        if (gate->getName() == name)
-            return gate;
+        if (gate->getName() == name) return gate;
 
     return 0;
 }
 
-void Node::addParam(QString key, Node::parameter p)
-{
-    params[key] = p;
-}
+void Node::addParam(QString key, Node::parameter p) { params[key] = p; }
 
 float Node::x() { return position_x; }
 
@@ -177,57 +164,47 @@ void Node::setX(const int &newX) { position_x = newX; }
 
 void Node::setY(const int &newY) { position_y = newY; }
 
-int Node::getID() const
-{
-    return ID;
-}
+int Node::getID() const { return ID; }
 
-void Node::setID(int value)
-{
-    ID = value;
-}
+void Node::setID(int value) { ID = value; }
 
-QPoint Node::getPosition()
-{
+QPoint Node::getPosition() {
     return QPoint(this->position_x, this->position_y);
 }
 
-QPoint Node::getGatePosition(QString gateName){
+QPoint Node::getGatePosition(QString gateName) {
     QPoint result;
     int gateHeight = SingletonRender::instance()->getImage("gate.png")->height();
     int gateWidth = SingletonRender::instance()->getImage("gate.png")->width();
-    int drawObjectWidth = 3*16+2*gateWidth;
+    int drawObjectWidth = 3 * 16 + 2 * gateWidth;
     int gateOffset = 10;
     int counter = 0;
-    foreach (Gate *gate, outputGates){
+    foreach (Gate *gate, outputGates) {
         qDebug() << gate->getName();
-        if (gate->getName()== gateName) {
-            result = (QPoint(drawObjectWidth, counter * (gateHeight + gateOffset) + 5+gateHeight));
-            result.operator +=(this->getPosition());
+        if (gate->getName() == gateName) {
+            result = (QPoint(drawObjectWidth,
+                             counter * (gateHeight + gateOffset) + 5 + gateHeight));
+            result.operator+=(this->getPosition());
             qDebug() << result.x() << ";" << result.y();
             return result;
         }
         counter++;
     }
     counter = 0;
-    foreach (Gate *gate, inputGates){
+    foreach (Gate *gate, inputGates) {
         if (gate->getName() == gateName) {
-
-            result = (QPoint(0, counter * (gateHeight + gateOffset) + 5+gateHeight));
-            result.operator +=(this->getPosition());
+            result =
+                    (QPoint(0, counter * (gateHeight + gateOffset) + 5 + gateHeight));
+            result.operator+=(this->getPosition());
             return result;
-
         }
         counter++;
     }
 
-    //best guess is the position of the node if no gate is found
+    // best guess is the position of the node if no gate is found
     return this->getPosition();
 }
-
 
 QString Node::getDescription() { return description; }
 
 void Node::setDescription(const QString &value) { description = value; }
-
-

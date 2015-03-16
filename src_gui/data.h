@@ -81,6 +81,7 @@ public:
     void setEditMode();
     void setDrawLineMode(QString gateType);
 
+    QList<Connection *> getConnections(int nodeID);
 public slots:
     bool deleteItem();
 

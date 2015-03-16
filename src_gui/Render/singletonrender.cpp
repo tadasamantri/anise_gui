@@ -661,6 +661,25 @@ void SingletonRender::setOutputGateDrawOffset(const QPoint &value)
     outPutGateDrawOffset = value;
 }
 
+void SingletonRender::updateConnections(int nodeID, QPoint offset)
+{
+    if(nodeID < 0)
+        return;
+    QList<Connection *> connections = Data::instance()->getConnections(nodeID);
+    for(Connection *c : connections){
+        QVector<QPoint> waypoints = c->getWaypoints();
+        bool backward = false;
+        if(c->getDestNode()->getID() == nodeID)
+            backward = true;
+        int size = waypoints.size();
+        for(int i = 0; i < size; i++){
+            waypoints[backward?size - i - 1 : i] += offset/(pow(1.5,i+1));
+        }
+        c->setWaypoints(waypoints);
+        renderConnection(c,c->getID());
+    }
+}
+
 
 bool SingletonRender::deleteMeshDrawing(int objectID) {
     bool success = false;
