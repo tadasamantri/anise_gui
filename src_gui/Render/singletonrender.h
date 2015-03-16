@@ -208,6 +208,8 @@ public:
     void dehighlightGates();
 
     void setNodeName(int nodeID, QString nodeName);
+    void clearAllConnections();
+    QMap<int, QVector<DrawObject *> > *getAllConnections();
 
 private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
@@ -260,6 +262,7 @@ private:
     static SingletonRender *m_pInstance;
 
     void moveJointsOnWaypoints(Connection *conToRender, int ID);
+
 };
 
 #endif  // SINGLETONRENDER_H

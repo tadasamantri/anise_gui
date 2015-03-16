@@ -333,13 +333,13 @@ QString JsonFileHandler::meshToJson() {
         theConnection["dest_gate"] = c->getDestGate()->getName();
         QJsonObject gui_params;
         QJsonArray way;
-        QVector<QPoint> points = c->getWaypoints();
+        QVector<QPoint> points = *c->getWaypoints();
         for (int i = 0; i < points.size(); i++) {
-            QPoint p = c->getWaypoints().at(i);
+            QPoint p = points.at(i);
             QJsonObject point;
             point["x"] = p.x();
             point["y"] = p.y();
-            way.push_back(point);
+            way<<(point);
         }
         gui_params["waypoints"] = way;
         theConnection["gui_params"] = gui_params;

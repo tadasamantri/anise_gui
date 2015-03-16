@@ -32,18 +32,16 @@ public:
     void setSrcNode(Node *node);
     void setDestNode(Node *node);
 
-    QVector<QPoint> waypoints;
-
-    QVector<QPoint> getWaypoints() const;
+    QVector<QPoint> *getWaypoints();
     void setWaypoints(const QVector<QPoint> &value);
-
+    void clearWaypoints();
     int getID() const;
     void setID(int value);
 
 private:
     Gate *src_gate, *dest_gate;
     Node *src_node, *dest_node;
-
+    QVector<QPoint> waypoints;
     int ID;
 };
 
