@@ -11,21 +11,20 @@
  */
 
 class AniseCommunicator : public QObject {
-
     Q_OBJECT
 
 private:
     /**
-      * readOuput always has the last output read
-      */
+    * readOuput always has the last output read
+    */
     static QString readOutput;
     /**
-      * path to framework should be initialized while starting the gui
-      */
+    * path to framework should be initialized while starting the gui
+    */
     static QString path;
     /**
-      * Executes ANISE Framework
-      */
+    * Executes ANISE Framework
+    */
     static QProcess *anise_process;
     static bool path_is_set;
 
@@ -39,4 +38,4 @@ public:
     ~AniseCommunicator();
 };
 
-#endif // ANISECOMMUNICATOR_H
+#endif  // ANISECOMMUNICATOR_H

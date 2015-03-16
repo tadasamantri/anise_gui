@@ -78,7 +78,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 }
 
 void MainWindow::saveFile(QString &path){
-    JsonFileHandler::saveMesh(path, Data::instance()->getMesh());
+    JsonFileHandler::saveMesh(path);
     Data::instance()->unsetChanged();
 }
 

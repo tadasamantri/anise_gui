@@ -295,16 +295,16 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
  * @param path path to file
  * @param fileContent the content written to the specified file
  */
-void JsonFileHandler::saveMesh(const QString &path, Mesh *theMesh) {
+void JsonFileHandler::saveMesh(const QString &path) {
     QFile file(path);
 
     file.open(QIODevice::WriteOnly);
     // QByteArray data = *JsonFileHandler::meshToJson(theMesh);
-    file.write(meshToJson(theMesh).toUtf8());
+    file.write(meshToJson().toUtf8());
     file.close();
 }
 
-QString JsonFileHandler::meshToJson(Mesh *mesh) {
+QString JsonFileHandler::meshToJson() {
     QJsonArray nodes, connections;
     foreach (Node *n, Data::instance()->getAllNodes()) {
         QJsonObject theNode;

@@ -8,14 +8,15 @@
 #include <QDebug>
 
 class Connection {
-
 public:
     Connection();
-    Connection(Node *src_node, Gate *src_gate, Node *dest_node, Gate *dest_gate, QVector<QPoint> waypoints = QVector<QPoint>());
-    Connection(int srcNodeID, QString srcGateName, int destNodeID, QString destGateName, QVector<QPoint> waypoints = QVector<QPoint>());
+    Connection(Node *src_node, Gate *src_gate, Node *dest_node, Gate *dest_gate,
+               QVector<QPoint> waypoints = QVector<QPoint>());
+    Connection(int srcNodeID, QString srcGateName, int destNodeID,
+               QString destGateName,
+               QVector<QPoint> waypoints = QVector<QPoint>());
 
-
-    //returns the closest joint to the point
+    // returns the closest joint to the point
     int getJoint(QPoint *point);
     void setJoint(int index, QPoint *newPosition);
 

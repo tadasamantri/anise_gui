@@ -11,32 +11,51 @@ class Mesh : public QObject {
 
     Q_OBJECT
 private:
-    // konstruktor
+
     explicit Mesh(QObject *parent = 0);
 
 
-    // add Node to mesh
-    // return the id of the new node
+    /**
+     * @brief addNode Add a Node to the Mesh
+     * @param Node The Node to be added
+     * @return the ID of the added Node
+     */
     int addNode(Node *Node);
 
-    // add Connection to mesh
-    // return the id of the new connection
+    /**
+     * @see addNode
+     */
     int addConnection(Connection *connection);
 
+    /**
+     * @see addNode
+     */
     int addNodes(QList<Node *> &list);
 
+    /**
+     * @brief removeNode
+     * @param ID the ID of the Node to be removed
+     */
     void removeNode(int ID);
 
-    // returns pointer to Node behind name
+    /**
+     * @brief getNodeByName search a Node by its unique Name
+     * @param name Name of the Node
+     * @return Pointer to the Node
+     */
     Node *getNodeByName(QString name);
 
-    // return node's address behind ID
+    /**
+     * @see getNodeByName
+     */
     Node *getNodeByID(int ID);
 
-    // return connection's address behind ID
+    /**
+     * @see getNodeByID()
+     */
     Connection *getConnectionByID(int ID);
 
-    // returns all Nodes from nodesInMash as a QList
+
     QList<Node *> getAllNodes();
 
     // returns all Connection from connectionsInMash as a QList

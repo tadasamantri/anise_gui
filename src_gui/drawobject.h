@@ -10,19 +10,17 @@
 #include <QListWidgetItem>
 #include "gatebutton.h"
 
-class DrawObject : public QWidget{
-
-   Q_OBJECT
+class DrawObject : public QWidget {
+    Q_OBJECT
 
 public:
     int ID;
-    QVector<QLabel*> labelvector;
+    QVector<QLabel *> labelvector;
 
-    DrawObject(int id, QPoint position, int width , int height, QWidget *parent = 0, int highlightWidth = 3);
+    DrawObject(int id, QPoint position, int width, int height,
+               QWidget *parent = 0, int highlightWidth = 3);
 
-    QVector<GateButton*> gateVector;
-
-
+    QVector<GateButton *> gateVector;
 
     QBitmap mainMaskUnhighlighted;
     QBitmap mainMaskHighlighted;
@@ -30,17 +28,18 @@ public:
     QPainter painter;
     QPixmap overAllPicture;
 
-    void addPicture (QPixmap *pic, QPoint position);
+    void addPicture(QPixmap *pic, QPoint position);
     void addPicture(QPixmap *pic, QPoint position, QString nodeName);
-    void addGateButton(QPixmap *pic, QPoint position, QString gateName, QString gateType, bool direction);
+    void addGateButton(QPixmap *pic, QPoint position, QString gateName,
+                       QString gateType, bool direction);
 
     QPoint getGatePosition(QString gateName);
 
-    //Modify the mask of the drawobject inserting the mask of the pixmap at given position
+    // Modify the mask of the drawobject inserting the mask of the pixmap at given
+    // position
     void modifyMask(QPixmap *pic, QPoint position, bool updateMask = true);
 
-    QPixmap getPicture ();
-
+    QPixmap getPicture();
 
     void dehighlight();
     void highlight();
@@ -49,13 +48,10 @@ public:
     void paintEvent(QPaintEvent *);
     int getHighlightWidth() const;
 
-
     void dehighlightGates();
     void highlightGates(QString gateType);
 
     void setNodeName(QString nodeName);
-
-
 
     void move(int x, int y);
     void hide();
@@ -70,24 +66,18 @@ public slots:
     void releasedOnGate(QString gateName, QPoint position);
     void nodeNameChanged(QListWidgetItem *itemChanged);
 
-
 private slots:
     void restrictOneClickOneItem(QListWidgetItem *itemClicked);
     void deleteItemText(QListWidgetItem *item);
+
 private:
-
     int highlightWidth;
-    QListWidget  *nameLabel;
+    QListWidget *nameLabel;
 
-
-
-void updateOverAllPicture(QPixmap *newPicture, QPoint position);
-int getPixel(const int x, const int y) const;
-void setPixel(const int x, const int y, const int pixel);
-void highlightMask();
-
-
+    void updateOverAllPicture(QPixmap *newPicture, QPoint position);
+    int getPixel(const int x, const int y) const;
+    void setPixel(const int x, const int y, const int pixel);
+    void highlightMask();
 };
 
-
-#endif // DRAWOBJECT_H
+#endif  // DRAWOBJECT_H

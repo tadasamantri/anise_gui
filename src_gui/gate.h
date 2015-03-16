@@ -16,7 +16,6 @@ public:
     QList<QString> getTypes();
     QString getName();
     void setName(QString name);
-
     QString getType();
 private:
     QList<QString> types;

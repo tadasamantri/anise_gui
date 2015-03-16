@@ -21,40 +21,42 @@
 
 class JsonFileHandler {
 public:
-    /*
-     * will simply load the file
+    /**
+     * @brief loadFile Load a Textfile
+     * @param path Path to File
+     * @return File Content as QString
      */
     static QString loadFile(const QString &path);
 
-    /*
-     * Will extract information from the file
+    /**
+     * @brief saveMesh Save current Project to a File
+     * @param path the File to be written
+     * @param theMesh
      */
-    //static Mesh parseJsonString(QString &jsonString);  <-- obsolete!
+    static void saveMesh(const QString &path);
 
-    /*
-     * will write the file to diskQString
+    /**
+     * @brief meshToJson
+     * @return JSON-String Representation of the current Mesh
      */
+    static QString meshToJson();
 
-    static void saveMesh(const QString &path, Mesh *theMesh);
-
-    /*
-     * Print the File
-     * (just for debugging)
-     */
-
-    static void printString(const QString &fileContent);
-
-    static QString meshToJson(Mesh *mesh);
-
-    /*
-     * reads the given file and returns a QJsonObject
+    /**
+     * @brief readFile Reads the given File and returnes its content as QJsonObject
+     * @param path path to specific File
+     * @return JsonObject representingFile Content
      */
     static QJsonObject *readFile(const QString &path);
 
+    /**
+     * @brief parseNodeTypesFromAnise Parses all existing Nodes an puts them into the Catalog
+     * @param output Output of calling Framework --nodes --mashine
+     */
     static void parseNodeTypesFromAnise(QString & output);
 
-    /*
-     * extracts all nodes given in QJsonObject and pushes them into the given list
+    /**
+     * @brief extractNodesAndConnections Load a JSON-Object into the Mesh
+     * @param obj JSON-Object containing all Information about the Mesh to be loaded
      */
     static void extractNodesAndConnections(const QJsonObject &obj);
 };
