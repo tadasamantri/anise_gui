@@ -429,8 +429,6 @@ void Mesh::sortForce() {
         }
     }
 
-    // remove all connection waypoints so they will be straight lines
-    foreach (Connection *c, this->getAllConnections()) { c->waypoints.clear(); }
 
     // move them into the view field
     float miny = 12345670.0;
@@ -447,6 +445,11 @@ void Mesh::sortForce() {
     foreach (Node *nodeI, this->getAllNodes()) {
         nodeI->moveTo(nodeI->x() - minx, nodeI->y() - miny);
     }
+
+    // remove all connection waypoints so they will be straight lines
+    foreach (Connection *c, this->getAllConnections()) { c->waypoints.clear(); }
+
+
 }
 
 Mesh::~Mesh() {

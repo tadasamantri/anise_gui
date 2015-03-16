@@ -20,7 +20,7 @@ public:
    * @brief Will return a pointer to the Singleton Instance.
    *
    * Will return a pointer to the existing SingletonRender Instance, if no
-   *Instance exists
+   * Instance exists
    * a new instance will be constructed.
    *
    * @return pointer to Instance of Singleton Class

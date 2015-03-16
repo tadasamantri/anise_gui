@@ -62,9 +62,11 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID) {
 
     // create new Lines
     // if no waypoints are given, that means no joints are in connection, than create on in the middle of the line
-    if(conToRender->waypoints.isEmpty())
+    if(conToRender->waypoints.isEmpty()){
         conToRender->waypoints << 0.5 * (srcGatePosition + destGatePosition);
+        //conToRender->waypoints << 0.6 * (srcGatePosition + destGatePosition);
 
+    }
     //draw lines of a connection
     for (int index = 0; index < conToRender->waypoints.size() - 1; index++) {
         tempVec << QLine(conToRender->waypoints.at(index),
