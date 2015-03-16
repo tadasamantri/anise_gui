@@ -263,10 +263,13 @@ QPixmap* SingletonRender::createTiledPixmap(int x, int y){
 
     //resize the QPixmap
     QPixmap *result = new QPixmap(dimX*16, dimY*16);
+    result->fill(Qt::transparent);
+
 
 
     // create a painter
     QPainter painter(result);
+    //painter.setRenderHint(QPainter::Antialiasing, false);
     painter.setBrush(Qt::green);
 
     bool isTop = false;
@@ -350,40 +353,11 @@ QPixmap* SingletonRender::createTiledPixmap(int x, int y){
             //add the image to our QPixmap
             temp = &(this->nodeTiles[indexOfTile]);
             //qDebug() << "rowX " << rowX << "|" << dimX << "rowY " << rowY <<"|" << dimY << "tileId" << indexOfTile;
-            if(indexOfTile == 0){
-
-                QString hexadecimal;
-                QImage testImage = temp->toImage();
-                uint decimal = testImage.pixel(0,0);
-                hexadecimal.setNum(decimal, 16);
-                qDebug() << "temp: " << hexadecimal;
-
-            }
 
             painter.drawPixmap(rowX*16, rowY*16, 16, 16, *temp);
-
-           /* if(boolean){
-            QLabel *test = new QLabel(this->ui->meshField);
-            test->setPixmap(nodeTiles[0]);
-            test->adjustSize();
-            test->show();
-            boolean = false;
-
-            QString hexadecimal;
-            QImage testImage = temp->toImage();
-            uint decimal = testImage.pixel(14,0);
-            hexadecimal.setNum(decimal, 16);
-            qDebug() << "loadedpicture: " << hexadecimal;
-
-            }*/
         }
     }
 
-    QString hexadecimal;
-    QImage testImage = result->toImage();
-    uint decimal = testImage.pixel(0,0);
-    hexadecimal.setNum(decimal, 16);
-    qDebug() << "result: " << hexadecimal;
     return result;
 }
 
