@@ -62,7 +62,8 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID) {
 
     // create new Lines
     // if no waypoints are given, that means no joints are in connection, than create on in the middle of the line
-    if(conToRender->waypoints.isEmpty()){
+
+    if(conToRender->getWaypoints()->isEmpty()){
 
         //delete all old joints
         foreach (DrawObject* joint, allConnections[ID]) {
@@ -70,18 +71,19 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID) {
 
         }
         allConnections.remove(ID);
-        conToRender->waypoints << 0.5 * (srcGatePosition + destGatePosition);
+        conToRender->setWaypoints(QVector<QPoint>() << 0.5 * (srcGatePosition + destGatePosition));
+
         //conToRender->waypoints << 0.6 * (srcGatePosition + destGatePosition);
 
     }
     //draw lines of a connection
-    for (int index = 0; index < conToRender->waypoints.size() - 1; index++) {
-        tempVec << QLine(conToRender->waypoints.at(index),
-                         conToRender->waypoints.at(index + 1));
+    for (int index = 0; index < conToRender->getWaypoints()->size() - 1; index++) {
+        tempVec << QLine(conToRender->getWaypoints()->at(index),
+                         conToRender->getWaypoints()->at(index + 1));
     }
 
-        tempVec.push_front(QLine(srcGatePosition, conToRender->waypoints.first())); // first line
-        tempVec << QLine(conToRender->waypoints.last(), destGatePosition); //last line
+        tempVec.push_front(QLine(srcGatePosition, conToRender->getWaypoints()->first())); // first line
+        tempVec << QLine(conToRender->getWaypoints()->last(), destGatePosition); //last line
 
     this->allLines.insert(ID, tempVec);
 
@@ -94,7 +96,7 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID) {
 
 
         // now draw all joints
-        for(int i = 0; i < conToRender->waypoints.size(); i++) {
+        for(int i = 0; i < conToRender->getWaypoints()->size(); i++) {
             if (!allImages.contains("joint.png")) {
                 qDebug() << "joint.png missing! cant draw connections!";
                 return;
@@ -121,8 +123,6 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID) {
     }
 
     this->moveJointsOnWaypoints(conToRender, ID);
-
-
 }
 
 
@@ -133,17 +133,19 @@ void SingletonRender::moveJointsOnWaypoints(Connection * conToRender, int ID){
     int index = 0;
 
     //move all joints to the correct position
+
     foreach (DrawObject* joint,  allConnections[ID]) {
 
-        if (index == conToRender->waypoints.size()) {
+        if (index == conToRender->getWaypoints()->size()) {
             qDebug() << "Waypoint Array out of bounds";
         }
+
 
         // calculate the middle of the Image
         posxOffset = -joint->width() / 2;
         posyOffset = -joint->height() / 2;
 
-        joint->move(conToRender->waypoints.at(index).x()+posxOffset, conToRender->waypoints.at(index).y()+posyOffset);
+        joint->move(conToRender->getWaypoints()->at(index).x()+posxOffset, conToRender->getWaypoints()->at(index).y()+posyOffset);
         joint->show();
         index++;
     }
@@ -624,6 +626,12 @@ void SingletonRender::clearAll(QWidget *parent) {
         this->allLines = QMap<int, QVector<QLine>>();
     }
 }
+QMap<int, QVector<DrawObject *> > *SingletonRender::getAllConnections()
+{
+    return &allConnections;
+}
+
+
 QPoint SingletonRender::getInputGateDrawOffset() const
 {
     return inputGateDrawOffset;
@@ -650,15 +658,14 @@ void SingletonRender::updateConnections(int nodeID, QPoint offset)
         return;
     QList<Connection *> connections = Data::instance()->getConnections(nodeID);
     for(Connection *c : connections){
-        QVector<QPoint> waypoints = c->getWaypoints();
+        QVector<QPoint> *waypoints = c->getWaypoints();
         bool backward = false;
         if(c->getDestNode()->getID() == nodeID)
             backward = true;
-        int size = waypoints.size();
+        int size = waypoints->size();
         for(int i = 0; i < size; i++){
-            waypoints[backward?size - i - 1 : i] += offset/(pow(1.5,i+1));
+            (*waypoints)[backward?size - i - 1 : i] += offset/(pow(1.5,i+1));
         }
-        c->setWaypoints(waypoints);
         renderConnection(c,c->getID());
     }
 }
@@ -762,6 +769,16 @@ void SingletonRender::setNodeName(int nodeID, QString nodeName)
 
 }
 
+void SingletonRender::clearAllConnections()
+{
+    for(int i = 0; i < allConnections.size(); i++){
+        for(int j = 0; j < allConnections[i].size(); j++)
+            delete allConnections[i][j];
+        allConnections[i].clear();
+    }
+    allConnections.clear();
+}
+
 
 QPixmap *SingletonRender::getImage(QString name){
 
@@ -770,6 +787,3 @@ QPixmap *SingletonRender::getImage(QString name){
     return new QPixmap();
 
 }
-
-
-

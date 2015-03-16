@@ -72,9 +72,15 @@ Gate *Connection::getSrcGate() { return src_gate; }
 
 void Connection::setDestNode(Node *node) { dest_node = node; }
 
-QVector<QPoint> Connection::getWaypoints() const { return waypoints; }
+QVector<QPoint> *Connection::getWaypoints() { return &waypoints; }
 
 void Connection::setWaypoints(const QVector<QPoint> &value) {  waypoints = value; }
+
+void Connection::clearWaypoints()
+{
+    waypoints.clear();
+    SingletonRender::instance()->clearAllConnections();
+}
 
 int Connection::getID() const { return ID; }
 

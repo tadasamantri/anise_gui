@@ -31,11 +31,17 @@ private:
     static void read(QProcess::ProcessChannel pc);
     static void read();
     static bool validPath(const QString &path);
+    bool onProgress;
 
 public:
     static QString getAllNodeTypes();
     static void setFrameworkPath(QString path);
     ~AniseCommunicator();
+    bool getOnProgress() const;
+    void setOnProgress(bool value);
+
+private slots:
+    void readProgress();
 };
 
 #endif  // ANISECOMMUNICATOR_H

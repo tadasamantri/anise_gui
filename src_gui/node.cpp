@@ -1,6 +1,6 @@
 #include "data.h"
 #include "node.h"
-
+#include <assert.h>
 Node::Node() {
     inputGates = QVector<Gate *>();
     outputGates = QVector<Gate *>();
@@ -94,6 +94,17 @@ bool Node::addParam(QString descr, QString _key, QString name, QString type,
         return false;
     return true;
 }
+float Node::getProgress() const
+{
+    return progress;
+}
+
+void Node::setProgress(float value)
+{
+    assert(0 <= value && value <= 1);
+    progress = value;
+}
+
 
 /**
  * @brief Node::setParam

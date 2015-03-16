@@ -37,6 +37,9 @@ void Data::setMainWindow(MainWindow *value) { mainWindow = value; }
  */
 void Data::initialize(MainWindow *mainWindow) {
     this->mainWindow = mainWindow;
+    //connect start and stop signals
+    connect(mainWindow->ui->start_button, SIGNAL(clicked()),this,SLOT(startSimulation()));
+    connect(mainWindow->ui->stop_button, SIGNAL(clicked()),this,SLOT(stopSimulation()));
     /**
   * Create the Nodecatalog
   */
@@ -342,6 +345,11 @@ void Data::setDrawLineMode(QString gateType){
     SingletonRender::instance()->highlightGates(gateType);
 }
 
+bool Data::isSimulating()
+{
+    return onSimulation;
+}
+
 void Data::setFocusMeshObject(int nodeID)
 {
     if(mesh)
@@ -352,6 +360,16 @@ void Data::updateNode(QTableWidgetItem *item)
 {
     if(mesh)
         mesh->updateNode(item);
+}
+
+void Data::startSimulation()
+{
+    onSimulation = true;
+}
+
+void Data::stopSimulation()
+{
+    onSimulation = false;
 }
 
 void Data::setEditMode(){
