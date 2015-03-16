@@ -140,6 +140,7 @@ void MainWindow::on_actionSort_Mesh_triggered(){
 
     Data::instance()->sortForce();
     SingletonRender::instance()->renderMesh();
+
 }
 
 void MainWindow::on_actionLoad_Catalog_triggered() {

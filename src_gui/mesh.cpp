@@ -277,11 +277,8 @@ void Mesh::sortCircle() {
 }
 
 void Mesh::sortRow() {
-    // first remove all waypoints of each connection, later the renderclass will
-    // add new waypoints if none are found
-    foreach (Connection *c, this->getAllConnections()) { c->waypoints.clear(); }
 
-    // now sort all nodes in a circle
+    // save how may odes we have
     int numberOfNodes = this->getAllNodes().size();
 
     // distance to the next node
@@ -327,6 +324,7 @@ void Mesh::sortRow() {
 }
 
 void Mesh::sortForce() {
+
     // first we sort the mesh into a row
     this->sortRow();
 
@@ -447,8 +445,11 @@ void Mesh::sortForce() {
     }
 
     // remove all connection waypoints so they will be straight lines
-    foreach (Connection *c, this->getAllConnections()) { c->waypoints.clear(); }
+    foreach (Connection *c, this->getAllConnections()) {
+        c->waypoints.clear();
 
+    }
+    qDebug() << "mesh sorted";
 
 }
 
