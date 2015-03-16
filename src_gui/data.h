@@ -60,6 +60,8 @@ public:
     bool checkConnection(int srcNodeID, QString srcGate, int destNodeID, QString destGate);
     bool hasChanged();
     void unsetChanged();
+    bool mustRepaint();
+    void unsetRepaint();
     void setChanged();
     Node *getNodeByName(QString name);
     Node *getNodeByID(int ID);
@@ -118,6 +120,7 @@ private:
     NodeCatalog *nodeCatalog;
     void updateConnections(int ID, QPoint offset);
     bool changed = false;
+    bool repaint = false;
 };
 
 #endif  // DATA_H

@@ -173,10 +173,14 @@ void MainWindow::on_actionSave_triggered() {
 }
 
 void MainWindow::updatePropertyTable(int nodeID) {
+    if(oldfocus == nodeID){
+        ui->tableWidget->show();
+        return;
+    }
     QTableWidget *table = ui->tableWidget;
-    if (nodeID >= 0 &&
-            Data::instance()->nodesInMesh()->contains(nodeID)) {
+    if (nodeID >= 0 && Data::instance()->nodesInMesh()->contains(nodeID)) {
         deleteTable();
+        oldfocus = nodeID;
         Node *n = Data::instance()->getNodeByID(nodeID);
         QMap<QString, Node::parameter> *map = n->getParams();
         table->setRowCount(map->size() + 5);
@@ -191,56 +195,55 @@ void MainWindow::updatePropertyTable(int nodeID) {
         name->setData(0, n->getName());
         type->setData(0, n->getType());
 
-
-
         // asign to table:
 
-        //NodeID
+        // NodeID
         table->setItem(i, 0, new QTableWidgetItem("NodeID"));
         table->setItem(i, 1, ID);
         table->item(i, 0)->setFlags(table->item(0, 0)->flags() ^
                                     (Qt::ItemIsEnabled | Qt::ItemIsSelectable));
         i++;
 
-        //Node Class
+        // Node Class
         table->setItem(i, 0, new QTableWidgetItem("Node Class"));
         table->setItem(i, 1, type);
         table->item(i, 0)->setFlags(table->item(i, 0)->flags() ^
                                     (Qt::ItemIsEnabled | Qt::ItemIsSelectable));
         i++;
 
-        //input Gates
+        // input Gates
 
-        bool moreThanOne = n->getInputGates()->size()>1;
-        if(!n->getInputGates()->isEmpty()){
+        bool moreThanOne = n->getInputGates()->size() > 1;
+        if (!n->getInputGates()->isEmpty()) {
             QString types;
-            for(Gate *g : *n->getInputGates())
-                for(QString s : g->getTypes())
-                    types += s + ", ";
+            for (Gate *g : *n->getInputGates())
+                for (QString s : g->getTypes()) types += s + ", ";
             types.chop(2);
             QTableWidgetItem *in = new QTableWidgetItem();
             in->setText(types);
             in->setFlags(in->flags() ^ (Qt::ItemIsEditable | Qt::ItemIsSelectable));
-            table->setItem(i,0, new QTableWidgetItem("Input" + QString((moreThanOne?"s":""))));
-            table->setItem(i,1,in);
-            table->item(i,1)->setToolTip(types);
+            table->setItem(i, 0, new QTableWidgetItem(
+                               "Input" + QString((moreThanOne ? "s" : ""))));
+            table->setItem(i, 1, in);
+            table->item(i, 1)->setToolTip(types);
             i++;
         }
 
-        //output gates
-        moreThanOne = n->getOutputGates()->size()>1;
-        if(!n->getInputGates()->isEmpty()){
+        // output gates
+        moreThanOne = n->getOutputGates()->size() > 1;
+        if (!n->getInputGates()->isEmpty()) {
             QString types;
-            for(Gate *g : *n->getOutputGates())
-                for(QString s : g->getTypes())
-                    types += s + ", ";
+            for (Gate *g : *n->getOutputGates())
+                for (QString s : g->getTypes()) types += s + ", ";
             types.chop(2);
             QTableWidgetItem *out = new QTableWidgetItem;
             out->setText(types);
-            out->setFlags(out->flags() ^ (Qt::ItemIsEditable | Qt::ItemIsSelectable));
-            table->setItem(i,0, new QTableWidgetItem("Output" + QString((moreThanOne?"s":""))));
-            table->setItem(i,1,out);
-            table->item(i,1)->setToolTip(types);
+            out->setFlags(out->flags() ^
+                          (Qt::ItemIsEditable | Qt::ItemIsSelectable));
+            table->setItem(i, 0, new QTableWidgetItem(
+                               "Output" + QString((moreThanOne ? "s" : ""))));
+            table->setItem(i, 1, out);
+            table->item(i, 1)->setToolTip(types);
             i++;
         }
         table->setItem(i, 0, new QTableWidgetItem("Node Name"));
@@ -254,12 +257,14 @@ void MainWindow::updatePropertyTable(int nodeID) {
         // avoid editing keys, and nodeID/type
         ID->setFlags(ID->flags() ^ (Qt::ItemIsEditable | Qt::ItemIsSelectable |
                                     Qt::ItemIsEnabled));
-        type->setFlags(type->flags() ^ (Qt::ItemIsEditable | Qt::ItemIsSelectable |
-                                        Qt::ItemIsEnabled));
+        type->setFlags(
+                    type->flags() ^
+                    (Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 
         for (int j = 0; j < i; j++)
-            table->item(j, 0)->setFlags(table->item(j, 0)->flags() ^
-                                        (Qt::ItemIsEditable | Qt::ItemIsSelectable));
+            table->item(j, 0)
+                    ->setFlags(table->item(j, 0)->flags() ^
+                               (Qt::ItemIsEditable | Qt::ItemIsSelectable));
         QStringList keys = map->keys();
         int count = i;
         for (int j = 0; j < keys.size(); j++) {
@@ -267,7 +272,7 @@ void MainWindow::updatePropertyTable(int nodeID) {
             // create key item
             QString key = keys.value(j);
             QTableWidgetItem *key_item = new QTableWidgetItem((*map)[key].name);
-            key_item->setData(Qt::UserRole,key);
+            key_item->setData(Qt::UserRole, key);
             key_item->setFlags(key_item->flags() ^
                                (Qt::ItemIsEditable | Qt::ItemIsSelectable));
             key_item->setToolTip((*map)[key].descr);
@@ -277,7 +282,7 @@ void MainWindow::updatePropertyTable(int nodeID) {
             QVariant value = map->value(key).value;
             QTableWidgetItem *value_item = new QTableWidgetItem();
             value_item->setToolTip((*map)[key].descr);
-            //QSpinBox *spinner;
+            // QSpinBox *spinner;
             switch (value.userType()) {
             case QVariant::Bool:
                 // value_item->setData(0, value);
@@ -285,41 +290,30 @@ void MainWindow::updatePropertyTable(int nodeID) {
                                                          : Qt::Unchecked);
                 table->setItem(i + j, 1, value_item);
                 break;
-                /*case QVariant::Int:
-                spinner = new QSpinBox(table);
-                spinner->setMaximum(std::numeric_limits<int>::max());
-                spinner->setMinimum(std::numeric_limits<int>::min());
-                spinner->setValue(value.toInt());
-                table->setCellWidget(3 + i, 1, spinner);
-                break;
-            case QVariant::UInt:
-                spinner = new QSpinBox(table);
-                spinner->setMaximum(std::numeric_limits<int>::max());
-                spinner->setMinimum(0);
-                spinner->setValue(value.toInt());
-                table->setCellWidget(3 + i, 1, spinner);
-                break;*/
             default:
-
                 value_item->setData(Qt::UserRole, value);
                 value_item->setText(value.toString());
                 table->setItem(i + j, 1, value_item);
+                if(key.contains("file")){
+                    connect(table,SIGNAL(cellDoubleClicked(int,int)),this,SLOT(onFilebuttonClicked(int,int)));
+                }
                 break;
             }
         }
         table->setRowCount(count);
-        connect(table, SIGNAL(itemChanged(QTableWidgetItem*)), Data::instance(), SLOT(updateNode(QTableWidgetItem*)));
+        connect(table, SIGNAL(itemChanged(QTableWidgetItem *)), Data::instance(),
+                SLOT(updateNode(QTableWidgetItem *)));
         table->resizeColumnsToContents();
-        if(ui->details->checkState() == Qt::Checked)
-            table->show();
+        if (ui->details->checkState() == Qt::Checked) table->show();
     } else if (table->isVisible()) {
-        deleteTable();
+        table->hide();
     }
 }
 
 void MainWindow::deleteTable() {
     QTableWidget *table = ui->tableWidget;
     table->disconnect(table, SIGNAL(itemChanged(QTableWidgetItem*)), Data::instance(), SLOT(updateNode(QTableWidgetItem*)));
+    table->disconnect(table, SIGNAL(cellDoubleClicked(int,int)),this, SLOT(onFilebuttonClicked(int,int)));
     table->hide();
     // delete all tableitems, because they aren't needed any more
     for (int col = 0; col < table->columnCount(); col++)
@@ -330,6 +324,7 @@ void MainWindow::deleteTable() {
 
 void MainWindow::displayTypeInfo(const QString &type) {
     deleteTable();
+    oldfocus = -1;
     QTableWidget *table = ui->tableWidget;
     Node n = *Data::instance()->getNodeCatalog()->getPointerOfType(type);
     //i is to count the rows set up
@@ -413,4 +408,12 @@ void MainWindow::on_details_stateChanged(int arg1)
         ui->tableWidget->show();
     else
         ui->tableWidget->hide();
+}
+
+void MainWindow::onFilebuttonClicked(int row, int col)
+{
+    QString fileName = QFileDialog::getOpenFileName(this,"Select a File...","~/");
+    if(fileName == "")
+        return;
+    ui->tableWidget->item(row,col)->setText(fileName);
 }

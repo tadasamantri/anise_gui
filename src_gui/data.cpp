@@ -202,9 +202,20 @@ void Data::unsetChanged()
     changed = false;
 }
 
+bool Data::mustRepaint()
+{
+    return repaint;
+}
+
+void Data::unsetRepaint()
+{
+    repaint = false;
+}
+
 void Data::setChanged()
 {
     changed = true;
+    repaint = true;
 }
 
 Node *Data::getNodeByName(QString name)

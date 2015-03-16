@@ -43,13 +43,14 @@ private slots:
 
     void on_details_stateChanged(int arg1);
 
+    void onFilebuttonClicked(int row, int col);
 private:
     void initializeGUI();
     bool pathChanged = false;
     QString saveDialog();
     void saveFile(QString &path);
+    int oldfocus = -1;
 protected:
     void closeEvent(QCloseEvent *event);
 };
-
-#endif  // MAINWINDOW_H
+#endif
