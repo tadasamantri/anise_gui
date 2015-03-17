@@ -174,7 +174,8 @@ void MainWindow::on_actionSave_triggered() {
 
 void MainWindow::updatePropertyTable(int nodeID) {
     if(oldfocus == nodeID){
-        ui->tableWidget->show();
+        if(ui->details->checkState() == Qt::Checked)
+            ui->table_Frame->show();
         return;
     }
     QTableWidget *table = ui->tableWidget;
@@ -306,7 +307,7 @@ void MainWindow::updatePropertyTable(int nodeID) {
         table->resizeColumnsToContents();
         if (ui->details->checkState() == Qt::Checked) table->show();
     } else if (table->isVisible()) {
-        table->hide();
+        ui->table_Frame->hide();
     }
 }
 
@@ -314,7 +315,7 @@ void MainWindow::deleteTable() {
     QTableWidget *table = ui->tableWidget;
     table->disconnect(table, SIGNAL(itemChanged(QTableWidgetItem*)), Data::instance(), SLOT(updateNode(QTableWidgetItem*)));
     table->disconnect(table, SIGNAL(cellDoubleClicked(int,int)),this, SLOT(onFilebuttonClicked(int,int)));
-    table->hide();
+    ui->table_Frame->hide();
     // delete all tableitems, because they aren't needed any more
     for (int col = 0; col < table->columnCount(); col++)
         for (int row = 0; row < table->rowCount(); row++)
@@ -399,15 +400,15 @@ void MainWindow::displayTypeInfo(const QString &type) {
         for(int row = 0;row < table->rowCount();row++)
             table->item(row,col)->setToolTip(table->item(row,col)->text());
     if(ui->details->checkState() == Qt::Checked)
-        table->show();
+        ui->table_Frame->show();
 }
 
 void MainWindow::on_details_stateChanged(int arg1)
 {
     if(arg1 && Data::instance()->getFocusedID() != -1)
-        ui->tableWidget->show();
+        ui->table_Frame->show();
     else
-        ui->tableWidget->hide();
+        ui->table_Frame->hide();
 }
 
 void MainWindow::onFilebuttonClicked(int row, int col)
