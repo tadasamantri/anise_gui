@@ -182,7 +182,7 @@ void MainWindow::updatePropertyTable(int nodeID) {
         deleteTable();
         oldfocus = nodeID;
         Node *n = Data::instance()->getNodeByID(nodeID);
-        QMap<QString, Node::parameter> *map = n->getParams();
+        QMap<QString, Node::Parameter> *map = n->getParams();
         table->setRowCount(map->size() + 5);
         int i = 0;
         // create the entries all nodes have
@@ -329,7 +329,7 @@ void MainWindow::displayTypeInfo(const QString &type) {
     Node n = *Data::instance()->getNodeCatalog()->getPointerOfType(type);
     //i is to count the rows set up
     int i = 0;
-    const QMap<QString, Node::parameter> *params = n.getParams();
+    const QMap<QString, Node::Parameter> *params = n.getParams();
 
     //init the table
     table->setRowCount(((params->size()) + 4));

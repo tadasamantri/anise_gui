@@ -35,7 +35,7 @@ Node *NodeFactory::createNode(QString _class, QString name) {
     return node;
 }
 
-Node *NodeFactory::createNode(QString _class, QString name, QMap<QString, Node::parameter> params) {
+Node *NodeFactory::createNode(QString _class, QString name, QMap<QString, Node::Parameter> params) {
     Node *node = createNode(_class, name);
     foreach (QString key, params.keys()) {
 

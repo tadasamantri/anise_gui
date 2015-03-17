@@ -13,7 +13,7 @@ public:
     static Node createNode();
     static Node *createNode(QString _class);
     static Node *createNode(QString _class, QString name);
-    static Node *createNode(QString _class, QString name, QMap<QString, Node::parameter> params);
+    static Node *createNode(QString _class, QString name, QMap<QString, Node::Parameter> params);
     static Node *createTestNode();
 
     //static Connection *createTestConnection(int i);

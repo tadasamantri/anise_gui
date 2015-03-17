@@ -7,46 +7,51 @@
 
 // Node konstruktor should be private
 class Node {
-
     friend class JsonFileHandler;
     friend class NodeFactory;
     friend class NodeCatalog;
 
-
 public:
-
-    struct parameter{
+    struct Parameter {
         QString descr;
         QString key;
         QString name;
         QString type;
         QVariant value;
     };
+
+    enum Status {
+        idle,
+        busy,
+        finished,
+    };
+
     Node();
     float position_x;
     float position_y;
-    QMap<QString, parameter>* getParams();
+    QMap<QString, Parameter> *getParams();
 
-    Node(QVector<Gate*> &inputGates, QVector<Gate*> &outputGates, QString &type, QString &name, QMap<QString, parameter> &params);
-    
+    Node(QVector<Gate *> &inputGates, QVector<Gate *> &outputGates, QString &type,
+         QString &name, QMap<QString, Parameter> &params);
+
     /*
-   * TODO:
-   * add gate ist sehr umständlich, am besten übergeben wir nur noch einen
-   *zusätzlichen
-   * type als(string, bool) und er erweitert seinen vector<gate> selber
-   *
-   */
+ * TODO:
+ * add gate ist sehr umständlich, am besten übergeben wir nur noch einen
+ *zusätzlichen
+ * type als(string, bool) und er erweitert seinen vector<gate> selber
+ *
+ */
     void addGate(Gate *gate);
-    void addGates(QVector<Gate*> gates, const bool &direction);
-    
+    void addGates(QVector<Gate *> gates, const bool &direction);
+
     bool isInputGate(QString gateName);
     bool isOutputGate(QString gateName);
 
     /*
-   * Set the position of the Node
-   * @param x new position_x
-   * @param y new position_y
-   */
+ * Set the position of the Node
+ * @param x new position_x
+ * @param y new position_y
+ */
     void moveTo(float x, float y);
 
     void setType(QString type);
@@ -57,9 +62,9 @@ public:
 
     QString getName();
 
-    QVector<Gate*> *getInputGates();
+    QVector<Gate *> *getInputGates();
 
-    QVector<Gate*> *getOutputGates();
+    QVector<Gate *> *getOutputGates();
 
     bool setParam(QString key, QVariant _value);
 
@@ -70,7 +75,7 @@ public:
     QString toString();
 
     Gate *getGateByName(const QString &name);
-    void addParam(QString key, parameter p);
+    void addParam(QString key, Parameter p);
     float x();
     float y();
 
@@ -82,17 +87,18 @@ public:
     void setID(int value);
     QPoint getPosition();
     QPoint getGatePosition(QString gateName);
-    Node::parameter getParamStructByKey(const QString &key);
+    Node::Parameter getParamStructByKey(const QString &key);
     float getProgress() const;
     void setProgress(float value);
 
 private:
-    bool addParam(QString descr, QString _key, QString name, QString type, QVariant _value);
+    bool addParam(QString descr, QString _key, QString name, QString type,
+                  QVariant _value);
     QString description;
     QVector<Gate *> inputGates, outputGates;
     QString type, name;
     int ID = -2;
-    QMap<QString, parameter> params;  // maps <identifier, value>
+    QMap<QString, Parameter> params;  // maps <identifier, value>
     float progress;
 };
 

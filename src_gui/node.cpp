@@ -4,15 +4,15 @@
 Node::Node() {
     inputGates = QVector<Gate *>();
     outputGates = QVector<Gate *>();
-    params = QMap<QString, parameter>();
+    params = QMap<QString, Parameter>();
     type = QString();
     name = QString();
 }
 
-QMap<QString, Node::parameter> *Node::getParams() { return &this->params; }
+QMap<QString, Node::Parameter> *Node::getParams() { return &this->params; }
 
 Node::Node(QVector<Gate *> &inputGates, QVector<Gate *> &outputGates,
-           QString &type, QString &name, QMap<QString, parameter> &params) {
+           QString &type, QString &name, QMap<QString, Parameter> &params) {
     this->inputGates = inputGates;
     this->outputGates = outputGates;
     this->type = type;
@@ -88,7 +88,7 @@ bool Node::isOutputGate(QString gateName) {
 bool Node::addParam(QString descr, QString _key, QString name, QString type,
                     QVariant _value) {
     if (!this->params.contains(_key)) {
-        parameter p{descr, _key, name, type, _value};
+        Parameter p{descr, _key, name, type, _value};
         this->params.insert(_key, p);
     } else
         return false;
@@ -134,11 +134,11 @@ bool Node::removeParam(QString _key) {
     return true;
 }
 
-Node::parameter Node::getParamStructByKey(const QString &key) {
+Node::Parameter Node::getParamStructByKey(const QString &key) {
     if (params.contains(key))
         return params[key];
     else
-        return parameter{QString(), QString(), QString(), QString(), QVariant()};
+        return Parameter{QString(), QString(), QString(), QString(), QVariant()};
 }
 
 QVariant Node::getParamByKey(const QString &_key) {
@@ -165,7 +165,7 @@ Gate *Node::getGateByName(const QString &name) {
     return 0;
 }
 
-void Node::addParam(QString key, Node::parameter p) { params[key] = p; }
+void Node::addParam(QString key, Node::Parameter p) { params[key] = p; }
 
 float Node::x() { return position_x; }
 

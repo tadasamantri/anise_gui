@@ -316,7 +316,7 @@ QString JsonFileHandler::meshToJson() {
         theNode["class"] = n->getType();
         theNode["name"] = n->getName();
         QJsonArray params;
-        QMap<QString, Node::parameter> *map = n->getParams();
+        QMap<QString, Node::Parameter> *map = n->getParams();
         foreach (QString key, map->keys()) {
             QJsonObject param;
             QVariant var = map->value(key).value;
