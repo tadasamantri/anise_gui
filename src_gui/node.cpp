@@ -7,17 +7,21 @@ Node::Node() {
     params = QMap<QString, Parameter>();
     type = QString();
     name = QString();
+    status = idle;
+    progress = 0;
 }
 
 QMap<QString, Node::Parameter> *Node::getParams() { return &this->params; }
 
 Node::Node(QVector<Gate *> &inputGates, QVector<Gate *> &outputGates,
-           QString &type, QString &name, QMap<QString, Parameter> &params) {
+           QString &type, QString &name, QMap<QString, Parameter> &params){
     this->inputGates = inputGates;
     this->outputGates = outputGates;
     this->type = type;
     this->params = params;
     this->name = name;
+    this->status = idle;
+    progress = 0;
 }
 
 void Node::moveTo(float x, float y) {
@@ -94,6 +98,16 @@ bool Node::addParam(QString descr, QString _key, QString name, QString type,
         return false;
     return true;
 }
+Node::Status Node::getStatus() const
+{
+    return status;
+}
+
+void Node::setStatus(const Node::Status &value)
+{
+    status = value;
+}
+
 float Node::getProgress() const
 {
     return progress;

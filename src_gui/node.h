@@ -91,6 +91,9 @@ public:
     float getProgress() const;
     void setProgress(float value);
 
+    Status getStatus() const;
+    void setStatus(const Status &value);
+
 private:
     bool addParam(QString descr, QString _key, QString name, QString type,
                   QVariant _value);
@@ -100,6 +103,7 @@ private:
     int ID = -2;
     QMap<QString, Parameter> params;  // maps <identifier, value>
     float progress;
+    Status status;
 };
 
 #endif  // NODE_H
