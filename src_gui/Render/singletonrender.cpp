@@ -62,8 +62,17 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID) {
 
     // create new Lines
     // if no waypoints are given, that means no joints are in connection, than create on in the middle of the line
+
     if(conToRender->getWaypoints()->isEmpty()){
-        *(conToRender->getWaypoints()) << 0.5 * (srcGatePosition + destGatePosition);
+
+        //delete all old joints
+        foreach (DrawObject* joint, allConnections[ID]) {
+            joint->deleteLater();
+
+        }
+        allConnections.remove(ID);
+        conToRender->setWaypoints(QVector<QPoint>() << 0.5 * (srcGatePosition + destGatePosition));
+
         //conToRender->waypoints << 0.6 * (srcGatePosition + destGatePosition);
 
     }
@@ -82,7 +91,7 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID) {
         QVector<DrawObject *> jointVector;
 
     // if it is a new connection, we need to create joints
-    if (!allConnections.contains(ID)) {
+    if (!allConnections.contains(ID) ) {
 
 
 
@@ -118,14 +127,19 @@ void SingletonRender::renderConnection(Connection *conToRender, int ID) {
 
 
 void SingletonRender::moveJointsOnWaypoints(Connection * conToRender, int ID){
-    DrawObject* joint;
+    ;
     int posxOffset;
     int posyOffset;
-
+    int index = 0;
 
     //move all joints to the correct position
-    for (int index = 0; index < allConnections[ID].size(); index++) {
-        joint = allConnections[ID].at(index);
+
+    foreach (DrawObject* joint,  allConnections[ID]) {
+
+        if (index == conToRender->getWaypoints()->size()) {
+            qDebug() << "Waypoint Array out of bounds";
+        }
+
 
         // calculate the middle of the Image
         posxOffset = -joint->width() / 2;
@@ -133,9 +147,8 @@ void SingletonRender::moveJointsOnWaypoints(Connection * conToRender, int ID){
 
         joint->move(conToRender->getWaypoints()->at(index).x()+posxOffset, conToRender->getWaypoints()->at(index).y()+posyOffset);
         joint->show();
+        index++;
     }
-
-
 }
 
 // will have to be called from a paint event!
