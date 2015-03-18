@@ -85,6 +85,9 @@ public:
     bool isSimulating();
     QList<Connection *> getConnections(int nodeID);
 
+    QString getSaveFile() const;
+    void setSaveFile(const QString &value);
+
 public slots:
     bool deleteItem();
     void setFocusMeshObject(int nodeID);
@@ -125,6 +128,7 @@ private:
     bool changed = false;
     bool repaint = false;
     bool onSimulation;
+    QString saveFile;
 };
 
 #endif  // DATA_H

@@ -26,7 +26,18 @@ Data::Data(QObject *parent) : QObject(parent) {
     mesh = new Mesh();
     nodeCatalog = 0;
     nodeFactory = 0;
+    saveFile = "";
 }
+QString Data::getSaveFile() const
+{
+    return saveFile;
+}
+
+void Data::setSaveFile(const QString &value)
+{
+    saveFile = value;
+}
+
 MainWindow *Data::getMainWindow() const { return mainWindow; }
 
 void Data::setMainWindow(MainWindow *value) { mainWindow = value; }

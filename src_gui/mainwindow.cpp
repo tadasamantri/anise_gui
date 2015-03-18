@@ -168,8 +168,19 @@ QString MainWindow::saveDialog(){
     return fileName;
 }
 
-void MainWindow::on_actionSave_triggered() {
+void MainWindow::on_actionSave_as_triggered() {
     QString fileName = saveDialog();
+    saveFile(fileName);
+}
+
+void MainWindow::on_actionSave_triggered() {
+    QString fileName = Data::instance()->getSaveFile();
+    if(fileName == ""){
+        fileName = saveDialog();
+        if(fileName != "")
+            Data::instance()->setSaveFile(fileName);
+        else return;
+    }
     saveFile(fileName);
 }
 

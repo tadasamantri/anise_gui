@@ -409,6 +409,7 @@
     </property>
     <addaction name="actionNew"/>
     <addaction name="actionSave"/>
+    <addaction name="actionSave_as"/>
     <addaction name="actionLoad"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
@@ -452,6 +453,9 @@
   <action name="actionSave">
    <property name="text">
     <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionLoad">
@@ -510,7 +514,7 @@
   </action>
   <action name="actionSet_framework_path">
    <property name="text">
-    <string>Set framework path...</string>
+    <string>Select Framework Executable</string>
    </property>
   </action>
   <action name="actionLoad_Catalog">
@@ -521,6 +525,14 @@
   <action name="actionSort_Mesh">
    <property name="text">
     <string>Sort Mesh</string>
+   </property>
+  </action>
+  <action name="actionSave_as">
+   <property name="text">
+    <string>Save as...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
  </widget>

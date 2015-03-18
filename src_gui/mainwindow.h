@@ -44,6 +44,7 @@ private slots:
     void on_details_stateChanged(int arg1);
 
     void onFilebuttonClicked(int row, int col);
+    void on_actionSave_as_triggered();
 private:
     void initializeGUI();
     bool pathChanged = false;
