@@ -36,15 +36,13 @@ int Connection::getJoint(QPoint *point) {
     return -1;
   }
 
-  // uses manhatten length (x+y) instead of correct pytharorean calculations
+  // uses manhatten length (x+y) instead of correct pythagorean calculations
   int min = std::numeric_limits<int>::max();
   int closestOne = -1;
   for (int index = 0; index < this->waypoints.size(); ++index) {
     QPoint tempPoint(point->x() - this->waypoints.at(index).x(),
                      point->y() - this->waypoints.at(index).y());
     int manhattenLength = tempPoint.manhattanLength();
-    qDebug() << "manhatten length: " << manhattenLength << " min: " << min
-             << " id: " << index;
     if (manhattenLength < min) {
       min = manhattenLength;
       closestOne = index;
