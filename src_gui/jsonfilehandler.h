@@ -21,6 +21,11 @@
 
 class JsonFileHandler {
 public:
+    enum ParseMode{
+        progress,
+        error,
+    };
+
     /**
      * @brief loadFile Load a Textfile
      * @param path Path to File
@@ -59,7 +64,10 @@ public:
      * @param obj JSON-Object containing all Information about the Mesh to be loaded
      */
     static void extractNodesAndConnections(const QJsonObject &obj);
-    static void parseProgress(const QString &textline);
+    static void parseProgress(const QString &text, const ParseMode &mode);
+private:
+    static void parseProgress(const QString &text);
+    static void parseErrors(const QString &text);
 };
 
 #endif  // FILEHANDLER_H

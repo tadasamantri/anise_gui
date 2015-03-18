@@ -270,7 +270,20 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
     }
 }
 
-void JsonFileHandler::parseProgress(const QString &textline)
+void JsonFileHandler::parseProgress(const QString &text, const ParseMode &mode)
+{
+    if(mode == progress)
+        parseProgress(text);
+    else if(mode == error)
+        parseErrors(text);
+}
+
+void JsonFileHandler::parseProgress(const QString &text)
+{
+
+}
+
+void JsonFileHandler::parseErrors(const QString &text)
 {
 
 }

@@ -122,6 +122,8 @@ void AniseCommunicator::readProgress()
 {
     if(!onProgress)
         return;
-    QString line = anise_process->readLine();
-    JsonFileHandler::parseProgress(line);
+    QString line = anise_process->readAllStandardOutput();
+    JsonFileHandler::parseProgress(line, JsonFileHandler::progress);
+    line = anise_process->readAllStandardError();
+    JsonFileHandler::parseProgress(line, JsonFileHandler::error);
 }
