@@ -664,7 +664,7 @@ void SingletonRender::updateConnections(int nodeID, QPoint offset)
             backward = true;
         int size = waypoints->size();
         for(int i = 0; i < size; i++){
-            (*waypoints)[backward?size - i - 1 : i] += offset/(pow(1.5,i+1));
+            (*waypoints)[backward?size - i - 1 : i] += offset/(pow(2,i+1));
         }
         renderConnection(c,c->getID());
     }
