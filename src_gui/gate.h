@@ -6,22 +6,21 @@
 class Gate {
 public:
     Gate();
-    Gate(bool in, QList<QString> types);
-    Gate(bool in, QString name);
-    bool getDirection();
-    bool hasType(const QString &type);
-    void addType(QString &type);
+    Gate(const bool &in, const QStringList &types);
+    Gate(const bool &in, const QString &name);
+    bool getDirection() const;
+    bool hasType(const QString &type) const;
+    void addType(const QString &type);
     bool removeType(const QString &type);
-    void setDirection(bool in);
-    QList<QString> getTypes();
-    QString getName();
-    void setName(QString name);
-    QString getType();
+    void setDirection(const bool &in);
+    QStringList getTypes() const;
+    QString getName() const;
+    void setName(QString &name);
+    QString getType() const;
 private:
-    QList<QString> types;
+    QStringList types;
     bool in;
     QString name;
-    // Node* parent;
 };
 
 #endif  // GATE_H

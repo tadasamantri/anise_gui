@@ -24,11 +24,11 @@ public:
         idle,
         busy,
         finished,
+        error,
     };
 
     Node();
-    float position_x;
-    float position_y;
+
     QMap<QString, Parameter> *getParams();
 
     Node(QVector<Gate *> &inputGates, QVector<Gate *> &outputGates, QString &type,
@@ -76,15 +76,15 @@ public:
 
     Gate *getGateByName(const QString &name);
     void addParam(QString key, Parameter p);
-    float x();
-    float y();
+    float x() const;
+    float y() const;
 
     QString getDescription();
     void setDescription(const QString &value);
-    void setX(const int &newX);
-    void setY(const int &newY);
+    void setX(const float &newX);
+    void setY(const float &newY);
     int getID() const;
-    void setID(int value);
+    void setID(const int &value);
     QPoint getPosition();
     QPoint getGatePosition(QString gateName);
     Node::Parameter getParamStructByKey(const QString &key);
@@ -104,6 +104,8 @@ private:
     QMap<QString, Parameter> params;  // maps <identifier, value>
     float progress;
     Status status;
+    float position_x;
+    float position_y;
 };
 
 #endif  // NODE_H

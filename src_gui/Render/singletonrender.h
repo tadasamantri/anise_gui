@@ -76,7 +76,7 @@ public:
    * @param y number of tiles in y dimension
    * @return Contructed QPixma from Tiles
    */
-    QPixmap *createTiledPixmap(int x, int y);
+    QPixmap *createTiledPixmap(const int &x, const int &y);
 
     /**
    *
@@ -105,7 +105,7 @@ public:
    * @return true if removed successful
    */
 
-    bool deleteMeshDrawing(int objectID);
+    bool deleteMeshDrawing(const int &objectID);
 
     /**
    * @brief getChildrenIDs Gets all DrawObject ids of Mesh field.
@@ -117,7 +117,7 @@ public:
    * @brief renderConnection reders a conection into the meshfield
    * @param conToRender the connection that will be rendered
    */
-    void renderConnection(Connection *conToRender, int ID);
+    void renderConnection(Connection *conToRender, const int &ID);
     /**
    * @brief renderConnections overloaded function
    * @see renderConnection(Connection *, int);
@@ -133,7 +133,7 @@ public:
    * @param nodeToRender node that will be redered
    * @param nodeID Unique Id of the Node
    */
-    void renderNode(Node *nodeToRender, int nodeID);
+    void renderNode(Node *nodeToRender, const int &nodeID);
 
     /**
    * @brief renderNodeType reders one node type in the catalog
@@ -141,13 +141,13 @@ public:
    * @param parent parent for the rendered node
    * @param position at which position
    */
-    void renderNodeType(Node *nodeToRender, QWidget *parent, int position);
+    void renderNodeType(Node *nodeToRender, QWidget *parent, const int &position);
 
     /**
    * @brief renderCatalogContent renderes all nodes in the catalog
    * @param NodeVektor nodes that will be rendered
    */
-    void renderCatalogContent(QVector<Node> NodeVektor);
+    void renderCatalogContent(const QVector<Node> &NodeVektor);
     /**
    * @brief drawLine draws a line from start to end
    * @param start_x
@@ -155,20 +155,20 @@ public:
    * @param end_x
    * @param end_y
    */
-    void drawLine(double start_x, double start_y, double end_x, double end_y);
+    void drawLine(const double &start_x, const double &start_y, const double &end_x, const double &end_y);
 
     /**
    * @brief drawLine draws a Line
    * @param line as a QLine instance
    */
-    void drawLine(QLine line);
+    void drawLine(const QLine &line);
 
     /**
    * @brief drawLine draws a line
    * @param start QPoint origin of the line
    * @param end QPoint end of the line
    */
-    void drawLine(QPoint start, QPoint end);
+    void drawLine(const QPoint &start, const QPoint &end);
 
     /**
    * @brief drawLines draws a line conecting all Points in the vector
@@ -196,18 +196,18 @@ public:
    */
     void setOutputGateDrawOffset(const QPoint &value);
 
-    void updateConnections(int nodeID, QPoint offset);
+    void updateConnections(const int &nodeID, const QPoint &offset);
     QPoint getInputGateDrawOffset() const;
     void setInputGateDrawOffset(const QPoint &value);
 
-    void dehighlightObject(int ID);
-    void highlightObject(int ID);
+    void dehighlightObject(const int &ID);
+    void highlightObject(const int &ID);
 
-    QPixmap *getImage(QString name);
-    void highlightGates(QString gateType);
+    QPixmap *getImage(const QString &name);
+    void highlightGates(const QString &gateType);
     void dehighlightGates();
 
-    void setNodeName(int nodeID, QString nodeName);
+    void setNodeName(const int &nodeID, const QString &nodeName);
     void clearAllConnections();
     QMap<int, QVector<DrawObject *> > *getAllConnections();
 
@@ -261,7 +261,7 @@ private:
     // pointer to this instance
     static SingletonRender *m_pInstance;
 
-    void moveJointsOnWaypoints(Connection *conToRender, int ID);
+    void moveJointsOnWaypoints(Connection *conToRender, const int &ID);
 
 };
 

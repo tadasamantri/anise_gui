@@ -36,24 +36,24 @@ private:
      * @brief removeNode
      * @param ID the ID of the Node to be removed
      */
-    void deleteNode(int ID);
+    void deleteNode(const int &ID);
 
     /**
      * @brief getNodeByName search a Node by its unique Name
      * @param name Name of the Node
      * @return Pointer to the Node
      */
-    Node *getNodeByName(QString name);
+    Node *getNodeByName(const QString &name);
 
     /**
      * @see getNodeByName
      */
-    Node *getNodeByID(int ID);
+    Node *getNodeByID(const int &ID);
 
     /**
      * @see getNodeByID()
      */
-    Connection *getConnectionByID(int ID);
+    Connection *getConnectionByID(const int &ID);
 
 
     QList<Node *> getAllNodes();
@@ -78,9 +78,9 @@ private:
     void sortForce();
 
     ~Mesh();
-    bool checkConnection(int srcNodeID, QString srcGate, int destNodeID, QString destGate);
+    bool checkConnection(const int &srcNodeID, const QString &srcGate, const int &destNodeID, const QString &destGate);
 public slots:
-    void setFocusMeshObject(int nodeID);
+    void setFocusMeshObject(const int &nodeID);
     void updateNode(QTableWidgetItem *item);
 
 private:
@@ -99,7 +99,7 @@ private:
     //update Connection start and ende
     void updateConnStartAndEnd();
 
-QList<Connection *> getConnectionsToNode(int nodeID);
+QList<Connection *> getConnectionsToNode(const int &nodeID);
 
 
     //internal deletingfunctions
@@ -108,7 +108,7 @@ QList<Connection *> getConnectionsToNode(int nodeID);
 
 
     bool deleteConnection();
-    bool deleteConnection(int conToDeleteID);
+    bool deleteConnection(const int &conToDeleteID);
     bool deleteConnection(Connection *c);
 };
 

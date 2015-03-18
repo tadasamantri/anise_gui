@@ -8,7 +8,6 @@
 
 MeshEditorWidget::MeshEditorWidget(QWidget *parent) : QWidget(parent) {
     connectSignals();
-    //connectDrawModeSingal();
     this->setMinimumHeight(5000);
     this->setMinimumWidth(5000);
     clearNewLine();
@@ -17,7 +16,8 @@ MeshEditorWidget::MeshEditorWidget(QWidget *parent) : QWidget(parent) {
 void MeshEditorWidget::connectSignals() {
     connect(this, SIGNAL(onWidgetClicked(int)), Data::instance(),
             SLOT(setFocusMeshObject(int)));
-    connect(this,SIGNAL(drawLineModeChanged()), this, SLOT(changeLineDrawMode()));
+    connect(this, SIGNAL(drawLineModeChanged()), this,
+            SLOT(changeLineDrawMode()));
 }
 
 void MeshEditorWidget::clearNewLine() {
@@ -31,8 +31,7 @@ void MeshEditorWidget::clearNewLine() {
     emit drawLineModeChanged();
 }
 
-void MeshEditorWidget::restToEditMode()
-{
+void MeshEditorWidget::restToEditMode() {
     this->clearNewLine();
     Data::instance()->setEditMode();
     repaint();
@@ -40,7 +39,6 @@ void MeshEditorWidget::restToEditMode()
 
 void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
     this->mouseMoveDistance += 100;
-
 
     // ensure a left-mouse-click
     if (!(event->button() == Qt::LeftButton)) {
@@ -50,37 +48,34 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
 
     // drawLine Mode
     if (newLine.drawLine) {
-
         // Check if i clicked on a child
         QObject *child = childAt(event->pos());
 
-        if(!child){
+        if (!child) {
             // add a way point for the line to draw
             this->newLine.wayPoints.push_back(event->pos());
 
-        }else if(dynamic_cast<QLabel*>(child)){
-            //clicked object is a label
+        } else if (dynamic_cast<QLabel *>(child)) {
+            // clicked object is a label
 
-            QLabel *label = dynamic_cast<QLabel*>(child);
-            if(dynamic_cast<DrawObject *>(label->parent())){
-                //clicked object is part of a drawobject
+            QLabel *label = dynamic_cast<QLabel *>(child);
+            if (dynamic_cast<DrawObject *>(label->parent())) {
+                // clicked object is part of a drawobject
 
                 DrawObject *draObj = dynamic_cast<DrawObject *>(label->parent());
 
-                //drawobject has an id and can be compared to source node
+                // drawobject has an id and can be compared to source node
                 if (draObj->ID == newLine.srcNodeID) {
                     this->restToEditMode();
                 }
             }
         }
     }
-
     // Normal Mode (currently not drawing a Connection)
-
     else {
         DrawObject *child = 0;
         QLabel *labelChild = 0;
-        //GateButton *buttonChild = 0;
+        // GateButton *buttonChild = 0;
 
         //---Clicked on Node?----------
         // check of clicking on label (picture)
@@ -101,8 +96,6 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
         // set focus on it
         emit onWidgetClicked(child->ID);
 
-
-
         // relative point of mouse to child
         QPoint hotSpot = event->pos() - child->pos();
         QByteArray arrayData;
@@ -113,8 +106,6 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
         // data Stream
         dataStream << QPoint(hotSpot) << child->ID << event->pos();
 
-        // something about mime data...
-        // TODO correct mimedata
         QMimeData *mimeData = new QMimeData;
         mimeData->setData("ANISE-GUI/drawobject", arrayData);
 
@@ -138,7 +129,6 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
 
 void MeshEditorWidget::dragEnterEvent(QDragEnterEvent *event) {
     if (event->mimeData()->hasFormat("ANISE-GUI/drawobject")) {
-        // qDebug() << "dragEnterEvent";
         if (event->source() == this) {
             event->setDropAction(Qt::MoveAction);
             event->accept();
@@ -151,32 +141,29 @@ void MeshEditorWidget::dragEnterEvent(QDragEnterEvent *event) {
 }
 
 void MeshEditorWidget::mouseMoveEvent(QMouseEvent *event) {
-
-    //update mouse position
+    // update mouse position
     this->mousePositionOld = this->mousePosition;
     this->mousePosition = event->pos();
 
-    //calculate how far the mouse moved
-    mouseMoveDistance +=  abs( ((mousePosition.x()-mousePositionOld.x())^2) + ((mousePosition.y()-mousePositionOld.y())^2));
+    // calculate how far the mouse moved
+    mouseMoveDistance += abs(((mousePosition.x() - mousePositionOld.x()) ^ 2) +
+                             ((mousePosition.y() - mousePositionOld.y()) ^ 2));
 
-
-    if(newLine.drawLine && mouseMoveDistance >= 10){
-        //qDebug() << "distance: " << mouseMoveDistance;
-        mouseMoveDistance = 0 ;
+    if (newLine.drawLine && mouseMoveDistance >= 10) {
+        mouseMoveDistance = 0;
         this->repaint();
     }
 }
 
 void MeshEditorWidget::dragMoveEvent(QDragMoveEvent *event) {
-    //update mouse position
+    // update mouse position
     this->mousePosition = event->pos();
-    if(newLine.drawLine){
+    if (newLine.drawLine) {
         this->repaint();
     }
 }
 
 void MeshEditorWidget::dropEvent(QDropEvent *event) {
-
     QPoint DropPoint = event->pos();
     QPoint offset;
     int nodeID;
@@ -220,17 +207,13 @@ void MeshEditorWidget::dropEvent(QDropEvent *event) {
 }
 
 void MeshEditorWidget::paintEvent(QPaintEvent *event) {
-
-    //qDebug() << "maus posi: " << mousePosition;
-
-    if ( newLine.drawLine == true) {
-        //qDebug() << "trying to draw a line to mouse";
+    QWidget::paintEvent(event);
+    if (newLine.drawLine == true) {
         // this will draw the vector with points as a line
-        SingletonRender::instance()->drawLines(&newLine.wayPoints,&mousePosition);
+        SingletonRender::instance()->drawLines(&newLine.wayPoints, &mousePosition);
     }
     // draw all connections:
     SingletonRender::instance()->renderConnections();
-
 }
 
 bool MeshEditorWidget::containsID(int objectID) {
@@ -244,108 +227,93 @@ bool MeshEditorWidget::containsID(int objectID) {
     return false;
 }
 
-bool MeshEditorWidget::handleGateClick(int nodeID, QString gateName, QPoint position) {
-
-    //stop connection creation when clicked on an outgate of the source node
+bool MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
+                                       QPoint position) {
+    // stop connection creation when clicked on an outgate of the source node
     if (nodeID == newLine.srcNodeID && gateName == newLine.srcGateName) {
         this->restToEditMode();
         return false;
     }
 
-    //Do nothing if you clicked on wrong Gate
-    else if(!correctGate(nodeID, gateName)){
+    // Do nothing if you clicked on wrong Gate
+    else if (!correctGate(nodeID, gateName)) {
         return false;
     }
 
-
-
     // That means we are currently constructing a line
     if (newLine.drawLine) {
-
         newLine.destNodeID = nodeID;
         newLine.destGateName = gateName;
-        //delete first wayPoint -> later on it is always calculated when connection is going to be drawn
+        // delete first wayPoint -> later on it is always calculated when connection
+        // is going to be drawn
         newLine.wayPoints.pop_front();
         // call Datastuff to create Connection
         // do this if connection is established
-        /*int ID = */Data::instance()->addConnectionToMesh(NodeFactory::createConnection(
-                                                               newLine.srcNodeID, newLine.srcGateName, newLine.destNodeID,
-                                                               newLine.destGateName, newLine.wayPoints));
-
+        Data::instance()->addConnectionToMesh(
+                    NodeFactory::createConnection(newLine.srcNodeID, newLine.srcGateName,
+                                                  newLine.destNodeID, newLine.destGateName,
+                                                  newLine.wayPoints));
         this->restToEditMode();
 
     }
 
     // That means we are just starting a new Line
     else {
-
         Node *node = Data::instance()->getNodeByID(nodeID);
         Gate *srcGate;
 
-
-        if(!node)
-            return false;
+        if (!node) return false;
 
         srcGate = node->getGateByName(gateName);
 
-        if(!srcGate)
-            return false;
-
+        if (!srcGate) return false;
 
         newLine.srcNodeID = nodeID;
         newLine.srcGateName = gateName;
-        //this is the OutputGatePosition where Connection starts
+        // this is the OutputGatePosition where Connection starts
         newLine.wayPoints << (position + SingletonRender::instance()->getOutputGateDrawOffset());
 
         // Do Everything that Changed when Clicking on a gate
         newLine.drawLine = !(newLine.drawLine);
 
-
         Data::instance()->setDrawLineMode(srcGate->getType());
 
         emit drawLineModeChanged();
-
-
     }
     return true;
 }
 
-
-
-void MeshEditorWidget::changeLineDrawMode()
-{
-    if(newLine.drawLine){
+void MeshEditorWidget::changeLineDrawMode() {
+    if (newLine.drawLine) {
         setCursor(Qt::CrossCursor);
-        Data::instance()->getMainWindow()->ui->statusBar->showMessage("exit line draw mode with right click", 5e3);
-        QToolTip::showText(cursor().pos(), QString("exit line draw mode with right click"), this, Data::instance()->getMainWindow()->ui->mesh_edt_area->rect(),4000);
-    }
-    else setCursor(Qt::ArrowCursor);
+        Data::instance()->getMainWindow()->ui->statusBar->showMessage(
+                    "exit line draw mode with right click", 5e3);
+        QToolTip::showText(
+                    cursor().pos(), QString("exit line draw mode with right click"), this,
+                    Data::instance()->getMainWindow()->ui->mesh_edt_area->rect(), 4000);
+    } else
+        setCursor(Qt::ArrowCursor);
 }
 
-
-
-bool MeshEditorWidget::correctGate(int nodeID, QString gateName){
-    
+bool MeshEditorWidget::correctGate(int nodeID, QString gateName) {
     Node *node = Data::instance()->getNodeByID(nodeID);
     Gate *endGate;
 
-
-    if(!node)
-        return false;
+    if (!node) return false;
 
     endGate = node->getGateByName(gateName);
 
-    if(!endGate)
-        return false;
+    if (!endGate) return false;
 
-    if(newLine.drawLine){
-
-        Gate *srcGate = Data::instance()->getNodeByID(newLine.srcNodeID)->getGateByName(newLine.srcGateName);
-        return endGate->getDirection() && srcGate->getType() == endGate->getType() && newLine.srcNodeID != nodeID;
-        
+    if (newLine.drawLine) {
+        Gate *srcGate =
+                Data::instance()->getNodeByID(newLine.srcNodeID)->getGateByName(
+                    newLine.srcGateName);
+        return endGate->getDirection() &&
+                srcGate->getType() == endGate->getType() &&
+                newLine.srcNodeID != nodeID;
     }
-
-    else{
+    else {
         return !endGate->getDirection();
     }
 }

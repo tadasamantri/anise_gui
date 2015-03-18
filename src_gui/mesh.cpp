@@ -14,8 +14,8 @@ Mesh::Mesh(QObject *parent) : QObject(parent) {
     tableExists = false;
 }
 
-bool Mesh::checkConnection(int srcNodeID, QString srcGate, int destNodeID,
-                           QString destGate) {
+bool Mesh::checkConnection(const int &srcNodeID, const QString &srcGate, const int &destNodeID,
+                           const QString &destGate) {
     Node *srcN = nodesInMesh[srcNodeID], *destN = nodesInMesh[destNodeID];
     if (!(srcN && destN)) return false;
     Gate *srcG = srcN->getGateByName(srcGate),
@@ -26,7 +26,7 @@ bool Mesh::checkConnection(int srcNodeID, QString srcGate, int destNodeID,
     return false;
 }
 
-QList<Connection *> Mesh::getConnectionsToNode(int nodeID) {
+QList<Connection *> Mesh::getConnectionsToNode(const int &nodeID) {
     QList<Connection *> list;
     for (Connection *c : connectionsInMesh) {
         if (c->getSrcNode()->getID() == nodeID ||
@@ -53,7 +53,7 @@ int Mesh::addNodes(QList<Node *> &list) {
     return id;
 }
 
-void Mesh::deleteNode(int ID) {
+void Mesh::deleteNode(const int &ID) {
     if (!nodesInMesh.contains(ID)) return;
     Node *n = nodesInMesh[ID];
     nodesInMesh.remove(ID);
@@ -79,7 +79,7 @@ Node *Mesh::getFocusedNode() {
     return getNodeByID(focusObject);
 }
 
-Node *Mesh::getNodeByName(QString name) {
+Node *Mesh::getNodeByName(const QString &name) {
     // TODO probably easy to optimize
     Node *node = 0;
     foreach (Node *n, this->nodesInMesh) {
@@ -91,23 +91,19 @@ Node *Mesh::getNodeByName(QString name) {
     return node;
 }
 
-Node *Mesh::getNodeByID(int ID) {
-    // qDebug() << "getNodeByID returned Node with ID " << ID <<"\nName of Node is
-    // "
-    //<< nodesInMash[ID]->getName();
+Node *Mesh::getNodeByID(const int &ID) {
     return this->nodesInMesh.value(ID, 0);
 }
 
-Connection *Mesh::getConnectionByID(int ID) {
+Connection *Mesh::getConnectionByID(const int &ID) {
     return this->connectionsInMesh[ID];
 }
 
 int Mesh::generateId() {
-    // qDebug() << "new Node with ID " << iDCounter << " added";
     return this->iDCounter++;
 }
 
-void Mesh::setFocusMeshObject(int nodeID) {
+void Mesh::setFocusMeshObject(const int &nodeID) {
     if (this->focusObject != -1)
         SingletonRender::instance()->dehighlightObject(this->focusObject);
 
@@ -201,14 +197,12 @@ bool Mesh::deleteNode() {
                 this->deleteConnection(c);
             }
         }
-
         //...and nothing is highlighted anymore
         this->setFocusMeshObject(-1);
 
         //...and Node has to get deleted too
         delete nodeToDelete;
     }
-
     // Update Property Table
     Data::instance()->getMainWindow()->updatePropertyTable(-1);
 
@@ -219,14 +213,12 @@ bool Mesh::deleteConnection(Connection *c) {
     return deleteConnection(c->getID());
 }
 
-bool Mesh::deleteConnection(int conToDeleteID) {
+bool Mesh::deleteConnection(const int &conToDeleteID) {
     connectionsInMesh.remove(conToDeleteID);
-    bool allRemoved =
-            !connectionsInMesh.contains(conToDeleteID) &&
+    bool allRemoved = !connectionsInMesh.contains(conToDeleteID) &&
             SingletonRender::instance()->deleteMeshDrawing(conToDeleteID);
 
     if (this->focusObject == conToDeleteID) this->setFocusMeshObject(-1);
-
     return allRemoved;
 }
 
@@ -254,8 +246,8 @@ void Mesh::sortCircle() {
 
     double degreeDistance = 2.0 * M_PI / float(numberOfNodes);
 
-    double nodeDistance =
-            80;  // distance to the next node; higher value make the circle bigger
+    double nodeDistance = 80;
+    // distance to the next node; higher values make the circle bigger
 
     double radius = (nodeDistance * numberOfNodes) / (2.0 * M_PI);  // M_PI = pi
 
@@ -389,30 +381,10 @@ void Mesh::sortForce() {
             } else {
                 force = distance * 0.5;  // a force is pulling them together
             }
-            // qDebug()<< "";
-            // qDebug() << "Ipos" << nodeI->x() << ";" << nodeI->y();
-            // qDebug() << "Jpos" << nodeJ->x() << ";" << nodeJ->y();
-            // qDebug() << "kraft " << force << " x " << difX << " y " << difY << "
-            // dis "<< distance;
-
             double alpha = atan2(difY, difX);
-            // qDebug() << "alpha: " << alpha;
+            forceY = force * sin(alpha);
+            forceX = force * cos(alpha);
 
-            forceY = sin(alpha);
-            // qDebug() << "sin " << forceY;
-
-            forceY *= force;
-            // qDebug() << "yforce: " << forceY;
-
-            forceX = cos(alpha);
-            // qDebug() << "cos " << forceX;
-
-            forceX *= force;
-            // qDebug()<< "xforce: " << forceX;
-
-            // qDebug() << " forceX " << forceX << " forceY" << forceY;
-
-            // pull NodeI closer
             posx = nodeI->x() - (forceX / 2.0) + 10;
             posy = nodeI->y() - (forceY / 2.0);
             nodeI->moveTo(posx, posy);
@@ -421,9 +393,6 @@ void Mesh::sortForce() {
             posx = nodeJ->x() + (forceX / 2.0) - 10;
             posy = nodeJ->y() + (forceY / 2.0);
             nodeJ->moveTo(posx, posy);
-
-            // qDebug() << "  Ipos after" << nodeI->x() << ";" << nodeI->y();
-            // qDebug() << "  Jpos after" << nodeJ->x() << ";" << nodeJ->y();
         }
     }
 
@@ -445,7 +414,6 @@ void Mesh::sortForce() {
     }
 
     // remove all connection waypoints so they will be straight lines
-
     foreach (Connection *c, this->getAllConnections()) { c->clearWaypoints(); }
 
     qDebug() << "mesh sorted";

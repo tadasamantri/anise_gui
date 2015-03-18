@@ -1,7 +1,5 @@
 #include <QApplication>
 #include <QCoreApplication>
-#include <QDir>
-
 #include "mainwindow.h"
 
 int main(int argc, char *argv[]) {

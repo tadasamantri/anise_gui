@@ -102,9 +102,6 @@ void Data::initialize(MainWindow *mainWindow) {
   */
     SingletonRender::instance()->renderCatalogContent(
                 Data::instance()->getNodeCatalog()->getContentVector());
-
-    // Connection *tempTestConnection = NodeFactory::createTestConnection(1);
-    // Data::instance()->addConnectionToMesh(tempTestConnection);
 }
 /**
  * @brief Data::addNodeToMesh inserts given node into the mesh and renders it afterwards
@@ -281,9 +278,7 @@ void Data::moveObjectInMesh(QPoint *start, QPoint *end, int ID) {
     // is it a connection?
     else if (this->mesh->connectionsInMesh.contains(ID)) {
         int joint = this->mesh->getConnectionByID(ID)->getJoint(start);
-        // QPoint offset = *start - mesh->getNodeByID(ID)->getPosition();
-        // QPoint *realEnd = end; realEnd->operator +=(QPoint(6, 6)); // this is
-        // just a temp. solution!
+        // this is just a temp. solution!
         this->mesh->getConnectionByID(ID)->setJoint(joint, end);
         changed = true;
         SingletonRender::instance()->renderMesh();

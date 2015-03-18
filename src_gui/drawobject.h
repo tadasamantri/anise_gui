@@ -29,7 +29,7 @@ public:
     QPixmap overAllPicture;
 
     void addPicture(QPixmap *pic, QPoint position);
-    void addPicture(QPixmap *pic, QPoint position, QString nodeName);
+    void addPicture(QPixmap *pic, QPoint const &position, QString const &nodeName);
     void addGateButton(QPixmap *pic, QPoint position, QString gateName,
                        QString gateType, bool direction);
 
@@ -37,23 +37,21 @@ public:
 
     // Modify the mask of the drawobject inserting the mask of the pixmap at given
     // position
-    void modifyMask(QPixmap *pic, QPoint position, bool updateMask = true);
+    void modifyMask(QPixmap *pic, const QPoint &position, const bool &updateMask = true);
 
     QPixmap getPicture();
 
     void dehighlight();
     void highlight();
-    void printMask();
-
     void paintEvent(QPaintEvent *);
     int getHighlightWidth() const;
 
     void dehighlightGates();
-    void highlightGates(QString gateType);
+    void highlightGates(const QString &gateType);
 
-    void setNodeName(QString nodeName);
+    void setNodeName(const QString &nodeName);
 
-    void move(int x, int y);
+    void move(int const &x, int const &y);
     void hide();
     void show();
     void deleteLater();
@@ -62,7 +60,6 @@ signals:
     void released(int nodeID, QString gateName, QPoint position);
 
 public slots:
-
     void releasedOnGate(QString gateName, QPoint position);
     void nodeNameChanged(QListWidgetItem *itemChanged);
 
@@ -74,9 +71,9 @@ private:
     int highlightWidth;
     QListWidget *nameLabel;
 
-    void updateOverAllPicture(QPixmap *newPicture, QPoint position);
-    int getPixel(const int x, const int y) const;
-    void setPixel(const int x, const int y, const int pixel);
+    void updateOverAllPicture(QPixmap *newPicture, QPoint const &position);
+    int getPixel(const int &x, const int &y) const;
+    void setPixel(const int &x, const int &y, const int &pixel);
     void highlightMask();
 };
 

@@ -2,21 +2,21 @@
 
 Gate::Gate() {}
 
-Gate::Gate(bool in, QList<QString> types) {
+Gate::Gate(bool const &in, const QStringList &types) {
     this->in = in;
     this->types = types;
 }
 
-Gate::Gate(bool in, QString name) {
+Gate::Gate(bool const &in, QString const &name) {
     this->in = in;
     this->name = name;
 }
 
-bool Gate::getDirection() { return this->in; }
+bool Gate::getDirection() const { return this->in; }
 
-bool Gate::hasType(const QString &type) { return types.contains(type); }
+bool Gate::hasType(const QString &type) const { return types.contains(type); }
 
-void Gate::addType(QString &type) {
+void Gate::addType(const QString &type) {
     if (!hasType(type)) types << type;
 }
 
@@ -28,12 +28,12 @@ bool Gate::removeType(const QString &type) {
     return true;
 }
 
-void Gate::setName(QString name) { this->name = name; }
+void Gate::setName(QString &name) { this->name = name; }
 
-void Gate::setDirection(bool in) { this->in = in; }
+void Gate::setDirection(const bool &in) { this->in = in; }
 
-QList<QString> Gate::getTypes() { return types; }
+QStringList Gate::getTypes() const { return types; }
 
-QString Gate::getType() { return types.first(); }
+QString Gate::getType() const { return types.first(); }
 
-QString Gate::getName() { return name; }
+QString Gate::getName() const { return name; }

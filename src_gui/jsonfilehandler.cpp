@@ -7,8 +7,6 @@
 #include <QMessageBox>
 
 QString JsonFileHandler::loadFile(const QString &path) {
-    // QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
-
     QString fileContent = "";
     // open a file
     qDebug() << "trying to open: \n" << path << "\n";
@@ -20,7 +18,6 @@ QString JsonFileHandler::loadFile(const QString &path) {
         QByteArray line = file.readLine();
         fileContent += line;
     }
-
     file.close();
     return fileContent;
 }
@@ -38,12 +35,12 @@ QJsonObject *JsonFileHandler::readFile(const QString &path) {
     file.open(QIODevice::ReadOnly);
     QJsonDocument jdoc = QJsonDocument::fromJson(file.readAll(), &jerror);
     file.close();
-    //-------------------
 
-    // was there an error?
+    // catch error while parsing
     if (jerror.error != QJsonParseError::NoError) {
-        qDebug() << jerror.errorString();
-        // return NULL;
+        qWarning() << jerror.errorString();
+        QMessageBox::critical(Data::instance()->getMainWindow(),"Error while Parsing",jerror.errorString());
+        return 0;
     }
 
     // no error
@@ -151,8 +148,7 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
     }
 
     qDebug() << "File contains " << obj["nodes"].toArray().size()
-             << " nodes, so let's parse them ";
-    //Mesh *mesh = Data::instance()->getMesh();
+             << " nodes";
 
     // for every node (represented as jsonvalue)...
     foreach (QJsonValue var, obj["nodes"].toArray()) {
@@ -174,7 +170,6 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
                      << " | type = " << type;
             qDebug() << "params:";
 
-            // ok, parameters are quite more difficult
             Node *createdNode = NodeFactory::createNode(type);
             //if node type not in catalog, skip
             if(createdNode->getType() == ""){
@@ -201,8 +196,6 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
                 QVariantMap p_gui = theNode["gui_params"].toObject().toVariantMap();
                 createdNode->moveTo(p_gui["x"].toInt(), p_gui["y"].toInt());
             }
-            // do some default stuff
-
             else {
                 hasPositionData = false;
             }
@@ -244,32 +237,19 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             QJsonArray way = json_gui_params["waypoints"].toArray();
             QVector<QPoint> waypoints;
             for (QJsonValue v : way) {
-                QJsonObject o = v.toObject();
-                if (o.contains("x") && o.contains("y"))
-                    waypoints << QPoint(o["x"].toInt(), o["y"].toInt());
+                QJsonObject jWaypoints = v.toObject();
+                if (jWaypoints.contains("x") && jWaypoints.contains("y"))
+                    waypoints << QPoint(jWaypoints["x"].toInt(), jWaypoints["y"].toInt());
             }
             connection->setWaypoints(waypoints);
         } else {
             // if no gui params are found
             QVector<QPoint> waypoints;
-
-            // start position of the connection
-            // waypoints<<
-            // src_node->getGatePosition(theConnection["src_gate"].toString());
-
-            // end position of the connections
-            // waypoints<<
-            // dest_node->getGatePosition(theConnection["dest_gate"].toString());
-
-            // waypoints<< source << destination;
-
             connection->setWaypoints(waypoints);
         }
-
         Data::instance()->addConnection(connection);
     }
     // all connections added"
-
     if (hasPositionData == false) {
         qDebug() << "position data missing";
         Data::instance()->sortForce();
@@ -348,7 +328,7 @@ QString JsonFileHandler::meshToJson() {
         }
         gui_params["waypoints"] = way;
         theConnection["gui_params"] = gui_params;
-        connections.push_back(theConnection);
+        connections << theConnection;
     }
     QJsonObject obj;
     obj.insert("nodes", nodes);

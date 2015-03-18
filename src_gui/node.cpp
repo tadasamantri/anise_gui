@@ -181,17 +181,17 @@ Gate *Node::getGateByName(const QString &name) {
 
 void Node::addParam(QString key, Node::Parameter p) { params[key] = p; }
 
-float Node::x() { return position_x; }
+float Node::x() const { return position_x; }
 
-float Node::y() { return position_y; }
+float Node::y() const { return position_y; }
 
-void Node::setX(const int &newX) { position_x = newX; }
+void Node::setX(const float &newX) { position_x = newX; }
 
-void Node::setY(const int &newY) { position_y = newY; }
+void Node::setY(const float &newY) { position_y = newY; }
 
 int Node::getID() const { return ID; }
 
-void Node::setID(int value) { ID = value; }
+void Node::setID(const int &ID) { this->ID = ID; }
 
 QPoint Node::getPosition() {
     return QPoint(this->position_x, this->position_y);
