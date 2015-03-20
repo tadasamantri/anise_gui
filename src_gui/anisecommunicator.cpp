@@ -1,6 +1,7 @@
 #include "anisecommunicator.h"
 #include "jsonfilehandler.h"
 #include <QDebug>
+#include <QFileInfo>
 #include "data.h"
 
 QProcess *AniseCommunicator::anise_process = new QProcess();
@@ -73,21 +74,7 @@ QString AniseCommunicator::getAllNodeTypes() {
     arguments << "--nodes"
               << "--machine";
 
-    //QString dir has the framework path.
-    QString dir;
-    dir += path;
 
-    /*
-    * Removes name of the Executable.
-    * dir is now path of directory containing anise.
-    * Example: from "~/bla/bla/anise" to "~/bla/bla/"
-    */
-    dir.chop(dir.length() - dir.lastIndexOf("/") - 1);
-
-    /*
-    * Changes the working Directory to get the Nodes.
-    */
-    anise_process->setWorkingDirectory(dir);
 
     /*
     * Starts the Framework.
@@ -98,7 +85,6 @@ QString AniseCommunicator::getAllNodeTypes() {
     * Waits for prints.
     */
     anise_process->waitForFinished();
-    anise_process->close();
     /*
     * Read printed stuff.
     */
@@ -107,16 +93,28 @@ QString AniseCommunicator::getAllNodeTypes() {
             readOutput.mid(readOutput.indexOf("{"), readOutput.lastIndexOf("}") - 1);
     qDebug() << "this is what the communicator got from the framework:\n"
              << readOutput << "\n";
-
+    anise_process->close();
     return readOutput;
 }
 
 void AniseCommunicator::setFrameworkPath(QString newPath) {
     AniseCommunicator::path = newPath;
+
+    QFileInfo f(newPath);
+    anise_process->setWorkingDirectory(f.absolutePath());
+}
+
+AniseCommunicator::AniseCommunicator()
+{
+    onProgress = false;
+    connect(anise_process, SIGNAL(readyRead()),this,SLOT(readProgress()));
+    connect(anise_process, SIGNAL(finished(int)),this,SLOT(finished(int)));
 }
 
 AniseCommunicator::~AniseCommunicator()
 {
+    disconnect(anise_process, SIGNAL(readyRead()),this,SLOT(readProgress()));
+    disconnect(anise_process, SIGNAL(finished(int)),this,SLOT(finished(int)));
     delete anise_process;
 }
 
@@ -124,14 +122,26 @@ void AniseCommunicator::readProgress()
 {
     if(!onProgress)
         return;
-    QString line = anise_process->readAllStandardOutput();
-    JsonFileHandler::parseProgress(line, JsonFileHandler::progress);
-    line = anise_process->readAllStandardError();
-    JsonFileHandler::parseProgress(line, JsonFileHandler::error);
+    QString out = (QString)anise_process->readAllStandardOutput();
+    QStringList lines = out.split("\n");
+    for(QString line : lines)
+        JsonFileHandler::parseProgress(line, JsonFileHandler::progress);
+    out = (QString)anise_process->readAllStandardError();
+    lines = out.split("\n");
+    for(QString line : lines)
+        JsonFileHandler::parseProgress(line, JsonFileHandler::error);
+}
+
+void AniseCommunicator::finished(int exitCode)
+{
+    //TODO: exit code handling!
+    onProgress = false;
 }
 
 void AniseCommunicator::runMesh(){
     QStringList args;
     args << Data::instance()->getSaveFile() << "--machine" << "--progress";
+    anise_process->setWorkingDirectory(QFileInfo(path).absolutePath());
+    onProgress = true;
     anise_process->start(path, args);
 }

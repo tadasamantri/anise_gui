@@ -97,6 +97,7 @@ void MainWindow::on_actionLoad_triggered() {
     this->on_actionNew_triggered();
     QJsonObject *obj = JsonFileHandler::readFile(fileName);
     JsonFileHandler::extractNodesAndConnections(*obj);
+    Data::instance()->setSaveFile(fileName);
     Data::instance()->unsetChanged();
     SingletonRender::instance()->renderMesh();
 }
@@ -428,4 +429,9 @@ void MainWindow::onFilebuttonClicked(int row, int col)
     if(fileName == "")
         return;
     ui->tableWidget->item(row,col)->setText(fileName);
+}
+
+void MainWindow::on_actionRun_Mesh_triggered()
+{
+    Data::instance()->runMesh();
 }

@@ -45,6 +45,8 @@ private slots:
 
     void onFilebuttonClicked(int row, int col);
     void on_actionSave_as_triggered();
+    void on_actionRun_Mesh_triggered();
+
 private:
     void initializeGUI();
     bool pathChanged = false;

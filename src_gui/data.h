@@ -10,6 +10,7 @@
 #include "connection.h"
 #include "node.h"
 #include "nodefactory.h"
+#include "anisecommunicator.h"
 
 /**
  *  @Author Frederik Lührs
@@ -55,6 +56,7 @@ public:
     void sortCircle();
     void sortRow();
     void sortForce();
+    void runMesh();
     int getFocusedID();
     void removeNodeFromMesh(int ID);
     bool checkConnection(int srcNodeID, QString srcGate, int destNodeID, QString destGate);
@@ -129,6 +131,7 @@ private:
     bool repaint = false;
     bool onSimulation;
     QString saveFile;
+    AniseCommunicator *framework;
 };
 
 #endif  // DATA_H

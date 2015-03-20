@@ -98,6 +98,16 @@ bool Node::addParam(QString descr, QString _key, QString name, QString type,
         return false;
     return true;
 }
+unsigned char Node::getProgress() const
+{
+    return progress;
+}
+
+void Node::setProgress(unsigned char value)
+{
+    progress = value;
+}
+
 Node::Status Node::getStatus() const
 {
     return status;
@@ -107,18 +117,6 @@ void Node::setStatus(const Node::Status &value)
 {
     status = value;
 }
-
-float Node::getProgress() const
-{
-    return progress;
-}
-
-void Node::setProgress(float value)
-{
-    assert(0 <= value && value <= 1);
-    progress = value;
-}
-
 
 /**
  * @brief Node::setParam

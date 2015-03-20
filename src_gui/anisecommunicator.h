@@ -36,13 +36,14 @@ private:
 public:
     static QString getAllNodeTypes();
     static void setFrameworkPath(QString path);
+    AniseCommunicator();
     ~AniseCommunicator();
     bool getOnProgress() const;
     void setOnProgress(bool value);
-
     void runMesh();
 private slots:
     void readProgress();
+    void finished(int exitCode);
 };
 
 #endif  // ANISECOMMUNICATOR_H

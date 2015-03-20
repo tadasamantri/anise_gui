@@ -27,6 +27,7 @@ Data::Data(QObject *parent) : QObject(parent) {
     nodeCatalog = 0;
     nodeFactory = 0;
     saveFile = "";
+    framework = new AniseCommunicator();
 }
 QString Data::getSaveFile() const
 {
@@ -179,6 +180,12 @@ void Data::sortForce()
         mesh->sortForce();
         changed = true;
     }
+}
+
+void Data::runMesh()
+{
+    if(!changed)
+        framework->runMesh();
 }
 
 int Data::getFocusedID()

@@ -270,7 +270,7 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
     }
 }
 
-void JsonFileHandler::parseProgress(const QString &text, const ParseMode &mode)
+void JsonFileHandler::parseProgress(QString &text, const ParseMode &mode)
 {
     if(mode == progress)
         parseProgress(text);
@@ -278,12 +278,19 @@ void JsonFileHandler::parseProgress(const QString &text, const ParseMode &mode)
         parseErrors(text);
 }
 
-void JsonFileHandler::parseProgress(const QString &text)
+void JsonFileHandler::parseProgress(QString &text)
 {
-
+    QJsonDocument doc = QJsonDocument::fromJson(text.toUtf8());
+    QJsonObject obj = doc.object();
+    if(!obj.contains("status"))
+        return;
+    obj = obj["status"].toObject();
+    QString nodeName = obj["node"].toString();
+    unsigned char progress = (unsigned char) obj["progress"].toInt();
+    Data::instance()->getNodeByName(nodeName)->setProgress(progress);
 }
 
-void JsonFileHandler::parseErrors(const QString &text)
+void JsonFileHandler::parseErrors(QString &text)
 {
 
 }
