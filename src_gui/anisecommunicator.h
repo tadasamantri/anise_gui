@@ -40,6 +40,7 @@ public:
     bool getOnProgress() const;
     void setOnProgress(bool value);
 
+    void runMesh();
 private slots:
     void readProgress();
 };

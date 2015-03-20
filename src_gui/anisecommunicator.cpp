@@ -1,6 +1,7 @@
 #include "anisecommunicator.h"
 #include "jsonfilehandler.h"
 #include <QDebug>
+#include "data.h"
 
 QProcess *AniseCommunicator::anise_process = new QProcess();
 QString AniseCommunicator::path;
@@ -97,7 +98,7 @@ QString AniseCommunicator::getAllNodeTypes() {
     * Waits for prints.
     */
     anise_process->waitForFinished();
-
+    anise_process->close();
     /*
     * Read printed stuff.
     */
@@ -106,6 +107,7 @@ QString AniseCommunicator::getAllNodeTypes() {
             readOutput.mid(readOutput.indexOf("{"), readOutput.lastIndexOf("}") - 1);
     qDebug() << "this is what the communicator got from the framework:\n"
              << readOutput << "\n";
+
     return readOutput;
 }
 
@@ -126,4 +128,10 @@ void AniseCommunicator::readProgress()
     JsonFileHandler::parseProgress(line, JsonFileHandler::progress);
     line = anise_process->readAllStandardError();
     JsonFileHandler::parseProgress(line, JsonFileHandler::error);
+}
+
+void AniseCommunicator::runMesh(){
+    QStringList args;
+    args << Data::instance()->getSaveFile() << "--machine" << "--progress";
+    anise_process->start(path, args);
 }
