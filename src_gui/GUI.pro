@@ -10,7 +10,31 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = anise_GUI
 TEMPLATE = app
-DESTDIR = "../build"
+
+CONFIG(debug,debug|release) {
+  # Debug...
+  DESTDIR = ../bin/debug
+  OBJECTS_DIR = build/debug
+  UI_DIR = build/debug/forms
+  UI_HEADERS_DIR = forms
+  UI_SOURCES_DIR = forms
+  MOC_DIR = build/debug/moc
+  RCC_DIR = build/debug/rcc
+} else {
+  # Release...
+  DESTDIR = ../bin/release
+  OBJECTS_DIR = build/release
+  UI_DIR = build/release/forms
+  UI_HEADERS_DIR = forms
+  UI_SOURCES_DIR = forms
+  MOC_DIR = build/release/moc
+  RCC_DIR = build/release/rcc
+  QMAKE_CXXFLAGS_RELEASE += -O2
+  #use O3 flag for optimisation
+  QMAKE_CXXFLAGS_RELEASE += -O3
+}
+
+QMAKE_CLEAN += $$DESTDIR/*$$TARGET*
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -55,9 +79,6 @@ HEADERS  += mainwindow.h \
 FORMS    += mainwindow.ui
 
 QMAKE_CXXFLAGS += -std=c++14
-
-#use O3 flag for optimisation
-QMAKE_CXXFLAGS_RELEASE += -O3
 
 QMAKE_POST_LINK = cp -R ../Data $${DESTDIR}
 
