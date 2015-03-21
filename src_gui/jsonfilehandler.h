@@ -64,10 +64,16 @@ public:
      * @param obj JSON-Object containing all Information about the Mesh to be loaded
      */
     static void extractNodesAndConnections(const QJsonObject &obj);
-    static void parseProgress(QString &text, const ParseMode &mode);
+
+    /**
+     * @brief parseProgress parse the progress of the mesh
+     * @param text textline given from framework
+     * @param mode distinguish between error parsing or progress parsing
+     */
+    static void parseProgress(const QString &text, const ParseMode &mode);
 private:
-    static void parseProgress(QString &text);
-    static void parseErrors(QString &text);
+    static void parseProgress(const QString &text);
+    static void parseErrors(const QString &text);
 };
 
 #endif  // FILEHANDLER_H

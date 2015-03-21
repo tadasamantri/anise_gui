@@ -270,7 +270,7 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
     }
 }
 
-void JsonFileHandler::parseProgress(QString &text, const ParseMode &mode)
+void JsonFileHandler::parseProgress(const QString &text, const ParseMode &mode)
 {
     if(mode == progress)
         parseProgress(text);
@@ -278,7 +278,7 @@ void JsonFileHandler::parseProgress(QString &text, const ParseMode &mode)
         parseErrors(text);
 }
 
-void JsonFileHandler::parseProgress(QString &text)
+void JsonFileHandler::parseProgress(const QString &text)
 {
     QJsonDocument doc = QJsonDocument::fromJson(text.toUtf8());
     QJsonObject obj = doc.object();
@@ -290,9 +290,10 @@ void JsonFileHandler::parseProgress(QString &text)
     Data::instance()->getNodeByName(nodeName)->setProgress(progress);
 }
 
-void JsonFileHandler::parseErrors(QString &text)
+void JsonFileHandler::parseErrors(const QString &text)
 {
-
+    if(text != "")
+        QMessageBox::warning(Data::instance()->getMainWindow(),"Errors during Simulation", "An Error occured:\n" + text);
 }
 
 /**

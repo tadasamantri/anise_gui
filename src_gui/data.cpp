@@ -273,7 +273,7 @@ QMap<int, Node *> *Data::nodesInMesh()
     return 0;
 }
 
-QString Data::getValidAlternativeForName(QString &name)
+QString Data::getValidAlternativeForName(const QString &name)
 {
     QString result;
     if(mesh)

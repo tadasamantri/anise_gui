@@ -11,6 +11,12 @@ Node::Node() {
     progress = 0;
 }
 
+Node::~Node()
+{
+    for(Gate *g : inputGates + outputGates)
+        delete g;
+}
+
 QMap<QString, Node::Parameter> *Node::getParams() { return &this->params; }
 
 Node::Node(QVector<Gate *> &inputGates, QVector<Gate *> &outputGates,
@@ -32,9 +38,9 @@ void Node::moveTo(float x, float y) {
     SingletonRender::instance()->updateConnections(ID, offset);
 }
 
-void Node::setType(QString type) { this->type = type; }
+void Node::setType(const QString &type) { this->type = type; }
 
-void Node::setName(QString name) {
+void Node::setName(const QString &name) {
     this->name = Data::instance()->getValidAlternativeForName(name);
     Data::instance()->setChanged();
     SingletonRender::instance()->setNodeName(ID, this->name);
@@ -56,7 +62,7 @@ void Node::addGate(Gate *gate) {
     }
 }
 
-void Node::addGates(QVector<Gate *> gates, const bool &direction) {
+void Node::addGates(const QVector<Gate *> &gates, const bool &direction) {
     if (direction == true) foreach (Gate *gate, gates) {
         inputGates << gate;
     }
@@ -64,20 +70,10 @@ void Node::addGates(QVector<Gate *> gates, const bool &direction) {
         foreach (Gate *gate, gates) { outputGates << gate; }
 }
 
-bool Node::isInputGate(QString gateName) {
-    foreach (Gate *gate, *this->getInputGates()) {
-        if (gate->getName() == gateName) return gate->getDirection();
-    }
-
-    return false;
-}
-
-bool Node::isOutputGate(QString gateName) {
-    foreach (Gate *gate, *this->getOutputGates()) {
-        if (gate->getName() == gateName) return !gate->getDirection();
-    }
-
-    return false;
+void Node::addGates(const QVector<Gate *> &gates)
+{
+    for(Gate *g : gates)
+        addGate(g);
 }
 
 /**
@@ -89,8 +85,8 @@ bool Node::isOutputGate(QString gateName) {
  * @param _value value to be stored
  * @return true if the parameter was added, false elsewise
  */
-bool Node::addParam(QString descr, QString _key, QString name, QString type,
-                    QVariant _value) {
+bool Node::addParam(const QString &descr, const QString &_key, const QString &name, const QString &type,
+                    const QVariant &_value) {
     if (!this->params.contains(_key)) {
         Parameter p{descr, _key, name, type, _value};
         this->params.insert(_key, p);

@@ -28,37 +28,38 @@ public:
     };
 
     Node();
-
+    ~Node();
     QMap<QString, Parameter> *getParams();
 
     Node(QVector<Gate *> &inputGates, QVector<Gate *> &outputGates, QString &type,
          QString &name, QMap<QString, Parameter> &params);
 
-    /*
- * TODO:
- * add gate ist sehr umständlich, am besten übergeben wir nur noch einen
- *zusätzlichen
- * type als(string, bool) und er erweitert seinen vector<gate> selber
- *
- */
+    /**
+     * @brief addGate add a Gate to the Node
+     * @param gate
+     */
     void addGate(Gate *gate);
-    void addGates(QVector<Gate *> gates, const bool &direction);
 
-    bool isInputGate(QString gateName);
-    bool isOutputGate(QString gateName);
+    /**
+     * @brief addGates add multiple Gates
+     * @param gates
+     * @param direction
+     */
+    void addGates(const QVector<Gate *> &gates, const bool &direction);
+    void addGates(const QVector<Gate *> &gates);
 
-    /*
- * Set the position of the Node
+    /**
+ * @brief Set the position of the Node
  * @param x new position_x
  * @param y new position_y
  */
     void moveTo(float x, float y);
 
-    void setType(QString type);
+    void setType(const QString &type);
 
     QString getType();
 
-    void setName(QString name);
+    void setName(const QString &name);
 
     QString getName();
 
@@ -93,10 +94,9 @@ public:
 
     unsigned char getProgress() const;
     void setProgress(unsigned char value);
-
 private:
-    bool addParam(QString descr, QString _key, QString name, QString type,
-                  QVariant _value);
+    bool addParam(const QString &descr, const QString &_key, const QString &name, const QString &type,
+                  const QVariant &_value);
     QString description;
     QVector<Gate *> inputGates, outputGates;
     QString type, name;
