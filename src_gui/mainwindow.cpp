@@ -435,3 +435,16 @@ void MainWindow::on_actionRun_Mesh_triggered()
 {
     Data::instance()->runMesh();
 }
+
+void MainWindow::on_start_button_clicked()
+{
+    Data::instance()->testChangeRun();
+
+}
+
+void MainWindow::on_stop_button_clicked()
+{
+
+    Data::instance()->testChangeRun();
+
+}

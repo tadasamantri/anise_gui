@@ -1,3 +1,4 @@
+
 #include "drawobject.h"
 #include <QShortcut>
 #include <QSize>
@@ -36,9 +37,17 @@ DrawObject::DrawObject(int id, QPoint position, int width, int height,
     this->setMask(mainMaskUnhighlighted);
 
     mainMaskAsImage = mainMaskUnhighlighted.toImage();
+
+
+
     //connect release event
     connect(this, SIGNAL(released(int, QString, QPoint)), this->parent(),
             SLOT(handleGateClick(int, QString, QPoint)));
+
+
+
+
+
 }
 
 /**
@@ -55,6 +64,10 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position) {
     // safe dimensions
     int height = pic->height();
     int width = pic->width();
+
+    // set transparency to magic pink
+    pic->setMask(pic->createMaskFromColor(Qt::magenta));
+
 
     // take respect to highlightWidth
     position += QPoint(highlightWidth, highlightWidth);
@@ -108,7 +121,6 @@ void DrawObject::setNodeName(QString const &nodeName){
     item->setFlags(item->flags() | Qt::ItemIsEditable);
     nameLabel->setFrameStyle(QFrame::NoFrame);
     nameLabel->setStyleSheet("background: transparent;");
-    nameLabel->setStyleSheet("background: transparent;");
 
     item->setText(nodeName);
     nameLabel->insertItem(0, item);
@@ -134,6 +146,10 @@ void DrawObject::addGateButton(QPixmap *pic, QPoint position,
     // safe dimensions
     int height = pic->height();
     int width = pic->width();
+
+    // set transparency to magic pink
+    pic->setMask(pic->createMaskFromColor(Qt::magenta));
+
 
     // take respect to highlightWidth
     position += QPoint(highlightWidth, highlightWidth);
@@ -313,35 +329,67 @@ void DrawObject::dehighlightGates(){
 
 void DrawObject::move(const int &x, const int &y){
     QWidget::move(x, y);
+    progressBar->move(this->pos().x(), this->pos().y()+this->height() + 20);
     if(!nameLabel)
         return;
     int nodeNameX = this->pos().x()+this->width()/2-nameLabel->width()/2;
     int nodeNameY = this->pos().y()+this->height();
+    nameLabel->move(nodeNameX,nodeNameY);
 
-    if(nameLabel)
-        nameLabel->move(nodeNameX,nodeNameY);
+
 }
 
 void DrawObject::hide(){
     QWidget::hide();
+    progressBar->hide();
 
     if(!nameLabel)
         return;
     nameLabel->hide();
+
 }
 
 void DrawObject::show(){
     QWidget::show();
+    this->changeProgressView();
     if(!nameLabel)
             return;
         nameLabel->show();
+
+
 }
 
 void DrawObject::deleteLater(){
     QObject::deleteLater();
-            if(!nameLabel)
+    progressBar->deleteLater();
+    if(!nameLabel)
             return;
             nameLabel->deleteLater();
+
+}
+
+
+void DrawObject::setProgressView(){
+
+    progressBar = new QProgressBar(dynamic_cast<MeshEditorWidget *> (this->parent()));
+    int posX = this->pos().x();
+    int posY = this->pos().y()+this->height()+20;
+
+    progressBar->setGeometry(posX, posY ,this->width(), 15);
+    progressBar->setOrientation(Qt::Horizontal);
+    progressBar->setRange(0,99);
+    progressBar->hide();
+}
+
+void DrawObject::changeProgressView(){
+
+    progressBar->setValue(0);
+
+    if(Data::instance()->isRunning())
+            progressBar->show();
+    else
+        progressBar->hide();
+
 }
 
 void DrawObject::deleteItemText(QListWidgetItem * item){

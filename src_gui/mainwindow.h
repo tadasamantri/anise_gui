@@ -47,6 +47,10 @@ private slots:
     void on_actionSave_as_triggered();
     void on_actionRun_Mesh_triggered();
 
+    void on_start_button_clicked();
+
+    void on_stop_button_clicked();
+
 private:
     void initializeGUI();
     bool pathChanged = false;

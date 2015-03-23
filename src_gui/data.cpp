@@ -28,7 +28,25 @@ Data::Data(QObject *parent) : QObject(parent) {
     nodeFactory = 0;
     saveFile = "";
     framework = new AniseCommunicator();
+    runMode = false;
+
+    SingletonRender *renderer = SingletonRender::instance();
+
+    connect(this, SIGNAL(runModeChanged()), renderer, SLOT(changeProgressView()));
 }
+bool Data::isRunning() const
+{
+    return runMode;
+}
+
+void Data::testChangeRun(){
+
+    runMode = !runMode;
+
+    emit runModeChanged();
+
+}
+
 QString Data::getSaveFile() const
 {
     return saveFile;
@@ -184,8 +202,11 @@ void Data::sortForce()
 
 void Data::runMesh()
 {
-    if(!changed)
+    if(!changed){
         framework->runMesh();
+        runMode = true;
+        emit runModeChanged();
+    }
 }
 
 int Data::getFocusedID()
@@ -387,6 +408,8 @@ void Data::stopSimulation()
 
 void Data::setEditMode(){
     SingletonRender::instance()->dehighlightGates();
+    runMode = false;
+    emit runModeChanged();
 }
 
 QList<Connection *> Data::getConnections(int nodeID){

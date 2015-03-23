@@ -8,6 +8,7 @@
 #include <QBitmap>
 #include <QPushButton>
 #include <QListWidgetItem>
+#include <QProgressBar>
 #include "gatebutton.h"
 
 class DrawObject : public QWidget {
@@ -55,6 +56,11 @@ public:
     void hide();
     void show();
     void deleteLater();
+
+    void setProgressValue(int value);
+    void setProgressView();
+    void changeProgressView();
+
 signals:
 
     void released(int nodeID, QString gateName, QPoint position);
@@ -68,6 +74,13 @@ private slots:
     void deleteItemText(QListWidgetItem *item);
 
 private:
+
+    //Stuff for progess
+
+    QProgressBar *progressBar;
+    bool progressMode;
+
+    //rest
     int highlightWidth;
     QListWidget *nameLabel;
 

@@ -90,7 +90,16 @@ public:
     QString getSaveFile() const;
     void setSaveFile(const QString &value);
 
+    bool isRunning() const;
+
+    void testChangeRun();
+
+signals:
+
+    void runModeChanged();
+
 public slots:
+
     bool deleteItem();
     void setFocusMeshObject(int nodeID);
     void updateNode(QTableWidgetItem *item);
@@ -98,6 +107,8 @@ public slots:
     void stopSimulation();
 private:
     explicit Data(QObject *parent = 0);
+
+    bool runMode;
 
     /**
     * It is Private so that it can't be called.

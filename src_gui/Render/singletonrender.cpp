@@ -25,6 +25,7 @@ SingletonRender::SingletonRender() {
     } else {
         qDebug() << "images loading failed";
     }
+
 }
 
 /** This function is called to create an instance of the class.
@@ -265,8 +266,8 @@ QPixmap *SingletonRender::createTiledPixmap(const int &x, const int &y) {
     result->fill(Qt::transparent);
 
     // create a painter
-    QPainter painter(result);
-    painter.setBrush(Qt::green);
+    QPainter *painter = new QPainter(result);
+    painter->setBrush(Qt::green);
 
     bool isTop = false;
     bool isBottom = false;
@@ -345,9 +346,11 @@ QPixmap *SingletonRender::createTiledPixmap(const int &x, const int &y) {
 
             // add the image to our QPixmap
             temp = &(this->nodeTiles[indexOfTile]);
-            painter.drawPixmap(rowX * 16, rowY * 16, 16, 16, *temp);
+            painter->drawPixmap(rowX * 16, rowY * 16, 16, 16, *temp);
         }
     }
+
+    delete painter;
 
     return result;
 }
@@ -388,8 +391,7 @@ bool SingletonRender::loadImages() {
                          << result;
             }
 
-            // set transparency to magic pink
-            temp->setMask(temp->createMaskFromColor(Qt::magenta));
+
 
             allImages.insert(listOfFiles.at(i), temp);
         }
@@ -456,6 +458,7 @@ void SingletonRender::renderNode(Node *nodeToRender, const int &nodeID) {
 
         if (allImages.contains("body.png")) {
             // Draw the body
+
             NodeDrawObject->addPicture(
                         this->createTiledPixmap(amountTilesX * 16, amountTilesY * 16),
                         QPoint(gateSpaceX, 0));
@@ -490,8 +493,9 @@ void SingletonRender::renderNode(Node *nodeToRender, const int &nodeID) {
         }
 
         NodeDrawObject->setNodeName(name);
-
         NodeDrawObject->setToolTip(nodeToRender->getDescription());
+        NodeDrawObject->setProgressView();
+
         allDrawnNodes.insert(nodeID, NodeDrawObject);
     }
     // TODO should use layouts instead of hardcoded position!
@@ -711,4 +715,16 @@ QPixmap *SingletonRender::getImage(const QString &name) {
     if (allImages.contains(name))
         return allImages.value(name);
     return new QPixmap();
+}
+
+
+void SingletonRender::changeProgressView(){
+
+    foreach(DrawObject *node , allDrawnNodes){
+        if(Data::instance()->isRunning())
+            node->highlight();
+        else
+            node->dehighlight();
+        node->changeProgressView();
+    }
 }

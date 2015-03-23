@@ -14,7 +14,10 @@
 // The life of the singleton instantiation is for the duration of the
 // application.
 
-class SingletonRender {
+class SingletonRender : public QObject{
+
+Q_OBJECT
+
 public:
     /**
    * @brief Will return a pointer to the Singleton Instance.
@@ -207,9 +210,16 @@ public:
     void highlightGates(const QString &gateType);
     void dehighlightGates();
 
+
+
     void setNodeName(const int &nodeID, const QString &nodeName);
     void clearAllConnections();
     QMap<int, QVector<DrawObject *> > *getAllConnections();
+
+
+public slots:
+
+    void changeProgressView();
 
 private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
@@ -253,7 +263,7 @@ private:
     // the class using only the Instance() function.
 
     // copy constructor is private
-    SingletonRender(SingletonRender const &) {}
+    SingletonRender(SingletonRender const &) : QObject(){}
 
     // assignment operator is private
     SingletonRender &operator=(SingletonRender const &) { return *this; }
