@@ -14,22 +14,22 @@ TEMPLATE = app
 CONFIG(debug,debug|release) {
   # Debug...
   DESTDIR = ../bin/debug
-  OBJECTS_DIR = build/debug
-  UI_DIR = build/debug/forms
+  OBJECTS_DIR = ../build/debug
+  UI_DIR = ../build/debug/forms
   UI_HEADERS_DIR = forms
   UI_SOURCES_DIR = forms
-  MOC_DIR = build/debug/moc
-  RCC_DIR = build/debug/rcc
+  MOC_DIR = ../build/debug/moc
+  RCC_DIR = ../build/debug/rcc
 } else {
   # Release...
   DESTDIR = ../bin/release
-  OBJECTS_DIR = build/release
-  UI_DIR = build/release/forms
+  OBJECTS_DIR = ../build/release
+  UI_DIR = ../build/release/forms
   UI_HEADERS_DIR = forms
   UI_SOURCES_DIR = forms
-  MOC_DIR = build/release/moc
-  RCC_DIR = build/release/rcc
-  QMAKE_CXXFLAGS_RELEASE += -O2
+  MOC_DIR = ../build/release/moc
+  RCC_DIR = ../build/release/rcc
+  QMAKE_CXXFLAGS_RELEASE -= -O2
   #use O3 flag for optimisation
   QMAKE_CXXFLAGS_RELEASE += -O3
 }
