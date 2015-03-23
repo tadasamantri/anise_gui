@@ -1,3 +1,5 @@
+#include <QTime>
+#include <QDate>
 #include "data.h"
 #include "settingshandler.h"
 #include "nodefactory.h"
@@ -28,7 +30,15 @@ Data::Data(QObject *parent) : QObject(parent) {
     nodeFactory = 0;
     saveFile = "";
     framework = new AniseCommunicator();
+    timer = new QTimer(this);
+    autosave = QDir::current();
+    autosave.cd("Data/Meshes");
+    autosave.mkdir("autosave");
+    autosave.cd("autosave");
+    connect(timer, SIGNAL(timeout()), this, SLOT(autosaveMesh()));
+    timer->start(autosave_interval);
 }
+
 QString Data::getSaveFile() const
 {
     return saveFile;
@@ -348,6 +358,7 @@ Data::~Data() {
     delete mesh;
     delete nodeCatalog;
     delete data;
+    delete timer;
 }
 
 NodeCatalog *Data::getNodeCatalog() { return nodeCatalog; }
@@ -383,6 +394,19 @@ void Data::startSimulation()
 void Data::stopSimulation()
 {
     onSimulation = false;
+}
+
+void Data::autosaveMesh()
+{
+    return;
+    qDebug() << "called autosave";
+    if(!autosave.exists() || !changed)
+        return;
+    QString time = QTime::currentTime().toString("hhmmss"),
+    date = QDate::currentDate().toString("yyyyMMdd");
+    QString savename = "backup" + date + time + ".mesh";
+    savename = autosave.absolutePath() +"/" + savename;
+    JsonFileHandler::saveMesh(savename);
 }
 
 void Data::setEditMode(){

@@ -2,6 +2,7 @@
 #define DATA_H
 
 #include <QObject>
+#include <QDir>
 #include "mesh.h"
 #include "nodecatalog.h"
 #include "mainwindow.h"
@@ -11,6 +12,7 @@
 #include "node.h"
 #include "nodefactory.h"
 #include "anisecommunicator.h"
+#include <QTimer>
 
 /**
  *  @Author Frederik Lührs
@@ -96,6 +98,8 @@ public slots:
     void updateNode(QTableWidgetItem *item);
     void startSimulation();
     void stopSimulation();
+private slots:
+    void autosaveMesh();
 private:
     explicit Data(QObject *parent = 0);
 
@@ -130,8 +134,11 @@ private:
     bool changed = false;
     bool repaint = false;
     bool onSimulation;
+    QTimer *timer;
+    QDir autosave;
     QString saveFile;
     AniseCommunicator *framework;
+    int autosave_interval = 3e5;
 };
 
 #endif  // DATA_H

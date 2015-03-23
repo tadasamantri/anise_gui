@@ -162,7 +162,7 @@ void MainWindow::on_actionLoad_Catalog_triggered() {
 
 QString MainWindow::saveDialog(){
     QString fileName = QFileDialog::getSaveFileName(this, "Save current project to...", "",
-                                 "Mesh-Files (*.mesh *.json);;All Files(*)");
+                                                    "Mesh-Files (*.mesh *.json);;All Files(*)");
 
     if(!(fileName.endsWith(".json",Qt::CaseInsensitive) || fileName.endsWith(".mesh", Qt::CaseInsensitive)))
         fileName += ".mesh";
@@ -425,7 +425,14 @@ void MainWindow::on_details_stateChanged(int arg1)
 
 void MainWindow::onFilebuttonClicked(int row, int col)
 {
-    QString fileName = QFileDialog::getOpenFileName(this,"Select a File...","~/");
+    QString key = ui->tableWidget->item(row,0)->data(Qt::UserRole).toString();
+    if(!key.contains("file",Qt::CaseInsensitive))
+        return;
+    QString fileName;
+    if(key.contains("out",Qt::CaseInsensitive))
+        fileName = QFileDialog::getSaveFileName(this,"Select a File...","~/");
+    else
+        fileName = QFileDialog::getOpenFileName(this, "Select a File...", "~/");
     if(fileName == "")
         return;
     ui->tableWidget->item(row,col)->setText(fileName);
