@@ -31,7 +31,7 @@ void MeshEditorWidget::clearNewLine() {
     emit drawLineModeChanged();
 }
 
-void MeshEditorWidget::restToEditMode() {
+void MeshEditorWidget::resetToEditMode() {
     this->clearNewLine();
     Data::instance()->setEditMode();
     repaint();
@@ -42,7 +42,7 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
 
     // ensure a left-mouse-click
     if (!(event->button() == Qt::LeftButton)) {
-        this->restToEditMode();
+        this->resetToEditMode();
         return;
     }
 
@@ -66,7 +66,7 @@ void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
 
                 // drawobject has an id and can be compared to source node
                 if (draObj->ID == newLine.srcNodeID) {
-                    this->restToEditMode();
+                    this->resetToEditMode();
                 }
             }
         }
@@ -231,12 +231,13 @@ bool MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
                                        QPoint position) {
     // stop connection creation when clicked on an outgate of the source node
     if (nodeID == newLine.srcNodeID && gateName == newLine.srcGateName) {
-        this->restToEditMode();
+        this->resetToEditMode();
         return false;
     }
 
     // Do nothing if you clicked on wrong Gate
     else if (!correctGate(nodeID, gateName)) {
+        resetToEditMode();
         return false;
     }
 
@@ -253,7 +254,7 @@ bool MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
                     NodeFactory::createConnection(newLine.srcNodeID, newLine.srcGateName,
                                                   newLine.destNodeID, newLine.destGateName,
                                                   newLine.wayPoints));
-        this->restToEditMode();
+        this->resetToEditMode();
 
     }
 
