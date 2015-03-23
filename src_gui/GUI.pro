@@ -29,7 +29,7 @@ CONFIG(debug,debug|release) {
   UI_SOURCES_DIR = forms
   MOC_DIR = build/release/moc
   RCC_DIR = build/release/rcc
-  QMAKE_CXXFLAGS_RELEASE += -O2
+  QMAKE_CXXFLAGS_RELEASE -= -O2
   #use O3 flag for optimisation
   QMAKE_CXXFLAGS_RELEASE += -O3
 }
