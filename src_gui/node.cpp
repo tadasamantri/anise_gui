@@ -98,13 +98,14 @@ bool Node::addParam(QString descr, QString _key, QString name, QString type,
         return false;
     return true;
 }
-unsigned char Node::getProgress() const
+int Node::getProgress() const
 {
     return progress;
 }
 
-void Node::setProgress(unsigned char value)
+void Node::setProgress(int value)
 {
+    assert((value >= 0 && value <= 100) || value == -1);
     progress = value;
 }
 

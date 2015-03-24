@@ -108,6 +108,9 @@ public slots:
     void startSimulation();
     void stopSimulation();
 private slots:
+    /**
+     * @brief autosaveMesh saves a backup file of the current mesh
+     */
     void autosaveMesh();
 private:
     explicit Data(QObject *parent = 0);
@@ -145,13 +148,17 @@ private:
     bool changed = false;
     bool repaint = false;
     bool onSimulation;
-    QTimer *timer;
+    //timer for autobackups
+    QTimer *backupTimer;
+    //directory for savings
     QDir autosave;
+    //location of current save file
     QString saveFile;
     AniseCommunicator *framework;
     //interval to create backup files in ms
     int autosave_interval = 3e5;
-    QString lastSaveFile;
+    //location of last made backup
+    QString lastBackupFile;
 };
 
 #endif  // DATA_H
