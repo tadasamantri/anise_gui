@@ -377,7 +377,8 @@ void DrawObject::setProgressView(){
 
     progressBar->setGeometry(posX, posY ,this->width(), 15);
     progressBar->setOrientation(Qt::Horizontal);
-    progressBar->setRange(0,99);
+    progressBar->setRange(0,0);
+    progressBar->setValue(0);
     progressBar->hide();
 }
 
@@ -385,8 +386,11 @@ void DrawObject::changeProgressView(){
 
     progressBar->setValue(0);
 
-    if(Data::instance()->isRunning())
-            progressBar->show();
+    if(Data::instance()->isRunning()){
+
+        this->changeHighlightColor(1);
+        progressBar->show();
+    }
     else
         progressBar->hide();
 
@@ -394,4 +398,15 @@ void DrawObject::changeProgressView(){
 
 void DrawObject::deleteItemText(QListWidgetItem * item){
     nameLabel->setStyleSheet("QListWidget::item:selected{background: transparent}");
+}
+
+
+void DrawObject::changeHighlightColor(int color){
+
+    switch(color){
+
+        case 1:  this->setStyleSheet("background-color:green;");break;
+
+    }
+
 }
