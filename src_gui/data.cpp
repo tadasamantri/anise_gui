@@ -30,13 +30,13 @@ Data::Data(QObject *parent) : QObject(parent) {
     nodeFactory = 0;
     saveFile = "";
     framework = new AniseCommunicator();
-    timer = new QTimer(this);
+    backupTimer = new QTimer(this);
     autosave = QDir::current();
     autosave.cd("Data/Meshes");
     autosave.mkdir("autosave");
     autosave.cd("autosave");
-    connect(timer, SIGNAL(timeout()), this, SLOT(autosaveMesh()));
-    timer->start(autosave_interval);
+    connect(backupTimer, SIGNAL(timeout()), this, SLOT(autosaveMesh()));
+    backupTimer->start(autosave_interval);
 
 
     runMode = false;
@@ -360,11 +360,14 @@ void Data::newMeshProject() {
     //create new mesh and delete old
     delete mesh;
     mesh = new Mesh();
+    //reset file locations
     lastBackupFile = "";
     saveFile = "";
+    //set not changed
     changed = false;
-    timer->stop();
-    timer->start(autosave_interval);
+    //restart backup timer
+    backupTimer->stop();
+    backupTimer->start(autosave_interval);
     //clear the mesh field
     SingletonRender::instance()->clearMeshField();
     mainWindow->ui->meshField->connectSignals();
@@ -386,7 +389,7 @@ Data::~Data() {
     delete mesh;
     delete nodeCatalog;
     delete data;
-    delete timer;
+    delete backupTimer;
 }
 
 NodeCatalog *Data::getNodeCatalog() { return nodeCatalog; }
