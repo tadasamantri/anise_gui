@@ -437,12 +437,12 @@ void DrawObject::setStatusColor(Node::Status status){
 
 void DrawObject::setProgressValue(int value){
 
-    if(progressBar)
+    if(progressBar){
         if(value == -1){
             progressBar->setRange(0,0);
             progressBar->setValue(0);
         }
-
         else
             progressBar->setValue(value);
+    }
 }
