@@ -291,7 +291,7 @@ void JsonFileHandler::parseProgress(QString &text)
     if(source == "node"){
         QString nodeName = obj["node"].toString();
         Node *node = Data::instance()->getNodeByName(nodeName);
-        switch(obj["msg"].toString()){
+        /*switch(obj["msg"].toString()){
         case "start":
             if(obj["state"].toString() == "init")
                 node->setStatus(Node::initializing);
@@ -315,11 +315,11 @@ void JsonFileHandler::parseProgress(QString &text)
             break;
         default:
             break;
-        }
+        }*/
     }
     //message comes from framework itself
     else if(source == "framework"){
-        switch(obj["msg"].toString()){
+       /* switch(obj["msg"].toString()){
         case "start":
             //starting simulation
             break;
@@ -332,7 +332,7 @@ void JsonFileHandler::parseProgress(QString &text)
         default:
             //not needed yet
             break;
-        }
+        }*/
     }
 }
 
