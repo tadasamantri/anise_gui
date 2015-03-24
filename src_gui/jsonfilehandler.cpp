@@ -282,12 +282,58 @@ void JsonFileHandler::parseProgress(QString &text)
 {
     QJsonDocument doc = QJsonDocument::fromJson(text.toUtf8());
     QJsonObject obj = doc.object();
-    if(!obj.contains("status"))
+    if(!obj.contains("status") && obj["status"].toObject().contains("source"))
         return;
+
     obj = obj["status"].toObject();
-    QString nodeName = obj["node"].toString();
-    unsigned char progress = (unsigned char) obj["progress"].toInt();
-    Data::instance()->getNodeByName(nodeName)->setProgress(progress);
+    QString source = obj["source"].toString();
+    //message comes from a node
+    if(source == "node"){
+        QString nodeName = obj["node"].toString();
+        Node *node = Data::instance()->getNodeByName(nodeName);
+        switch(obj["msg"].toString()){
+        case "start":
+            if(obj["state"].toString() == "init")
+                node->setStatus(Node::initializing);
+            else if(obj["state"].toString() == "proc")
+                node->setStatus(Node::processing);
+            break;
+
+        case "stop":
+            node->setStatus(Node::idle);
+            break;
+        case "perc":
+            int progress = obj["info"].toInt();
+            node->setProgress(progress);
+            break;
+
+        case "err":
+            //
+            break;
+        case "warn":
+            //
+            break;
+        default:
+            break;
+        }
+    }
+    //message comes from framework itself
+    else if(source == "framework"){
+        switch(obj["msg"].toString()){
+        case "start":
+            //starting simulation
+            break;
+        case "finished":
+            //simulation finished
+            break;
+        case "error":
+            //error occured
+            break;
+        default:
+            //not needed yet
+            break;
+        }
+    }
 }
 
 void JsonFileHandler::parseErrors(QString &text)

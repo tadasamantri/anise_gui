@@ -92,8 +92,8 @@ public:
     Status getStatus() const;
     void setStatus(const Status &value);
 
-    unsigned char getProgress() const;
-    void setProgress(unsigned char value);
+    int getProgress() const;
+    void setProgress(int value);
 
 private:
     bool addParam(QString descr, QString _key, QString name, QString type,
@@ -103,7 +103,7 @@ private:
     QString type, name;
     int ID = -2;
     QMap<QString, Parameter> params;  // maps <identifier, value>
-    unsigned char progress;
+    int progress;
     Status status;
     float position_x;
     float position_y;
