@@ -360,7 +360,11 @@ void Data::newMeshProject() {
     //create new mesh and delete old
     delete mesh;
     mesh = new Mesh();
-
+    lastBackupFile = "";
+    saveFile = "";
+    changed = false;
+    timer->stop();
+    timer->start(autosave_interval);
     //clear the mesh field
     SingletonRender::instance()->clearMeshField();
     mainWindow->ui->meshField->connectSignals();
@@ -422,7 +426,6 @@ void Data::stopSimulation()
 
 void Data::autosaveMesh()
 {
-
     if(!autosave.exists() || !changed)
         return;
     QString time = QTime::currentTime().toString("hhmmss"),
@@ -430,6 +433,11 @@ void Data::autosaveMesh()
     QString savename = "backup" + date + time + ".mesh";
     savename = autosave.absolutePath() +"/" + savename;
     JsonFileHandler::saveMesh(savename);
+    //if there was a previous backup delete it!
+    if(lastBackupFile != "")
+        QFile::remove(lastBackupFile);
+    lastBackupFile = savename;
+
 }
 
 void Data::setEditMode(){
