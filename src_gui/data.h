@@ -149,7 +149,9 @@ private:
     QDir autosave;
     QString saveFile;
     AniseCommunicator *framework;
+    //interval to create backup files in ms
     int autosave_interval = 3e5;
+    QString lastSaveFile;
 };
 
 #endif  // DATA_H
