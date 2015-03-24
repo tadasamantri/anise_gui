@@ -117,10 +117,7 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
             node.setParam(parameters["name"].toString(),parameters["default"]);
         }
         catalog->insert(node);
-        qDebug() << "added node to Catalog:\n"
-                 << "class: " << node.getType()
-                 << "\ninputs: " << input_gates.size()
-                 << "\noutputs: " << output_gates.size();
+
     }
 }
 
@@ -146,9 +143,6 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
         flags |= 0b0001;
         goto end;
     }
-
-    qDebug() << "File contains " << obj["nodes"].toArray().size()
-             << " nodes";
 
     // for every node (represented as jsonvalue)...
     foreach (QJsonValue var, obj["nodes"].toArray()) {

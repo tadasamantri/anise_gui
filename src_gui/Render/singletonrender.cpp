@@ -409,7 +409,7 @@ bool SingletonRender::loadImages() {
 
     // create tiles from loaded image
     if (allImages.contains("body.png")) {
-        qDebug() << "creating tiles";
+
         this->createTilesFromImage(allImages.value("body.png"));
     }
 

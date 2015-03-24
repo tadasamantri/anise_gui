@@ -62,9 +62,8 @@ public:
     void setProgressValue(int value);
     void initializeProgressView();
     void changeProgressView();
-
-
     void setProgressView();
+    void setStatusColor(Node::Status status);
 signals:
 
     void released(int nodeID, QString gateName, QPoint position);
@@ -84,7 +83,7 @@ private:
     QProgressBar *progressBar;
     bool progressMode;
 
-    void setStatusColor(Node::Status status);
+
 
     //rest
     int highlightWidth;

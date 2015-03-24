@@ -17,6 +17,7 @@ DrawObject::DrawObject(int id, QPoint position, int width, int height,
     this->setParent(parent);
     this->highlightWidth = highlightOffset;
     this->nameLabel = 0;
+    this->progressBar = 0;
     // We say the constructor which position he has
     this->setGeometry(position.x(), position.y(), width + 2 * highlightOffset,
                       height + 2 * highlightOffset);
@@ -329,7 +330,8 @@ void DrawObject::dehighlightGates(){
 
 void DrawObject::move(const int &x, const int &y){
     QWidget::move(x, y);
-    progressBar->move(this->pos().x(), this->pos().y()+this->height() + 20);
+    if(progressBar)
+        progressBar->move(this->pos().x(), this->pos().y()+this->height() + 20);
     if(!nameLabel)
         return;
     int nodeNameX = this->pos().x()+this->width()/2-nameLabel->width()/2;
@@ -341,7 +343,9 @@ void DrawObject::move(const int &x, const int &y){
 
 void DrawObject::hide(){
     QWidget::hide();
-    progressBar->hide();
+
+    if(progressBar)
+        progressBar->hide();
 
     if(!nameLabel)
         return;
@@ -351,7 +355,9 @@ void DrawObject::hide(){
 
 void DrawObject::show(){
     QWidget::show();
-    this->changeProgressView();
+
+    if(progressBar)
+        this->changeProgressView();
     if(!nameLabel)
             return;
         nameLabel->show();
@@ -427,4 +433,16 @@ void DrawObject::setStatusColor(Node::Status status){
     default: this->setStyleSheet("background-color:yellow;");break;
     }
 
+}
+
+void DrawObject::setProgressValue(int value){
+
+    if(progressBar)
+        if(value == -1){
+            progressBar->setRange(0,0);
+            progressBar->setValue(0);
+        }
+
+        else
+            progressBar->setValue(value);
 }
