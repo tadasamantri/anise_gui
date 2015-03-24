@@ -494,7 +494,7 @@ void SingletonRender::renderNode(Node *nodeToRender, const int &nodeID) {
 
         NodeDrawObject->setNodeName(name);
         NodeDrawObject->setToolTip(nodeToRender->getDescription());
-        NodeDrawObject->setProgressView();
+        NodeDrawObject->initializeProgressView();
 
         allDrawnNodes.insert(nodeID, NodeDrawObject);
     }
@@ -720,11 +720,7 @@ QPixmap *SingletonRender::getImage(const QString &name) {
 
 void SingletonRender::changeProgressView(){
 
-    foreach(DrawObject *node , allDrawnNodes){
-        if(Data::instance()->isRunning())
-            node->highlight();
-        else
-            node->dehighlight();
+    foreach(DrawObject *node , allDrawnNodes)
         node->changeProgressView();
-    }
+
 }

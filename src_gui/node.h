@@ -21,9 +21,10 @@ public:
     };
 
     enum Status {
+        edit,
         idle,
-        busy,
-        finished,
+        processing,
+        initializing,
         error,
     };
 

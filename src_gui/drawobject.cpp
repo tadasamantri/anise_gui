@@ -369,11 +369,11 @@ void DrawObject::deleteLater(){
 }
 
 
-void DrawObject::setProgressView(){
+void DrawObject::initializeProgressView(){
 
     progressBar = new QProgressBar(dynamic_cast<MeshEditorWidget *> (this->parent()));
     int posX = this->pos().x();
-    int posY = this->pos().y()+this->height()+20;
+    int posY = this->pos().y()+this->height()+ (nameLabel) ? nameLabel->height() : 20;
 
     progressBar->setGeometry(posX, posY ,this->width(), 15);
     progressBar->setOrientation(Qt::Horizontal);
@@ -384,29 +384,47 @@ void DrawObject::setProgressView(){
 
 void DrawObject::changeProgressView(){
 
-    progressBar->setValue(0);
+    if(Data::instance()->isRunning())
+        setProgressView();
 
-    if(Data::instance()->isRunning()){
-
-        this->changeHighlightColor(1);
-        progressBar->show();
-    }
     else
-        progressBar->hide();
+        setEditView();
+}
+
+void DrawObject::setEditView(){
+
+    progressBar->hide();
+    this->dehighlight();
+    this->setStyleSheet("background-color:yellow;");
+
 
 }
+
+void DrawObject::setProgressView(){
+
+    this->changeStatusColor(Node::initializing);
+    this->highlight();
+    progressBar->show();
+
+}
+
+
 
 void DrawObject::deleteItemText(QListWidgetItem * item){
     nameLabel->setStyleSheet("QListWidget::item:selected{background: transparent}");
 }
 
 
-void DrawObject::changeHighlightColor(int color){
+void DrawObject::changeStatusColor(Node::Status status){
 
-    switch(color){
+    switch(status){
 
-        case 1:  this->setStyleSheet("background-color:green;");break;
-
+        case Node::edit: this->setStyleSheet("background-color:yellow;");break;
+        case Node::initializing: this->setStyleSheet("background-color:grey;");break;
+        case Node::idle:  this->setStyleSheet("background-color:green;");break;
+        case Node::processing: this->setStyleSheet("background-color:blue;");break;
+        case Node::error: this->setStyleSheet("background-color:grey;");break;
+    default: this->setStyleSheet("background-color:yellow;");break;
     }
 
 }
