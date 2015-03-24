@@ -26,7 +26,7 @@ DrawObject::DrawObject(int id, QPoint position, int width, int height,
     mainMaskUnhighlighted = QBitmap(this->size());
     mainMaskUnhighlighted.fill(Qt::color0);
 
-    // initialize the over all picture
+    // initialize the over allRange picture
     this->overAllPicture = QPixmap(this->size());
 
     // make it transparent
@@ -439,10 +439,12 @@ void DrawObject::setProgressValue(int value){
 
     if(progressBar){
         if(value == -1){
-            progressBar->setRange(0,0);
+            progressBar->setMaximum(0);
             progressBar->setValue(0);
         }
-        else
+        else{
+            progressBar->setMaximum(100);
             progressBar->setValue(value);
+        }
     }
 }

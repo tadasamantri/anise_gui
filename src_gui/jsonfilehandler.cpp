@@ -274,6 +274,8 @@ void JsonFileHandler::parseProgress(QString &text, const ParseMode &mode) {
 }
 
 void JsonFileHandler::parseProgress(QString &text) {
+    qDebug() << text;
+
     QJsonDocument doc = QJsonDocument::fromJson(text.toUtf8());
     QJsonObject obj = doc.object();
     if (!obj.contains("status") && obj["status"].toObject().contains("source"))

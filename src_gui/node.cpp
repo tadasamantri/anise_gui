@@ -107,6 +107,7 @@ void Node::setProgress(int value)
 {
     assert((value >= 0 && value <= 100) || value == -1);
     progress = value;
+    SingletonRender::instance()->setPercentage(ID,progress);
 }
 
 Node::Status Node::getStatus() const
@@ -117,6 +118,7 @@ Node::Status Node::getStatus() const
 void Node::setStatus(const Node::Status &value)
 {
     status = value;
+    SingletonRender::instance()->setStatusColor(ID, status);
 }
 
 /**
