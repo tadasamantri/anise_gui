@@ -446,6 +446,7 @@ void MainWindow::on_actionRun_Mesh_triggered()
 void MainWindow::on_start_button_clicked()
 {
     Data::instance()->testChangeRun();
+    SingletonRender::instance()->setStatusColor(0, Node::error);
 
 }
 

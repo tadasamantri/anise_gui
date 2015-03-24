@@ -217,6 +217,8 @@ public:
     QMap<int, QVector<DrawObject *> > *getAllConnections();
 
 
+    void setStatusColor(int nodeID, Node::Status status);
+    void setPercentage(int nodeID, int percentage);
 public slots:
     void changeProgressView();
 

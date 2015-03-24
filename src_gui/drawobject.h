@@ -84,7 +84,7 @@ private:
     QProgressBar *progressBar;
     bool progressMode;
 
-    void changeStatusColor(Node::Status status);
+    void setStatusColor(Node::Status status);
 
     //rest
     int highlightWidth;

@@ -402,7 +402,7 @@ void DrawObject::setEditView(){
 
 void DrawObject::setProgressView(){
 
-    this->changeStatusColor(Node::initializing);
+    this->setStatusColor(Node::initializing);
     this->highlight();
     progressBar->show();
 
@@ -415,7 +415,7 @@ void DrawObject::deleteItemText(QListWidgetItem * item){
 }
 
 
-void DrawObject::changeStatusColor(Node::Status status){
+void DrawObject::setStatusColor(Node::Status status){
 
     switch(status){
 
@@ -423,7 +423,7 @@ void DrawObject::changeStatusColor(Node::Status status){
         case Node::initializing: this->setStyleSheet("background-color:grey;");break;
         case Node::idle:  this->setStyleSheet("background-color:green;");break;
         case Node::processing: this->setStyleSheet("background-color:blue;");break;
-        case Node::error: this->setStyleSheet("background-color:grey;");break;
+        case Node::error: this->setStyleSheet("background-color:red;");break;
     default: this->setStyleSheet("background-color:yellow;");break;
     }
 

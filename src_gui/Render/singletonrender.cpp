@@ -724,3 +724,21 @@ void SingletonRender::changeProgressView(){
         node->changeProgressView();
 
 }
+
+void SingletonRender::setPercentage(int nodeID, int percentage){
+
+    if(allDrawnNodes.contains(nodeID))
+        allDrawnNodes.value(nodeID)->setProgressValue(percentage);
+    else
+        qDebug() << "You tried to call DrawObject::setPercentage with non-existing nodeID: " << nodeID;
+}
+
+void SingletonRender::setStatusColor(int nodeID, Node::Status status){
+
+    if(allDrawnNodes.contains(nodeID))
+        allDrawnNodes.value(nodeID)->setStatusColor(status);
+    else
+        qDebug() << "You tried to call DrawObject::setPercentage with non-existing nodeID: " << nodeID;
+
+
+}
