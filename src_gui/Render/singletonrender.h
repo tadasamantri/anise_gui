@@ -218,13 +218,7 @@ public:
 
 
 public slots:
-
     void changeProgressView();
-
-private slots:
-    void on_buttonBox_clicked(QAbstractButton *button);
-
-    void on_Apply_clicked(QAbstractButton *button);
 
 private:
     void paintEvent(QPaintEvent *event);
