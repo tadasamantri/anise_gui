@@ -373,7 +373,12 @@ void Data::updateNode(QTableWidgetItem *item) {
 
 void Data::startSimulation() { onSimulation = true; }
 
-void Data::stopSimulation() { onSimulation = false; }
+void Data::stopSimulation() {
+    onSimulation = false;
+    runMode = false;
+    framework->stop();
+    emit runModeChanged();
+}
 
 void Data::autosaveMesh() {
     if (!autosave.exists() || !changed) return;

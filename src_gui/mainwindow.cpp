@@ -452,7 +452,10 @@ void MainWindow::on_start_button_clicked()
 
 void MainWindow::on_stop_button_clicked()
 {
-
     Data::instance()->testChangeRun();
+}
 
+void MainWindow::on_actionStop_Simulation_triggered()
+{
+    Data::instance()->stopSimulation();
 }

@@ -274,45 +274,46 @@ void JsonFileHandler::parseProgress(QString &text, const ParseMode &mode) {
 }
 
 void JsonFileHandler::parseProgress(QString &text) {
+    text = text.mid(text.indexOf("{"), text.lastIndexOf("}")+1);
     qDebug() << text;
-
     QJsonDocument doc = QJsonDocument::fromJson(text.toUtf8());
     QJsonObject obj = doc.object();
-    if (!obj.contains("status") && obj["status"].toObject().contains("source"))
+    if (!(obj.contains("progress") && obj["progress"].toObject().contains("source")))
         return;
 
-    obj = obj["status"].toObject();
+    obj = obj["progress"].toObject();
     QString source = obj["source"].toString();
     // message comes from a node
     if (source == "node") {
-        QString nodeName = obj["node"].toString();
+        QString nodeName = obj["name"].toString();
         Node *node = Data::instance()->getNodeByName(nodeName);
         QString msg = obj["msg"].toString();
         if (msg == "start") {
             if (obj["state"].toString() == "init")
                 node->setStatus(Node::initializing);
-            else if (obj["state"].toString() == "proc")
+            else if (obj["state"].toString() == "processing")
                 node->setStatus(Node::processing);
         } else if (msg == "stop")
             node->setStatus(Node::idle);
-        else if (msg == "perc") {
+        else if (msg == "percentage") {
             int progress = obj["info"].toInt();
             node->setProgress(progress);
-        } else if (msg == "err") {
+        } else if (msg == "error") {
             ;
-        } else if (msg == "warn") {
+        } else if (msg == "warning") {
             ;
         }
     }
     // message comes from framework itself
     else if (source == "framework") {
-        QString msg = obj["msg"].toString();
+        QString msg = obj["msg"].toString(),
+                state = obj["state"].toString();
         if (msg == "start") {
             // starting simulation
             ;
-        } else if (msg == "finished") {
+        } else if (msg == "stop" && state == "processing") {
             // simulation finished
-            ;
+            Data::instance()->stopSimulation();
         } else if (msg == "error") {
             // error occured
             ;

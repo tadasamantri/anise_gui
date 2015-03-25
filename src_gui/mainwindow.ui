@@ -92,7 +92,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>615</width>
+            <width>621</width>
             <height>63</height>
            </rect>
           </property>
@@ -230,8 +230,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>602</width>
-            <height>285</height>
+            <width>608</width>
+            <height>292</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -400,7 +400,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>25</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -423,6 +423,7 @@
     <addaction name="actionAdd_Connection"/>
     <addaction name="actionSort_Mesh"/>
     <addaction name="actionRun_Mesh"/>
+    <addaction name="actionStop_Simulation"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -538,10 +539,15 @@
   </action>
   <action name="actionRun_Mesh">
    <property name="text">
-    <string>Run Mesh</string>
+    <string>Start Simulation</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionStop_Simulation">
+   <property name="text">
+    <string>Stop Simulation</string>
    </property>
   </action>
  </widget>
