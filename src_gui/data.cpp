@@ -32,7 +32,7 @@ Data::Data(QObject *parent) : QObject(parent) {
     framework = new AniseCommunicator();
     backupTimer = new QTimer(this);
     autosave = QDir::current();
-    autosave.cd("Data/Meshes");
+    autosave.cd("data/meshes");
     autosave.mkdir("autosave");
     autosave.cd("autosave");
     connect(backupTimer, SIGNAL(timeout()), this, SLOT(autosaveMesh()));
@@ -215,11 +215,20 @@ void Data::sortForce()
 
 void Data::runMesh()
 {
-    if(!changed){
-        framework->runMesh();
-        runMode = true;
-        emit runModeChanged();
+    if(changed){
+        int answer = QMessageBox::question(mainWindow,"Save before executing?",
+                                           "You have unsaved changes. Do you want to save before executing?",
+                                           QMessageBox::Yes, QMessageBox::No);
+        if(answer == QMessageBox::Yes){
+            mainWindow->on_actionSave_triggered();
+        }
     }
+    if(saveFile == "")
+        return;
+    framework->runMesh();
+    runMode = true;
+    onSimulation = true;
+    emit runModeChanged();
 }
 
 int Data::getFocusedID()

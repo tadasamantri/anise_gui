@@ -14,7 +14,7 @@ class MainWindow;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
-
+friend class Data;
 public:
     explicit MainWindow(QWidget *parent = 0);
     // Ui::MainWindow *getUi();
