@@ -186,10 +186,12 @@ void MainWindow::on_actionSave_triggered() {
 }
 
 void MainWindow::updatePropertyTable(int nodeID) {
-    if(oldfocus == nodeID){
+    //check if table has to be refilled or just to be shown
+    if(nodeID != -1 && oldfocus == nodeID && ui->details->checkState() == Qt::Checked){
         ui->tableWidget->show();
         return;
     }
+
     QTableWidget *table = ui->tableWidget;
     if (nodeID >= 0 && Data::instance()->nodesInMesh()->contains(nodeID)) {
         deleteTable();
