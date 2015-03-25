@@ -90,7 +90,7 @@ QString AniseCommunicator::getAllNodeTypes() {
     */
     read();
     readOutput =
-            readOutput.mid(readOutput.indexOf("{"), readOutput.lastIndexOf("}") - 1);
+            readOutput.mid(readOutput.indexOf("{"), readOutput.lastIndexOf("}"));
 
     anise_process->close();
     return readOutput;
