@@ -1,0 +1,121 @@
+{
+  "nodes": [
+    {
+      "class": "file",
+      "name": "File",
+      "params": [
+        {
+          "file": "/home/boy/Documents/CASED/Development/LERAD/dataset/training_data/001.inside.tcpdump"
+        },
+        {
+          "binary": true
+        }
+      ]
+    },
+    {
+      "class": "tcpdump",
+      "name": "TcpDump",
+      "params": []
+    },
+    {
+      "class": "tcpstreamextractor",
+      "name": "TcpExtr",
+      "params": [
+        {
+          "payload_size": 102400
+        },
+        {
+          "dest_filter": true
+        },
+        {
+          "dest_ip_filter_from": "172.16.112.0"
+        },
+        {
+          "dest_ip_filter_to": "172.16.118.255"
+        },
+        {
+          "dest_port_filter_from": 0
+        },
+        {
+          "dest_port_filter_to": 1023
+        }
+      ]
+    },
+    {
+      "class": "tcpstreamfeatures",
+      "name": "TcpFeatures",
+      "params": [
+        {
+          "timezone": -4
+        },
+        {
+          "split_dest_ip": true
+        },
+        {
+          "dest_ip_split_number": 2
+        },
+        {
+          "split_src_ip": true
+        },
+        {
+          "src_ip_split_number": 4
+        },
+        {
+          "word_count": 8
+        },
+        {
+          "word_length": 16
+        }
+      ]
+    },
+    {
+      "class": "tablefiledump",
+      "name": "FeaturesDump",
+      "params": [
+        {
+          "filename": "dump.anise"
+        },
+        {
+          "append": false
+        }
+      ]
+    },
+    {
+      "class": "lerad",
+      "name": "Lerad",
+      "params": []
+    }
+  ],
+  "connections": [
+    {
+      "src_node": "File",
+      "src_gate": "out",
+      "dest_node": "TcpDump",
+      "dest_gate": "in"
+    },
+    {
+      "src_node": "TcpDump",
+      "src_gate": "out",
+      "dest_node": "TcpExtr",
+      "dest_gate": "in"
+    },
+    {
+      "src_node": "TcpExtr",
+      "src_gate": "out",
+      "dest_node": "TcpFeatures",
+      "dest_gate": "in"
+    },
+    {
+      "src_node": "TcpFeatures",
+      "src_gate": "out",
+      "dest_node": "FeaturesDump",
+      "dest_gate": "in"
+    },
+    {
+      "src_node": "TcpFeatures",
+      "src_gate": "out",
+      "dest_node": "Lerad",
+      "dest_gate": "in"
+    }
+  ]
+}
