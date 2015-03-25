@@ -186,7 +186,7 @@ void MainWindow::on_actionSave_triggered() {
 }
 
 void MainWindow::updatePropertyTable(int nodeID) {
-    if(oldfocus == nodeID){
+    if(nodeID != -1 && oldfocus == nodeID && ui->details->checkState() == Qt::Checked){
         ui->tableWidget->show();
         return;
     }
