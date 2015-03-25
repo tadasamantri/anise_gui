@@ -18,8 +18,8 @@ Data *Data::data = 0;
 */
 Data *Data::instance() {
     /**
-  * Allows only one instance of class to be generated.
-  */
+* Allows only one instance of class to be generated.
+*/
     if (!data) data = new Data;
     return data;
 }
@@ -38,7 +38,6 @@ Data::Data(QObject *parent) : QObject(parent) {
     connect(backupTimer, SIGNAL(timeout()), this, SLOT(autosaveMesh()));
     backupTimer->start(autosave_interval);
 
-
     runMode = false;
 
     SingletonRender *renderer = SingletonRender::instance();
@@ -46,29 +45,17 @@ Data::Data(QObject *parent) : QObject(parent) {
     connect(this, SIGNAL(runModeChanged()), renderer, SLOT(changeProgressView()));
 }
 
-bool Data::isRunning() const
-{
-    return runMode;
-}
+bool Data::isRunning() const { return runMode; }
 
-void Data::testChangeRun(){
-
+void Data::testChangeRun() {
     runMode = !runMode;
 
     emit runModeChanged();
-
 }
 
+QString Data::getSaveFile() const { return saveFile; }
 
-QString Data::getSaveFile() const
-{
-    return saveFile;
-}
-
-void Data::setSaveFile(const QString &value)
-{
-    saveFile = value;
-}
+void Data::setSaveFile(const QString &value) { saveFile = value; }
 
 MainWindow *Data::getMainWindow() const { return mainWindow; }
 
@@ -80,35 +67,35 @@ void Data::setMainWindow(MainWindow *value) { mainWindow = value; }
  */
 void Data::initialize(MainWindow *mainWindow) {
     this->mainWindow = mainWindow;
-    //connect start and stop signals
-    connect(mainWindow->ui->start_button, SIGNAL(clicked()),this,SLOT(startSimulation()));
-    connect(mainWindow->ui->stop_button, SIGNAL(clicked()),this,SLOT(stopSimulation()));
+    // connect start and stop signals
+    connect(mainWindow->ui->start_button, SIGNAL(clicked()), this,
+            SLOT(startSimulation()));
+    connect(mainWindow->ui->stop_button, SIGNAL(clicked()), this,
+            SLOT(stopSimulation()));
     /**
-  * Create the Nodecatalog
-  */
-    if(nodeCatalog)
-        delete nodeCatalog;
+* Create the Nodecatalog
+*/
+    if (nodeCatalog) delete nodeCatalog;
     nodeCatalog = new NodeCatalog();
     /**
-  * Create the render object
-  */
+* Create the render object
+*/
     SingletonRender::instance();
     /**
-  * Create the NodeFactory
-  */
-    if(nodeFactory)
-        delete nodeFactory;
+* Create the NodeFactory
+*/
+    if (nodeFactory) delete nodeFactory;
     this->nodeFactory = new NodeFactory();
 
     /**
-  * Initialize stored settings
-  */
+* Initialize stored settings
+*/
     SettingsHandler::setSettingsPath(QApplication::applicationDirPath() +
                                      "/settings.ini");
 
     /**
-  * Checks if Framework path is set
-  */
+* Checks if Framework path is set
+*/
     if (SettingsHandler::contains("frameworkpath"))
         AniseCommunicator::setFrameworkPath(
                     SettingsHandler::loadSetting("frameworkpath"));
@@ -129,25 +116,26 @@ void Data::initialize(MainWindow *mainWindow) {
     }
 
     /**
-  * Initialize settings from .ini file
-  */
+* Initialize settings from .ini file
+*/
     SettingsHandler::initializeSettings();
 
     /**
-  * Start loading node types
-  * Load all available NodeTypes
-  */
+* Start loading node types
+* Load all available NodeTypes
+*/
     QString out = AniseCommunicator::getAllNodeTypes();
     JsonFileHandler::parseNodeTypesFromAnise(out);
 
     /**
-  * Render the Nodecatalog filled with test nodes
-  */
+* Render the Nodecatalog filled with test nodes
+*/
     SingletonRender::instance()->renderCatalogContent(
                 Data::instance()->getNodeCatalog()->getContentVector());
 }
 /**
- * @brief Data::addNodeToMesh inserts given node into the mesh and renders it afterwards
+ * @brief Data::addNodeToMesh inserts given node into the mesh and renders it
+ * afterwards
  * @param newNode
  * @return ID of inserted Node
  */
@@ -155,7 +143,7 @@ int Data::addNodeToMesh(Node *newNode) {
     int id = this->mesh->addNode(newNode);
     // A new created Node is always focussed in the beginning
 
-    if(id >= 0){
+    if (id >= 0) {
         SingletonRender::instance()->renderMesh();
         changed = true;
     }
@@ -164,10 +152,7 @@ int Data::addNodeToMesh(Node *newNode) {
     return id;
 }
 
-int Data::addNode(Node *node)
-{
-    return addNodeToMesh(node);
-}
+int Data::addNode(Node *node) { return addNodeToMesh(node); }
 
 /**
  * @brief Data::addConnectionToMesh inserts new Connection to mesh
@@ -177,64 +162,56 @@ int Data::addNode(Node *node)
  */
 int Data::addConnectionToMesh(Connection *newConnection) {
     int id = this->mesh->addConnection(newConnection);
-    if(id >= 0){
+    if (id >= 0) {
         SingletonRender::instance()->renderMesh();
         changed = true;
     }
     return id;
 }
 
-int Data::addConnection(Connection *newConnection)
-{
+int Data::addConnection(Connection *newConnection) {
     return addConnectionToMesh(newConnection);
 }
 
-void Data::sortCircle()
-{
-    if(mesh){
+void Data::sortCircle() {
+    if (mesh) {
         mesh->sortCircle();
         changed = true;
     }
 }
 
-void Data::sortRow()
-{
-    if(mesh){
+void Data::sortRow() {
+    if (mesh) {
         mesh->sortRow();
         changed = true;
     }
 }
 
-void Data::sortForce()
-{
-    if(mesh){
+void Data::sortForce() {
+    if (mesh) {
         mesh->sortForce();
         changed = true;
     }
 }
 
-void Data::runMesh()
-{
-    if(changed){
-        int answer = QMessageBox::question(mainWindow,"Save before executing?",
-                                           "You have unsaved changes. Do you want to save before executing?",
-                                           QMessageBox::Yes, QMessageBox::No);
-        if(answer == QMessageBox::Yes){
+void Data::runMesh() {
+    if (changed) {
+        int answer = QMessageBox::question(
+                    mainWindow, "Save before executing?",
+                    "You have unsaved changes. Do you want to save before executing?",
+                    QMessageBox::Yes, QMessageBox::No);
+        if (answer == QMessageBox::Yes) {
             mainWindow->on_actionSave_triggered();
         }
     }
-    if(saveFile == "")
-        return;
+    if (saveFile == "") return;
     framework->runMesh();
     runMode = true;
     onSimulation = true;
     emit runModeChanged();
 }
 
-int Data::getFocusedID()
-{
-    return mesh->focusObject;
-}
+int Data::getFocusedID() { return mesh->focusObject; }
 
 /**
  * @brief Data::removeNodeFromMesh removes node with given ID from mesh
@@ -246,86 +223,63 @@ void Data::removeNodeFromMesh(int ID) {
     changed = true;
 }
 
-bool Data::checkConnection(int srcNodeID, QString srcGate, int destNodeID, QString destGate)
-{
-    if(mesh)
+bool Data::checkConnection(int srcNodeID, QString srcGate, int destNodeID,
+                           QString destGate) {
+    if (mesh)
         return mesh->checkConnection(srcNodeID, srcGate, destNodeID, destGate);
-    else return false;
+    else
+        return false;
 }
 
-bool Data::hasChanged()
-{
-    return changed;
-}
+bool Data::hasChanged() { return changed; }
 
-void Data::unsetChanged()
-{
-    changed = false;
-}
+void Data::unsetChanged() { changed = false; }
 
-bool Data::mustRepaint()
-{
-    return repaint;
-}
+bool Data::mustRepaint() { return repaint; }
 
-void Data::unsetRepaint()
-{
-    repaint = false;
-}
+void Data::unsetRepaint() { repaint = false; }
 
-void Data::setChanged()
-{
+void Data::setChanged() {
     changed = true;
     repaint = true;
 }
 
-Node *Data::getNodeByName(QString name)
-{
-    if(mesh)
-        return mesh->getNodeByName(name);
+Node *Data::getNodeByName(QString name) {
+    if (mesh) return mesh->getNodeByName(name);
     return 0;
 }
 
-Node *Data::getNodeByID(int ID)
-{
-    if(mesh)
-        return mesh->getNodeByID(ID);
+Node *Data::getNodeByID(int ID) {
+    if (mesh) return mesh->getNodeByID(ID);
     return 0;
 }
 
-QList<Node *> Data::getAllNodes()
-{
+QList<Node *> Data::getAllNodes() {
     QList<Node *> result;
-    if(mesh)
-        result = mesh->getAllNodes();
+    if (mesh) result = mesh->getAllNodes();
     return result;
 }
 
-QList<Connection *> Data::getAllConnections()
-{
+QList<Connection *> Data::getAllConnections() {
     QList<Connection *> result;
-    if(mesh)
-        result = mesh->getAllConnections();
+    if (mesh) result = mesh->getAllConnections();
     return result;
 }
 
-QMap<int, Node *> *Data::nodesInMesh()
-{
-    if(mesh)
-        return &mesh->nodesInMesh;
+QMap<int, Node *> *Data::nodesInMesh() {
+    if (mesh) return &mesh->nodesInMesh;
     return 0;
 }
 
-QString Data::getValidAlternativeForName(QString &name)
-{
+QString Data::getValidAlternativeForName(QString &name) {
     QString result;
-    if(mesh)
-        result = mesh->getValidAlternativeForName(name);
+    if (mesh) result = mesh->getValidAlternativeForName(name);
     return result;
 }
 
 /**
- * @brief Data::moveObjectInMesh moves drwan object with given id from start to end
+ * @brief Data::moveObjectInMesh moves drwan object with given id from start to
+ * end
  * @param start start point
  * @param end end point
  * @param ID ID of moving item
@@ -366,28 +320,27 @@ void Data::moveObjectInMesh(QPoint *Position, int ID) {
 Mesh *Data::getMesh() { return this->mesh; }
 
 void Data::newMeshProject() {
-    //create new mesh and delete old
+    // create new mesh and delete old
     delete mesh;
     mesh = new Mesh();
-    //reset file locations
+    // reset file locations
     lastBackupFile = "";
     saveFile = "";
-    //set not changed
+    // set not changed
     changed = false;
-    //restart backup timer
+    // restart backup timer
     backupTimer->stop();
     backupTimer->start(autosave_interval);
-    //clear the mesh field
+    // clear the mesh field
     SingletonRender::instance()->clearMeshField();
     mainWindow->ui->meshField->connectSignals();
-    //render the new mesh
+    // render the new mesh
     SingletonRender::instance()->renderMesh();
 }
 
 bool Data::deleteItem() {
     bool deleted = this->mesh->deleteItem();
-    if(deleted)
-        changed = true;
+    if (deleted) changed = true;
     return deleted;
 }
 
@@ -403,65 +356,48 @@ Data::~Data() {
 
 NodeCatalog *Data::getNodeCatalog() { return nodeCatalog; }
 
-void Data::setDrawLineMode(QString gateType){
-
+void Data::setDrawLineMode(QString gateType) {
     this->mesh->setFocusMeshObject(-1);
     SingletonRender::instance()->highlightGates(gateType);
 }
 
-bool Data::isSimulating()
-{
-    return onSimulation;
+bool Data::isSimulating() { return onSimulation; }
+
+void Data::setFocusMeshObject(int nodeID) {
+    if (mesh) mesh->setFocusMeshObject(nodeID);
 }
 
-void Data::setFocusMeshObject(int nodeID)
-{
-    if(mesh)
-        mesh->setFocusMeshObject(nodeID);
+void Data::updateNode(QTableWidgetItem *item) {
+    if (mesh) mesh->updateNode(item);
 }
 
-void Data::updateNode(QTableWidgetItem *item)
-{
-    if(mesh)
-        mesh->updateNode(item);
-}
+void Data::startSimulation() { onSimulation = true; }
 
-void Data::startSimulation()
-{
-    onSimulation = true;
-}
+void Data::stopSimulation() { onSimulation = false; }
 
-void Data::stopSimulation()
-{
-    onSimulation = false;
-}
-
-void Data::autosaveMesh()
-{
-    if(!autosave.exists() || !changed)
-        return;
+void Data::autosaveMesh() {
+    if (!autosave.exists() || !changed) return;
     QString time = QTime::currentTime().toString("hhmmss"),
-    date = QDate::currentDate().toString("yyyyMMdd");
+            date = QDate::currentDate().toString("yyyyMMdd");
     QString savename = "backup" + date + time + ".mesh";
-    savename = autosave.absolutePath() +"/" + savename;
+    savename = autosave.absolutePath() + "/" + savename;
     JsonFileHandler::saveMesh(savename);
-    //if there was a previous backup delete it!
-    if(lastBackupFile != "")
-        QFile::remove(lastBackupFile);
+    // if there was a previous backup delete it!
+    if (lastBackupFile != "") QFile::remove(lastBackupFile);
     lastBackupFile = savename;
-
 }
 
-void Data::setEditMode(){
+void Data::setEditMode() {
     SingletonRender::instance()->dehighlightGates();
     runMode = false;
     emit runModeChanged();
 }
 
-QList<Connection *> Data::getConnections(int nodeID){
+QList<Connection *> Data::getConnections(int nodeID) {
     QList<Connection *> result;
-    for(Connection *c : mesh->connectionsInMesh.values())
-        if(c->getSrcNode()->getID() == nodeID || c->getDestNode()->getID() == nodeID)
+    for (Connection *c : mesh->connectionsInMesh.values())
+        if (c->getSrcNode()->getID() == nodeID ||
+                c->getDestNode()->getID() == nodeID)
             result << c;
     return result;
 }
