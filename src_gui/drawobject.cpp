@@ -235,7 +235,7 @@ void DrawObject::updateOverAllPicture(QPixmap *newPicture, const QPoint &positio
 
 QPixmap DrawObject::getPicture() { return this->overAllPicture; }
 
-void DrawObject::dehighlight() { this->setMask(mainMaskUnhighlighted); }
+void DrawObject::dehighlight() {this->setMask(mainMaskUnhighlighted); }
 
 void DrawObject::highlight() { this->setMask(mainMaskHighlighted); }
 
@@ -356,8 +356,12 @@ void DrawObject::hide(){
 void DrawObject::show(){
     QWidget::show();
 
-    if(progressBar)
-        this->changeProgressView();
+    if(progressBar){
+        if(Data::instance()->isRunning())
+            progressBar->show();
+        else
+            progressBar->hide();
+    }
     if(!nameLabel)
             return;
         nameLabel->show();

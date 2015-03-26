@@ -666,6 +666,9 @@ QVector<int> *SingletonRender::getChildrenIDs() {
 }
 
 void SingletonRender::dehighlightObject(const int &ID) {
+
+
+
     if (allDrawnNodes.contains(ID)) {
         allDrawnNodes.value(ID)->dehighlight();
     }
@@ -678,6 +681,9 @@ void SingletonRender::dehighlightObject(const int &ID) {
 }
 
 void SingletonRender::highlightObject(const int &ID) {
+
+
+
     if (allDrawnNodes.contains(ID)) allDrawnNodes.value(ID)->highlight();
 
     if (allConnections.contains(ID)) {

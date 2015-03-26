@@ -53,7 +53,7 @@ bool Data::isRunning() const
 
 void Data::testChangeRun(){
 
-    runMode = !runMode;
+    runMode = true;
 
     emit runModeChanged();
 
