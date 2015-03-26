@@ -274,11 +274,12 @@ void JsonFileHandler::parseProgress(QString &text, const ParseMode &mode) {
 }
 
 void JsonFileHandler::parseProgress(QString &text) {
-    text = text.mid(text.indexOf("{"), text.lastIndexOf("}")+1);
+    text = text.mid(text.indexOf("{"), text.lastIndexOf("}") + 1);
     qDebug() << text;
     QJsonDocument doc = QJsonDocument::fromJson(text.toUtf8());
     QJsonObject obj = doc.object();
-    if (!(obj.contains("progress") && obj["progress"].toObject().contains("source")))
+    if (!(obj.contains("progress") &&
+          obj["progress"].toObject().contains("source")))
         return;
 
     obj = obj["progress"].toObject();
@@ -306,8 +307,7 @@ void JsonFileHandler::parseProgress(QString &text) {
     }
     // message comes from framework itself
     else if (source == "framework") {
-        QString msg = obj["msg"].toString(),
-                state = obj["state"].toString();
+        QString msg = obj["msg"].toString(), state = obj["state"].toString();
         if (msg == "start") {
             // starting simulation
             ;

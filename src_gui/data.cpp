@@ -18,8 +18,8 @@ Data *Data::data = 0;
 */
 Data *Data::instance() {
     /**
-  * Allows only one instance of class to be generated.
-  */
+* Allows only one instance of class to be generated.
+*/
     if (!data) data = new Data;
     return data;
 }
@@ -30,14 +30,23 @@ Data::Data(QObject *parent) : QObject(parent) {
     nodeFactory = 0;
     saveFile = "";
     framework = new AniseCommunicator();
+
+    // set up the timer for backups
     backupTimer = new QTimer(this);
+    connect(backupTimer, SIGNAL(timeout()), this, SLOT(autosaveMesh()));
+    if(SettingsHandler::contains("autosave_interval"))
+        autosave_interval = SettingsHandler::loadSetting("autosave_interval").toInt();
+    else {
+        autosave_interval = 3e5;
+        SettingsHandler::storeSetting("autosave_interval", QString::number(autosave_interval));
+    }
+    backupTimer->start(autosave_interval);
+
+    // set up directory for backups
     autosave = QDir::current();
     autosave.cd("data/meshes");
     autosave.mkdir("autosave");
     autosave.cd("autosave");
-    connect(backupTimer, SIGNAL(timeout()), this, SLOT(autosaveMesh()));
-    backupTimer->start(autosave_interval);
-
 
     runMode = false;
 
@@ -48,12 +57,10 @@ Data::Data(QObject *parent) : QObject(parent) {
 
 bool Data::isRunning() const { return runMode; }
 
-void Data::testChangeRun(){
-
+void Data::testChangeRun() {
     runMode = true;
 
     emit runModeChanged();
-
 }
 
 QString Data::getSaveFile() const { return saveFile; }
@@ -70,15 +77,17 @@ void Data::setMainWindow(MainWindow *value) { mainWindow = value; }
  */
 void Data::initialize(MainWindow *mainWindow) {
     this->mainWindow = mainWindow;
-    //connect start and stop signals
-    connect(mainWindow->ui->start_button, SIGNAL(clicked()),this,SLOT(startSimulation()));
-    connect(mainWindow->ui->stop_button, SIGNAL(clicked()),this,SLOT(stopSimulation()));
-    connect(mainWindow->ui->actionRun_Mesh,SIGNAL(triggered()),this,SLOT(runMesh()));
+    // connect start and stop signals
+    connect(mainWindow->ui->start_button, SIGNAL(clicked()), this,
+            SLOT(startSimulation()));
+    connect(mainWindow->ui->stop_button, SIGNAL(clicked()), this,
+            SLOT(stopSimulation()));
+    connect(mainWindow->ui->actionRun_Mesh, SIGNAL(triggered()), this,
+            SLOT(runMesh()));
     /**
-  * Create the Nodecatalog
-  */
-    if(nodeCatalog)
-        delete nodeCatalog;
+* Create the Nodecatalog
+*/
+    if (nodeCatalog) delete nodeCatalog;
     nodeCatalog = new NodeCatalog();
     /**
 * Create the render object
@@ -107,8 +116,7 @@ void Data::initialize(MainWindow *mainWindow) {
                     0, QString("Please, set your framework path"),
                     QString("You haven't set your framework path yet.\nChoose first!"),
                     "Choose", "Ignore");
-        if(choice == 1)
-            return;
+        if (choice == 1) return;
         QString fileName = QFileDialog::getOpenFileName(
                     mainWindow, "Set your framework path", "", "");
 
@@ -145,9 +153,7 @@ int Data::addNodeToMesh(Node *newNode) {
     mesh->setFocusMeshObject(id);
 
     return id;
-
 }
-
 
 int Data::addConnectionToMesh(Connection *newConnection) {
     int id = this->mesh->addConnection(newConnection);
@@ -158,9 +164,8 @@ int Data::addConnectionToMesh(Connection *newConnection) {
     return id;
 }
 
-void Data::sortCircle()
-{
-    if(mesh){
+void Data::sortCircle() {
+    if (mesh) {
         mesh->sortCircle();
         changed = true;
     }
@@ -198,7 +203,6 @@ void Data::runMesh() {
 }
 
 int Data::getFocusedID() { return mesh->focusObject; }
-
 
 void Data::removeNodeFromMesh(int ID) {
     if (!mesh->nodesInMesh.contains(ID)) return;
@@ -276,10 +280,8 @@ void Data::moveObjectInMesh(QPoint *start, QPoint *end, int ID) {
     }
 }
 
-void Data::finishMesh()
-{
-    for(Node *n : mesh->nodesInMesh)
-        n->setProgress(0);
+void Data::finishMesh() {
+    for (Node *n : mesh->nodesInMesh) n->setProgress(0);
 }
 
 void Data::moveObjectInMesh(QPoint *Position, int ID) {

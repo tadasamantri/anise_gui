@@ -14,8 +14,8 @@ Mesh::Mesh(QObject *parent) : QObject(parent) {
     tableExists = false;
 }
 
-bool Mesh::checkConnection(const int &srcNodeID, const QString &srcGate, const int &destNodeID,
-                           const QString &destGate) {
+bool Mesh::checkConnection(const int &srcNodeID, const QString &srcGate,
+                           const int &destNodeID, const QString &destGate) {
     Node *srcN = nodesInMesh[srcNodeID], *destN = nodesInMesh[destNodeID];
     if (!(srcN && destN)) return false;
     Gate *srcG = srcN->getGateByName(srcGate),
@@ -99,9 +99,7 @@ Connection *Mesh::getConnectionByID(const int &ID) {
     return this->connectionsInMesh[ID];
 }
 
-int Mesh::generateId() {
-    return this->iDCounter++;
-}
+int Mesh::generateId() { return this->iDCounter++; }
 
 void Mesh::setFocusMeshObject(const int &nodeID) {
     if (this->focusObject != -1)
@@ -215,7 +213,8 @@ bool Mesh::deleteConnection(Connection *c) {
 
 bool Mesh::deleteConnection(const int &conToDeleteID) {
     connectionsInMesh.remove(conToDeleteID);
-    bool allRemoved = !connectionsInMesh.contains(conToDeleteID) &&
+    bool allRemoved =
+            !connectionsInMesh.contains(conToDeleteID) &&
             SingletonRender::instance()->deleteMeshDrawing(conToDeleteID);
 
     if (this->focusObject == conToDeleteID) this->setFocusMeshObject(-1);
@@ -269,7 +268,6 @@ void Mesh::sortCircle() {
 }
 
 void Mesh::sortRow() {
-
     // save how may odes we have
     int numberOfNodes = this->getAllNodes().size();
 
@@ -316,7 +314,6 @@ void Mesh::sortRow() {
 }
 
 void Mesh::sortForce() {
-
     // first we sort the mesh into a row
     this->sortRow();
 
@@ -396,7 +393,6 @@ void Mesh::sortForce() {
         }
     }
 
-
     // move them into the view field
     float miny = 12345670.0;
     float minx = 12345670.0;
@@ -417,7 +413,6 @@ void Mesh::sortForce() {
     foreach (Connection *c, this->getAllConnections()) { c->clearJoints(); }
 
     qDebug() << "mesh sorted";
-
 }
 
 Mesh::~Mesh() {

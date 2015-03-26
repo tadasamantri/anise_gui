@@ -206,7 +206,7 @@ private:
     QString saveFile;
     AniseCommunicator *framework;
     //interval to create backup files in ms
-    int autosave_interval = 3e5;
+    int autosave_interval;
     //location of last made backup
     QString lastBackupFile;
 };

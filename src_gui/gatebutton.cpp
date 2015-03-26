@@ -34,7 +34,7 @@ void GateButton::enable() { enableClick = true; }
 void GateButton::disable() { enableClick = false; }
 
 bool GateButton::event(QEvent *e) {
-    if (enableClick)
+    if (enableClick && !Data::instance()->isRunning())
         QPushButton::event(e);
 
     else {

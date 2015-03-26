@@ -213,7 +213,7 @@ void DrawObject::updateOverAllPicture(QPixmap *newPicture,
 
 QPixmap DrawObject::getPicture() { return this->overAllPicture; }
 
-void DrawObject::dehighlight() {this->setMask(mainMaskUnhighlighted); }
+void DrawObject::dehighlight() { this->setMask(mainMaskUnhighlighted); }
 
 void DrawObject::highlight() { this->setMask(mainMaskHighlighted); }
 
@@ -324,16 +324,14 @@ void DrawObject::hide() {
 void DrawObject::show() {
     QWidget::show();
 
-    if(progressBar){
-        if(Data::instance()->isRunning())
+    if (progressBar) {
+        if (Data::instance()->isRunning())
             progressBar->show();
         else
             progressBar->hide();
     }
-    if(!nameLabel)
-            return;
-        nameLabel->show();
-
+    if (!nameLabel) return;
+    nameLabel->show();
 }
 
 void DrawObject::deleteLater() {
@@ -389,15 +387,18 @@ void DrawObject::setStatusColor(Node::Status status) {
         break;
     case Node::initializing:
         this->setStyleSheet("background-color:grey;");
+        progressBar->show();
         break;
     case Node::idle:
-        this->setStyleSheet("background-color:green;");
+        this->setStyleSheet("background-color:#00ff00;");
+        progressBar->hide();
         break;
     case Node::processing:
-        this->setStyleSheet("background-color:blue;");
+        this->setStyleSheet("background-color:#0000ff;");
+        progressBar->show();
         break;
     case Node::error:
-        this->setStyleSheet("background-color:red;");
+        this->setStyleSheet("background-color:#ff0000;");
         break;
     default:
         this->setStyleSheet("background-color:yellow;");

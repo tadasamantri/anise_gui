@@ -12,9 +12,9 @@ DragWidget::DragWidget(QWidget *parent) : QWidget(parent) {
 
 void DragWidget::mousePressEvent(QMouseEvent *event) {
     /**
-      * User pressed the mouse button
-      * Ensure a left mouse click
-      */
+    * User pressed the mouse button
+    * Ensure a left mouse click
+    */
     if (!(event->button() == Qt::LeftButton)) {
         qDebug() << "that was not the left mouse button!\n";
         return;
@@ -22,14 +22,14 @@ void DragWidget::mousePressEvent(QMouseEvent *event) {
 
     NodeTypeLabel *child = dynamic_cast<NodeTypeLabel *>(childAt(event->pos()));
     if (!child) {
-        //if there is no child at this position - return
+        // if there is no child at this position - return
         return;
     }
 
-     /*
-      * User pressed on a child
-      * Mouse position relative to child top left corner
-      */
+    /*
+   * User pressed on a child
+   * Mouse position relative to child top left corner
+   */
     QPoint hotSpot = event->pos() - child->pos();
 
     QByteArray Data;
@@ -39,8 +39,7 @@ void DragWidget::mousePressEvent(QMouseEvent *event) {
     dataStream << id;
     dataStream << child->getType();
 
-
-    //set the mime data for the drag
+    // set the mime data for the drag
     QMimeData *mimeData = new QMimeData;
     mimeData->setData("ANISE-GUI/drawobject", Data);
 
@@ -50,9 +49,10 @@ void DragWidget::mousePressEvent(QMouseEvent *event) {
     drag->setHotSpot(hotSpot);
     this->setWindowOpacity(0.0);
 
-    //determine the drag operation
+    // determine the drag operation
     if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) ==
-            Qt::MoveAction);
+            Qt::MoveAction)
+        ;
     else {
         // end of drag
         child->show();
