@@ -219,17 +219,6 @@ void MeshEditorWidget::paintEvent(QPaintEvent *event) {
     SingletonRender::instance()->renderConnections();
 }
 
-bool MeshEditorWidget::containsID(int objectID) {
-    foreach (QObject *child, this->children()) {
-        DrawObject *castChild = static_cast<DrawObject *>(child);
-
-        if (!castChild) continue;
-
-        if (castChild->ID == objectID) return true;
-    }
-    return false;
-}
-
 bool MeshEditorWidget::handleGateClick(int nodeID, QString gateName,
                                        QPoint position) {
     // stop connection creation when clicked on an outgate of the source node

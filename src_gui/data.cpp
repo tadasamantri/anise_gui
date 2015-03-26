@@ -143,21 +143,26 @@ void Data::initialize(MainWindow *mainWindow) {
 }
 
 int Data::addNodeToMesh(Node *newNode) {
+    //insert node into mesh
     int id = this->mesh->addNode(newNode);
-    // A new created Node is always focussed in the beginning
 
     if (id >= 0) {
+        //repaint the mesh
         SingletonRender::instance()->renderMesh();
         changed = true;
     }
+
+    // A new created Node is always focussed in the beginning
     mesh->setFocusMeshObject(id);
 
     return id;
 }
 
 int Data::addConnectionToMesh(Connection *newConnection) {
+    //add the connection to the mesh
     int id = this->mesh->addConnection(newConnection);
     if (id >= 0) {
+        //repaint the mesh
         SingletonRender::instance()->renderMesh();
         changed = true;
     }
@@ -203,12 +208,6 @@ void Data::runMesh() {
 }
 
 int Data::getFocusedID() { return mesh->focusObject; }
-
-void Data::removeNodeFromMesh(int ID) {
-    if (!mesh->nodesInMesh.contains(ID)) return;
-    mesh->deleteNode(ID);
-    changed = true;
-}
 
 bool Data::checkConnection(int srcNodeID, QString srcGate, int destNodeID,
                            QString destGate) {
@@ -285,11 +284,14 @@ void Data::finishMesh() {
 }
 
 void Data::moveObjectInMesh(QPoint *Position, int ID) {
+    //check if object is a node
     if (this->mesh->nodesInMesh.contains(ID)) {
         this->mesh->getNodeByID(ID)->moveTo(Position->x(), Position->y());
         changed = true;
         SingletonRender::instance()->renderMesh();
-    } else if (this->mesh->connectionsInMesh.contains(ID)) {
+    }
+    //check if object is a connection
+    else if (this->mesh->connectionsInMesh.contains(ID)) {
         qDebug() << "cant move a connection joint with onle one QPoint";
         return;
     }
@@ -322,14 +324,6 @@ bool Data::deleteItem() {
     return deleted;
 }
 
-Data::~Data() {
-    delete mesh;
-    delete framework;
-    delete nodeCatalog;
-    delete data;
-    delete backupTimer;
-}
-
 NodeCatalog *Data::getNodeCatalog() { return nodeCatalog; }
 
 void Data::setDrawLineMode(QString gateType) {
@@ -339,8 +333,8 @@ void Data::setDrawLineMode(QString gateType) {
 
 bool Data::isSimulating() { return onSimulation; }
 
-void Data::setFocusMeshObject(int nodeID) {
-    if (mesh) mesh->setFocusMeshObject(nodeID);
+void Data::setFocusMeshObject(int objectID) {
+    if (mesh) mesh->setFocusMeshObject(objectID);
 }
 
 void Data::updateNode(QTableWidgetItem *item) {

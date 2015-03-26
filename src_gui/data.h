@@ -80,11 +80,7 @@ public:
     void sortForce();
 
     int getFocusedID();
-    /**
-     * @brief removeNodeFromMesh removes node with given ID from mesh
-     * @param ID
-     */
-    void removeNodeFromMesh(int ID);
+
     /**
      * @brief checkConnection verify if a connection is valid
      * @param srcNodeID
@@ -131,8 +127,6 @@ public:
 
     MainWindow *getMainWindow() const;
     void setMainWindow(MainWindow *value);
-
-    ~Data();
     void setEditMode();
     void setDrawLineMode(QString gateType);
     bool isSimulating();
@@ -150,9 +144,20 @@ signals:
     void runModeChanged();
 
 public slots:
-
+    /**
+     * @brief deleteItem deletes the item which is in focus
+     * @return
+     */
     bool deleteItem();
-    void setFocusMeshObject(int nodeID);
+    /**
+     * @brief setFocusMeshObject sets the focus pointer to the specified object
+     * @param objectID
+     */
+    void setFocusMeshObject(int objectID);
+    /**
+     * @brief updateNode updates the node parmeter belonging to given item
+     * @param item item of propertytable that has changed
+     */
     void updateNode(QTableWidgetItem *item);
     void startSimulation();
     void stopSimulation();
@@ -194,7 +199,6 @@ private:
     * (Unique list of node objects of all types)
     */
     NodeCatalog *nodeCatalog;
-    void updateConnections(int ID, QPoint offset);
     bool changed = false;
     bool repaint = false;
     bool onSimulation;

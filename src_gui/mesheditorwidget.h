@@ -22,20 +22,14 @@
 
 #include "node.h"
 
-struct NewLine{
-
+struct NewLine {
     bool drawLine;
     int srcNodeID;
     QString srcGateName;
     int destNodeID;
     QString destGateName;
     QVector<QPoint> wayPoints;
-
-
 };
-
-
-
 
 class MeshEditorWidget : public QWidget {
     Q_OBJECT
@@ -43,15 +37,10 @@ public:
     explicit MeshEditorWidget(QWidget *parent = 0);
     QPoint dragStartPosition;
 
-    //returns true if there is a child of Meshfield containing drawObject with objectID
-    //function to confirm drawObject got deleted
-    //
-    bool containsID(int objectID);
-
     void connectSignals();
-protected:
 
-    //variables for drawing a line to the mouse cursor
+protected:
+    // variables for drawing a line to the mouse cursor
     bool drawLine;
     QPoint mousePosition;
     QPoint mousePositionOld;
@@ -65,13 +54,10 @@ protected:
     void paintEvent(QPaintEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
 
-
-
 private:
-
     NewLine newLine;
 
-    //Clears new Line which is/was in construction
+    // Clears new Line which is/was in construction
     void clearNewLine();
     void resetToEditMode();
 

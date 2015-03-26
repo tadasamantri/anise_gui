@@ -124,9 +124,7 @@ void SingletonRender::renderConnection(Connection *conToRender, const int &ID) {
 }
 
 void SingletonRender::moveJointsOnJoints(Connection *conToRender, const int &ID) {
-    ;
-    int posxOffset;
-    int posyOffset;
+
     int index = 0;
 
     // move all joints to the correct position
@@ -135,7 +133,8 @@ void SingletonRender::moveJointsOnJoints(Connection *conToRender, const int &ID)
         if (index == conToRender->getJoints()->size()) {
             qDebug() << "Waypoint Array out of bounds";
         }
-
+        int posxOffset;
+        int posyOffset;
         // calculate the middle of the Image
         posxOffset = -joint->width() / 2;
         posyOffset = -joint->height() / 2;
@@ -212,11 +211,6 @@ bool SingletonRender::createTilesFromImage(QPixmap *Sprite) {
     }
 
     int size = 16;  // we want to load 16*16 pictures
-    int top;
-    int bottom;
-    int left;
-    int right;
-
     QRect cropRect;
 
     /*
@@ -226,10 +220,10 @@ bool SingletonRender::createTilesFromImage(QPixmap *Sprite) {
    */
 
     for (int index = 0; index < 9; ++index) {
-        top = int(index / 3) * size;
-        bottom = top + size;
-        left = (index % 3) * size;
-        right = left + size;
+        int top = int(index / 3) * size;
+        int bottom = top + size;
+        int left = (index % 3) * size;
+        int right = left + size;
 
         cropRect = QRect(left, top, right - left, bottom - top);
         this->nodeTiles[index] = QPixmap(Sprite->copy(cropRect));

@@ -345,8 +345,7 @@ void DrawObject::initializeProgressView() {
     progressBar =
             new QProgressBar(dynamic_cast<MeshEditorWidget *>(this->parent()));
     int posX = this->pos().x();
-    int posY =
-            this->pos().y() + this->height() + (nameLabel) ? nameLabel->height() : 20;
+    int posY = this->pos().y() + this->height() + ((nameLabel) ? nameLabel->height() : 20);
 
     progressBar->setGeometry(posX, posY, this->width(), 15);
     progressBar->setOrientation(Qt::Horizontal);

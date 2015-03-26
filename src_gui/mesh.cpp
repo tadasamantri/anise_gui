@@ -46,13 +46,6 @@ int Mesh::addNode(Node *node) {
     return id;
 }
 
-int Mesh::addNodes(QList<Node *> &list) {
-    int id = -1;
-    foreach (Node *node, list)
-        id = addNode(node);
-    return id;
-}
-
 void Mesh::deleteNode(const int &ID) {
     if (!nodesInMesh.contains(ID)) return;
     Node *n = nodesInMesh[ID];
@@ -229,8 +222,6 @@ bool Mesh::deleteConnection() {
     return false;
 }
 
-int Mesh::getCurrentID() { return iDCounter; }
-
 void Mesh::updateConnStartAndEnd() {}
 
 void Mesh::sortCircle() {
@@ -252,12 +243,10 @@ void Mesh::sortCircle() {
 
     double angle = 0;
 
-    int posx, posy;
-
     foreach (Node *n, this->getAllNodes()) {
         // calculate the position in the circle
-        posx = int(radius * cos(angle) + radius + 100);
-        posy = int(radius * sin(angle) + radius + 100);
+        int posx = int(radius * cos(angle) + radius + 100);
+        int posy = int(radius * sin(angle) + radius + 100);
 
         // set the position
         n->moveTo(posx, posy);

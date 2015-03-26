@@ -28,11 +28,6 @@ private:
     int addConnection(Connection *connection);
 
     /**
-     * @see addNode
-     */
-    int addNodes(QList<Node *> &list);
-
-    /**
      * @brief removeNode
      * @param ID the ID of the Node to be removed
      */
@@ -55,22 +50,40 @@ private:
      */
     Connection *getConnectionByID(const int &ID);
 
-
+    /**
+     * @brief getAllNodes
+     * @return a collection of all nodes inside the mesh
+     */
     QList<Node *> getAllNodes();
 
-    // returns all Connection from connectionsInMash as a QList
+    /**
+     * @brief getAllConnections
+     * @see getAllNodes
+     */
     QList<Connection *> getAllConnections();
 
     // Nodes and connections
     QMap<int, Node *> nodesInMesh;
     QMap<int, Connection *> connectionsInMesh;
 
+    /**
+     * @brief getFocusedNode
+     * @return the node in focus
+     */
     Node* getFocusedNode();
     //deletingfunctions
     bool deleteItem();
+    /**
+     * @brief validName
+     * @param name
+     * @return true if given name is a valid (unique and non-empty) node name
+     */
     bool validName(const QString &name);
-
-    int getCurrentID();
+    /**
+     * @brief getValidAlternativeForName checks if given name is valid and generates a valid alternative
+     * @param name
+     * @return valid alternative for name (may be the name itself!)
+     */
     QString getValidAlternativeForName(const QString name);
 
     void sortCircle();
@@ -78,6 +91,14 @@ private:
     void sortForce();
 
     ~Mesh();
+    /**
+     * @brief checkConnection checks if a connection between given nodes and gates is valid
+     * @param srcNodeID
+     * @param srcGate
+     * @param destNodeID
+     * @param destGate
+     * @return
+     */
     bool checkConnection(const int &srcNodeID, const QString &srcGate, const int &destNodeID, const QString &destGate);
 public slots:
     void setFocusMeshObject(const int &nodeID);
