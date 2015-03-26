@@ -96,6 +96,10 @@ public:
     int getProgress() const;
     void setProgress(int value);
 
+    QString getErrorMsg() const;
+    void setErrorMsg(const QString &value);
+    void addErrorMsg(const QString &value);
+
 private:
     bool addParam(const QString &descr, const QString &_key, const QString &name, const QString &type,
                   const QVariant &_value);
@@ -108,6 +112,7 @@ private:
     Status status;
     float position_x;
     float position_y;
+    QString errorMsg;
 };
 
 #endif  // NODE_H

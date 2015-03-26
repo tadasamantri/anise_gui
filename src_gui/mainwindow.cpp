@@ -426,10 +426,12 @@ void MainWindow::on_details_stateChanged(int arg1) {
 }
 
 void MainWindow::onFilebuttonClicked(int row, int col) {
+    if(col != 1)
+        return;
     QString key = ui->tableWidget->item(row, 0)->data(Qt::UserRole).toString();
     if (!key.contains("file", Qt::CaseInsensitive)) return;
     QString fileName;
-    if (key.contains("out", Qt::CaseInsensitive))
+    if (key.contains("output", Qt::CaseInsensitive))
         fileName = QFileDialog::getSaveFileName(this, "Select a File...", "~/");
     else
         fileName = QFileDialog::getOpenFileName(this, "Select a File...", "~/");

@@ -1,4 +1,4 @@
-
+#include <QMessageBox>
 #include "drawobject.h"
 #include <QShortcut>
 #include <QSize>
@@ -370,9 +370,16 @@ void DrawObject::setEditView() {
 }
 
 void DrawObject::setProgressView() {
-    this->setStatusColor(Node::initializing);
+    this->setStatus(Node::initializing);
     this->highlight();
     progressBar->show();
+}
+
+void DrawObject::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    QWidget::mouseDoubleClickEvent(e);
+    if(status == Node::error)
+        QMessageBox::critical(this,"Errors on Simulation", "Errors:\n" + Data::instance()->getNodeByID(ID)->getErrorMsg());
 }
 
 void DrawObject::deleteItemText(QListWidgetItem *item) {
@@ -380,7 +387,8 @@ void DrawObject::deleteItemText(QListWidgetItem *item) {
                 "QListWidget::item:selected{background: transparent}");
 }
 
-void DrawObject::setStatusColor(Node::Status status) {
+void DrawObject::setStatus(const Node::Status &status) {
+    this->status = status;
     switch (status) {
     case Node::edit:
         this->setStyleSheet("background-color:yellow;");

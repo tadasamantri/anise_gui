@@ -300,7 +300,8 @@ void JsonFileHandler::parseProgress(QString &text) {
             int progress = obj["info"].toInt();
             node->setProgress(progress);
         } else if (msg == "error") {
-            ;
+            node->setStatus(Node::error);
+            node->addErrorMsg("- " + obj["info"].toString() + "\n");
         } else if (msg == "warning") {
             ;
         }

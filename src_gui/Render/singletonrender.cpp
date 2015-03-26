@@ -742,7 +742,7 @@ void SingletonRender::setPercentage(int nodeID, int percentage){
 void SingletonRender::setStatusColor(int nodeID, Node::Status status){
 
     if(allDrawnNodes.contains(nodeID))
-        allDrawnNodes.value(nodeID)->setStatusColor(status);
+        allDrawnNodes.value(nodeID)->setStatus(status);
     else
         qDebug() << "You tried to call DrawObject::setPercentage with non-existing nodeID: " << nodeID;
 

@@ -82,6 +82,21 @@ bool Node::addParam(const QString &descr, const QString &_key, const QString &na
         return false;
     return true;
 }
+QString Node::getErrorMsg() const
+{
+    return errorMsg;
+}
+
+void Node::setErrorMsg(const QString &value)
+{
+    errorMsg = value;
+}
+
+void Node::addErrorMsg(const QString &value)
+{
+    errorMsg += value;
+}
+
 int Node::getProgress() const
 {
     return progress;

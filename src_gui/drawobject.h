@@ -61,8 +61,7 @@ public:
     void setProgressValue(int value);
     void initializeProgressView();
     void changeProgressView();
-
-    void setStatusColor(Node::Status status);
+    void setStatus(const Node::Status &status);
 signals:
 
     void released(int nodeID, QString gateName, QPoint position);
@@ -83,11 +82,11 @@ private:
     bool progressMode;
 
     void setProgressView();
-
+    Node::Status status;
     //rest
     int highlightWidth;
     QListWidget *nameLabel;
-
+    void mouseDoubleClickEvent(QMouseEvent *e);
     void updateOverAllPicture(QPixmap *newPicture, QPoint const &position);
     int getPixel(const int &x, const int &y) const;
     void setPixel(const int &x, const int &y, const int &pixel);
