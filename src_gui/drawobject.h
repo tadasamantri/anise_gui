@@ -8,6 +8,9 @@
 #include <QBitmap>
 #include <QPushButton>
 #include <QListWidgetItem>
+#include <QProgressBar>
+#include <node.h>
+
 #include "gatebutton.h"
 
 class DrawObject : public QWidget {
@@ -29,7 +32,6 @@ public:
     QPixmap overAllPicture;
 
     void addPicture(QPixmap *pic, QPoint position);
-    void addPicture(QPixmap *pic, QPoint const &position, QString const &nodeName);
     void addGateButton(QPixmap *pic, QPoint position, QString gateName,
                        QString gateType, bool direction);
 
@@ -55,6 +57,12 @@ public:
     void hide();
     void show();
     void deleteLater();
+
+    void setProgressValue(int value);
+    void initializeProgressView();
+    void changeProgressView();
+
+    void setStatusColor(Node::Status status);
 signals:
 
     void released(int nodeID, QString gateName, QPoint position);
@@ -68,6 +76,15 @@ private slots:
     void deleteItemText(QListWidgetItem *item);
 
 private:
+
+    //Stuff for progess
+
+    QProgressBar *progressBar;
+    bool progressMode;
+
+    void setProgressView();
+
+    //rest
     int highlightWidth;
     QListWidget *nameLabel;
 
@@ -75,6 +92,7 @@ private:
     int getPixel(const int &x, const int &y) const;
     void setPixel(const int &x, const int &y, const int &pixel);
     void highlightMask();
+    void setEditView();
 };
 
 #endif  // DRAWOBJECT_H

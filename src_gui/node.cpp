@@ -64,12 +64,6 @@ void Node::addGates(const QVector<Gate *> &gates, const bool &direction) {
         foreach (Gate *gate, gates) { outputGates << gate; }
 }
 
-void Node::addGates(const QVector<Gate *> &gates)
-{
-    for(Gate *g : gates)
-        addGate(g);
-}
-
 /**
  * @brief Node::addParam add a new Parameter to the Node
  * @param descr description
@@ -88,27 +82,16 @@ bool Node::addParam(const QString &descr, const QString &_key, const QString &na
         return false;
     return true;
 }
-unsigned char Node::getProgress() const
+int Node::getProgress() const
 {
     return progress;
 }
 
-void Node::setProgress(const unsigned char &value)
+void Node::setProgress(int value)
 {
-    assert(value <= 100);
+    assert((value >= 0 && value <= 100) || value == -1);
     progress = value;
-    switch (value) {
-    case 0:
-        status = idle;
-        break;
-    case 100:
-        status = finished;
-        break;
-    default:
-        status = busy;
-        break;
-    }
-    qDebug() << "Node" << name << ":" << status << "-" << progress << "%";
+    SingletonRender::instance()->setPercentage(ID,progress);
 }
 
 Node::Status Node::getStatus() const
@@ -119,6 +102,7 @@ Node::Status Node::getStatus() const
 void Node::setStatus(const Node::Status &value)
 {
     status = value;
+    SingletonRender::instance()->setStatusColor(ID, status);
 }
 
 /**

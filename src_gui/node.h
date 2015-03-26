@@ -21,13 +21,15 @@ public:
     };
 
     enum Status {
+        edit,
         idle,
-        busy,
-        finished,
+        processing,
+        initializing,
         error,
     };
 
     Node();
+
     QMap<QString, Parameter> *getParams();
 
     Node(QVector<Gate *> &inputGates, QVector<Gate *> &outputGates, QString &type,
@@ -91,8 +93,9 @@ public:
     Status getStatus() const;
     void setStatus(const Status &value);
 
-    unsigned char getProgress() const;
-    void setProgress(const unsigned char &value);
+    int getProgress() const;
+    void setProgress(int value);
+
 private:
     bool addParam(const QString &descr, const QString &_key, const QString &name, const QString &type,
                   const QVariant &_value);
@@ -101,7 +104,7 @@ private:
     QString type, name;
     int ID = -2;
     QMap<QString, Parameter> params;  // maps <identifier, value>
-    unsigned char progress;
+    int progress;
     Status status;
     float position_x;
     float position_y;

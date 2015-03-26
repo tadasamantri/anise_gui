@@ -46,7 +46,7 @@ Node NodeCatalog::getNodeOfType(const QString &type){
     Node node;
     QString _class = type;
     node = Content[_class];
-    qDebug() << "node of type " << _class <<" returned";
+
     return node;
 }
 

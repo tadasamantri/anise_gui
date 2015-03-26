@@ -2,6 +2,7 @@
 #define DATA_H
 
 #include <QObject>
+#include <QDir>
 #include "mesh.h"
 #include "nodecatalog.h"
 #include "mainwindow.h"
@@ -11,6 +12,7 @@
 #include "node.h"
 #include "nodefactory.h"
 #include "anisecommunicator.h"
+#include <QTimer>
 
 /**
  *  @Author Frederik Lührs
@@ -139,15 +141,31 @@ public:
     QString getSaveFile() const;
     void setSaveFile(const QString &value);
 
+    bool isRunning() const;
+
+    void testChangeRun();
+
+signals:
+
+    void runModeChanged();
+
 public slots:
+
     bool deleteItem();
     void setFocusMeshObject(int nodeID);
     void updateNode(QTableWidgetItem *item);
     void startSimulation();
     void stopSimulation();
     void runMesh();
+private slots:
+    /**
+     * @brief autosaveMesh saves a backup file of the current mesh
+     */
+    void autosaveMesh();
 private:
     explicit Data(QObject *parent = 0);
+
+    bool runMode;
 
     /**
     * It is Private so that it can't be called.
@@ -180,8 +198,17 @@ private:
     bool changed = false;
     bool repaint = false;
     bool onSimulation;
+    //timer for autobackups
+    QTimer *backupTimer;
+    //directory for savings
+    QDir autosave;
+    //location of current save file
     QString saveFile;
     AniseCommunicator *framework;
+    //interval to create backup files in ms
+    int autosave_interval = 3e5;
+    //location of last made backup
+    QString lastBackupFile;
 };
 
 #endif  // DATA_H

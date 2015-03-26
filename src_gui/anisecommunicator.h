@@ -43,7 +43,6 @@ private:
      */
     static bool validPath(const QString &path);
     bool onProgress;
-
 public:
     /**
      * @brief getAllNodeTypes executes command to get all existing node types from anise
@@ -63,6 +62,7 @@ public:
      * @brief runMesh starts the framework
      */
     void runMesh();
+    void stop();
 private slots:
     /**
      * @brief readProgress reads out progress information

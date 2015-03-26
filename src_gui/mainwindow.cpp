@@ -25,11 +25,13 @@ MainWindow::MainWindow(QWidget *parent)
     SingletonRender::instance()->setUi(this->ui);
     initializeGUI();
 
-    //activates deleteItem when deletebutton is pressed
-    //deleteItem handles itself whether object is focussed or not nothing is deleted
+    // activates deleteItem when deletebutton is pressed
+    // deleteItem handles itself whether object is focussed or not nothing is
+    // deleted
     QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_Delete), this);
     connect(shortcut, SIGNAL(activated()), Data::instance(), SLOT(deleteItem()));
-    connect(ui->delete_button, SIGNAL(clicked()), Data::instance(), SLOT(deleteItem()));
+    connect(ui->delete_button, SIGNAL(clicked()), Data::instance(),
+            SLOT(deleteItem()));
 }
 
 void MainWindow::initializeGUI() {
@@ -57,27 +59,30 @@ void MainWindow::initializeGUI() {
     Data::instance()->initialize(this);
 }
 
-void MainWindow::closeEvent(QCloseEvent *event)
-{
+void MainWindow::closeEvent(QCloseEvent *event) {
     bool ok = false;
-    if(Data::instance()->hasChanged()){
-        int choice = QMessageBox::question(this,"Save old project?","You attemted creating a new project.\n Do you want to save your current project?",(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel),QMessageBox::Yes);
-        if(choice == QMessageBox::Yes){
+    if (Data::instance()->hasChanged()) {
+        int choice = QMessageBox::question(
+                    this, "Save old project?",
+                    "You attemted creating a new project.\n Do you want to save your "
+                    "current project?",
+                    (QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel),
+                    QMessageBox::Yes);
+        if (choice == QMessageBox::Yes) {
             QString path = saveDialog();
             ok = path != ".mesh";
-            if(ok)
-                saveFile(path);
-        }
-        else if(choice == QMessageBox::No)
+            if (ok) saveFile(path);
+        } else if (choice == QMessageBox::No)
             ok = true;
-    }
-    else ok = true;
-    if(ok)
+    } else
+        ok = true;
+    if (ok)
         event->accept();
-    else event->ignore();
+    else
+        event->ignore();
 }
 
-void MainWindow::saveFile(QString &path){
+void MainWindow::saveFile(QString &path) {
     JsonFileHandler::saveMesh(path);
     Data::instance()->unsetChanged();
 }
@@ -109,11 +114,14 @@ void MainWindow::on_actionSet_framework_path_triggered() {
 
     SettingsHandler::storeSetting("frameworkpath", fileName);
     AniseCommunicator::setFrameworkPath(fileName);
-    if(old != fileName){
+    if (old != fileName) {
         pathChanged = true;
-        int choice = QMessageBox::warning(this,"Path to Framework changed", "You changed the Path to the ANISE-Framework. To apply the changes a restart is required.\nDo you want to restart now?", QMessageBox::Yes, QMessageBox::Cancel);
-        if(choice == QMessageBox::Yes)
-            emit ui->actionLoad_Catalog->triggered();
+        int choice = QMessageBox::warning(
+                    this, "Path to Framework changed",
+                    "You changed the Path to the ANISE-Framework. To apply the changes a "
+                    "restart is required.\nDo you want to restart now?",
+                    QMessageBox::Yes, QMessageBox::Cancel);
+        if (choice == QMessageBox::Yes) emit ui->actionLoad_Catalog->triggered();
     }
 }
 
@@ -137,32 +145,30 @@ void MainWindow::on_actionNew_triggered() {
     if (ok) Data::instance()->newMeshProject();
 }
 
-void MainWindow::on_actionSort_Mesh_triggered(){
+void MainWindow::on_actionSort_Mesh_triggered() {
     Data::instance()->sortForce();
     SingletonRender::instance()->renderMesh();
 }
 
 void MainWindow::on_actionLoad_Catalog_triggered() {
-
-
-    //the old ndoes should be deleted!
+    // the old ndoes should be deleted!
 
     QString out = AniseCommunicator::getAllNodeTypes();
-    //Data::instance()->getNodeCatalog()->Content.clear();
+    // Data::instance()->getNodeCatalog()->Content.clear();
     JsonFileHandler::parseNodeTypesFromAnise(out);
-    //SingletonRender::instance()->renderCatalogContent(Data::instance()->getNodeCatalog()->Content.values().toVector());
-
+    // SingletonRender::instance()->renderCatalogContent(Data::instance()->getNodeCatalog()->Content.values().toVector());
 
     qDebug() << "perfoming reboot...";
     qApp->exit(EXIT_CODE_REBOOT);
-
 }
 
-QString MainWindow::saveDialog(){
-    QString fileName = QFileDialog::getSaveFileName(this, "Save current project to...", "",
-                                 "Mesh-Files (*.mesh *.json);;All Files(*)");
+QString MainWindow::saveDialog() {
+    QString fileName =
+            QFileDialog::getSaveFileName(this, "Save current project to...", "",
+                                         "Mesh-Files (*.mesh *.json);;All Files(*)");
 
-    if(!(fileName.endsWith(".json",Qt::CaseInsensitive) || fileName.endsWith(".mesh", Qt::CaseInsensitive)))
+    if (!(fileName.endsWith(".json", Qt::CaseInsensitive) ||
+          fileName.endsWith(".mesh", Qt::CaseInsensitive)))
         fileName += ".mesh";
     return fileName;
 }
@@ -174,17 +180,20 @@ void MainWindow::on_actionSave_as_triggered() {
 
 void MainWindow::on_actionSave_triggered() {
     QString fileName = Data::instance()->getSaveFile();
-    if(fileName == ""){
+    if (fileName == "") {
         fileName = saveDialog();
-        if(fileName != "")
+        if (fileName != "")
             Data::instance()->setSaveFile(fileName);
-        else return;
+        else
+            return;
     }
     saveFile(fileName);
 }
 
 void MainWindow::updatePropertyTable(int nodeID) {
-    if(oldfocus == nodeID){
+    // check if table has to be refilled or just to be shown
+    if (nodeID != -1 && oldfocus == nodeID &&
+            ui->details->checkState() == Qt::Checked) {
         ui->tableWidget->show();
         return;
     }
@@ -249,8 +258,7 @@ void MainWindow::updatePropertyTable(int nodeID) {
             types.chop(2);
             QTableWidgetItem *out = new QTableWidgetItem;
             out->setText(types);
-            out->setFlags(out->flags() ^
-                          (Qt::ItemIsEditable | Qt::ItemIsSelectable));
+            out->setFlags(out->flags() ^ (Qt::ItemIsEditable | Qt::ItemIsSelectable));
             table->setItem(i, 0, new QTableWidgetItem(
                                "Output" + QString((moreThanOne ? "s" : ""))));
             table->setItem(i, 1, out);
@@ -268,14 +276,12 @@ void MainWindow::updatePropertyTable(int nodeID) {
         // avoid editing keys, and nodeID/type
         ID->setFlags(ID->flags() ^ (Qt::ItemIsEditable | Qt::ItemIsSelectable |
                                     Qt::ItemIsEnabled));
-        type->setFlags(
-                    type->flags() ^
-                    (Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+        type->setFlags(type->flags() ^ (Qt::ItemIsEditable | Qt::ItemIsSelectable |
+                                        Qt::ItemIsEnabled));
 
         for (int j = 0; j < i; j++)
-            table->item(j, 0)
-                    ->setFlags(table->item(j, 0)->flags() ^
-                               (Qt::ItemIsEditable | Qt::ItemIsSelectable));
+            table->item(j, 0)->setFlags(table->item(j, 0)->flags() ^
+                                        (Qt::ItemIsEditable | Qt::ItemIsSelectable));
         QStringList keys = map->keys();
         int count = i;
         for (int j = 0; j < keys.size(); j++) {
@@ -305,8 +311,9 @@ void MainWindow::updatePropertyTable(int nodeID) {
                 value_item->setData(Qt::UserRole, value);
                 value_item->setText(value.toString());
                 table->setItem(i + j, 1, value_item);
-                if(key.contains("file")){
-                    connect(table,SIGNAL(cellDoubleClicked(int,int)),this,SLOT(onFilebuttonClicked(int,int)));
+                if (key.contains("file")) {
+                    connect(table, SIGNAL(cellDoubleClicked(int, int)), this,
+                            SLOT(onFilebuttonClicked(int, int)));
                 }
                 break;
             }
@@ -323,8 +330,10 @@ void MainWindow::updatePropertyTable(int nodeID) {
 
 void MainWindow::deleteTable() {
     QTableWidget *table = ui->tableWidget;
-    table->disconnect(table, SIGNAL(itemChanged(QTableWidgetItem*)), Data::instance(), SLOT(updateNode(QTableWidgetItem*)));
-    table->disconnect(table, SIGNAL(cellDoubleClicked(int,int)),this, SLOT(onFilebuttonClicked(int,int)));
+    table->disconnect(table, SIGNAL(itemChanged(QTableWidgetItem *)),
+                      Data::instance(), SLOT(updateNode(QTableWidgetItem *)));
+    table->disconnect(table, SIGNAL(cellDoubleClicked(int, int)), this,
+                      SLOT(onFilebuttonClicked(int, int)));
     table->hide();
     // delete all tableitems, because they aren't needed any more
     for (int col = 0; col < table->columnCount(); col++)
@@ -338,59 +347,56 @@ void MainWindow::displayTypeInfo(const QString &type) {
     oldfocus = -1;
     QTableWidget *table = ui->tableWidget;
     Node n = *Data::instance()->getNodeCatalog()->getPointerOfType(type);
-    //i is to count the rows set up
+    // i is to count the rows set up
     int i = 0;
     const QMap<QString, Node::Parameter> *params = n.getParams();
 
-    //init the table
+    // init the table
     table->setRowCount(((params->size()) + 4));
     table->setColumnCount(2);
 
-    //print the Node Type
+    // print the Node Type
     table->setItem(i, 0, new QTableWidgetItem("Type"));
     table->setItem(i, 1, new QTableWidgetItem(type));
-    QFont f1 = table->item(i,1)->font(), f2 = table->item(i,0)->font();
+    QFont f1 = table->item(i, 1)->font(), f2 = table->item(i, 0)->font();
     f1.setBold(true);
     f2.setBold(true);
-    table->item(i,0)->setFont(f2);
-    table->item(i++,1)->setFont(f1);
+    table->item(i, 0)->setFont(f2);
+    table->item(i++, 1)->setFont(f1);
 
-
-    //print input gates
-    QVector<Gate*> *gates = n.getInputGates();
-    bool moreThanOneGate = gates->size()>1;
+    // print input gates
+    QVector<Gate *> *gates = n.getInputGates();
+    bool moreThanOneGate = gates->size() > 1;
     QString gateTypes;
-    //if there are inputs, print them
-    if(!gates->isEmpty()) {
-        table->setItem(i, 0, new QTableWidgetItem("Input" + QString((moreThanOneGate?"s":""))));
-        for(Gate *g : *gates)
-            for(QString s : g->getTypes())
-                gateTypes += s + ", ";
+    // if there are inputs, print them
+    if (!gates->isEmpty()) {
+        table->setItem(i, 0, new QTableWidgetItem(
+                           "Input" + QString((moreThanOneGate ? "s" : ""))));
+        for (Gate *g : *gates)
+            for (QString s : g->getTypes()) gateTypes += s + ", ";
         gateTypes.chop(2);
         table->setItem(i++, 1, new QTableWidgetItem(gateTypes));
     }
 
-
-    //print outputs
+    // print outputs
     gateTypes = "";
     gates = n.getOutputGates();
-    moreThanOneGate = gates->size()>1;
-    if(!gates->isEmpty()){
-        for(Gate *g : *gates)
-            for(QString s : g->getTypes())
-                gateTypes += s + ", ";
+    moreThanOneGate = gates->size() > 1;
+    if (!gates->isEmpty()) {
+        for (Gate *g : *gates)
+            for (QString s : g->getTypes()) gateTypes += s + ", ";
         gateTypes.chop(2);
-        table->setItem(i, 0, new QTableWidgetItem("Output" + QString((moreThanOneGate?"s":""))));
+        table->setItem(i, 0, new QTableWidgetItem(
+                           "Output" + QString((moreThanOneGate ? "s" : ""))));
         table->setItem(i++, 1, new QTableWidgetItem(gateTypes));
     }
 
     QString descr = n.getDescription();
-    if(descr != "")
-    {
+    if (descr != "") {
         table->setRowCount(table->rowCount() + 1);
         table->setItem(i, 0, new QTableWidgetItem("Description"));
         table->setItem(i, 1, new QTableWidgetItem(descr));
-        table->item(i++,1)->setToolTip(descr);
+        table->item(i++, 1)->setToolTip(descr);
     }
     QList<QString> keys = params->keys();
     for (int j = 0; j < keys.size(); j++) {
@@ -402,29 +408,42 @@ void MainWindow::displayTypeInfo(const QString &type) {
     table->setRowCount(i);
     for (int col = 0; col < table->columnCount(); col++)
         for (int row = 0; row < table->rowCount(); row++)
-            if(table->item(row,col))
+            if (table->item(row, col))
                 table->item(row, col)->setFlags(Qt::ItemIsEnabled);
     table->resizeColumnToContents(0);
     table->resizeColumnToContents(1);
-    for(int col = 0; col < table->columnCount();col++)
-        for(int row = 0;row < table->rowCount();row++)
-            table->item(row,col)->setToolTip(table->item(row,col)->text());
-    if(ui->details->checkState() == Qt::Checked)
-        table->show();
+    for (int col = 0; col < table->columnCount(); col++)
+        for (int row = 0; row < table->rowCount(); row++)
+            table->item(row, col)->setToolTip(table->item(row, col)->text());
+    if (ui->details->checkState() == Qt::Checked) table->show();
 }
 
-void MainWindow::on_details_stateChanged(int arg1)
-{
-    if(arg1 && Data::instance()->getFocusedID() != -1)
+void MainWindow::on_details_stateChanged(int arg1) {
+    if (arg1 && Data::instance()->getFocusedID() != -1)
         ui->tableWidget->show();
     else
         ui->tableWidget->hide();
 }
 
-void MainWindow::onFilebuttonClicked(int row, int col)
-{
-    QString fileName = QFileDialog::getOpenFileName(this,"Select a File...","~/");
-    if(fileName == "")
-        return;
-    ui->tableWidget->item(row,col)->setText(fileName);
+void MainWindow::onFilebuttonClicked(int row, int col) {
+    QString key = ui->tableWidget->item(row, 0)->data(Qt::UserRole).toString();
+    if (!key.contains("file", Qt::CaseInsensitive)) return;
+    QString fileName;
+    if (key.contains("out", Qt::CaseInsensitive))
+        fileName = QFileDialog::getSaveFileName(this, "Select a File...", "~/");
+    else
+        fileName = QFileDialog::getOpenFileName(this, "Select a File...", "~/");
+    if (fileName == "") return;
+    ui->tableWidget->item(row, col)->setText(fileName);
+}
+
+void MainWindow::on_start_button_clicked() {
+    Data::instance()->testChangeRun();
+    SingletonRender::instance()->setStatusColor(0, Node::error);
+}
+
+void MainWindow::on_stop_button_clicked() { Data::instance()->setEditMode(); }
+
+void MainWindow::on_actionStop_Simulation_triggered() {
+    Data::instance()->stopSimulation();
 }

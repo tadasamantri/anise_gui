@@ -36,6 +36,12 @@ bool AniseCommunicator::validPath(const QString &path) {
     result = result.remove("\n").remove(" ");
     return result == "anise-framework";
 }
+
+void AniseCommunicator::stop()
+{
+    anise_process->terminate();
+}
+
 bool AniseCommunicator::getOnProgress() const
 {
     return onProgress;
@@ -90,9 +96,8 @@ QString AniseCommunicator::getAllNodeTypes() {
     */
     read();
     readOutput =
-            readOutput.mid(readOutput.indexOf("{"), readOutput.lastIndexOf("}")+1);
-    qDebug() << "this is what the communicator got from the framework:\n"
-             << readOutput << "\n";
+            readOutput.mid(readOutput.indexOf("{"), readOutput.lastIndexOf("}") + 1);
+
     anise_process->close();
     return readOutput;
 }

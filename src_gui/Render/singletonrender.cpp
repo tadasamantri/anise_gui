@@ -25,6 +25,7 @@ SingletonRender::SingletonRender() {
     } else {
         qDebug() << "images loading failed";
     }
+
 }
 
 /** This function is called to create an instance of the class.
@@ -119,10 +120,10 @@ void SingletonRender::renderConnection(Connection *conToRender, const int &ID) {
         allConnections.insert(ID, jointVector);
     }
 
-    this->moveJointsOnWaypoints(conToRender, ID);
+    this->moveJointsOnJoints(conToRender, ID);
 }
 
-void SingletonRender::moveJointsOnWaypoints(Connection *conToRender, const int &ID) {
+void SingletonRender::moveJointsOnJoints(Connection *conToRender, const int &ID) {
     ;
     int posxOffset;
     int posyOffset;
@@ -265,8 +266,8 @@ QPixmap *SingletonRender::createTiledPixmap(const int &x, const int &y) {
     result->fill(Qt::transparent);
 
     // create a painter
-    QPainter painter(result);
-    painter.setBrush(Qt::green);
+    QPainter *painter = new QPainter(result);
+    painter->setBrush(Qt::green);
 
     bool isTop = false;
     bool isBottom = false;
@@ -345,9 +346,11 @@ QPixmap *SingletonRender::createTiledPixmap(const int &x, const int &y) {
 
             // add the image to our QPixmap
             temp = &(this->nodeTiles[indexOfTile]);
-            painter.drawPixmap(rowX * 16, rowY * 16, 16, 16, *temp);
+            painter->drawPixmap(rowX * 16, rowY * 16, 16, 16, *temp);
         }
     }
+
+    delete painter;
 
     return result;
 }
@@ -359,13 +362,13 @@ bool SingletonRender::loadImages() {
     bool result = true;
     // go into the right Directory using a Qdir object
     QDir directory;
-    directory.cd("Data/Images/");
+    directory.cd("data/images/");
 
     // fill the list of Files with all filenames insode this directory
     if (directory.exists() == true) {
         listOfFiles = directory.entryList();
     } else {
-        qCritical() << "Directory \"Data/Images\" not found!";
+        qCritical() << "Directory \"data/images\" not found!";
         return false;
     }
 
@@ -388,8 +391,7 @@ bool SingletonRender::loadImages() {
                          << result;
             }
 
-            // set transparency to magic pink
-            temp->setMask(temp->createMaskFromColor(Qt::magenta));
+
 
             allImages.insert(listOfFiles.at(i), temp);
         }
@@ -407,7 +409,7 @@ bool SingletonRender::loadImages() {
 
     // create tiles from loaded image
     if (allImages.contains("body.png")) {
-        qDebug() << "creating tiles";
+
         this->createTilesFromImage(allImages.value("body.png"));
     }
 
@@ -456,6 +458,7 @@ void SingletonRender::renderNode(Node *nodeToRender, const int &nodeID) {
 
         if (allImages.contains("body.png")) {
             // Draw the body
+
             NodeDrawObject->addPicture(
                         this->createTiledPixmap(amountTilesX * 16, amountTilesY * 16),
                         QPoint(gateSpaceX, 0));
@@ -490,8 +493,9 @@ void SingletonRender::renderNode(Node *nodeToRender, const int &nodeID) {
         }
 
         NodeDrawObject->setNodeName(name);
-
         NodeDrawObject->setToolTip(nodeToRender->getDescription());
+        NodeDrawObject->initializeProgressView();
+
         allDrawnNodes.insert(nodeID, NodeDrawObject);
     }
     // TODO should use layouts instead of hardcoded position!
@@ -662,6 +666,9 @@ QVector<int> *SingletonRender::getChildrenIDs() {
 }
 
 void SingletonRender::dehighlightObject(const int &ID) {
+
+
+
     if (allDrawnNodes.contains(ID)) {
         allDrawnNodes.value(ID)->dehighlight();
     }
@@ -674,6 +681,9 @@ void SingletonRender::dehighlightObject(const int &ID) {
 }
 
 void SingletonRender::highlightObject(const int &ID) {
+
+
+
     if (allDrawnNodes.contains(ID)) allDrawnNodes.value(ID)->highlight();
 
     if (allConnections.contains(ID)) {
@@ -711,4 +721,30 @@ QPixmap *SingletonRender::getImage(const QString &name) {
     if (allImages.contains(name))
         return allImages.value(name);
     return new QPixmap();
+}
+
+
+void SingletonRender::changeProgressView(){
+
+    foreach(DrawObject *node , allDrawnNodes)
+        node->changeProgressView();
+
+}
+
+void SingletonRender::setPercentage(int nodeID, int percentage){
+
+    if(allDrawnNodes.contains(nodeID))
+        allDrawnNodes.value(nodeID)->setProgressValue(percentage);
+    else
+        qDebug() << "You tried to call DrawObject::setPercentage with non-existing nodeID: " << nodeID;
+}
+
+void SingletonRender::setStatusColor(int nodeID, Node::Status status){
+
+    if(allDrawnNodes.contains(nodeID))
+        allDrawnNodes.value(nodeID)->setStatusColor(status);
+    else
+        qDebug() << "You tried to call DrawObject::setPercentage with non-existing nodeID: " << nodeID;
+
+
 }

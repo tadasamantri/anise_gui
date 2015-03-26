@@ -39,7 +39,8 @@ QJsonObject *JsonFileHandler::readFile(const QString &path) {
     // catch error while parsing
     if (jerror.error != QJsonParseError::NoError) {
         qWarning() << jerror.errorString();
-        QMessageBox::critical(Data::instance()->getMainWindow(),"Error while Parsing",jerror.errorString());
+        QMessageBox::critical(Data::instance()->getMainWindow(),
+                              "Error while Parsing", jerror.errorString());
         return 0;
     }
 
@@ -109,18 +110,15 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
         QJsonArray contents = localNode["parameters"].toArray();
         for (QJsonValue o : contents) {
             QVariantMap parameters = o.toObject().toVariantMap();
-            QVariant value(QVariant::nameToType(parameters["type"].toString().toUtf8()));
+            QVariant value(
+                        QVariant::nameToType(parameters["type"].toString().toUtf8()));
             value = parameters["default"];
-            node.addParam(
-                        parameters["description"].toString(), parameters["key"].toString(),
-                    parameters["name"].toString(), parameters["type"].toString(),value);
-            node.setParam(parameters["name"].toString(),parameters["default"]);
+            node.addParam(parameters["description"].toString(),
+                    parameters["key"].toString(), parameters["name"].toString(),
+                    parameters["type"].toString(), value);
+            node.setParam(parameters["name"].toString(), parameters["default"]);
         }
         catalog->insert(node);
-        qDebug() << "added node to Catalog:\n"
-                 << "class: " << node.getType()
-                 << "\ninputs: " << input_gates.size()
-                 << "\noutputs: " << output_gates.size();
     }
 }
 
@@ -133,11 +131,11 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
  */
 void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
     bool hasPositionData = true;
-    //error flags: c|nc|n|nn
-    //c: error in connection
-    //nc: no connections
-    //n: error in node
-    //nn: no nodes
+    // error flags: c|nc|n|nn
+    // c: error in connection
+    // nc: no connections
+    // n: error in node
+    // nn: no nodes
     std::bitset<4> flags = 0;
     // check if there are any nodes
     int i = 1, j = 1;  // for debug only
@@ -147,9 +145,6 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
         goto end;
     }
 
-    qDebug() << "File contains " << obj["nodes"].toArray().size()
-             << " nodes";
-
     // for every node (represented as jsonvalue)...
     foreach (QJsonValue var, obj["nodes"].toArray()) {
         //...convert it to json object...
@@ -157,9 +152,9 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
 
         // check if nodes are declared correctly
         if (!(theNode["class"].isString() && theNode["name"].isString() &&
-              theNode["params"].isArray())){
+              theNode["params"].isArray())) {
             qWarning() << "Error while extracting node:\n" << theNode;
-        flags |= 0b0010;
+            flags |= 0b0010;
         }
         // node is welldefined:
         else {
@@ -171,8 +166,8 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             qDebug() << "params:";
 
             Node *createdNode = NodeFactory::createNode(type);
-            //if node type not in catalog, skip
-            if(createdNode->getType() == ""){
+            // if node type not in catalog, skip
+            if (createdNode->getType() == "") {
                 flags |= 0b0010;
                 continue;
             }
@@ -195,8 +190,7 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             if (theNode.contains("gui_params")) {
                 QVariantMap p_gui = theNode["gui_params"].toObject().toVariantMap();
                 createdNode->moveTo(p_gui["x"].toInt(), p_gui["y"].toInt());
-            }
-            else {
+            } else {
                 hasPositionData = false;
             }
             // node is complete, so let's insert it
@@ -218,11 +212,15 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
         QJsonObject co = var.toObject();
         QVariantMap theConnection = co.toVariantMap();
 
-        Node *src_node = Data::instance()->getNodeByName(theConnection["src_node"].toString());
+        Node *src_node =
+                Data::instance()->getNodeByName(theConnection["src_node"].toString());
         Node *dest_node =
                 Data::instance()->getNodeByName(theConnection["dest_node"].toString());
-        //if connection is invalid, skip
-        if (!(src_node && dest_node) || !Data::instance()->checkConnection(src_node->getID(), theConnection["src_gate"].toString(),dest_node->getID(), theConnection["dest_gate"].toString())){
+        // if connection is invalid, skip
+        if (!(src_node && dest_node) ||
+                !Data::instance()->checkConnection(
+                    src_node->getID(), theConnection["src_gate"].toString(),
+                    dest_node->getID(), theConnection["dest_gate"].toString())) {
             flags |= 0b1000;
             continue;
         }
@@ -237,9 +235,9 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             QJsonArray way = json_gui_params["waypoints"].toArray();
             QVector<QPoint> waypoints;
             for (QJsonValue v : way) {
-                QJsonObject jWaypoints = v.toObject();
-                if (jWaypoints.contains("x") && jWaypoints.contains("y"))
-                    waypoints << QPoint(jWaypoints["x"].toInt(), jWaypoints["y"].toInt());
+                QJsonObject jJoints = v.toObject();
+                if (jJoints.contains("x") && jJoints.contains("y"))
+                    waypoints << QPoint(jJoints["x"].toInt(), jJoints["y"].toInt());
             }
             connection->setJoints(waypoints);
         } else {
@@ -254,47 +252,76 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
         qDebug() << "position data missing";
         Data::instance()->sortForce();
     }
-    end:  ;
-    if(flags.any()){
+end:
+    ;
+    if (flags.any()) {
         QString msg;
         msg += "Parser encountered Problems. File may be corrupt.\n\n \tIssues:\n";
-        if(flags[0])
-            msg += "\t- No Nodes were found\n";
-        if(flags[1])
-            msg += "\t- Error while parsing Node\n";
-        if(flags[2])
-            msg += "\t- No Connections founds\n";
-        if(flags[3])
-            msg += "\t- Error while parsing Connection";
-        QMessageBox::warning(Data::instance()->getMainWindow(),"Errors while parsing!", msg);
+        if (flags[0]) msg += "\t- No Nodes were found\n";
+        if (flags[1]) msg += "\t- Error while parsing Node\n";
+        if (flags[2]) msg += "\t- No Connections founds\n";
+        if (flags[3]) msg += "\t- Error while parsing Connection";
+        QMessageBox::warning(Data::instance()->getMainWindow(),
+                             "Errors while parsing!", msg);
     }
 }
 
-void JsonFileHandler::parseProgress(const QString &text, const ParseMode &mode)
-{
-    if(mode == progress)
+void JsonFileHandler::parseProgress(QString &text, const ParseMode &mode) {
+    if (mode == progress)
         parseProgress(text);
-    else if(mode == error)
+    else if (mode == error)
         parseErrors(text);
 }
 
-void JsonFileHandler::parseProgress(const QString &text)
-{
+void JsonFileHandler::parseProgress(QString &text) {
+    text = text.mid(text.indexOf("{"), text.lastIndexOf("}")+1);
+    qDebug() << text;
     QJsonDocument doc = QJsonDocument::fromJson(text.toUtf8());
     QJsonObject obj = doc.object();
-    if(!obj.contains("status"))
+    if (!(obj.contains("progress") && obj["progress"].toObject().contains("source")))
         return;
-    obj = obj["status"].toObject();
-    QString nodeName = obj["node"].toString();
-    unsigned char progress = (const unsigned char) obj["progress"].toInt();
-    Data::instance()->getNodeByName(nodeName)->setProgress(progress);
+
+    obj = obj["progress"].toObject();
+    QString source = obj["source"].toString();
+    // message comes from a node
+    if (source == "node") {
+        QString nodeName = obj["name"].toString();
+        Node *node = Data::instance()->getNodeByName(nodeName);
+        QString msg = obj["msg"].toString();
+        if (msg == "start") {
+            if (obj["state"].toString() == "init")
+                node->setStatus(Node::initializing);
+            else if (obj["state"].toString() == "processing")
+                node->setStatus(Node::processing);
+        } else if (msg == "stop")
+            node->setStatus(Node::idle);
+        else if (msg == "percentage") {
+            int progress = obj["info"].toInt();
+            node->setProgress(progress);
+        } else if (msg == "error") {
+            ;
+        } else if (msg == "warning") {
+            ;
+        }
+    }
+    // message comes from framework itself
+    else if (source == "framework") {
+        QString msg = obj["msg"].toString(),
+                state = obj["state"].toString();
+        if (msg == "start") {
+            // starting simulation
+            ;
+        } else if (msg == "stop" && state == "processing") {
+            // simulation finished
+            Data::instance()->stopSimulation();
+        } else if (msg == "error") {
+            // error occured
+            ;
+        }
+    }
 }
 
-void JsonFileHandler::parseErrors(const QString &text)
-{
-    if(text != "")
-        QMessageBox::warning(Data::instance()->getMainWindow(),"Errors during Simulation", "An Error occured:\n" + text);
-}
+void JsonFileHandler::parseErrors(const QString &text) {}
 
 /**
  * @brief JsonFileHandler::writeFile writes a string into a given file
@@ -345,7 +372,7 @@ QString JsonFileHandler::meshToJson() {
             QJsonObject point;
             point["x"] = p.x();
             point["y"] = p.y();
-            way<<(point);
+            way << (point);
         }
         gui_params["waypoints"] = way;
         theConnection["gui_params"] = gui_params;
