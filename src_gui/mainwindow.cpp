@@ -455,6 +455,7 @@ void MainWindow::on_stop_button_clicked()
 {
 
     Data::instance()->setEditMode();
+}
 
 void MainWindow::on_actionStop_Simulation_triggered()
 {

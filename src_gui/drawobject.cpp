@@ -80,18 +80,6 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position) {
     this->updateOverAllPicture(pic, position);
 }
 
-void DrawObject::addPicture(QPixmap *pic, const QPoint &position,
-                            const QString &nodeName) {
-    QPixmap newPic = pic->copy(pic->rect());
-
-    // tell the painter to draw on the QImage
-    QPainter *painter = new QPainter(&newPic);
-    painter->setPen(Qt::blue);
-    painter->setFont(QFont("Arial", 8));
-    this->addPicture(&newPic, position);
-    delete painter;
-}
-
 void DrawObject::nodeNameChanged(QListWidgetItem *itemChanged) {
     itemChanged->setSelected(false);
     Node *node = Data::instance()->getNodeByID(this->ID);

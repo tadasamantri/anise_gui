@@ -32,7 +32,6 @@ public:
     QPixmap overAllPicture;
 
     void addPicture(QPixmap *pic, QPoint position);
-    void addPicture(QPixmap *pic, QPoint const &position, QString const &nodeName);
     void addGateButton(QPixmap *pic, QPoint position, QString gateName,
                        QString gateType, bool direction);
 
@@ -62,7 +61,7 @@ public:
     void setProgressValue(int value);
     void initializeProgressView();
     void changeProgressView();
-    void setProgressView();
+
     void setStatusColor(Node::Status status);
 signals:
 
@@ -83,7 +82,7 @@ private:
     QProgressBar *progressBar;
     bool progressMode;
 
-
+    void setProgressView();
 
     //rest
     int highlightWidth;
