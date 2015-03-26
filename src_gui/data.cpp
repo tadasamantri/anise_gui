@@ -52,6 +52,7 @@ void Data::initialize(MainWindow *mainWindow) {
     //connect start and stop signals
     connect(mainWindow->ui->start_button, SIGNAL(clicked()),this,SLOT(startSimulation()));
     connect(mainWindow->ui->stop_button, SIGNAL(clicked()),this,SLOT(stopSimulation()));
+    connect(mainWindow->ui->actionRun_Mesh,SIGNAL(triggered()),this,SLOT(runMesh()));
     /**
   * Create the Nodecatalog
   */
@@ -82,15 +83,12 @@ void Data::initialize(MainWindow *mainWindow) {
         AniseCommunicator::setFrameworkPath(
                     SettingsHandler::loadSetting("frameworkpath"));
     else {
-        /*
-* TODO different outcome of buttons
-* right now whatever you click will result in the same outcome
-*/
-        QMessageBox::information(
+        int choice = QMessageBox::information(
                     0, QString("Please, set your framework path"),
                     QString("You haven't set your framework path yet.\nChoose first!"),
-                    "Choose", "Not yet");
-
+                    "Choose", "Ignore");
+        if(choice == 1)
+            return;
         QString fileName = QFileDialog::getOpenFileName(
                     mainWindow, "Set your framework path", "", "");
 
@@ -115,11 +113,7 @@ void Data::initialize(MainWindow *mainWindow) {
     SingletonRender::instance()->renderCatalogContent(
                 Data::instance()->getNodeCatalog()->getContentVector());
 }
-/**
- * @brief Data::addNodeToMesh inserts given node into the mesh and renders it afterwards
- * @param newNode
- * @return ID of inserted Node
- */
+
 int Data::addNodeToMesh(Node *newNode) {
     int id = this->mesh->addNode(newNode);
     // A new created Node is always focussed in the beginning
@@ -133,17 +127,6 @@ int Data::addNodeToMesh(Node *newNode) {
     return id;
 }
 
-int Data::addNode(Node *node)
-{
-    return addNodeToMesh(node);
-}
-
-/**
- * @brief Data::addConnectionToMesh inserts new Connection to mesh
- * @param newConnection
- * @return
- * @see Data::addNodeToMesh
- */
 int Data::addConnectionToMesh(Connection *newConnection) {
     int id = this->mesh->addConnection(newConnection);
     if(id >= 0){
@@ -151,11 +134,6 @@ int Data::addConnectionToMesh(Connection *newConnection) {
         changed = true;
     }
     return id;
-}
-
-int Data::addConnection(Connection *newConnection)
-{
-    return addConnectionToMesh(newConnection);
 }
 
 void Data::sortCircle()
@@ -193,10 +171,7 @@ int Data::getFocusedID()
     return mesh->focusObject;
 }
 
-/**
- * @brief Data::removeNodeFromMesh removes node with given ID from mesh
- * @param ID
- */
+
 void Data::removeNodeFromMesh(int ID) {
     if (!mesh->nodesInMesh.contains(ID)) return;
     mesh->deleteNode(ID);
@@ -281,12 +256,6 @@ QString Data::getValidAlternativeForName(const QString &name)
     return result;
 }
 
-/**
- * @brief Data::moveObjectInMesh moves drwan object with given id from start to end
- * @param start start point
- * @param end end point
- * @param ID ID of moving item
- */
 void Data::moveObjectInMesh(QPoint *start, QPoint *end, int ID) {
     // is object a node?
     if (this->mesh->nodesInMesh.contains(ID)) {
@@ -303,12 +272,12 @@ void Data::moveObjectInMesh(QPoint *start, QPoint *end, int ID) {
     }
 }
 
-/**
- * @brief Data::moveObjectInMesh
- * @param Position
- * @param ID
- * @see Data::moveObjectInMesh(QPoint*,QPoint*,int)
- */
+void Data::finishMesh()
+{
+    for(Node *n : mesh->nodesInMesh)
+        n->setProgress(0);
+}
+
 void Data::moveObjectInMesh(QPoint *Position, int ID) {
     if (this->mesh->nodesInMesh.contains(ID)) {
         this->mesh->getNodeByID(ID)->moveTo(Position->x(), Position->y());
@@ -341,13 +310,11 @@ bool Data::deleteItem() {
     return deleted;
 }
 
-/**
- * @brief Data::~Data deletes mesh, nodeCatalog & the singelton object
- */
 Data::~Data() {
     delete mesh;
     delete nodeCatalog;
     delete data;
+    delete framework;
 }
 
 NodeCatalog *Data::getNodeCatalog() { return nodeCatalog; }
@@ -389,7 +356,7 @@ void Data::setEditMode(){
     SingletonRender::instance()->dehighlightGates();
 }
 
-QList<Connection *> Data::getConnections(int nodeID){
+QList<Connection *> Data::getConnections(const int &nodeID){
     QList<Connection *> result;
     for(Connection *c : mesh->connectionsInMesh.values())
         if(c->getSrcNode()->getID() == nodeID || c->getDestNode()->getID() == nodeID)

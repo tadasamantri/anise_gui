@@ -4,11 +4,11 @@
 
 Connection::Connection(Node *src_node, Gate *src_gate, Node *dest_node,
                        Gate *dest_gate, QVector<QPoint> waypoints) {
-  this->src_gate = src_gate;
-  this->dest_gate = dest_gate;
-  this->src_node = src_node;
-  this->dest_node = dest_node;
-  this->waypoints = waypoints;
+  this->srcGate = src_gate;
+  this->destGate = dest_gate;
+  this->srcNode = src_node;
+  this->destNode = dest_node;
+  this->joints = waypoints;
 }
 
 Connection::Connection(int srcNodeID, QString srcGateName, int destNodeID,
@@ -31,7 +31,7 @@ Connection::Connection() {}
  * @return ID of closest joint to given point
  */
 int Connection::getJoint(QPoint *point) {
-  if (this->waypoints.isEmpty()) {
+  if (this->joints.isEmpty()) {
     qDebug() << "tried to get a joint from a connection without joints!";
     return -1;
   }
@@ -39,9 +39,9 @@ int Connection::getJoint(QPoint *point) {
   // uses manhatten length (x+y) instead of correct pythagorean calculations
   int min = std::numeric_limits<int>::max();
   int closestOne = -1;
-  for (int index = 0; index < this->waypoints.size(); ++index) {
-    QPoint tempPoint(point->x() - this->waypoints.at(index).x(),
-                     point->y() - this->waypoints.at(index).y());
+  for (int index = 0; index < this->joints.size(); ++index) {
+    QPoint tempPoint(point->x() - this->joints.at(index).x(),
+                     point->y() - this->joints.at(index).y());
     int manhattenLength = tempPoint.manhattanLength();
     if (manhattenLength < min) {
       min = manhattenLength;
@@ -56,27 +56,27 @@ int Connection::getJoint(QPoint *point) {
  * @param newPosition position to move the joint to
  */
 void Connection::setJoint(int index, QPoint *newPosition) {
-  waypoints.removeAt(index);
-  waypoints.insert(index, *newPosition);
+  joints.removeAt(index);
+  joints.insert(index, *newPosition);
 }
 
-void Connection::setDestGate(Gate *dest) { dest_gate = dest; }
+void Connection::setDestGate(Gate *dest) { destGate = dest; }
 
-void Connection::setSrcGate(Gate *src) { src_gate = src; }
+void Connection::setSrcGate(Gate *src) { srcGate = src; }
 
-Gate *Connection::getDestGate() { return dest_gate; }
+Gate *Connection::getDestGate() { return destGate; }
 
-Gate *Connection::getSrcGate() { return src_gate; }
+Gate *Connection::getSrcGate() { return srcGate; }
 
-void Connection::setDestNode(Node *node) { dest_node = node; }
+void Connection::setDestNode(Node *node) { destNode = node; }
 
-QVector<QPoint> *Connection::getWaypoints() { return &waypoints; }
+QVector<QPoint> *Connection::getJoints() { return &joints; }
 
-void Connection::setWaypoints(const QVector<QPoint> &value) {  waypoints = value; }
+void Connection::setJoints(const QVector<QPoint> &value) {  joints = value; }
 
-void Connection::clearWaypoints()
+void Connection::clearJoints()
 {
-    waypoints.clear();
+    joints.clear();
     SingletonRender::instance()->clearAllConnections();
 }
 
@@ -84,8 +84,8 @@ int Connection::getID() const { return ID; }
 
 void Connection::setID(int value) { ID = value; }
 
-void Connection::setSrcNode(Node *node) { src_node = node; }
+void Connection::setSrcNode(Node *node) { srcNode = node; }
 
-Node *Connection::getSrcNode() { return src_node; }
+Node *Connection::getSrcNode() { return srcNode; }
 
-Node *Connection::getDestNode() { return dest_node; }
+Node *Connection::getDestNode() { return destNode; }

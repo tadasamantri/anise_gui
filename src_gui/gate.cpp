@@ -1,6 +1,8 @@
 #include "gate.h"
 
-Gate::Gate() {}
+Gate::Gate() {
+    types = QStringList();
+}
 
 Gate::Gate(bool const &in, const QStringList &types) {
     this->in = in;

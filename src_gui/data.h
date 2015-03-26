@@ -43,37 +43,86 @@ public:
     void initialize(MainWindow *mainWindow);
 
     /**
-   * @brief Data::getNodeCatalog
+   * @brief getNodeCatalog
    * @return the NodeCatalog containing all types of nodes available
    */
     NodeCatalog *getNodeCatalog();
 
-    //add a node to the mesh
+    /**
+     * @brief addNodeToMesh inserts given node into the mesh and renders it afterwards
+     * @param newNode
+     * @return ID of inserted Node
+     */
     int addNodeToMesh(Node *newNode);
-    int addNode(Node *node);
+    /**
+     * @brief addConnectionToMesh inserts new Connection to mesh
+     * @param newConnection
+     * @return
+     * @see addNodeToMesh
+     */
     int addConnectionToMesh(Connection *newConnection);
-    int addConnection(Connection *newConnection);
+    /**
+     * @brief sortCircle
+     * @see Mesh::sortCircle()
+     */
     void sortCircle();
+    /**
+     * @brief sortRow
+     * @see Mesh::sortRow()
+     */
     void sortRow();
+    /**
+     * @brief sortForce
+     * @see Mesh::sortForce()
+     */
     void sortForce();
-    void runMesh();
+
     int getFocusedID();
+    /**
+     * @brief removeNodeFromMesh removes node with given ID from mesh
+     * @param ID
+     */
     void removeNodeFromMesh(int ID);
+    /**
+     * @brief checkConnection verify if a connection is valid
+     * @param srcNodeID
+     * @param srcGate
+     * @param destNodeID
+     * @param destGate
+     * @return
+     */
     bool checkConnection(int srcNodeID, QString srcGate, int destNodeID, QString destGate);
     bool hasChanged();
     void unsetChanged();
     bool mustRepaint();
     void unsetRepaint();
     void setChanged();
+    /**
+     * @brief getNodeByName searches for node by name
+     * @param name
+     * @return
+     */
     Node *getNodeByName(QString name);
     Node *getNodeByID(int ID);
     QList<Node *> getAllNodes();
     QList<Connection *> getAllConnections();
     QMap<int, Node *> *nodesInMesh();
-    QString getValidAlternativeForName(QString &name);
+    QString getValidAlternativeForName(const QString &name);
+    /**
+     * @brief moveObjectInMesh
+     * @param Position
+     * @param ID
+     * @see moveObjectInMesh(QPoint*,QPoint*,int)
+     */
     void moveObjectInMesh(QPoint *Position, int ID);
+    /**
+     * @brief moveObjectInMesh moves drwan object with given id from start to end
+     * @param start start point
+     * @param end end point
+     * @param ID ID of moving item
+     */
     void moveObjectInMesh(QPoint *start, QPoint *end, int ID);
-
+    void finishMesh();
     void newMeshProject();
 
     Mesh *getMesh();
@@ -85,7 +134,7 @@ public:
     void setEditMode();
     void setDrawLineMode(QString gateType);
     bool isSimulating();
-    QList<Connection *> getConnections(int nodeID);
+    QList<Connection *> getConnections(const int &nodeID);
 
     QString getSaveFile() const;
     void setSaveFile(const QString &value);
@@ -96,6 +145,7 @@ public slots:
     void updateNode(QTableWidgetItem *item);
     void startSimulation();
     void stopSimulation();
+    void runMesh();
 private:
     explicit Data(QObject *parent = 0);
 

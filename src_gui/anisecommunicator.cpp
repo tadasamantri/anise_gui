@@ -90,7 +90,7 @@ QString AniseCommunicator::getAllNodeTypes() {
     */
     read();
     readOutput =
-            readOutput.mid(readOutput.indexOf("{"), readOutput.lastIndexOf("}") - 1);
+            readOutput.mid(readOutput.indexOf("{"), readOutput.lastIndexOf("}")+1);
     qDebug() << "this is what the communicator got from the framework:\n"
              << readOutput << "\n";
     anise_process->close();
@@ -136,6 +136,7 @@ void AniseCommunicator::finished(int exitCode)
 {
     //TODO: exit code handling!
     onProgress = false;
+    Data::instance()->finishMesh();
 }
 
 void AniseCommunicator::runMesh(){

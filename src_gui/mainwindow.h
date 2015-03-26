@@ -30,22 +30,14 @@ private slots:
 
     // Action for loading .mesh files
     void on_actionLoad_triggered();
-
     void on_actionSave_triggered();
-
     void on_actionSort_Mesh_triggered();
-
     void on_actionSet_framework_path_triggered();
-
     void on_actionNew_triggered();
-
     void on_actionLoad_Catalog_triggered();
-
     void on_details_stateChanged(int arg1);
-
     void onFilebuttonClicked(int row, int col);
     void on_actionSave_as_triggered();
-    void on_actionRun_Mesh_triggered();
 
 private:
     void initializeGUI();

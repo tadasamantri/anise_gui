@@ -10,14 +10,23 @@
 class Connection {
 public:
     Connection();
-    Connection(Node *src_node, Gate *src_gate, Node *dest_node, Gate *dest_gate,
-               QVector<QPoint> waypoints = QVector<QPoint>());
+    Connection(Node *srcNode, Gate *srcGate, Node *destNode, Gate *destGate,
+               QVector<QPoint> joints = QVector<QPoint>());
     Connection(int srcNodeID, QString srcGateName, int destNodeID,
                QString destGateName,
-               QVector<QPoint> waypoints = QVector<QPoint>());
+               QVector<QPoint> joints = QVector<QPoint>());
 
-    // returns the closest joint to the point
+    /**
+     * @brief getJoint
+     * @param point
+     * @return closest joint to given point
+     */
     int getJoint(QPoint *point);
+    /**
+     * @brief setJoint set joint with given to new position
+     * @param index index of joint
+     * @param newPosition the new position
+     */
     void setJoint(int index, QPoint *newPosition);
 
     Gate *getSrcGate();
@@ -32,16 +41,21 @@ public:
     void setSrcNode(Node *node);
     void setDestNode(Node *node);
 
-    QVector<QPoint> *getWaypoints();
-    void setWaypoints(const QVector<QPoint> &value);
-    void clearWaypoints();
+    QVector<QPoint> *getJoints();
+    void setJoints(const QVector<QPoint> &value);
+    /**
+     * @brief clearJoints deletes all joints
+     */
+    void clearJoints();
     int getID() const;
     void setID(int value);
 
 private:
-    Gate *src_gate, *dest_gate;
-    Node *src_node, *dest_node;
-    QVector<QPoint> waypoints;
+    Gate *srcGate;
+    Gate *destGate;
+    Node *srcNode;
+    Node *destNode;
+    QVector<QPoint> joints;
     int ID;
 };
 

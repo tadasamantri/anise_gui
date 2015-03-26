@@ -201,7 +201,7 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             }
             // node is complete, so let's insert it
 
-            Data::instance()->addNode(createdNode);
+            Data::instance()->addNodeToMesh(createdNode);
         }
     }
 
@@ -241,13 +241,13 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
                 if (jWaypoints.contains("x") && jWaypoints.contains("y"))
                     waypoints << QPoint(jWaypoints["x"].toInt(), jWaypoints["y"].toInt());
             }
-            connection->setWaypoints(waypoints);
+            connection->setJoints(waypoints);
         } else {
             // if no gui params are found
             QVector<QPoint> waypoints;
-            connection->setWaypoints(waypoints);
+            connection->setJoints(waypoints);
         }
-        Data::instance()->addConnection(connection);
+        Data::instance()->addConnectionToMesh(connection);
     }
     // all connections added"
     if (hasPositionData == false) {
@@ -286,7 +286,7 @@ void JsonFileHandler::parseProgress(const QString &text)
         return;
     obj = obj["status"].toObject();
     QString nodeName = obj["node"].toString();
-    unsigned char progress = (unsigned char) obj["progress"].toInt();
+    unsigned char progress = (const unsigned char) obj["progress"].toInt();
     Data::instance()->getNodeByName(nodeName)->setProgress(progress);
 }
 
@@ -339,7 +339,7 @@ QString JsonFileHandler::meshToJson() {
         theConnection["dest_gate"] = c->getDestGate()->getName();
         QJsonObject gui_params;
         QJsonArray way;
-        QVector<QPoint> points = *c->getWaypoints();
+        QVector<QPoint> points = *c->getJoints();
         for (int i = 0; i < points.size(); i++) {
             QPoint p = points.at(i);
             QJsonObject point;

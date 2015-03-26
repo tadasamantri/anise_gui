@@ -11,12 +11,6 @@ Node::Node() {
     progress = 0;
 }
 
-Node::~Node()
-{
-    for(Gate *g : inputGates + outputGates)
-        delete g;
-}
-
 QMap<QString, Node::Parameter> *Node::getParams() { return &this->params; }
 
 Node::Node(QVector<Gate *> &inputGates, QVector<Gate *> &outputGates,
@@ -99,9 +93,22 @@ unsigned char Node::getProgress() const
     return progress;
 }
 
-void Node::setProgress(unsigned char value)
+void Node::setProgress(const unsigned char &value)
 {
+    assert(value <= 100);
     progress = value;
+    switch (value) {
+    case 0:
+        status = idle;
+        break;
+    case 100:
+        status = finished;
+        break;
+    default:
+        status = busy;
+        break;
+    }
+    qDebug() << "Node" << name << ":" << status << "-" << progress << "%";
 }
 
 Node::Status Node::getStatus() const

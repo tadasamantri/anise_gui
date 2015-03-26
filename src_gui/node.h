@@ -28,7 +28,6 @@ public:
     };
 
     Node();
-    ~Node();
     QMap<QString, Parameter> *getParams();
 
     Node(QVector<Gate *> &inputGates, QVector<Gate *> &outputGates, QString &type,
@@ -93,7 +92,7 @@ public:
     void setStatus(const Status &value);
 
     unsigned char getProgress() const;
-    void setProgress(unsigned char value);
+    void setProgress(const unsigned char &value);
 private:
     bool addParam(const QString &descr, const QString &_key, const QString &name, const QString &type,
                   const QVariant &_value);

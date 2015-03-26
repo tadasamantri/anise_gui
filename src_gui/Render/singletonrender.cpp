@@ -67,23 +67,23 @@ void SingletonRender::renderConnection(Connection *conToRender, const int &ID) {
     // if no waypoints are given, that means no joints are in connection, than
     // create on in the middle of the line
 
-    if (conToRender->getWaypoints()->isEmpty()) {
+    if (conToRender->getJoints()->isEmpty()) {
         // delete all old joints
         foreach (DrawObject *joint, allConnections[ID]) { joint->deleteLater(); }
         allConnections.remove(ID);
-        conToRender->setWaypoints(QVector<QPoint>()
+        conToRender->setJoints(QVector<QPoint>()
                                   << 0.5 * (srcGatePosition + destGatePosition));
     }
     // draw lines of a connection
-    for (int index = 0; index < conToRender->getWaypoints()->size() - 1;
+    for (int index = 0; index < conToRender->getJoints()->size() - 1;
          index++) {
-        tempVec << QLine(conToRender->getWaypoints()->at(index),
-                         conToRender->getWaypoints()->at(index + 1));
+        tempVec << QLine(conToRender->getJoints()->at(index),
+                         conToRender->getJoints()->at(index + 1));
     }
 
     tempVec.push_front(QLine(
-                           srcGatePosition, conToRender->getWaypoints()->first()));  // first line
-    tempVec << QLine(conToRender->getWaypoints()->last(),
+                           srcGatePosition, conToRender->getJoints()->first()));  // first line
+    tempVec << QLine(conToRender->getJoints()->last(),
                      destGatePosition);  // last line
 
     this->allLines.insert(ID, tempVec);
@@ -94,7 +94,7 @@ void SingletonRender::renderConnection(Connection *conToRender, const int &ID) {
     // if it is a new connection, we need to create joints
     if (!allConnections.contains(ID)) {
         // now draw all joints
-        for (int i = 0; i < conToRender->getWaypoints()->size(); i++) {
+        for (int i = 0; i < conToRender->getJoints()->size(); i++) {
             if (!allImages.contains("joint.png")) {
                 qCritical() << "joint.png missing! cant draw connections!";
                 return;
@@ -131,7 +131,7 @@ void SingletonRender::moveJointsOnWaypoints(Connection *conToRender, const int &
     // move all joints to the correct position
 
     foreach (DrawObject *joint, allConnections[ID]) {
-        if (index == conToRender->getWaypoints()->size()) {
+        if (index == conToRender->getJoints()->size()) {
             qDebug() << "Waypoint Array out of bounds";
         }
 
@@ -139,8 +139,8 @@ void SingletonRender::moveJointsOnWaypoints(Connection *conToRender, const int &
         posxOffset = -joint->width() / 2;
         posyOffset = -joint->height() / 2;
 
-        joint->move(conToRender->getWaypoints()->at(index).x() + posxOffset,
-                    conToRender->getWaypoints()->at(index).y() + posyOffset);
+        joint->move(conToRender->getJoints()->at(index).x() + posxOffset,
+                    conToRender->getJoints()->at(index).y() + posyOffset);
         joint->show();
         index++;
     }
@@ -618,7 +618,7 @@ void SingletonRender::updateConnections(const int &nodeID, const QPoint &offset)
     if (nodeID < 0) return;
     QList<Connection *> connections = Data::instance()->getConnections(nodeID);
     for (Connection *c : connections) {
-        QVector<QPoint> *waypoints = c->getWaypoints();
+        QVector<QPoint> *waypoints = c->getJoints();
         bool backward = false;
         if (c->getDestNode()->getID() == nodeID) backward = true;
         int size = waypoints->size();
