@@ -362,13 +362,13 @@ bool SingletonRender::loadImages() {
     bool result = true;
     // go into the right Directory using a Qdir object
     QDir directory;
-    directory.cd("Data/Images/");
+    directory.cd("data/images/");
 
     // fill the list of Files with all filenames insode this directory
     if (directory.exists() == true) {
         listOfFiles = directory.entryList();
     } else {
-        qCritical() << "Directory \"Data/Images\" not found!";
+        qCritical() << "Directory \"data/images\" not found!";
         return false;
     }
 

@@ -80,5 +80,5 @@ FORMS    += mainwindow.ui
 
 QMAKE_CXXFLAGS += -std=c++14
 
-QMAKE_POST_LINK = cp -R ../Data $${DESTDIR}
+QMAKE_POST_LINK = cp -R ../data $${DESTDIR}
 

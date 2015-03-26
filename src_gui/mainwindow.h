@@ -14,7 +14,7 @@ class MainWindow;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
-
+friend class Data;
 public:
     explicit MainWindow(QWidget *parent = 0);
     // Ui::MainWindow *getUi();
@@ -50,6 +50,8 @@ private slots:
     void on_start_button_clicked();
 
     void on_stop_button_clicked();
+
+    void on_actionStop_Simulation_triggered();
 
 private:
     void initializeGUI();

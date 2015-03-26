@@ -38,6 +38,9 @@ void MeshEditorWidget::resetToEditMode() {
 }
 
 void MeshEditorWidget::mousePressEvent(QMouseEvent *event) {
+    if(Data::instance()->isRunning())
+        return;
+
     this->mouseMoveDistance += 100;
 
     // ensure a left-mouse-click

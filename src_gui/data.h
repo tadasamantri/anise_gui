@@ -50,8 +50,15 @@ public:
    */
     NodeCatalog *getNodeCatalog();
 
-    //add a node to the mesh
+    /**
+     * @brief addNodeToMesh adds given Node into the Mesh
+     * @param newNode
+     * @return ID of added Node
+     */
     int addNodeToMesh(Node *newNode);
+    /**
+     * @see addNodeToMesh
+     */
     int addNode(Node *node);
     int addConnectionToMesh(Connection *newConnection);
     int addConnection(Connection *newConnection);

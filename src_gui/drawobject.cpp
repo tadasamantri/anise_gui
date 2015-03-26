@@ -26,7 +26,7 @@ DrawObject::DrawObject(int id, QPoint position, int width, int height,
     mainMaskUnhighlighted = QBitmap(this->size());
     mainMaskUnhighlighted.fill(Qt::color0);
 
-    // initialize the over all picture
+    // initialize the over allRange picture
     this->overAllPicture = QPixmap(this->size());
 
     // make it transparent
@@ -39,16 +39,9 @@ DrawObject::DrawObject(int id, QPoint position, int width, int height,
 
     mainMaskAsImage = mainMaskUnhighlighted.toImage();
 
-
-
-    //connect release event
+    // connect release event
     connect(this, SIGNAL(released(int, QString, QPoint)), this->parent(),
             SLOT(handleGateClick(int, QString, QPoint)));
-
-
-
-
-
 }
 
 /**
@@ -69,7 +62,6 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position) {
     // set transparency to magic pink
     pic->setMask(pic->createMaskFromColor(Qt::magenta));
 
-
     // take respect to highlightWidth
     position += QPoint(highlightWidth, highlightWidth);
 
@@ -88,7 +80,8 @@ void DrawObject::addPicture(QPixmap *pic, QPoint position) {
     this->updateOverAllPicture(pic, position);
 }
 
-void DrawObject::addPicture(QPixmap *pic, const QPoint &position, const QString &nodeName) {
+void DrawObject::addPicture(QPixmap *pic, const QPoint &position,
+                            const QString &nodeName) {
     QPixmap newPic = pic->copy(pic->rect());
 
     // tell the painter to draw on the QImage
@@ -99,58 +92,56 @@ void DrawObject::addPicture(QPixmap *pic, const QPoint &position, const QString 
     delete painter;
 }
 
-
-void DrawObject::nodeNameChanged(QListWidgetItem * itemChanged){
-
+void DrawObject::nodeNameChanged(QListWidgetItem *itemChanged) {
     itemChanged->setSelected(false);
     Node *node = Data::instance()->getNodeByID(this->ID);
 
-    if(node->getName() != itemChanged->text())
+    if (node->getName() != itemChanged->text())
         node->setName(itemChanged->text());
 
-      nameLabel->setStyleSheet("background: transparent;");
-
+    nameLabel->setStyleSheet("background: transparent;");
 }
 
+void DrawObject::setNodeName(QString const &nodeName) {
+    if (!nameLabel) {
+        nameLabel =
+                new QListWidget(dynamic_cast<MeshEditorWidget *>(this->parent()));
+        QListWidgetItem *item = new QListWidgetItem(nameLabel);
 
-void DrawObject::setNodeName(QString const &nodeName){
-    if(!nameLabel){
-        nameLabel = new QListWidget(dynamic_cast<MeshEditorWidget *> (this->parent()));
-    QListWidgetItem *item = new QListWidgetItem(nameLabel);
+        item->setTextAlignment(Qt::AlignCenter);
+        item->setFlags(item->flags() | Qt::ItemIsEditable);
+        nameLabel->setFrameStyle(QFrame::NoFrame);
+        nameLabel->setStyleSheet("background: transparent;");
 
-    item->setTextAlignment(Qt::AlignCenter);
-    item->setFlags(item->flags() | Qt::ItemIsEditable);
-    nameLabel->setFrameStyle(QFrame::NoFrame);
-    nameLabel->setStyleSheet("background: transparent;");
+        item->setText(nodeName);
+        nameLabel->insertItem(0, item);
 
-    item->setText(nodeName);
-    nameLabel->insertItem(0, item);
-
-    int posX = this->pos().x()+this->width()/2-nameLabel->width()/2;
-    int posY = this->pos().y()+this->height();
-    nameLabel->setGeometry(posX, posY, this->width()*2, 20);
-        connect(nameLabel, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(nodeNameChanged(QListWidgetItem*)));
-        connect(nameLabel, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(restrictOneClickOneItem(QListWidgetItem*)));
-        connect(nameLabel, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(deleteItemText(QListWidgetItem*)));
+        int posX = this->pos().x() + this->width() / 2 - nameLabel->width() / 2;
+        int posY = this->pos().y() + this->height();
+        nameLabel->setGeometry(posX, posY, this->width() * 2, 20);
+        connect(nameLabel, SIGNAL(itemChanged(QListWidgetItem *)), this,
+                SLOT(nodeNameChanged(QListWidgetItem *)));
+        connect(nameLabel, SIGNAL(itemClicked(QListWidgetItem *)), this,
+                SLOT(restrictOneClickOneItem(QListWidgetItem *)));
+        connect(nameLabel, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this,
+                SLOT(deleteItemText(QListWidgetItem *)));
     }
-    nameLabel->itemAt(1,1)->setText(nodeName);
+    nameLabel->itemAt(1, 1)->setText(nodeName);
     nameLabel->show();
 }
 
-void DrawObject::restrictOneClickOneItem(QListWidgetItem *itemClicked){
-
+void DrawObject::restrictOneClickOneItem(QListWidgetItem *itemClicked) {
     itemClicked->setSelected(false);
 }
 
-void DrawObject::addGateButton(QPixmap *pic, QPoint position,
-                               QString gateName, QString gateType, bool direction) {
+void DrawObject::addGateButton(QPixmap *pic, QPoint position, QString gateName,
+                               QString gateType, bool direction) {
     // safe dimensions
     int height = pic->height();
     int width = pic->width();
 
     // set transparency to magic pink
     pic->setMask(pic->createMaskFromColor(Qt::magenta));
-
 
     // take respect to highlightWidth
     position += QPoint(highlightWidth, highlightWidth);
@@ -174,13 +165,11 @@ void DrawObject::addGateButton(QPixmap *pic, QPoint position,
             SLOT(releasedOnGate(QString, QPoint)));
 }
 
-QPoint DrawObject::getGatePosition(QString gateName)
-{
-    QPoint gatePosition(-1,-1);
+QPoint DrawObject::getGatePosition(QString gateName) {
+    QPoint gatePosition(-1, -1);
 
-    foreach(GateButton * gate, gateVector){
-
-        if(gate->getGateName() == gateName){
+    foreach (GateButton *gate, gateVector) {
+        if (gate->getGateName() == gateName) {
             gatePosition = gate->pos();
             break;
         }
@@ -188,7 +177,8 @@ QPoint DrawObject::getGatePosition(QString gateName)
     return gatePosition;
 }
 
-void DrawObject::modifyMask(QPixmap *pic, QPoint const &position, const bool &updateMask) {
+void DrawObject::modifyMask(QPixmap *pic, QPoint const &position,
+                            const bool &updateMask) {
     // safe dimensions
     int height = pic->height();
     int width = pic->width();
@@ -215,14 +205,14 @@ void DrawObject::modifyMask(QPixmap *pic, QPoint const &position, const bool &up
     mainMaskAsImage =
             mainMaskUnhighlighted.toImage().convertToFormat(QImage::Format_Mono);
 
-    if(updateMask)
-        highlightMask();
+    if (updateMask) highlightMask();
 
     // Now set the mask of the widget
     this->setMask(mainMaskUnhighlighted);
 }
 
-void DrawObject::updateOverAllPicture(QPixmap *newPicture, const QPoint &position) {
+void DrawObject::updateOverAllPicture(QPixmap *newPicture,
+                                      const QPoint &position) {
     // save the dimension of the new picture
     int height = newPicture->height();
     int width = newPicture->width();
@@ -311,49 +301,39 @@ void DrawObject::paintEvent(QPaintEvent *) {
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
 
-void DrawObject::highlightGates(QString const &gateType){
-    foreach(GateButton *gate, gateVector){
-            if(gate->getDirection() && gate->getGateType() == gateType)
-                gate->setHighlightMode(true);
-            else
-                gate->setHighlightMode(false);
-     }
-}
-
-void DrawObject::dehighlightGates(){
-    foreach(GateButton *gate, gateVector){
-            gate->resetPicture();
+void DrawObject::highlightGates(QString const &gateType) {
+    foreach (GateButton *gate, gateVector) {
+        if (gate->getDirection() && gate->getGateType() == gateType)
+            gate->setHighlightMode(true);
+        else
+            gate->setHighlightMode(false);
     }
 }
 
-
-
-void DrawObject::move(const int &x, const int &y){
-    QWidget::move(x, y);
-    if(progressBar)
-        progressBar->move(this->pos().x(), this->pos().y()+this->height() + 20);
-    if(!nameLabel)
-        return;
-    int nodeNameX = this->pos().x()+this->width()/2-nameLabel->width()/2;
-    int nodeNameY = this->pos().y()+this->height();
-    nameLabel->move(nodeNameX,nodeNameY);
-
-
+void DrawObject::dehighlightGates() {
+    foreach (GateButton *gate, gateVector) { gate->resetPicture(); }
 }
 
-void DrawObject::hide(){
+void DrawObject::move(const int &x, const int &y) {
+    QWidget::move(x, y);
+    if (progressBar)
+        progressBar->move(this->pos().x(), this->pos().y() + this->height() + 20);
+    if (!nameLabel) return;
+    int nodeNameX = this->pos().x() + this->width() / 2 - nameLabel->width() / 2;
+    int nodeNameY = this->pos().y() + this->height();
+    nameLabel->move(nodeNameX, nodeNameY);
+}
+
+void DrawObject::hide() {
     QWidget::hide();
 
-    if(progressBar)
-        progressBar->hide();
+    if (progressBar) progressBar->hide();
 
-    if(!nameLabel)
-        return;
+    if (!nameLabel) return;
     nameLabel->hide();
-
 }
 
-void DrawObject::show(){
+void DrawObject::show() {
     QWidget::show();
 
     if(progressBar){
@@ -366,87 +346,85 @@ void DrawObject::show(){
             return;
         nameLabel->show();
 
-
 }
 
-void DrawObject::deleteLater(){
+void DrawObject::deleteLater() {
     QObject::deleteLater();
     progressBar->deleteLater();
-    if(!nameLabel)
-            return;
-            nameLabel->deleteLater();
-
+    if (!nameLabel) return;
+    nameLabel->deleteLater();
 }
 
-
-void DrawObject::initializeProgressView(){
-
-    progressBar = new QProgressBar(dynamic_cast<MeshEditorWidget *> (this->parent()));
+void DrawObject::initializeProgressView() {
+    progressBar =
+            new QProgressBar(dynamic_cast<MeshEditorWidget *>(this->parent()));
     int posX = this->pos().x();
-    int posY = this->pos().y()+this->height()+ (nameLabel) ? nameLabel->height() : 20;
+    int posY =
+            this->pos().y() + this->height() + (nameLabel) ? nameLabel->height() : 20;
 
-    progressBar->setGeometry(posX, posY ,this->width(), 15);
+    progressBar->setGeometry(posX, posY, this->width(), 15);
     progressBar->setOrientation(Qt::Horizontal);
-    progressBar->setRange(0,0);
+    progressBar->setRange(0, 0);
     progressBar->setValue(0);
     progressBar->hide();
 }
 
-void DrawObject::changeProgressView(){
-
-    if(Data::instance()->isRunning())
+void DrawObject::changeProgressView() {
+    if (Data::instance()->isRunning())
         setProgressView();
 
     else
         setEditView();
 }
 
-void DrawObject::setEditView(){
-
+void DrawObject::setEditView() {
     progressBar->hide();
     this->dehighlight();
     this->setStyleSheet("background-color:yellow;");
-
-
 }
 
-void DrawObject::setProgressView(){
-
+void DrawObject::setProgressView() {
     this->setStatusColor(Node::initializing);
     this->highlight();
     progressBar->show();
-
 }
 
-
-
-void DrawObject::deleteItemText(QListWidgetItem * item){
-    nameLabel->setStyleSheet("QListWidget::item:selected{background: transparent}");
+void DrawObject::deleteItemText(QListWidgetItem *item) {
+    nameLabel->setStyleSheet(
+                "QListWidget::item:selected{background: transparent}");
 }
 
-
-void DrawObject::setStatusColor(Node::Status status){
-
-    switch(status){
-
-        case Node::edit: this->setStyleSheet("background-color:yellow;");break;
-        case Node::initializing: this->setStyleSheet("background-color:grey;");break;
-        case Node::idle:  this->setStyleSheet("background-color:green;");break;
-        case Node::processing: this->setStyleSheet("background-color:blue;");break;
-        case Node::error: this->setStyleSheet("background-color:red;");break;
-    default: this->setStyleSheet("background-color:yellow;");break;
+void DrawObject::setStatusColor(Node::Status status) {
+    switch (status) {
+    case Node::edit:
+        this->setStyleSheet("background-color:yellow;");
+        break;
+    case Node::initializing:
+        this->setStyleSheet("background-color:grey;");
+        break;
+    case Node::idle:
+        this->setStyleSheet("background-color:green;");
+        break;
+    case Node::processing:
+        this->setStyleSheet("background-color:blue;");
+        break;
+    case Node::error:
+        this->setStyleSheet("background-color:red;");
+        break;
+    default:
+        this->setStyleSheet("background-color:yellow;");
+        break;
     }
-
 }
 
-void DrawObject::setProgressValue(int value){
-
-    if(progressBar)
-        if(value == -1){
-            progressBar->setRange(0,0);
+void DrawObject::setProgressValue(int value) {
+    if (progressBar) {
+        if (value == -1) {
+            progressBar->setMaximum(0);
             progressBar->setValue(0);
-        }
-
-        else
+        } else {
+            progressBar->setMaximum(100);
             progressBar->setValue(value);
+        }
+    }
 }

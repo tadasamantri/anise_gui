@@ -32,7 +32,6 @@ private:
     static void read();
     static bool validPath(const QString &path);
     bool onProgress;
-
 public:
     static QString getAllNodeTypes();
     static void setFrameworkPath(QString path);
@@ -41,6 +40,7 @@ public:
     bool getOnProgress() const;
     void setOnProgress(bool value);
     void runMesh();
+    void stop();
 private slots:
     void readProgress();
     void finished(int exitCode);
