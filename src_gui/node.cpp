@@ -97,6 +97,17 @@ void Node::addErrorMsg(const QString &value)
     errorMsg += value;
 }
 
+bool Node::hasGate(const QString &gateName)
+{
+    for(Gate *g : inputGates)
+        if(g->getName() == gateName)
+            return true;
+    for(Gate *g : outputGates)
+        if(g->getName() == gateName)
+            return true;
+    return false;
+}
+
 int Node::getProgress() const
 {
     return progress;
@@ -132,6 +143,13 @@ bool Node::setParam(QString key, QVariant _value) {
         Data::instance()->setChanged();
         return true;
     }
+    Parameter p;
+    p.descr = "unknown parameter";
+    p.type = _value.typeName();
+    p.key = key;
+    p.value = _value;
+    params[key] = p;
+
     return false;
 }
 

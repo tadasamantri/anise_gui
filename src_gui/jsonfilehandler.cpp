@@ -116,7 +116,7 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
             node.addParam(parameters["description"].toString(),
                     parameters["key"].toString(), parameters["name"].toString(),
                     parameters["type"].toString(), value);
-            node.setParam(parameters["name"].toString(), parameters["default"]);
+            node.setParam(parameters["key"].toString(), parameters["default"]);
         }
         catalog->insert(node);
     }
@@ -131,12 +131,13 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
  */
 void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
     bool hasPositionData = true;
-    // error flags: c|nc|n|nn
+    // error flags: u|c|nc|n|nn
+    // u: unknown node found
     // c: error in connection
     // nc: no connections
     // n: error in node
     // nn: no nodes
-    std::bitset<4> flags = 0;
+    std::bitset<5> flags = 0;
     // check if there are any nodes
     int i = 1, j = 1;  // for debug only
     if (!obj["nodes"].isArray()) {
@@ -166,10 +167,13 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             qDebug() << "params:";
 
             Node *createdNode = NodeFactory::createNode(type);
+            if(!createdNode)
+                createdNode = new Node();
             // if node type not in catalog, skip
             if (createdNode->getType() == "") {
-                flags |= 0b0010;
-                continue;
+                flags |= 0b10010;
+                createdNode->setType("unknown");
+                //continue;
             }
             createdNode->setName(name);
             // get parameters as array of objects
@@ -202,7 +206,7 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
     // nodes parsed
     if (!obj["connections"].isArray()) {
         qDebug() << "no connections found";
-        flags |= 0b0100;
+        flags |= 0b00100;
         goto end;
     } else {
         qDebug() << obj["connections"].toArray().size() << " connections found";
@@ -211,24 +215,48 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
     foreach (QJsonValue var, obj["connections"].toArray()) {
         QJsonObject co = var.toObject();
         QVariantMap theConnection = co.toVariantMap();
-
+        QString src_gate_name = theConnection["src_gate"].toString(),
+                dest_gate_name = theConnection["dest_gate"].toString();
         Node *src_node =
                 Data::instance()->getNodeByName(theConnection["src_node"].toString());
         Node *dest_node =
                 Data::instance()->getNodeByName(theConnection["dest_node"].toString());
-        // if connection is invalid, skip
-        if (!(src_node && dest_node) ||
-                !Data::instance()->checkConnection(
+        // if nodes not found, skip
+            if (!(src_node && dest_node)) {
+            flags |= 0b01000;
+            continue;
+        }
+        //if gates were not found, add them
+        if(!src_node->hasGate(src_gate_name)){
+            Gate *g = new Gate();
+            g->setName(src_gate_name);
+            g->addType("unknown");
+            g->setDirection(false);
+            src_node->addGate(g);
+            flags |= 0b10000;
+            SingletonRender::instance()->rerender(src_node, src_node->getID());
+        }
+        if(!dest_node->hasGate(dest_gate_name)){
+            Gate *g = new Gate();
+            g->setName(dest_gate_name);
+            g->addType("unknown");
+            g->setDirection(true);
+            dest_node->addGate(g);
+            flags |= 0b10000;
+            SingletonRender::instance()->rerender(dest_node, dest_node->getID());
+        }
+        //if connection is invalid, skip
+        if (!Data::instance()->checkConnection(
                     src_node->getID(), theConnection["src_gate"].toString(),
                     dest_node->getID(), theConnection["dest_gate"].toString())) {
-            flags |= 0b1000;
+            flags |= 0b01000;
             continue;
         }
 
         Connection *connection = new Connection(
-                    src_node, src_node->getGateByName(theConnection["src_gate"].toString()),
+                    src_node, src_node->getGateByName(src_gate_name),
                 dest_node,
-                dest_node->getGateByName(theConnection["dest_gate"].toString()));
+                dest_node->getGateByName(dest_gate_name));
 
         if (co.contains("gui_params")) {
             QJsonObject json_gui_params = co["gui_params"].toObject();
@@ -256,11 +284,12 @@ end:
     ;
     if (flags.any()) {
         QString msg;
-        msg += "Parser encountered Problems. File may be corrupt.\n\n \tIssues:\n";
-        if (flags[0]) msg += "\t- No Nodes were found\n";
-        if (flags[1]) msg += "\t- Error while parsing Node\n";
-        if (flags[2]) msg += "\t- No Connections founds\n";
-        if (flags[3]) msg += "\t- Error while parsing Connection";
+        msg += "Parser encountered Problems. File may be corrupt.\n\n \tIssues:";
+        if (flags[0]) msg += "\n\t- No Nodes were found";
+        if (flags[1]) msg += "\n\t- Error while parsing Node";
+        if (flags[2]) msg += "\n\t- No Connections founds";
+        if (flags[3]) msg += "\n\t- Error while parsing Connection";
+        if (flags[4]) msg += "\n\t- Unknown Nodes have been detected";
         QMessageBox::warning(Data::instance()->getMainWindow(),
                              "Errors while parsing!", msg);
     }

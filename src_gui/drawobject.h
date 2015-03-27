@@ -24,7 +24,7 @@ public:
                QWidget *parent = 0, int highlightWidth = 3);
 
     QVector<GateButton *> gateVector;
-
+    ~DrawObject();
     QBitmap mainMaskUnhighlighted;
     QBitmap mainMaskHighlighted;
     QImage mainMaskAsImage;

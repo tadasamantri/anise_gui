@@ -99,6 +99,7 @@ public:
     QString getErrorMsg() const;
     void setErrorMsg(const QString &value);
     void addErrorMsg(const QString &value);
+    bool hasGate(const QString &gateName);
 
 private:
     bool addParam(const QString &descr, const QString &_key, const QString &name, const QString &type,

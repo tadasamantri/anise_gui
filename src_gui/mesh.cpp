@@ -23,6 +23,7 @@ bool Mesh::checkConnection(const int &srcNodeID, const QString &srcGate,
     if (!(srcG && destG)) return false;
     for (QString t : srcG->getTypes())
         if (destG->hasType(t)) return true;
+    if(destG->hasType("unknown") || srcG->hasType("unknown")) return true;
     return false;
 }
 

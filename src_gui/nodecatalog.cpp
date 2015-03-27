@@ -50,6 +50,10 @@ Node NodeCatalog::getNodeOfType(const QString &type){
     return node;
 }
 
+bool NodeCatalog::contains(const QString &_class){
+    return Content.contains(_class);
+}
+
 const Node *NodeCatalog::getPointerOfType(const QString &type)
 {
     Node *n = 0;

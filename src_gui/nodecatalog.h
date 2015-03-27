@@ -16,6 +16,7 @@ public:
     QMap<QString, Node> getContent();
     QVector<Node> getContentVector();
     QList<Node> getContentList();
+    bool contains(const QString &_class);
 private:
     QMap<QString, Node> Content;
 };

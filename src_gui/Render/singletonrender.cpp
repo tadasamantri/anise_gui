@@ -412,6 +412,13 @@ bool SingletonRender::loadImages() {
 
 void SingletonRender::setUi(Ui::MainWindow *ui) { this->ui = ui; }
 
+void SingletonRender::rerender(Node *nodeToRender, const int &nodeID){
+    DrawObject *drawnObject = allDrawnNodes[nodeID];
+    allDrawnNodes.remove(nodeID);
+    delete drawnObject;
+    renderNode(nodeToRender, nodeID);
+}
+
 void SingletonRender::renderNode(Node *nodeToRender, const int &nodeID) {
     if (!allDrawnNodes.contains(nodeID)) {
         // some Variables needed often

@@ -219,6 +219,7 @@ public:
 
     void setStatusColor(int nodeID, Node::Status status);
     void setPercentage(int nodeID, int percentage);
+    void rerender(Node *nodeToRender, const int &nodeID);
 public slots:
     void changeProgressView();
 

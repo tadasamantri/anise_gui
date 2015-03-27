@@ -44,6 +44,14 @@ DrawObject::DrawObject(int id, QPoint position, int width, int height,
             SLOT(handleGateClick(int, QString, QPoint)));
 }
 
+DrawObject::~DrawObject()
+{
+    if(nameLabel)
+        delete nameLabel;
+    if(progressBar)
+        delete progressBar;
+}
+
 /**
  * Has two parameter for the widget.
  * We create label object.

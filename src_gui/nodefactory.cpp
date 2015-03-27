@@ -11,8 +11,11 @@ Node NodeFactory::createNode() {
 }
 
 Node *NodeFactory::createNode(QString _class) {
-    Node *node = new Node(Data::instance()->getNodeCatalog()->getNodeOfType(_class));
-    return node;
+    if(Data::instance()->getNodeCatalog()->contains(_class)){
+        Node *node = new Node(Data::instance()->getNodeCatalog()->getNodeOfType(_class));
+        return node;
+    }
+    return 0;
 }
 
 Node *NodeFactory::createNode(QString _class, QString name) {
