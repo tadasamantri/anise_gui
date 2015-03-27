@@ -71,9 +71,12 @@ public:
      * @param mode distinguish between error parsing or progress parsing
      */
     static void parseProgress(QString &text, const ParseMode &mode);
+
+    static bool isParsing();
 private:
     static void parseProgress(QString &text);
     static void parseErrors(const QString &text);
+    static bool parsing;
 };
 
 #endif  // FILEHANDLER_H

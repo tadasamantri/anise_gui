@@ -148,6 +148,7 @@ bool Node::setParam(QString key, QVariant _value) {
     p.type = _value.typeName();
     p.key = key;
     p.value = _value;
+    p.name = key;
     params[key] = p;
 
     return false;

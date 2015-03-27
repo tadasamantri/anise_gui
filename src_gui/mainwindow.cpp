@@ -251,7 +251,7 @@ void MainWindow::updatePropertyTable(int nodeID) {
 
         // output gates
         moreThanOne = n->getOutputGates()->size() > 1;
-        if (!n->getInputGates()->isEmpty()) {
+        if (!n->getOutputGates()->isEmpty()) {
             QString types;
             for (Gate *g : *n->getOutputGates())
                 for (QString s : g->getTypes()) types += s + ", ";

@@ -6,6 +6,8 @@
 #include <QJsonArray>
 #include <QMessageBox>
 
+bool JsonFileHandler::parsing = false;
+
 QString JsonFileHandler::loadFile(const QString &path) {
     QString fileContent = "";
     // open a file
@@ -130,6 +132,7 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
  * @param connectionlist List in which the connections will be written
  */
 void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
+    parsing = true;
     bool hasPositionData = true;
     // error flags: u|c|nc|n|nn
     // u: unknown node found
@@ -234,7 +237,6 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             g->setDirection(false);
             src_node->addGate(g);
             flags |= 0b10000;
-            SingletonRender::instance()->rerender(src_node, src_node->getID());
         }
         if(!dest_node->hasGate(dest_gate_name)){
             Gate *g = new Gate();
@@ -243,7 +245,6 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             g->setDirection(true);
             dest_node->addGate(g);
             flags |= 0b10000;
-            SingletonRender::instance()->rerender(dest_node, dest_node->getID());
         }
         //if connection is invalid, skip
         if (!Data::instance()->checkConnection(
@@ -293,6 +294,8 @@ end:
         QMessageBox::warning(Data::instance()->getMainWindow(),
                              "Errors while parsing!", msg);
     }
+    parsing = false;
+    SingletonRender::instance()->renderMesh();
 }
 
 void JsonFileHandler::parseProgress(QString &text, const ParseMode &mode) {
@@ -300,6 +303,11 @@ void JsonFileHandler::parseProgress(QString &text, const ParseMode &mode) {
         parseProgress(text);
     else if (mode == error)
         parseErrors(text);
+}
+
+bool JsonFileHandler::isParsing()
+{
+    return parsing;
 }
 
 void JsonFileHandler::parseProgress(QString &text) {

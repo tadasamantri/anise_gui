@@ -146,7 +146,7 @@ int Data::addNodeToMesh(Node *newNode) {
     //insert node into mesh
     int id = this->mesh->addNode(newNode);
 
-    if (id >= 0) {
+    if (id >= 0 && !JsonFileHandler::isParsing()) {
         //repaint the mesh
         SingletonRender::instance()->renderMesh();
         changed = true;
@@ -161,7 +161,7 @@ int Data::addNodeToMesh(Node *newNode) {
 int Data::addConnectionToMesh(Connection *newConnection) {
     //add the connection to the mesh
     int id = this->mesh->addConnection(newConnection);
-    if (id >= 0) {
+    if (id >= 0 && !JsonFileHandler::isParsing()) {
         //repaint the mesh
         SingletonRender::instance()->renderMesh();
         changed = true;
