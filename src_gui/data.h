@@ -138,6 +138,8 @@ public:
     bool isRunning() const;
 
     void testChangeRun();
+    bool isExecutable() const;
+    void setExecutable(bool value);
 
 signals:
 
@@ -213,6 +215,7 @@ private:
     int autosave_interval;
     //location of last made backup
     QString lastBackupFile;
+    bool executable = true;
 };
 
 #endif  // DATA_H

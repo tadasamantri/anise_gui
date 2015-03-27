@@ -55,11 +55,16 @@ Data::Data(QObject *parent) : QObject(parent) {
     connect(this, SIGNAL(runModeChanged()), renderer, SLOT(changeProgressView()));
 }
 
+void Data::setExecutable(bool value)
+{
+    executable = value;
+}
+
+
 bool Data::isRunning() const { return runMode; }
 
 void Data::testChangeRun() {
     runMode = true;
-
     emit runModeChanged();
 }
 
@@ -76,6 +81,7 @@ void Data::setMainWindow(MainWindow *value) { mainWindow = value; }
  * @param mainWindow
  */
 void Data::initialize(MainWindow *mainWindow) {
+    changed = false;
     this->mainWindow = mainWindow;
     // connect start and stop signals
     connect(mainWindow->ui->start_button, SIGNAL(clicked()), this,
@@ -191,6 +197,10 @@ void Data::sortForce() {
 }
 
 void Data::runMesh() {
+    if(!executable){
+        QMessageBox::critical(mainWindow,"Cannot execute", "Current mesh file is not executable!");
+        return;
+    }
     if (changed) {
         int answer = QMessageBox::question(
                     mainWindow, "Save before executing?",
@@ -205,6 +215,11 @@ void Data::runMesh() {
     runMode = true;
     onSimulation = true;
     emit runModeChanged();
+}
+
+bool Data::isExecutable() const
+{
+    return executable;
 }
 
 int Data::getFocusedID() { return mesh->focusObject; }

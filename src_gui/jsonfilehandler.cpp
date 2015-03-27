@@ -175,7 +175,7 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             // if node type not in catalog, skip
             if (createdNode->getType() == "") {
                 flags |= 0b10010;
-                createdNode->setType("unknown");
+                createdNode->setType(type);
                 //continue;
             }
             createdNode->setName(name);
@@ -290,7 +290,10 @@ end:
         if (flags[1]) msg += "\n\t- Error while parsing Node";
         if (flags[2]) msg += "\n\t- No Connections founds";
         if (flags[3]) msg += "\n\t- Error while parsing Connection";
-        if (flags[4]) msg += "\n\t- Unknown Nodes have been detected";
+        if (flags[4]) {
+            msg += "\n\t- Unknown Nodes have been detected";
+            Data::instance()->setExecutable(false);
+        }
         QMessageBox::warning(Data::instance()->getMainWindow(),
                              "Errors while parsing!", msg);
     }
