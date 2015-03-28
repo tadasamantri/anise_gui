@@ -90,6 +90,13 @@ public:
      * @return
      */
     bool checkConnection(int srcNodeID, QString srcGate, int destNodeID, QString destGate);
+
+    /**
+     * @brief inCatalog checks if given type of node is in the catalog
+     * @param type nodetype to be checked
+     * @return
+     */
+    bool inCatalog(const QString &type);
     bool hasChanged();
     void unsetChanged();
     bool mustRepaint();

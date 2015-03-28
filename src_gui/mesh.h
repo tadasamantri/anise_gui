@@ -100,10 +100,12 @@ private:
      * @return
      */
     bool checkConnection(const int &srcNodeID, const QString &srcGate, const int &destNodeID, const QString &destGate);
+signals:
+    void changed();
 public slots:
     void setFocusMeshObject(const int &nodeID);
     void updateNode(QTableWidgetItem *item);
-
+    void checkIfExecutable();
 private:
 
 
@@ -113,7 +115,6 @@ private:
     bool tableExists;
     // generate an unique id key;
     int generateId();
-
     //it is very important only chinging focusObject by using setFocusMeshObject!!
     int focusObject;
 

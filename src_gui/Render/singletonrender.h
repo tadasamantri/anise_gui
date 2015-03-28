@@ -89,13 +89,7 @@ public:
    */
     void setUi(Ui::MainWindow *ui);
 
-    /**
-   *
-   * @brief renderMesh, Will re-Render the whole Mesh.
-   */
-    void renderMesh();
-
-    /**
+   /**
    * @brief clearMeshField, will clear the meshfield
    */
     void clearMeshField();
@@ -222,7 +216,11 @@ public:
     void rerender(Node *nodeToRender, const int &nodeID);
 public slots:
     void changeProgressView();
-
+    /**
+   *
+   * @brief renderMesh, Will re-Render the whole Mesh.
+   */
+    void renderMesh();
 private:
     void paintEvent(QPaintEvent *event);
 

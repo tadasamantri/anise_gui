@@ -12,6 +12,7 @@ Mesh::Mesh(QObject *parent) : QObject(parent) {
     this->iDCounter = 0;
     this->focusObject = -1;
     tableExists = false;
+    connect(this, SIGNAL(changed()),this,SLOT(checkIfExecutable()));
 }
 
 bool Mesh::checkConnection(const int &srcNodeID, const QString &srcGate,
@@ -43,7 +44,7 @@ int Mesh::addNode(Node *node) {
     node->setID(id);
 
     this->nodesInMesh.insert(id, node);
-
+    emit changed();
     return id;
 }
 
@@ -58,6 +59,7 @@ int Mesh::addConnection(Connection *connection) {
     int id = this->generateId();
     connection->setID(id);
     this->connectionsInMesh.insert(id, connection);
+    emit changed();
     return id;
 }
 
@@ -144,6 +146,17 @@ void Mesh::updateNode(QTableWidgetItem *item) {
     Data::instance()->getMainWindow()->updatePropertyTable(focusObject);
 }
 
+void Mesh::checkIfExecutable()
+{
+    bool result = true;
+    for(Node *n : nodesInMesh.values())
+        if(!Data::instance()->inCatalog(n->getType())){
+            result = false;
+            break;
+        }
+    Data::instance()->setExecutable(result);
+}
+
 bool Mesh::deleteItem() {
     if (this->focusObject == -1) return false;
 
@@ -192,8 +205,9 @@ bool Mesh::deleteNode() {
         //...and nothing is highlighted anymore
         this->setFocusMeshObject(-1);
 
-        //...and Node has to get deleted too
+        //...and Node has to be deleted too
         delete nodeToDelete;
+        emit changed();
     }
     // Update Property Table
     Data::instance()->getMainWindow()->updatePropertyTable(-1);
@@ -206,18 +220,23 @@ bool Mesh::deleteConnection(Connection *c) {
 }
 
 bool Mesh::deleteConnection(const int &conToDeleteID) {
+    Connection *c = connectionsInMesh[conToDeleteID];
     connectionsInMesh.remove(conToDeleteID);
     bool allRemoved =
             !connectionsInMesh.contains(conToDeleteID) &&
             SingletonRender::instance()->deleteMeshDrawing(conToDeleteID);
 
     if (this->focusObject == conToDeleteID) this->setFocusMeshObject(-1);
+    if(allRemoved)
+        delete c;
+    emit changed();
     return allRemoved;
 }
 
 bool Mesh::deleteConnection() {
     if (deleteConnection(focusObject)) {
         this->setFocusMeshObject(-1);
+        emit changed();
         return true;
     }
     return false;

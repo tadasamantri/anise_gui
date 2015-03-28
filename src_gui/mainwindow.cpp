@@ -90,21 +90,23 @@ void MainWindow::saveFile(QString &path) {
 MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::on_actionLoad_triggered() {
-    qDebug() << "Trying to open FileDialog";
+    //clear old mesh
+    this->on_actionNew_triggered();
+
+    //get filename
     QString fileName = QFileDialog::getOpenFileName(
                 this, "Load previously saved mesh", "",
                 "Mesh-Files (*.mesh *.json);; All Files (*.*)");
 
-    qDebug() << "Path to File loaded\nPath is" << fileName
-             << "\nnow let's load it to the FileHandler!";
+    qDebug() << "Trying to load \"" + fileName + "\"";
 
     if (fileName == "") return;
-    this->on_actionNew_triggered();
+    //get file content as JsonObject
     QJsonObject *obj = JsonFileHandler::readFile(fileName);
+    //parse file
     JsonFileHandler::extractNodesAndConnections(*obj);
     Data::instance()->setSaveFile(fileName);
     Data::instance()->unsetChanged();
-    SingletonRender::instance()->renderMesh();
 }
 
 void MainWindow::on_actionSet_framework_path_triggered() {

@@ -232,6 +232,11 @@ bool Data::checkConnection(int srcNodeID, QString srcGate, int destNodeID,
         return false;
 }
 
+bool Data::inCatalog(const QString &type)
+{
+    return this->nodeCatalog->contains(type);
+}
+
 bool Data::hasChanged() { return changed; }
 
 void Data::unsetChanged() { changed = false; }

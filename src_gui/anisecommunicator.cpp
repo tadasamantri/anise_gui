@@ -30,11 +30,13 @@ bool AniseCommunicator::validPath(const QString &path) {
     QProcess checker;
     QStringList arg;
     arg << "--version";
+    //ask anise for version output
     checker.start(path, arg);
+    // wait up to 3s for an answer
     checker.waitForFinished(3000);
     QString result = checker.readAll();
-    result = result.remove("\n").remove(" ");
-    return result == "anise-framework";
+    //check if
+    return result.contains("anise-framework");
 }
 
 void AniseCommunicator::stop() { anise_process->terminate(); }
@@ -83,6 +85,7 @@ QString AniseCommunicator::getAllNodeTypes() {
   * Read printed stuff.
   */
     read();
+    //cut off unwanted characters like " or whitespace
     readOutput =
             readOutput.mid(readOutput.indexOf("{"), readOutput.lastIndexOf("}") + 1);
 
@@ -111,12 +114,12 @@ AniseCommunicator::~AniseCommunicator() {
 
 void AniseCommunicator::readProgress() {
     if (!onProgress) return;
-    QString out = (QString)anise_process->readAllStandardOutput();
-    QStringList lines = out.split("\n");
+    readOutput = (QString)anise_process->readAllStandardOutput();
+    QStringList lines = readOutput.split("\n");
     for (QString line : lines)
         JsonFileHandler::parseProgress(line, JsonFileHandler::progress);
-    out = (QString)anise_process->readAllStandardError();
-    lines = out.split("\n");
+    readOutput = (QString)anise_process->readAllStandardError();
+    lines = readOutput.split("\n");
     for (QString line : lines)
         JsonFileHandler::parseProgress(line, JsonFileHandler::error);
 }
@@ -125,13 +128,17 @@ void AniseCommunicator::finished(int exitCode) {
     // TODO: exit code handling!
     onProgress = false;
     Data::instance()->finishMesh();
+    qDebug() << "Anise finished with exit code" << exitCode;
 }
 
 void AniseCommunicator::runMesh() {
     QStringList args;
+    // use arguments --progress and --machine
     args << Data::instance()->getSaveFile() << "--machine"
          << "--progress";
+    //set the correct working directory
     anise_process->setWorkingDirectory(QFileInfo(path).absolutePath());
     onProgress = true;
+    //execute anise
     anise_process->start(path, args);
 }
