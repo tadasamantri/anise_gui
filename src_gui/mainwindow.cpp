@@ -32,8 +32,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(shortcut, SIGNAL(activated()), Data::instance(), SLOT(deleteItem()));
     connect(ui->delete_button, SIGNAL(clicked()), Data::instance(),
             SLOT(deleteItem()));
-    connect(ui->actionDelete,SIGNAL(triggered()),Data::instance(),SLOT(deleteItem()));
-
+    connect(ui->actionDelete, SIGNAL(triggered()), Data::instance(),
+            SLOT(deleteItem()));
 }
 
 void MainWindow::initializeGUI() {
@@ -65,8 +65,10 @@ void MainWindow::initializeGUI() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-    bool ok = false;
-    if (Data::instance()->hasChanged()) {
+    bool accept_exit = Data::instance()->hasChanged();
+    // has the mesh changed?
+    if (accept_exit) {
+        // ask to save or not
         int choice = QMessageBox::question(
                     this, "Save old project?",
                     "You attemted creating a new project.\n Do you want to save your "
@@ -75,13 +77,16 @@ void MainWindow::closeEvent(QCloseEvent *event) {
                     QMessageBox::Yes);
         if (choice == QMessageBox::Yes) {
             QString path = saveDialog();
-            ok = path != ".mesh";
-            if (ok) saveFile(path);
+            // check if a file was chosen
+            accept_exit = path != ".mesh";
+            // save to file
+            if (accept_exit) saveFile(path);
         } else if (choice == QMessageBox::No)
-            ok = true;
-    } else
-        ok = true;
-    if (ok)
+            // if user does not want to save, exit is ok
+            accept_exit = true;
+    }
+    // if exit action is still ok, accept it.
+    if (accept_exit)
         event->accept();
     else
         event->ignore();
@@ -95,10 +100,10 @@ void MainWindow::saveFile(QString &path) {
 MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::on_actionLoad_triggered() {
-    //clear old mesh
+    // clear old mesh
     this->on_actionNew_triggered();
 
-    //get filename
+    // get filename
     QString fileName = QFileDialog::getOpenFileName(
                 this, "Load previously saved mesh", "",
                 "Mesh-Files (*.mesh *.json);; All Files (*.*)");
@@ -106,9 +111,9 @@ void MainWindow::on_actionLoad_triggered() {
     qDebug() << "Trying to load \"" + fileName + "\"";
 
     if (fileName == "") return;
-    //get file content as JsonObject
+    // get file content as JsonObject
     QJsonObject *obj = JsonFileHandler::readFile(fileName);
-    //parse file
+    // parse file
     JsonFileHandler::extractNodesAndConnections(*obj);
     Data::instance()->setSaveFile(fileName);
     Data::instance()->unsetChanged();
@@ -433,8 +438,7 @@ void MainWindow::on_details_stateChanged(int arg1) {
 }
 
 void MainWindow::onFilebuttonClicked(int row, int col) {
-    if(col != 1)
-        return;
+    if (col != 1) return;
     QString key = ui->tableWidget->item(row, 0)->data(Qt::UserRole).toString();
     if (!key.contains("file", Qt::CaseInsensitive)) return;
     QString fileName;
@@ -457,15 +461,15 @@ void MainWindow::on_actionStop_Simulation_triggered() {
     Data::instance()->stopSimulation();
 }
 
-void MainWindow::on_actionAbout_triggered()
-{
+void MainWindow::on_actionAbout_triggered() {
     QString aboutText;
     aboutText += "This GUI was developed due to";
-    aboutText += "\"Bachelorpraktikum WS14/15\" at the department of computer science ";
+    aboutText += "\"Bachelorpraktikum WS14/15\" at the ";
+    aboutText += "department of computer science ";
     aboutText += "TU Darmstadt.\nDevelopers:\n";
     aboutText += "\t-Frederik Lührs\n";
     aboutText += "\t-Tobias Lippert\n";
     aboutText += "\t-Artur Fast\n";
     aboutText += "\t-Mehrad Mohammadian\n";
-    QMessageBox::information(this,"About Anise GUI",aboutText,QMessageBox::Ok);
+    QMessageBox::information(this, "About Anise GUI", aboutText, QMessageBox::Ok);
 }
