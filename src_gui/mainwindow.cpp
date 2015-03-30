@@ -13,7 +13,7 @@
 #include "anisecommunicator.h"
 #include "settingshandler.h"
 #include "qdebugstreamredirector.h"
-#include "Render/singletonrender.h"
+#include "render/singletonrender.h"
 #include "nodecatalog.h"
 #include "data.h"
 
@@ -455,4 +455,17 @@ void MainWindow::on_stop_button_clicked() { Data::instance()->setEditMode(); }
 
 void MainWindow::on_actionStop_Simulation_triggered() {
     Data::instance()->stopSimulation();
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+    QString aboutText;
+    aboutText += "This GUI was developed due to";
+    aboutText += "\"Bachelorpraktikum WS14/15\" at the department of computer science ";
+    aboutText += "TU Darmstadt.\nDevelopers:\n";
+    aboutText += "\t-Frederik Lührs\n";
+    aboutText += "\t-Tobias Lippert\n";
+    aboutText += "\t-Artur Fast\n";
+    aboutText += "\t-Mehrad Mohammadian\n";
+    QMessageBox::information(this,"About Anise GUI",aboutText,QMessageBox::Ok);
 }

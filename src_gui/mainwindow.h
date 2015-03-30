@@ -45,6 +45,8 @@ private slots:
 
     void on_actionStop_Simulation_triggered();
 
+    void on_actionAbout_triggered();
+
 private:
     void initializeGUI();
     bool pathChanged = false;
