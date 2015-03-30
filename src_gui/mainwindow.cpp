@@ -71,12 +71,12 @@ void MainWindow::closeEvent(QCloseEvent *event) {
         // ask to save or not
         int choice = QMessageBox::question(
                     this, "Save old project?",
-                    "You attemted creating a new project.\n Do you want to save your "
-                    "current project?",
+                    "Do you want to save befor exiting?",
                     (QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel),
                     QMessageBox::Yes);
         if (choice == QMessageBox::Yes) {
-            QString path = saveDialog();
+            QString path = Data::instance()->getSaveFile();
+            if(path == "") path = saveDialog();
             // check if a file was chosen
             accept_exit = path != ".mesh";
             // save to file
@@ -84,7 +84,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
         } else if (choice == QMessageBox::No)
             // if user does not want to save, exit is ok
             accept_exit = true;
-    }
+    } else accept_exit = true;
     // if exit action is still ok, accept it.
     if (accept_exit)
         event->accept();
@@ -138,8 +138,10 @@ void MainWindow::on_actionSet_framework_path_triggered() {
 }
 
 void MainWindow::on_actionNew_triggered() {
-    bool ok = false;
-    if (Data::instance()->hasChanged()) {
+    bool accept_exit = Data::instance()->hasChanged();
+    // has the mesh changed?
+    if (accept_exit) {
+        // ask to save or not
         int choice = QMessageBox::question(
                     this, "Save old project?",
                     "You attemted creating a new project.\n Do you want to save your "
@@ -147,14 +149,17 @@ void MainWindow::on_actionNew_triggered() {
                     (QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel),
                     QMessageBox::Yes);
         if (choice == QMessageBox::Yes) {
-            QString path = saveDialog();
-            ok = path != ".mesh";
-            if (ok) saveFile(path);
+            QString path = Data::instance()->getSaveFile();
+            if(path == "") path = saveDialog();
+            // check if a file was chosen
+            accept_exit = path != ".mesh";
+            // save to file
+            if (accept_exit) saveFile(path);
         } else if (choice == QMessageBox::No)
-            ok = true;
-    } else
-        ok = true;
-    if (ok) Data::instance()->newMeshProject();
+            // if user does not want to save, exit is ok
+            accept_exit = true;
+    } else accept_exit = true;
+    if (accept_exit) Data::instance()->newMeshProject();
 }
 
 void MainWindow::on_actionSort_Mesh_triggered() {

@@ -122,6 +122,7 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
         }
         catalog->insert(node);
     }
+    Data::instance()->unsetChanged();
 }
 
 /**
