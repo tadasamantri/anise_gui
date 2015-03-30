@@ -86,8 +86,6 @@ void Data::initialize(MainWindow *mainWindow) {
     // connect start and stop signals
     connect(mainWindow->ui->start_button, SIGNAL(clicked()), this,
             SLOT(startSimulation()));
-    connect(mainWindow->ui->stop_button, SIGNAL(clicked()), this,
-            SLOT(stopSimulation()));
     connect(mainWindow->ui->actionRun_Mesh, SIGNAL(triggered()), this,
             SLOT(runMesh()));
     /**
