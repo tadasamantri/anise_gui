@@ -51,7 +51,7 @@ SOURCES += main.cpp\
     drawobject.cpp \
     mesheditorwidget.cpp \
     data.cpp \
-    Render/singletonrender.cpp \
+    render/singletonrender.cpp \
     nodetypelabel.cpp \
     gatebutton.cpp
 
@@ -71,7 +71,7 @@ HEADERS  += mainwindow.h \
     drawobject.h \
     mesheditorwidget.h \
     data.h \
-    Render/singletonrender.h \
+    render/singletonrender.h \
     testdrawobject.h \
     nodetypelabel.h \
     gatebutton.h
