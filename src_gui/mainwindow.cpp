@@ -32,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(shortcut, SIGNAL(activated()), Data::instance(), SLOT(deleteItem()));
     connect(ui->delete_button, SIGNAL(clicked()), Data::instance(),
             SLOT(deleteItem()));
+    connect(ui->actionDelete,SIGNAL(triggered()),Data::instance(),SLOT(deleteItem()));
+
 }
 
 void MainWindow::initializeGUI() {
@@ -51,6 +53,9 @@ void MainWindow::initializeGUI() {
 
     // hides the tab-widget
     ui->tabWidget->hide();
+    ui->start_button->hide();
+    ui->stop_button->hide();
+    ui->delete_button->hide();
 
     // prepare propertytable
     ui->tableWidget->hide();
