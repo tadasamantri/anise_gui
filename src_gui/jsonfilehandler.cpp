@@ -129,7 +129,6 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
  * @brief JsonFileHandler::extractNodesAndConnections Extracts all Nodes and
  * Connections of a QJsonObject
  * @param obj the QJsonObject containing the JSON File
- * @param nodelist List in which the nodes will be written
  * @param connectionlist List in which the connections will be written
  */
 void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
@@ -191,6 +190,7 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
                     qDebug() << j++ << ": " << key << " = " << map[key];
                 }
             }
+            
             j = 1;  // for debugging only
             qDebug() << "\n";
 
