@@ -148,6 +148,9 @@ public:
     bool isExecutable() const;
     void setExecutable(bool value);
 
+    int getLastExitCode() const;
+    void setLastExitCode(int value);
+
 signals:
 
     void runModeChanged();
@@ -223,6 +226,7 @@ private:
     //location of last made backup
     QString lastBackupFile;
     bool executable = true;
+    int lastExitCode = 0;
 };
 
 #endif  // DATA_H

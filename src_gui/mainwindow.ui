@@ -46,7 +46,7 @@
         <number>0</number>
        </property>
        <property name="bottomMargin">
-        <number>30</number>
+        <number>0</number>
        </property>
        <item>
         <widget class="QLabel" name="label_2">
@@ -92,7 +92,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>621</width>
+            <width>615</width>
             <height>63</height>
            </rect>
           </property>
@@ -230,8 +230,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>608</width>
-            <height>292</height>
+            <width>602</width>
+            <height>315</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -285,13 +285,16 @@
           <bool>true</bool>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="console_tab">
           <attribute name="title">
            <string>Console</string>
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_2">
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
            <item>
             <widget class="QTextBrowser" name="console_out">
              <property name="minimumSize">
@@ -324,6 +327,9 @@
            <string>Log</string>
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_3">
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
            <item>
             <widget class="QTextBrowser" name="qDebug_out">
              <property name="verticalScrollBarPolicy">
@@ -400,7 +406,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>24</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

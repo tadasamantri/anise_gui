@@ -62,6 +62,12 @@ void MainWindow::initializeGUI() {
     ui->tableWidget->setColumnCount(2);
     // initialize all data content
     Data::instance()->initialize(this);
+    if(Data::instance()->getLastExitCode() == EXIT_CODE_REBOOT){
+        QJsonObject *obj =
+        JsonFileHandler::readFile("/tmp/tmp_anise_gui.mesh");
+        JsonFileHandler::extractNodesAndConnections(*obj);
+        Data::instance()->setFocusMeshObject(-1);
+    }
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
@@ -108,10 +114,9 @@ void MainWindow::on_actionLoad_triggered() {
                 this, "Load previously saved mesh", "",
                 "Mesh-Files (*.mesh *.json);; All Files (*.*)");
 
-    qDebug() << "Trying to load \"" + fileName + "\"";
-
     if (fileName == "") return;
     // get file content as JsonObject
+    qDebug() << "Trying to load \"" + fileName + "\"";
     QJsonObject *obj = JsonFileHandler::readFile(fileName);
     // parse file
     JsonFileHandler::extractNodesAndConnections(*obj);
@@ -169,13 +174,15 @@ void MainWindow::on_actionSort_Mesh_triggered() {
 
 void MainWindow::on_actionLoad_Catalog_triggered() {
     // the old ndoes should be deleted!
-
+    JsonFileHandler::saveMesh("/tmp/tmp_anise_gui.mesh");
     QString out = AniseCommunicator::getAllNodeTypes();
     // Data::instance()->getNodeCatalog()->Content.clear();
     JsonFileHandler::parseNodeTypesFromAnise(out);
+    Data::instance()->newMeshProject();
     // SingletonRender::instance()->renderCatalogContent(Data::instance()->getNodeCatalog()->Content.values().toVector());
 
     qDebug() << "perfoming reboot...";
+    Data::instance()->setLastExitCode(EXIT_CODE_REBOOT);
     qApp->exit(EXIT_CODE_REBOOT);
 }
 

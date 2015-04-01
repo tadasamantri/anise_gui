@@ -54,6 +54,16 @@ Data::Data(QObject *parent) : QObject(parent) {
 
     connect(this, SIGNAL(runModeChanged()), renderer, SLOT(changeProgressView()));
 }
+int Data::getLastExitCode() const
+{
+    return lastExitCode;
+}
+
+void Data::setLastExitCode(int value)
+{
+    lastExitCode = value;
+}
+
 
 void Data::setExecutable(bool value)
 {
@@ -321,6 +331,7 @@ void Data::newMeshProject() {
     // create new mesh and delete old
     delete mesh;
     mesh = new Mesh();
+    setFocusMeshObject(-1);
     // reset file locations
     lastBackupFile = "";
     saveFile = "";
