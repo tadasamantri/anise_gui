@@ -94,10 +94,9 @@ void Data::initialize(MainWindow *mainWindow) {
     changed = false;
     this->mainWindow = mainWindow;
     // connect start and stop signals
-    connect(mainWindow->ui->start_button, SIGNAL(clicked()), this,
-            SLOT(startSimulation()));
     connect(mainWindow->ui->actionRun_Mesh, SIGNAL(triggered()), this,
             SLOT(runMesh()));
+    connect(mainWindow->ui->actionStop_Simulation, SIGNAL(triggered()),this,SLOT(stopSimulation()));
     /**
 * Create the Nodecatalog
 */
