@@ -53,7 +53,8 @@ SOURCES += main.cpp\
     data.cpp \
     render/singletonrender.cpp \
     nodetypelabel.cpp \
-    gatebutton.cpp
+    gatebutton.cpp \
+    parseerrorbox.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -74,9 +75,11 @@ HEADERS  += mainwindow.h \
     render/singletonrender.h \
     testdrawobject.h \
     nodetypelabel.h \
-    gatebutton.h
+    gatebutton.h \
+    parseerrorbox.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    parseerrorbox.ui
 
 QMAKE_CXXFLAGS += -std=c++14
 

@@ -5,6 +5,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QMessageBox>
+#include "parseerrorbox.h"
 
 bool JsonFileHandler::parsing = false;
 
@@ -133,6 +134,7 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
  */
 void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
     parsing = true;
+    QString nodeErrors = "", connectionErrors = "";
     bool hasPositionData = true;
     // error flags: u|c|nc|n|nn
     // u: unknown node found
@@ -157,6 +159,8 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
         // check if nodes are declared correctly
         if (!(theNode["class"].isString() && theNode["name"].isString() &&
               theNode["params"].isArray())) {
+            nodeErrors += "\n- Syntaxerror in node " +
+                    QString(theNode["name"].toString());
             qWarning() << "Error while extracting node:\n" << theNode;
             flags |= 0b0010;
         }
@@ -170,13 +174,14 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
             qDebug() << "params:";
 
             Node *createdNode = NodeFactory::createNode(type);
-            if(!createdNode)
-                createdNode = new Node();
+            if (!createdNode) createdNode = new Node();
             // if node type not in catalog, skip
             if (createdNode->getType() == "") {
                 flags |= 0b10010;
+                nodeErrors +=
+                        "\n- Class \"" + type + "\" is unknown. (Node: \"" + name + "\")";
                 createdNode->setType(type);
-                //continue;
+                // continue;
             }
             createdNode->setName(name);
             // get parameters as array of objects
@@ -190,7 +195,7 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
                     qDebug() << j++ << ": " << key << " = " << map[key];
                 }
             }
-            
+
             j = 1;  // for debugging only
             qDebug() << "\n";
 
@@ -226,39 +231,47 @@ void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
         Node *dest_node =
                 Data::instance()->getNodeByName(theConnection["dest_node"].toString());
         // if nodes not found, skip
-            if (!(src_node && dest_node)) {
+        if (!(src_node && dest_node)) {
             flags |= 0b01000;
             continue;
         }
-        //if gates were not found, add them
-        if(!src_node->hasGate(src_gate_name)){
+        // if gates were not found, add them
+        if (!src_node->hasGate(src_gate_name)) {
             Gate *g = new Gate();
             g->setName(src_gate_name);
             g->addType("unknown");
             g->setDirection(false);
             src_node->addGate(g);
             flags |= 0b10000;
+            connectionErrors += "\n- Node \"" + src_node->getName() +
+                    "\" has a connection from unknown gate \"" +
+                    src_gate_name + "\"";
         }
-        if(!dest_node->hasGate(dest_gate_name)){
+        if (!dest_node->hasGate(dest_gate_name)) {
             Gate *g = new Gate();
             g->setName(dest_gate_name);
             g->addType("unknown");
             g->setDirection(true);
             dest_node->addGate(g);
             flags |= 0b10000;
+            connectionErrors += "\n- Node \"" + dest_node->getName() +
+                    "\" has a connection to unknown gate \"" +
+                    dest_gate_name + "\"";
         }
-        //if connection is invalid, skip
+        // if connection is invalid, skip
         if (!Data::instance()->checkConnection(
                     src_node->getID(), theConnection["src_gate"].toString(),
                     dest_node->getID(), theConnection["dest_gate"].toString())) {
             flags |= 0b01000;
+            connectionErrors += "\n- Connection (" + src_node->getName() + "->" +
+                    src_gate_name + "|" + dest_node->getName() + "->" +
+                    dest_gate_name + ") is invalid. It will not be added.";
             continue;
         }
 
-        Connection *connection = new Connection(
-                    src_node, src_node->getGateByName(src_gate_name),
-                dest_node,
-                dest_node->getGateByName(dest_gate_name));
+        Connection *connection =
+                new Connection(src_node, src_node->getGateByName(src_gate_name),
+                               dest_node, dest_node->getGateByName(dest_gate_name));
 
         if (co.contains("gui_params")) {
             QJsonObject json_gui_params = co["gui_params"].toObject();
@@ -286,17 +299,24 @@ end:
     ;
     if (flags.any()) {
         QString msg;
-        msg += "Parser encountered Problems. File may be corrupt.\n\n \tIssues:";
-        if (flags[0]) msg += "\n\t- No Nodes were found";
-        if (flags[1]) msg += "\n\t- Error while parsing Node";
-        if (flags[2]) msg += "\n\t- No Connections founds";
-        if (flags[3]) msg += "\n\t- Error while parsing Connection";
+        msg += "Parser encountered Problems. File may be corrupt.\n\nIssues:";
+        if (flags[0]) msg += "\n -No nodes were found";
+        if (flags[1]) msg += "\n -Error while parsing node";
+        if (flags[2]) msg += "\n -No connections found";
+        if (flags[3]) msg += "\n -Error while parsing connection";
         if (flags[4]) {
-            msg += "\n\t- Unknown Nodes have been detected";
+            msg += "\n -Unknown nodes have been detected";
             Data::instance()->setExecutable(false);
         }
+        if(nodeErrors == "" && connectionErrors == "")
         QMessageBox::warning(Data::instance()->getMainWindow(),
                              "Errors while parsing!", msg);
+        else {
+            ParseErrorBox box;
+            box.setHeader(msg);
+            box.setErrorText("Errors in parsed nodes:\n" + nodeErrors + "\n\n\nErrors in parsed connections:\n" + connectionErrors);
+            box.exec();
+        }
     }
     parsing = false;
     SingletonRender::instance()->renderMesh();
@@ -309,10 +329,7 @@ void JsonFileHandler::parseProgress(QString &text, const ParseMode &mode) {
         parseErrors(text);
 }
 
-bool JsonFileHandler::isParsing()
-{
-    return parsing;
-}
+bool JsonFileHandler::isParsing() { return parsing; }
 
 void JsonFileHandler::parseProgress(QString &text) {
     text = text.mid(text.indexOf("{"), text.lastIndexOf("}") + 1);
