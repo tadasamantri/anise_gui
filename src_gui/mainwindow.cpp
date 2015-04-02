@@ -62,11 +62,24 @@ void MainWindow::initializeGUI() {
     ui->tableWidget->setColumnCount(2);
     // initialize all data content
     Data::instance()->initialize(this);
+    //if gui is rebooting
     if(Data::instance()->getLastExitCode() == EXIT_CODE_REBOOT){
+        //load tmp file (last mesh)
         QJsonObject *obj =
         JsonFileHandler::readFile("/tmp/tmp_anise_gui.mesh");
         JsonFileHandler::extractNodesAndConnections(*obj);
+
+        //unset focus
         Data::instance()->setFocusMeshObject(-1);
+
+        //load last save file
+        QFile file("/tmp/tmp_anise_gui_savefile");
+        file.open(QFile::ReadOnly);
+        Data::instance()->setSaveFile(file.readAll());
+        file.close();
+
+        //unset changed flag
+        Data::instance()->unsetChanged();
     }
 }
 
@@ -178,6 +191,10 @@ void MainWindow::on_actionSort_Mesh_triggered() {
 void MainWindow::on_actionLoad_Catalog_triggered() {
     // the old ndoes should be deleted!
     JsonFileHandler::saveMesh("/tmp/tmp_anise_gui.mesh");
+    QFile file("/tmp/tmp_anise_gui_savefile");
+    file.open(QFile::WriteOnly);
+    file.write(Data::instance()->getSaveFile().toUtf8());
+    file.close();
     QString out = AniseCommunicator::getAllNodeTypes();
     // Data::instance()->getNodeCatalog()->Content.clear();
     JsonFileHandler::parseNodeTypesFromAnise(out);
