@@ -151,6 +151,9 @@ public:
     int getLastExitCode() const;
     void setLastExitCode(int value);
 
+    int getAutosave_interval() const;
+    void setAutosave_interval(int value);
+
 signals:
 
     void runModeChanged();

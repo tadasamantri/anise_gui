@@ -34,9 +34,7 @@ Data::Data(QObject *parent) : QObject(parent) {
     // set up the timer for backups
     backupTimer = new QTimer(this);
     connect(backupTimer, SIGNAL(timeout()), this, SLOT(autosaveMesh()));
-    if(SettingsHandler::contains("autosave_interval"))
-        autosave_interval = SettingsHandler::loadSetting("autosave_interval").toInt();
-    else {
+    if(!SettingsHandler::contains("autosave_interval")){
         autosave_interval = 3e5;
         SettingsHandler::storeSetting("autosave_interval", QString::number(autosave_interval));
     }
@@ -53,7 +51,19 @@ Data::Data(QObject *parent) : QObject(parent) {
     SingletonRender *renderer = SingletonRender::instance();
 
     connect(this, SIGNAL(runModeChanged()), renderer, SLOT(changeProgressView()));
+
 }
+int Data::getAutosave_interval() const
+{
+    return autosave_interval;
+}
+
+void Data::setAutosave_interval(int value)
+{
+    autosave_interval = value;
+    SettingsHandler::storeSetting("autosave_interval", QString::number(value));
+}
+
 int Data::getLastExitCode() const
 {
     return lastExitCode;
@@ -119,11 +129,16 @@ void Data::initialize(MainWindow *mainWindow) {
                                      "/settings.ini");
 
     /**
+    * Initialize settings from .ini file
+    */
+    SettingsHandler::initializeSettings();
+
+    /**
 * Checks if Framework path is set
 */
     if (SettingsHandler::contains("frameworkpath"))
         AniseCommunicator::setFrameworkPath(
-                    SettingsHandler::loadSetting("frameworkpath"));
+                    SettingsHandler::getSetting("frameworkpath"));
     else {
         int choice = QMessageBox::information(
                     0, QString("Please, set your framework path"),
@@ -136,10 +151,7 @@ void Data::initialize(MainWindow *mainWindow) {
         SettingsHandler::storeSetting("frameworkpath", fileName);
     }
 
-    /**
-* Initialize settings from .ini file
-*/
-    SettingsHandler::initializeSettings();
+
 
     /**
 * Start loading node types

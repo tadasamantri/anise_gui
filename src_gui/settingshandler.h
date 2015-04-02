@@ -2,18 +2,24 @@
 #define SETTINGSHANDLER_H
 
 #include <QSettings>
+#include <QMap>
 
-class SettingsHandler {
+class SettingsHandler : public QObject{
+
+    Q_OBJECT
 private:
+
     static QString settingsFilePath;
+    static QMap<QString, QString> tempSettings;
 
 public:
-    static QString loadSetting(QString key);
+    static QString getSetting(QString key);
     static void storeSetting(QString SettingsKey, QString SettingsValue);
     static void initializeSettings();
     static bool contains(QString key);
     static void setSettingsPath(QString path);
-    static QMap<QString, QString> loadAllSettings();
+    static void loadAllSettings();
+    static void storeAll();
 };
 
 #endif  // SETTINGSHANDLER_H

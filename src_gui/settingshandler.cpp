@@ -1,33 +1,32 @@
 #include "settingshandler.h"
 #include "anisecommunicator.h"
+#include "data.h"
 #include <QDebug>
 
 QString SettingsHandler::settingsFilePath;
+QMap<QString, QString> SettingsHandler::tempSettings = QMap<QString, QString>();
 
 // checks if setting with given key exists
 bool SettingsHandler::contains(QString key) {
-    QSettings settings(settingsFilePath, QSettings::IniFormat);
-
-    return settings.contains(key);
-}
-
-// loads a setting from .ini file with given key
-QString SettingsHandler::loadSetting(QString key) {
-    QSettings settings(settingsFilePath, QSettings::IniFormat);
-
-    if (settings.contains(key)) return settings.value(key, "").toString();
-    return NULL;
+    return tempSettings.contains(key);
 }
 
 // Stores setting in .ini file. When storing setting ensure loading in function
 // initializeSettings()
-void SettingsHandler::storeSetting(QString SettingsKey, QString SettingsValue) {
-    QSettings settings(settingsFilePath, QSettings::IniFormat);
-    settings.setValue(SettingsKey, SettingsValue);
+QString SettingsHandler::getSetting(QString key)
+{
+   return tempSettings.value(key);
 }
 
-QMap<QString, QString> SettingsHandler::loadAllSettings() {
-    QMap<QString, QString> values = QMap<QString, QString>();
+void SettingsHandler::storeSetting(QString SettingsKey, QString SettingsValue) {
+
+    tempSettings.insert(SettingsKey, SettingsValue);
+    storeAll();
+
+}
+
+void SettingsHandler::loadAllSettings() {
+
     QSettings settings(settingsFilePath, QSettings::IniFormat);
 
     QStringList settingKeys = settings.allKeys();
@@ -35,10 +34,21 @@ QMap<QString, QString> SettingsHandler::loadAllSettings() {
 
     foreach (QString key, settingKeys) {
         val = QString(settings.value(key, "").toString());
-        values.insert(key, val);
+        tempSettings.insert(key, val);
     }
 
-    return values;
+
+}
+
+void SettingsHandler::storeAll(){
+
+    QSettings settings(settingsFilePath, QSettings::IniFormat);
+
+    for(QString key : tempSettings.keys())
+        settings.setValue(key, tempSettings.value(key));
+
+    settings.sync();
+
 }
 
 /* To ensure initalization when GUI starts please copy if-case for your
@@ -47,7 +57,11 @@ QMap<QString, QString> SettingsHandler::loadAllSettings() {
  * variable is set!
  */
 void SettingsHandler::initializeSettings() {
-    QMap<QString, QString> allSettings = SettingsHandler::loadAllSettings();
+
+    loadAllSettings();
+
+
+    QMap<QString, QString> allSettings(tempSettings);
 
     QString value;
 
@@ -55,6 +69,12 @@ void SettingsHandler::initializeSettings() {
         value = allSettings.take("frameworkpath");
         qDebug() << "initializing framework path: " << value;
         AniseCommunicator::setFrameworkPath(value);
+    }
+
+    if (allSettings.contains("autosave_interval")) {
+        value = allSettings.take("autosave_interval");
+        qDebug() << "initializing autosav_interval: " << value;
+        Data::instance()->setAutosave_interval(value.toInt());
     }
 
     if (!allSettings.isEmpty())

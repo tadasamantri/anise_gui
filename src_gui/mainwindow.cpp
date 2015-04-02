@@ -141,7 +141,7 @@ void MainWindow::on_actionLoad_triggered() {
 }
 
 void MainWindow::on_actionSet_framework_path_triggered() {
-    QString old = SettingsHandler::loadSetting("frameworkpath");
+    QString old = SettingsHandler::getSetting("frameworkpath");
     QString fileName =
             QFileDialog::getOpenFileName(this, "Set your framework path", "", "");
 
@@ -504,4 +504,5 @@ void MainWindow::on_actionAbout_triggered() {
     aboutText += "\t-Artur Fast\n";
     aboutText += "\t-Mehrad Mohammadian\n";
     QMessageBox::information(this, "About Anise GUI", aboutText, QMessageBox::Ok);
+
 }
