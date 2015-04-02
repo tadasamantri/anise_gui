@@ -211,11 +211,12 @@ void Data::runMesh() {
     if (changed) {
         int answer = QMessageBox::question(
                     mainWindow, "Save before executing?",
-                    "You have unsaved changes. Do you want to save before executing?",
-                    QMessageBox::Yes, QMessageBox::No);
+                    "You must save your changes before executing. Save now?",
+                    QMessageBox::No, QMessageBox::Yes);
         if (answer == QMessageBox::Yes) {
             mainWindow->on_actionSave_triggered();
         }
+        else return;
     }
     if (saveFile == "") return;
     framework->runMesh();
