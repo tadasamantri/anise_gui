@@ -27,13 +27,6 @@ public:
     };
 
     /**
-     * @brief loadFile Load a Textfile
-     * @param path Path to File
-     * @return File Content as QString
-     */
-    static QString loadFile(const QString &path);
-
-    /**
      * @brief saveMesh Save current Project to a File
      * @param path the File to be written
      * @param theMesh
@@ -63,7 +56,7 @@ public:
      * @brief extractNodesAndConnections Load a JSON-Object into the Mesh
      * @param obj JSON-Object containing all Information about the Mesh to be loaded
      */
-    static void extractNodesAndConnections(const QJsonObject &obj);
+    static bool extractNodesAndConnections(const QJsonObject &obj);
 
     /**
      * @brief parseProgress parse the progress of the mesh

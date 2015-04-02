@@ -9,22 +9,6 @@
 
 bool JsonFileHandler::parsing = false;
 
-QString JsonFileHandler::loadFile(const QString &path) {
-    QString fileContent = "";
-    // open a file
-    qDebug() << "trying to open: \n" << path << "\n";
-    QFile file(path);
-    file.open(QIODevice::ReadOnly);
-
-    // read each line of that file and append it to the String
-    while (file.bytesAvailable()) {
-        QByteArray line = file.readLine();
-        fileContent += line;
-    }
-    file.close();
-    return fileContent;
-}
-
 /**
  * @brief JsonFileHandler::readFile converts a textfile into a
  * QJsonDocument-Object
@@ -36,14 +20,25 @@ QJsonObject *JsonFileHandler::readFile(const QString &path) {
     QJsonParseError jerror;
     QFile file(path);
     file.open(QIODevice::ReadOnly);
-    QJsonDocument jdoc = QJsonDocument::fromJson(file.readAll(), &jerror);
+    QString content = file.readAll();
+    QJsonDocument jdoc = QJsonDocument::fromJson(content.toUtf8(), &jerror);
     file.close();
 
     // catch error while parsing
     if (jerror.error != QJsonParseError::NoError) {
+        QString errorString = jerror.errorString();
+        int line = 1;
+        int point = 0;
+        for(int i = 0; i < jerror.offset; i++){
+            if(content[i] == '\n'){
+                line++;
+                point = 0;
+            }
+            else point++;
+        }
         qWarning() << jerror.errorString();
         QMessageBox::critical(Data::instance()->getMainWindow(),
-                              "Error while Parsing", jerror.errorString());
+                              "Error while Parsing", errorString + "\n Line " + QString::number(line) + ":" + QString::number(point));
         return 0;
     }
 
@@ -132,7 +127,9 @@ void JsonFileHandler::parseNodeTypesFromAnise(QString &output) {
  * @param obj the QJsonObject containing the JSON File
  * @param connectionlist List in which the connections will be written
  */
-void JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
+bool JsonFileHandler::extractNodesAndConnections(const QJsonObject &obj) {
+    if(!&obj)
+        return false;
     parsing = true;
     QString nodeErrors = "", connectionErrors = "";
     bool hasPositionData = true;
@@ -320,6 +317,7 @@ end:
     }
     parsing = false;
     SingletonRender::instance()->renderMesh();
+    return true;
 }
 
 void JsonFileHandler::parseProgress(QString &text, const ParseMode &mode) {

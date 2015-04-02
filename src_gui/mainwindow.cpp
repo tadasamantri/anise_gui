@@ -119,8 +119,11 @@ void MainWindow::on_actionLoad_triggered() {
     qDebug() << "Trying to load \"" + fileName + "\"";
     QJsonObject *obj = JsonFileHandler::readFile(fileName);
     // parse file
-    JsonFileHandler::extractNodesAndConnections(*obj);
-    Data::instance()->setSaveFile(fileName);
+    bool success = JsonFileHandler::extractNodesAndConnections(*obj);
+    if(success)
+        Data::instance()->setSaveFile(fileName);
+    else
+        Data::instance()->setSaveFile("");
     Data::instance()->unsetChanged();
 }
 
