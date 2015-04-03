@@ -1,9 +1,12 @@
 #do not upload build files
-build/
-build-GUI-Desktop-Debug/
+build*/*
+bin/
 
 #do not upload user-files
-GUI.pro.user*
+*.pro.user*
 
 #ignore local working copies
 *.*~
+
+#ignore makefile created by qmake
+Makefile
