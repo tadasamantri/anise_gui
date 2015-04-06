@@ -58,7 +58,7 @@ PropertyWidget::PropertyWidget(int ID, QWidget *parent) : PropertyWidget(parent)
         else if (type == QVariant::Int || type == QVariant::UInt || type == QVariant::Double) {
             QAbstractSpinBox *spinBox = 0;
             if(type == QVariant::Double){
-                spinBox = new QDoubleSpinBox(this);
+                spinBox = new DoubleSpinBox(this);
                 static_cast<QDoubleSpinBox*>(spinBox)->setMaximum(std::numeric_limits<double>::max());
                 static_cast<QDoubleSpinBox*>(spinBox)->setValue(p.value.toDouble());
             }
