@@ -10,10 +10,12 @@
 #include "gatebutton.h"
 #include "mesheditorwidget.h"
 #include "data.h"
+#include "propertywidget.h"
 
 DrawObject::DrawObject(int id, QPoint position, int width, int height,
                        QWidget *parent, int highlightOffset) {
     this->ID = id;
+    this->status = Node::edit;
     this->setParent(parent);
     this->highlightWidth = highlightOffset;
     this->nameLabel = 0;
@@ -387,6 +389,12 @@ void DrawObject::mouseDoubleClickEvent(QMouseEvent *e)
     QWidget::mouseDoubleClickEvent(e);
     if(status == Node::error)
         QMessageBox::critical(this,"Errors on Simulation", "Errors:\n" + Data::instance()->getNodeByID(ID)->getErrorMsg());
+    else if(status == Node::edit){
+        PropertyWidget *p = new PropertyWidget(ID);
+        p->show();
+        //p->deleteLater();
+    }
+
 }
 
 void DrawObject::deleteItemText(QListWidgetItem *item) {
