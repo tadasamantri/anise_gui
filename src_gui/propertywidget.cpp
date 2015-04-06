@@ -1,20 +1,25 @@
 #include "propertywidget.h"
 #include "ui_propertywidget.h"
-#include "data.h"
 #include <QFormLayout>
+#include <QHBoxLayout>
+#include <QSpinBox>
+#include <QDoubleSpinBox>
+#include <limits>
+char PropertyWidget::count = 0;
 
 PropertyWidget::PropertyWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PropertyWidget)
 {
+    if(count++ > 0)
+        throw("only one window can be opened at once!");
+    //count++;
     ui->setupUi(this);
 }
 
-PropertyWidget::PropertyWidget(int ID, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::PropertyWidget)
+PropertyWidget::PropertyWidget(int ID, QWidget *parent) : PropertyWidget(parent)
 {
-    ui->setupUi(this);
+   // ui->setupUi(this);
     this->ID = ID;
     node = Data::instance()->getNodeByID(ID);
     ui->ID->setText(QString::number(this->ID));
@@ -24,29 +29,75 @@ PropertyWidget::PropertyWidget(int ID, QWidget *parent) :
     QFormLayout *layout = ui->form;
     QMap<QString, Node::Parameter> *params = node->getParams();
     QStringList keys = params->keys();
-    for(QString key : keys){
+    for (QString key : keys) {
         Node::Parameter p = (*params)[key];
         QWidget *item = 0;
-        switch (p.value.type()) {
-        case QVariant::Bool:
-            item = (QWidget*) new MyCheckBox(key,this);
-            break;
-        case QVariant::String:
-            item = new QLineEdit(p.value.toString(),this);
-            break;
-        case QVariant::Int:
-            //item = new QSpinB
-        default:
-            ;
-            break;
+        QVariant::Type type = QVariant::nameToType(p.type.toUtf8());
+        if (type == QVariant::Bool) {
+            MyCheckBox *checkbox = new MyCheckBox(key, this);
+            checkbox->setChecked(p.value.toBool());
+            item = checkbox;
         }
-        layout->addRow(p.name,item);
+
+        else if (type == QVariant::String) {
+            QLineEdit *textLine = new TextLine(this->ID, key, this);
+            textLine->setText(p.value.toString());
+            item = textLine;
+            if (key.contains("file", Qt::CaseInsensitive)) {
+                QWidget *tmp = new QWidget(this);
+                FileButton *button = new FileButton(key, ID, textLine, tmp);
+                button->setText("File...");
+                QHBoxLayout *tmp_layout = new QHBoxLayout(tmp);
+                tmp_layout->addWidget(textLine);
+                tmp_layout->addWidget(button);
+                qDebug() << "prop_window file selcetor layout: " << tmp_layout->widget();
+                item = tmp;
+            }
+        }
+
+        else if (type == QVariant::Int || type == QVariant::UInt || type == QVariant::Double) {
+            QAbstractSpinBox *spinBox = 0;
+            if(type == QVariant::Double){
+                spinBox = new QDoubleSpinBox(this);
+                static_cast<QDoubleSpinBox*>(spinBox)->setMaximum(std::numeric_limits<double>::max());
+                static_cast<QDoubleSpinBox*>(spinBox)->setValue(p.value.toDouble());
+            }
+            else {
+                spinBox = new SpinBox(this->ID,key,this);
+                static_cast<QSpinBox*>(spinBox)->setMaximum(std::numeric_limits<int>::max());
+                static_cast<QSpinBox*>(spinBox)->setValue(p.value.toInt());
+                if (type == QVariant::UInt)
+                    static_cast<QSpinBox*>(spinBox)->setMinimum(0);
+            }
+            item = spinBox;            
+            item->show();
+
+        }
+        if(item){
+            QLabel *name = new QLabel(p.name,this);
+            name->setToolTip(p.descr);
+            item->setToolTip(p.descr);
+            layout->addRow(name, item);
+        }
     }
 }
 
 PropertyWidget::~PropertyWidget()
 {
+    count--;
     delete ui;
+}
+
+bool PropertyWidget::close(){
+    bool result = QWidget::close();
+    delete this;
+    return result;
+}
+
+void PropertyWidget::closeEvent(QCloseEvent *e){
+    QWidget::closeEvent(e);
+    this->deleteLater();
+    e->accept();
 }
 
 void PropertyWidget::nameChanged(QString name)
@@ -55,17 +106,4 @@ void PropertyWidget::nameChanged(QString name)
         return;
     node->setName(name);
     this->setWindowTitle("Node: " + name);
-}
-
-
-MyCheckBox::MyCheckBox(QString key, QWidget *parent) : QCheckBox(parent)
-{
-    this->key = key;
-}
-
-void MyCheckBox::toggle()
-{
-    QCheckBox::toggle();
-    PropertyWidget *p = dynamic_cast<PropertyWidget*>(parent());
-    Data::instance()->getNodeByID(p->ID)->setParam(key,this->checkState() == Qt::Checked);
 }

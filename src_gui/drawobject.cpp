@@ -386,12 +386,20 @@ void DrawObject::setProgressView() {
 
 void DrawObject::mouseDoubleClickEvent(QMouseEvent *e)
 {
+    if(!Data::instance()->getNodeByID(ID))
+        return;
     QWidget::mouseDoubleClickEvent(e);
     if(status == Node::error)
         QMessageBox::critical(this,"Errors on Simulation", "Errors:\n" + Data::instance()->getNodeByID(ID)->getErrorMsg());
     else if(status == Node::edit){
+        try{
         PropertyWidget *p = new PropertyWidget(ID);
         p->show();
+        p->move(100,100);
+        }
+        catch(...){
+        }
+
         //p->deleteLater();
     }
 

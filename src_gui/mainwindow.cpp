@@ -235,7 +235,8 @@ void MainWindow::on_actionSave_triggered() {
 }
 
 void MainWindow::updatePropertyTable(int nodeID) {
-
+    if(nodeID == -2)
+        nodeID = Data::instance()->getFocusedID();
     QTableWidget *table = ui->tableWidget;
     if (nodeID >= 0 && Data::instance()->nodesInMesh()->contains(nodeID)) {
         deleteTable();
