@@ -70,8 +70,6 @@ PropertyWidget::PropertyWidget(int ID, QWidget *parent) : PropertyWidget(parent)
                     static_cast<QSpinBox*>(spinBox)->setMinimum(0);
             }
             item = spinBox;            
-            item->show();
-
         }
         if(item){
             QLabel *name = new QLabel(p.name,this);
