@@ -136,10 +136,7 @@ void Data::initialize(MainWindow *mainWindow) {
     /**
 * Checks if Framework path is set
 */
-    if (SettingsHandler::contains("frameworkpath"))
-        AniseCommunicator::setFrameworkPath(
-                    SettingsHandler::getSetting("frameworkpath"));
-    else {
+    if (!SettingsHandler::contains("frameworkpath")){
         int choice = QMessageBox::information(
                     0, QString("Please, set your framework path"),
                     QString("You haven't set your framework path yet.\nChoose first!"),
@@ -150,8 +147,8 @@ void Data::initialize(MainWindow *mainWindow) {
 
         SettingsHandler::storeSetting("frameworkpath", fileName);
     }
-
-
+    AniseCommunicator::setFrameworkPath(
+                SettingsHandler::getSetting("frameworkpath"));
 
     /**
 * Start loading node types
