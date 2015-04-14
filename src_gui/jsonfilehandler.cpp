@@ -405,6 +405,7 @@ QString JsonFileHandler::meshToJson() {
         foreach (QString key, map->keys()) {
             QJsonObject param;
             QVariant var = map->value(key).value;
+            var.convert(QVariant::nameToType(map->value(key).type.toUtf8().constData()));
             param[key] = QJsonValue::fromVariant(var);
             params.push_back(param);
         }
