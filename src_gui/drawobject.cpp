@@ -406,6 +406,7 @@ void DrawObject::mouseDoubleClickEvent(QMouseEvent *e)
 }
 
 void DrawObject::deleteItemText(QListWidgetItem *item) {
+    Q_UNUSED(item);
     nameLabel->setStyleSheet(
                 "QListWidget::item:selected{background: transparent}");
 }

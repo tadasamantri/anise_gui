@@ -378,7 +378,7 @@ void JsonFileHandler::parseProgress(QString &text) {
     }
 }
 
-void JsonFileHandler::parseErrors(const QString &text) {}
+void JsonFileHandler::parseErrors(const QString &text) { Q_UNUSED(text); }
 
 /**
  * @brief JsonFileHandler::writeFile writes a string into a given file
