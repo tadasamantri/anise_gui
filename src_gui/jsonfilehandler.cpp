@@ -482,5 +482,23 @@ void JsonFileHandler::parseLog(QString &text) {
     }
     else if (source == "framework") {
     // message comes from framework itself
+        QString framework = obj["src_name"].toString();
+        QString message=" ";
+         QString msg = obj["msg"].toString();
+        message = message + "Framework::" + framework + " ";
+        QString status = obj["status"].toString();
+        QString currentTime =  obj["time"].toString();
+        message = message + currentTime + " ";
+        if (status == "info") {
+            message = message + msg;
+        } else if (status == "warning") {
+            message = message + msg;
+        } else if (status == "error") {
+            message = message + msg;
+        }
+
+
+     Data::instance()->getMainWindow()->ui->qDebug_out->append(message);
+
     }
 }
