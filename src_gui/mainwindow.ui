@@ -22,6 +22,13 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
+     <widget class="Line" name="line_3">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QFrame" name="frame_2">
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
@@ -56,53 +63,114 @@
         </widget>
        </item>
        <item>
-        <widget class="QScrollArea" name="Node_Catalog">
+        <widget class="QGroupBox" name="Nodes_GroupBox">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
+         <property name="title">
+          <string>GroupBox</string>
          </property>
-         <property name="autoFillBackground">
-          <bool>true</bool>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="verticalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
-         </property>
-         <property name="horizontalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOn</enum>
-         </property>
-         <property name="sizeAdjustPolicy">
-          <enum>QAbstractScrollArea::AdjustToContents</enum>
-         </property>
-         <property name="widgetResizable">
-          <bool>true</bool>
-         </property>
-         <widget class="DragWidget" name="nodeCatalogContent">
+         <widget class="QScrollArea" name="Node_Catalog">
           <property name="geometry">
            <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>615</width>
-            <height>63</height>
+            <x>166</x>
+            <y>-3</y>
+            <width>461</width>
+            <height>78</height>
            </rect>
           </property>
           <property name="sizePolicy">
-           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <layout class="QGridLayout" name="CatalogLayout"/>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="autoFillBackground">
+           <bool>true</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(255, 255, 255);</string>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOn</enum>
+          </property>
+          <property name="sizeAdjustPolicy">
+           <enum>QAbstractScrollArea::AdjustToContents</enum>
+          </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="DragWidget" name="nodeCatalogContent">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>459</width>
+             <height>63</height>
+            </rect>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <layout class="QGridLayout" name="CatalogLayout"/>
+          </widget>
+         </widget>
+         <widget class="QScrollArea" name="Node_Categories">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>-1</y>
+            <width>141</width>
+            <height>78</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background:rgb(255, 255, 255);</string>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOn</enum>
+          </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="scrollAreaWidgetContents_5">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>126</width>
+             <height>76</height>
+            </rect>
+           </property>
+           <widget class="QListWidget" name="NodeCategories_List">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>141</width>
+              <height>181</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color:#000000;</string>
+            </property>
+           </widget>
+          </widget>
          </widget>
         </widget>
        </item>
@@ -231,7 +299,7 @@
             <x>0</x>
             <y>0</y>
             <width>602</width>
-            <height>315</height>
+            <height>365</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -342,13 +410,6 @@
         </widget>
        </item>
       </layout>
-     </widget>
-    </item>
-    <item>
-     <widget class="Line" name="line_3">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
      </widget>
     </item>
     <item>
