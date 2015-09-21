@@ -323,7 +323,6 @@ void DrawObject::moveProgressButton(const int &x, const int &y) {
     if (progressButton){
         int posY=this->pos().y();
         for(int i=0;i<3;i++){
-            qDebug()<<"goes in";
             progressButton[i]->move(this->pos().x()+34, posY + 5);
             posY+=15;
          }
@@ -381,9 +380,8 @@ void DrawObject::initializeProgressButton(){
           progressButton[i]=new QPushButton(dynamic_cast<QWidget *>(this->parent()));
           progressButton[i]->setGeometry(posX, posY, this->width()/5, 12);
           progressButton[i]->setStyleSheet({"border: none;"});
-         QString filename1=filename;
-        filename1.append(QString::number(i)).append(".png");
-        qDebug()<<filename1;
+          QString filename1=filename;
+          filename1.append(QString::number(i)).append(".png");
           QPixmap pix(filename1);
           QIcon icon(pix);
           progressButton[i]->setIcon(icon);
