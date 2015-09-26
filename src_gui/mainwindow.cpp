@@ -50,7 +50,7 @@ void MainWindow::initializeGUI() {
     ui->Nodes_GroupBox->setFixedHeight(140);
     ui->Node_Categories->setFixedHeight(130);
     ui->Node_Catalog->setFixedHeight(130);
-    ui->Node_Catalog->setFixedWidth(800);
+    ui->Node_Catalog->setFixedWidth(450);
 
     // make the mesh editor accept drops
     ui->mesh_edt_area->setAcceptDrops(true);
@@ -63,7 +63,8 @@ void MainWindow::initializeGUI() {
     ui->Node_Categories->setupViewport(ui->NodeCategories_List);
     // show the tab-widget
     ui->tabWidget->show();
-
+    //hide the console tab
+    ui->tabWidget->removeTab(0);
     ui->start_button->hide();
     ui->stop_button->hide();
     ui->delete_button->hide();
@@ -209,8 +210,11 @@ void MainWindow::on_actionLoad_Catalog_triggered() {
     file.close();
     QString out = AniseCommunicator::getAllNodeTypes();
     // Data::instance()->getNodeCatalog()->Content.clear();
+    //delete the contents of the node catalog
+     qDeleteAll(ui->nodeCatalogContent->findChildren<QWidget *>());
     JsonFileHandler::parseNodeTypesFromAnise(out);
-    Data::instance()->newMeshProject();
+    //delete the contents of the node catalog
+     Data::instance()->newMeshProject();
     // SingletonRender::instance()->renderCatalogContent(Data::instance()->getNodeCatalog()->Content.values().toVector());
 
     qDebug() << "perfoming reboot...";

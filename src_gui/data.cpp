@@ -118,10 +118,10 @@ void Data::initialize(MainWindow *mainWindow) {
     connect(mainWindow->ui->actionRun_Mesh, SIGNAL(triggered()), this,
             SLOT(runMesh()));
     connect(mainWindow->ui->actionStop_Simulation, SIGNAL(triggered()),this,SLOT(stopSimulation()));
-
+//int i=0;
     //connect the on click even of items in node category list
-    connect(mainWindow->ui->NodeCategories_List,SIGNAL(itemClicked(QListWidgetItem*)),
-            this, SLOT(onNodeCategoryItemClicked(QListWidgetItem*)));
+    connect(mainWindow->ui->NodeCategories_List,SIGNAL(itemSelectionChanged()),
+            this, SLOT(onNodeCategoryItemClicked()));
 
     /**
 * Create the Nodecatalog
@@ -181,33 +181,39 @@ void Data::initialize(MainWindow *mainWindow) {
 
 //Display the list of node categories
 void Data::displayNodeCategory(const QVector<Node> &NodeVektor) {
-
+    //clear the node catalog content list for the current instance
+    categoryWithNodeList.clear();
     foreach(Node node,NodeVektor){
         QString category = node.getCategory();
               categoryWithNodeList.insertMulti(category,node);
     }
     QStringList categories;
-
+int i=0;
     QListIterator<QString> it(categoryWithNodeList.keys());
     while(it.hasNext()){
         QString tempCategory=it.next();
         if(!categories.contains(tempCategory))
-             categories.append(tempCategory);
+    {      QTreeWidgetItem *item=new QTreeWidgetItem(mainWindow->ui->NodeCategories_List);
+           item->setText(0,tempCategory);
+            mainWindow->ui->NodeCategories_List->insertTopLevelItem(i++,item);
+            categories.append(tempCategory);
     }
-    mainWindow->ui->NodeCategories_List->addItems(categories);
+        }
+
+
 }
 
 // Display node catalog for a category depending on the click event
-void Data::onNodeCategoryItemClicked(QListWidgetItem* item)
+void Data::onNodeCategoryItemClicked()
 {
-    QString category=item->text();
+    QTreeWidgetItem* item;
+    QList<QTreeWidgetItem*> itemsSelected=mainWindow->ui->NodeCategories_List->selectedItems();
+    for(QTreeWidgetItem* it:itemsSelected){
+        if(itemsSelected.length()==1)
+            item=it;
+    }
+    QString category=item->text(0);
     QList<Node> nodeList=categoryWithNodeList.values(category);
-  /*  QListIterator<Node> it(nodeList);
-    while(it.hasNext()){
-    Node n=it.next();
-    QString d=n.getType();
-        qDebug()<<d;
-    }*/
     QVector<Node> categorizedNodeList=nodeList.toVector();
     SingletonRender::instance()->renderCatalogContent(categorizedNodeList);
 }

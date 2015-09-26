@@ -575,6 +575,7 @@ void SingletonRender::renderCatalogContent(const QVector<Node> &NodeVektor) {
     int position = 0;
     CatalogParent->layout()->setSpacing(5);
     // TODO scroll weite sollte nicht hard coded sein
+    CatalogParent->repaint();
     foreach (Node nodeTyp, NodeVektor) {
         renderNodeType(&nodeTyp, CatalogParent, position);
         position++;
@@ -712,7 +713,6 @@ void SingletonRender::dehighlightGates() {
 void SingletonRender::setNodeName(const int &nodeID, const QString &nodeName) {
     if (!allDrawnNodes.contains(nodeID)) return;
     allDrawnNodes.value(nodeID)->setNodeName(nodeName);
-
     Data::instance()->getMainWindow()->updatePropertyTable(nodeID);
 }
 

@@ -185,7 +185,7 @@ public slots:
     void startSimulation();
     void stopSimulation();
     void runMesh();
-    void onNodeCategoryItemClicked(QListWidgetItem* item);
+    void onNodeCategoryItemClicked();
 private slots:
     /**
      * @brief autosaveMesh saves a backup file of the current mesh
