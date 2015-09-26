@@ -118,7 +118,6 @@ void Data::initialize(MainWindow *mainWindow) {
     connect(mainWindow->ui->actionRun_Mesh, SIGNAL(triggered()), this,
             SLOT(runMesh()));
     connect(mainWindow->ui->actionStop_Simulation, SIGNAL(triggered()),this,SLOT(stopSimulation()));
-//int i=0;
     //connect the on click even of items in node category list
     connect(mainWindow->ui->NodeCategories_List,SIGNAL(itemSelectionChanged()),
             this, SLOT(onNodeCategoryItemClicked()));
@@ -188,17 +187,18 @@ void Data::displayNodeCategory(const QVector<Node> &NodeVektor) {
               categoryWithNodeList.insertMulti(category,node);
     }
     QStringList categories;
-int i=0;
+    int i=0;
     QListIterator<QString> it(categoryWithNodeList.keys());
     while(it.hasNext()){
         QString tempCategory=it.next();
         if(!categories.contains(tempCategory))
-    {      QTreeWidgetItem *item=new QTreeWidgetItem(mainWindow->ui->NodeCategories_List);
-           item->setText(0,tempCategory);
+        {
+            QTreeWidgetItem *item=new QTreeWidgetItem(mainWindow->ui->NodeCategories_List);
+            item->setText(0,tempCategory);
             mainWindow->ui->NodeCategories_List->insertTopLevelItem(i++,item);
             categories.append(tempCategory);
-    }
         }
+    }
 
 
 }

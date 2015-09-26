@@ -575,7 +575,6 @@ void SingletonRender::renderCatalogContent(const QVector<Node> &NodeVektor) {
     int position = 0;
     CatalogParent->layout()->setSpacing(5);
     // TODO scroll weite sollte nicht hard coded sein
-    CatalogParent->repaint();
     foreach (Node nodeTyp, NodeVektor) {
         renderNodeType(&nodeTyp, CatalogParent, position);
         position++;
